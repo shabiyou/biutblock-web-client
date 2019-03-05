@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import i18n from '../utils/index'
 const Index = resolve => require(['@/pages/index'], resolve) 
-const CreateWallet = resolve => require(['@/pages/create_wallet/create'], resolve) 
-const ReceiveSec = resolve => require(['@/pages/receive_sec/receive_sec'], resolve)
-const TransferAccounts = resolve => require(['@/pages/transfer_accounts/transfer_accounts'], resolve)
-const WalletInfo = resolve => require(['@/pages/wallet_info/wallet_info'], resolve)
-const WalletHelp = resolve => require(['@/pages/wallet_help/wallet_help'], resolve)
+const CreateWallet = resolve => require(['@/pages/createWallet/create-wallet'], resolve) 
+const ReceiveSec = resolve => require(['@/pages/receiveSec/receive-sec'], resolve)
+const TransferAccounts = resolve => require(['@/pages/transferAccounts/transfer-accounts'], resolve)
+const WalletInfo = resolve => require(['@/pages/walletInfo/wallet-info'], resolve)
+const WalletHelp = resolve => require(['@/pages/walletHelp/wallet-help'], resolve)
 
 Vue.use(Router)
 
@@ -18,7 +18,7 @@ var router = new Router({
       component: Index,
       redirect: 'createWallet',
       meta: {
-        title: 'hello world'
+        title: 'headerNav.Newallet'
       },
       children: [
         {

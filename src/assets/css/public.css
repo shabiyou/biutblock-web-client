@@ -72,7 +72,7 @@ main .content_bg p {font-size: .6rem;color: #728087;font-weight: 400;padding: 4.
 .mask_cnt article img {vertical-align: middle;margin-right: .5rem;width: .8rem;height: .8rem;}
 .mask_cnt a {display:block;word-wrap: break-word;color: #388ED9;font-size: .7rem;margin: .9rem 0 1rem;
   text-decoration: none;}
-.mask_cnt button {width: 6.6rem;height: 2.2rem;color: #fff;font-size: 14px;border-radius: .5rem;
+.mask_cnt button {width: 5.4rem;height: 1.8rem;color: #fff;font-size: 14px;border-radius: .5rem;
   background:linear-gradient(90deg,rgba(41,216,147,1) 0%,rgba(12,197,183,1) 100%);border: none;
   float: right;}
 
@@ -94,9 +94,8 @@ main .content_bg p {font-size: .6rem;color: #728087;font-weight: 400;padding: 4.
 .key_store .key_store_btn {margin: 1.8rem 0 3.5rem;}
 .private_key .private_key_btn {margin: 1.6rem 0 4.5rem;}
 
-.private_key div textarea {width: 18.5rem;padding: 0.8rem 1rem 0;color: #42535B;font-size: .7rem;overflow: hidden;
-  outline: none;resize: none;border-radius: .5rem;max-width: calc(100% - 2rem)!important;
-  border: 0;}
+.private_key textarea {width: 18.5rem;color: #42535B;font-size: .7rem;padding: .8rem 1rem;
+  outline: none;resize: none;border-radius: .5rem;}
 
 .key_store {position: relative;}
 .key_store input[type='file'] {width: 20.5rem;height: 2.4rem;position: absolute;top: 3rem;opacity: 0;

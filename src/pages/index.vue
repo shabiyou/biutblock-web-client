@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import walletHeader from "./componentsPublic/wallet_header.vue"
-import walletFooter from "./componentsPublic/wallet_footer.vue"
+import walletHeader from "./componentsPublic/wallet-header.vue"
+import walletFooter from "./componentsPublic/wallet-footer.vue"
 export default {
   name: 'index',
   data () {

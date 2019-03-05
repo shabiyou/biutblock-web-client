@@ -53,7 +53,6 @@ export default {
     balance: "余额",
     all: "全部",
     generateTrading: "生成交易",
-
     confirmTransferInfo: "请确认您的转帐信息",
     orderInfo: "订单信息",
     transferTxt: "转账",
@@ -64,6 +63,7 @@ export default {
     transferMoney: "转账金额必须小于余额",
     transferMoney1: "转账金额必不能为0",
     transferAddressError: "转账地址无效",
+    transferAddressError2: "相同地址不能转账",
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果:",
