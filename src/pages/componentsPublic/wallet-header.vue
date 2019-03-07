@@ -185,7 +185,7 @@ export default {
   nav ul li:last-child {padding-left: 1.1rem;margin-left: 1.1rem;}
 
   .languageList {position: absolute;top: 3.5rem;right: 0;width: 8.7rem;height: 4.2rem;background:#fff;
-    box-shadow:0 .15rem .3rem rgba(0,0,0,0.16);border-radius:0 0 .5rem .5rem;}
+    box-shadow:0 .15rem .3rem rgba(0,0,0,0.16);border-radius:0 0 .5rem .5rem;z-index: 99;}
   .languageList span {display: block;height: 2.1rem;line-height: 2.1rem;padding-left: .8rem;color: #B9C4C2;}
   .languageList span:hover {cursor: pointer;background: #29D893;color: #fff;}
   .languageList span:last-child:hover,.languageList span:last-child {border-radius:0 0 .5rem .5rem;}

@@ -4,10 +4,10 @@
     <main>
       <!-- 内容展示区域 -->
       <!-- 查看信息认证 -->
-      <el-row>
+      <el-row v-if="infoPages == 1">
         <el-col :xs="2" :sm="0" :md="0">&nbsp;</el-col>
         <el-col :xs="20" :sm="24" :md="24">
-          <section class="content_list" v-if="infoPages == 1">
+          <section class="content_list">
             <h2>{{$t('walletInfo.accessWallet')}}</h2>
             <!-- 按钮组 -->
             <section class="radio_arr">
@@ -26,7 +26,14 @@
               <section>
                 <span>{{ $t(KeyStoreVal) }}</span>
               </section>
-              <public-ipt :placeholder="$t('passTips.passEncryption')" :class="walletPassError?'errorBorder':''" maxlength="30" class="mt1" v-if="showPass" v-model="passVal"></public-ipt>
+              <public-ipt 
+                  v-if="showPass" 
+                  v-model="passVal"
+                  maxlength="30" 
+                  class="mt1" 
+                  :placeholder="$t('passTips.passEncryption')" 
+                  :class="walletPassError?'errorBorder':''" 
+                  @input="inputContentPass"></public-ipt>
               <tips-content :tipsTxt="walletPassErrorTxt" v-show="walletPassError"></tips-content>
               <public-btn class="key_store_btn"
               :disabled="!keyStoreActive" :class="keyStoreActive?'btn_active':''"
@@ -36,9 +43,13 @@
             <section class="private_key" v-if="radioPages == 1">
               <p>{{$t('walletInfo.inputPrivateKey1')}}</p>
 
-              <textarea :placeholder="$t('walletInfo.inputPrivateKey2')" maxlength="64" 
+              <textarea 
+                  v-model="privateKeyVal"
+                  maxlength="64" 
+                  :placeholder="$t('walletInfo.inputPrivateKey2')"
                   :class="privateKeyError?'errorBorder':''" 
-                  v-model="privateKeyVal" :rows="textRows"></textarea>
+                  :rows="textRows"
+                  @input="inputContentKey"></textarea>
               
               <tips-content :tipsTxt="privateKeyErrorTxt" v-show="privateKeyError"></tips-content>
               <public-btn class="private_key_btn"
@@ -85,7 +96,11 @@
       <section class="mask"></section>
       <section class="mask_cnt info_mask clearfix">
         <p>{{$t('passTips.newWalletPass')}}</p>
-        <public-ipt :placeholder="$t('passTips.newWalletPass')" :class="walletPassTxt?'errorBorder':''" maxlength="30" type="button" v-model="newWalletPass" class="info_mask_ipt"></public-ipt>
+        <public-ipt 
+          v-model="newWalletPass"
+          maxlength="30"
+          :placeholder="$t('passTips.newWalletPass')" 
+          @input="inputContentNewPass"></public-ipt>
         <tips-content :tipsTxt="infoTxt" v-show="passTips"></tips-content>
         <section>
           <button type="button" @click="closeMask">{{$t('mask.cancel')}}</button>
@@ -106,6 +121,7 @@ import tipsContent from '../componentsPublic/tips-content'
 import publicBtn from '../componentsPublic/public-btn'
 import Qrcode from '@xkeshi/vue-qrcode'
 import walletsHandler from '../../lib/WalletsHandler.js'
+import walletMethods from '../../utils/publicMethode.js'
 export default {
   name: '',
   data () {
@@ -120,7 +136,6 @@ export default {
       maskShow: false,//弹窗显示与隐藏
       privateKeyError: false,//私钥错误true显示
       walletPassError: false,//密码
-      walletPassTxt: false,
       textRows: 1,//多行文本框控制
       showPass: false,//默认不显示密码输入框
       radioPages: 0, //keyStore与私钥切换显示  0 显示keyStore  1 显示私钥
@@ -147,6 +162,28 @@ export default {
     }
   },
   methods: {
+     //keyStore文件登陆 去空
+     inputContentPass () {
+        this.passVal = this.passVal.replace(/^\s+|\s+$/g, '')
+        this.$nextTick(()=> {
+          this.passVal = this.passVal.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+     //私钥登陆 去空
+     inputContentKey () {
+       this.privateKeyVal = this.privateKeyVal.replace(/^\s+|\s+$/g, '')
+       this.$nextTick(()=> {
+          this.privateKeyVal = this.privateKeyVal.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+     //创建新钱包 去空
+     inputContentNewPass () {
+       this.newWalletPass = this.newWalletPass.replace(/^\s+|\s+$/g, '')
+       this.$nextTick(()=> {
+          this.newWalletPass = this.newWalletPass.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+    //登陆
     walletInfoForm () {
       var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
             index,arr) => {
@@ -164,7 +201,7 @@ export default {
       //1 私钥登陆  0 keyStore登陆
       
       if (this.radioPages === 1) {
-        let privateVal = this.privateKeyVal
+        let privateVal = this.privateKeyVal.replace(/^\s+|\s+$/g, '')
         var key = /^[A-Za-z0-9]+$/
         if (!key.test(privateVal)) {
           this.privateKeyError = true
@@ -174,7 +211,7 @@ export default {
           let flag3 = keystoreArr.filter(item=> JSON.parse(item).privateKey === privateVal)
           if (flag1) {
             this.infoPages = 2
-            this.walletAddress = JSON.parse(flag3[0]).address
+            this.walletAddress = "0x" + JSON.parse(flag3[0]).address
             this.walletKey = JSON.parse(flag3[0]).privateKey
             this.walletMoney = JSON.parse(flag3[0]).amount
           } else {
@@ -182,7 +219,7 @@ export default {
           }
         }
       } else {
-          var passVal = this.passVal
+          var passVal = this.passVal.replace(/^\s+|\s+$/g, '')
           let keyStoreAddress = this.KeyStoreVal.substring(3,43)
           let flag2 = keystoreArr.filter(item=> JSON.parse(item).address === keyStoreAddress)
           var userPass = JSON.parse(flag2[0]).pass
@@ -195,7 +232,7 @@ export default {
             return
           } else {
             this.infoPages = 2
-            this.walletAddress = JSON.parse(flag2[0]).address
+            this.walletAddress = "0x" + JSON.parse(flag2[0]).address
             this.walletKey = JSON.parse(flag2[0]).privateKey
             this.walletMoney = JSON.parse(flag2[0]).amount
           }
@@ -209,6 +246,8 @@ export default {
         this.showPass = true
       } else {
         this.KeyStoreVal = 'walletInfo.checkKeyStore2'
+        this.passVal = ''
+        this.walletPassError = false
         this.showPass = false
       }
     },
@@ -220,43 +259,19 @@ export default {
     },
     //确认创建钱包
     createWallet () {
-      let newPass = this.newWalletPass
-      var pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
-      if (!pass.test(newPass)) {
-          this.walletPassTxt = true
-          this.infoTxt = 'passTips.passFormatError'
-          return
-      } else {
-          this.walletPassTxt = false
-          let keys = walletsHandler.getWalletKeys()
-          this.privateInoKey = keys.privateKey //获取创建钱包的私钥
-          this.userInoAddress = keys.userAddress //获取创建钱包的地址
-          
-          //存储密码、地址、私钥、余额
-          let keystoreArr = localStorage.getItem("keystore") ? localStorage.getItem('keystore').split(/},{/).map((item,
-            index,arr) => {
-            if(arr.length<2){
-                return item
-            }
-            if (index == 0) {
-              return item + '}'
-            } else if (index == arr.length - 1) {
-              return '{' + item
-            } else {
-              return '{' + item + '}'
-            }
-          }) : []
-          localStorage.setItem("keystore", [...keystoreArr, JSON.stringify({
-            pass: this.newWalletPass,
-            address: this.userInoAddress,
-            privateKey: this.privateInoKey,
-            amount: 0
-          })])
-        var json = "" + this.userInoAddress + ".json"
-        this.download("SEC" + json + "", "{'version':3,'privateKey':'" + this.privateInoKey + "'}")
-        this.closeMask()
-      }
+      let newPass = this.newWalletPass.replace(/^\s+|\s+$/g, '')
+      let amount = 0
+      let keys = walletsHandler.getWalletKeys() //创建钱包
+      this.privateInoKey = keys.privateKey //获取创建钱包的私钥
+      this.userInoAddress = keys.userAddress //获取创建钱包的地址
+
+      walletMethods.createNewWallet(newPass,this.userInoAddress,this.privateInoKey,amount)
+
+      var json = "" + this.userInoAddress + ".json"
+      this.download("SEC" + json + "", "{'version':3,'privateKey':'" + this.privateInoKey + "'}")
+      this.closeMask()
     },
+    //下载keyStore文件
     download(filename, text) {
       var element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -285,40 +300,46 @@ export default {
   computed: {
     //keyStore按钮是否可点击
     keyStoreActive () {
+      if (this.passVal.length == 0) {
+        this.walletPassError = false
+      }
       return this.passVal.length > 7 ? true : false
     },
+
     //私钥按钮是否可点击
     privateKeyActive () {
       if (this.privateKeyVal.length > 40) {
         this.textRows = 2
+      } else if (this.privateKeyVal.length == 0) {
+        this.textRows = 1
+        this.privateKeyError = false
       } else {
         this.textRows = 1
-      }
+      } 
       return this.privateKeyVal.length > 63 ? true : false
     },
+
     //新钱包密码
     passActive () {
+      let pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
       if (this.newWalletPass.length > 0) {
         this.passTips = true
       } else {
         this.passTips = false
-      }
-      return this.newWalletPass.length > 7 ? true : false
+      } 
+      return this.newWalletPass.length > 7 && pass.test(this.newWalletPass) ? true : false
     }
-  },
-  created () {
-   
-  },
+  }
 }
 </script>
 
 <style scoped>
+  main .el-row {height: 30.35rem;}
   /* 信息内容 */
-  .info_content {padding: 4.6rem 3.3rem 0;display: flex;justify-content: space-between;flex-wrap: wrap;}
+  .info_content {padding: 4.6rem 3.3rem 0;display: flex;justify-content: space-between;height: 25.75rem;}
   .info_content section:first-child {width: 35.8rem;max-width: 100%;}
   .info_content section:first-child ul li {border-bottom: .05rem solid #CFDEDB;color: #42535B;padding-top: 2.2rem;}
   .info_content section:first-child ul li:first-child {padding-top: 0rem;}
-  .info_content section:first-child ul li:last-child {margin-bottom: 5.75rem;}
   .info_content section:first-child ul li h4 {margin: 0;font-size: 1rem;font-weight: 300;}
   .info_content section:first-child ul li p {padding: .8rem 0 2.3rem;font-size: .8rem;font-weight: 500;
     word-wrap:break-word;white-space:pre-wrap;width: calc(100% - 2.3rem);}
@@ -333,7 +354,6 @@ export default {
 
   /* 弹窗 */
   .info_mask {padding: .8rem 1.2rem .6rem;}
-  .info_mask .info_mask_ipt {width: 22.4rem;max-width: calc(100% - 2.4rem);}
   .info_mask p {color: #42535B;font-size: .8rem;padding-bottom: .6rem;}
   .info_mask section {float: right;padding-top: 1rem;}
   .info_mask section button {float: left;background:linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}

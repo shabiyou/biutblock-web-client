@@ -36,7 +36,7 @@ const requestData = function (mark, data, options = {}) {
   return axios({
     url: mark,
     method: 'post',
-    baseURL: 'http://39.108.137.8:8099/v1.0/',
+    baseURL: 'http://',
     // headers: {
     //   'token': store.state.token
     // },

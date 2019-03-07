@@ -13,7 +13,7 @@ export default {
   name: 'index',
   data () {
     return {
-
+      
     }
   },
   components: {
@@ -24,26 +24,6 @@ export default {
     key() {
       return this.$route.name !== undefined? this.$route.name +new Date(): this.$route +new Date()
     }
-  },
-  created() {
-    // var ua = navigator.userAgent.toLowerCase();
-    // if (ua.match(/MicroMessenger/i) == "micromessenger") {//微信中打开网页
-    //     alert("微信打开")
-    // } else if (ua.match(/QQ/i) == "qq") {//qq里打开网页
-    //     alert("qq打开")
-    // } else {
-    //     return false;
-    // }
-    // var u = navigator.userAgent;
-    // if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
-    //     alert("安卓手机")
-    // } else if (u.indexOf('iPhone') > -1) {
-    //     alert("ios手机")
-    //     //苹果手机
-    // } else if (u.indexOf('Windows Phone') > -1) {
-    //     //winphone手机
-        
-    // }
   },
 }
 </script>

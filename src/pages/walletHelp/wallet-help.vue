@@ -7,18 +7,23 @@
 </template>
 
 <script>
+// import SECHelpEN from '../../assets/help/SECHelp_EN.pdf'
+// import SECHelpZH from '../../assets/help/SECHelp_ZH.pdf'
 export default {
   name: 'walletHelp',
   data () {
     return {
-      guideUrl: 'https://test.wallet.intchain.io/images/helpEn.pdf'
+      guideUrl: "https://test.wallet.intchain.io/images/helpEn.pdf"
     }
   },
   mounted() {
-    
+    console.log(this.$i18n.locale)
   },
   created() {
-    
+    console.log(this.$i18n.locale)
+    if (this.$i18n.locale == "zh") {
+      this.guideUrl = "https://test.wallet.intchain.io/images/helpZh.pdf"
+    }
   },
 }
 </script>

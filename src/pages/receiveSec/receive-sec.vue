@@ -10,10 +10,23 @@
             <!-- SEC地址 -->
             <section>
               <h2>{{$t('receiveSec.secAddress')}}</h2>
-              <public-ipt :placeholder="$t('receiveSec.secAddress')" :class="tipsError?'errorBorder':''" max-length="40" type="text" v-model="secAddress"/>
+              <!-- input输入框组件 -->
+              <public-ipt  
+                  v-model="secAddress"
+                  maxlength="42" 
+                  type="text" 
+                  :placeholder="$t('receiveSec.secAddress')" 
+                  :class="tipsError?'errorBorder':''" 
+                  @input="inputContent"/>
               <tips-content :tipsTxt="tipsTxt" v-show="tipsError"></tips-content>
-              <public-btn class="receive_btn" @click.native="receiveSec"
-                :disabled="!receiveActive" :class="receiveActive?'btn_active':''">{{$t('receiveSec.receiveBtn')}}</public-btn>
+              <!-- button按钮组件 -->
+              <public-btn 
+                  class="receive_btn" 
+                  @click.native="receiveSec"
+                  :disabled="!receiveActive" 
+                  :class="receiveActive?'btn_active':''">
+                  {{$t('receiveSec.receiveBtn')}}
+              </public-btn>
             </section>
           <!-- 内容展示区域结束 -->
           </section>
@@ -42,7 +55,9 @@ import publicIpt from '../componentsPublic/pubic-ipt'
 import publicBtn from '../componentsPublic/public-btn'
 import tipsContent from '../componentsPublic/tips-content'
 import contentFooter from '../componentsPublic/content-footer'
-import rpc from '../../lib/rpc.js' 
+import walletMethods from '../../utils/publicMethode.js'
+import rpc from '../../lib/rpc.js'
+import SECSDK from '../../lib/SECSDK.bundle.js'
 export default {
   name: 'receiveSec',
   data () {
@@ -56,43 +71,32 @@ export default {
   },
   components: {
     publicIpt,
+
     publicBtn,
+
     tipsContent,
+
     contentFooter
   },
   methods: {
+    //去掉开头空格
+    inputContent () {
+      this.secAddress = this.secAddress.replace(/(^\s*)|(\s*$)/g, "")
+      this.$nextTick(()=> {
+        this.secAddress = this.secAddress.replace(/[\u4E00-\u9FA5]/g,'')
+      })
+    },
+
     //领取SEC币 1000
     receiveSec () {
-      let address = this.secAddress
+      let address = this.secAddress.replace(/^\s+|\s+$/g, '')
       var key = /^[A-Za-z0-9]+$/
       if (!key.test(address)) {
         this.tipsError = true
         return
       }
-      var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
-            index,arr) => {
-            if(arr.length<2){
-                return item
-            }
-            if (index == 0) {
-              return item + '}'
-            } else if (index == arr.length - 1) {
-              return '{' + item
-            } else {
-              return '{' + item + '}'
-            }
-      })
-       keystoreArr = keystoreArr.map(item=>{
-          const keystore = JSON.parse(item)
-          if(keystore.address == address){
-            keystore.amount = '1000'
-            return keystore
-          }
-          return keystore
-        })
-        keystoreArr = JSON.stringify(keystoreArr)
-        localStorage.setItem("keystore",keystoreArr.substring(1,keystoreArr.length-1))
-        this.maskShow = true
+      walletMethods.updateAmount('1000', address)//修改金额
+      this.maskShow = true
     },
     //关闭遮罩层
     closeMask () {
@@ -101,22 +105,70 @@ export default {
     }
   },
   computed: {
+    //领取测试币的按钮是否可点击
     receiveActive () {
+      if (this.secAddress.length == 0) {
+        this.tipsError = false
+      }
       return this.secAddress.length > 39 ? true : false
     }
   },
   created() {
-    let walletAddress = "2ea55ca2492ba1a3da67f75cb773682d57bc8a13"
-    // var x = this.$JsonRPCClient.getWalletBalance(walletAddress, (walletBalance) => {
-    //   console.log(walletBalance)
-    // })
+    let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
 
+    //查询余额
+    let postData = this.$qs.stringify({
+        "method":"sec_getBalance",
+        "params":["2ea55ca2492ba1a3da67f75cb773682d57bc8a13"]
+    })
+
+
+    //转账数据
+    let privateVal = 'a262db30966fd7a8968b5f66014ac6a377df16b4d8a099b00612034f44d68dc0'
+    let fromAddress = '75d1bd308cf2301b22db23c657e917a29f9b6f6a'
+    let toAddress = 'e77b8994508ae42632f91cf462c5132c65cc7706'
+    let amount = 10
+    //签名
+    const tx = "{\"privateKey\":\""+privateVal+"\",\"from\":\""+fromAddress+"\",\"to\":\""+toAddress+"\",\"value\":\""+amount+"\",\"inputData\":\"Test\"}"
+    SECSDK.default.generateSecKeys()
+    SECSDK.default.entropyToMnemonic(""+privateVal+"")
+    SECSDK.default.mnemonicToEntropy("river position steel require girl someone build truck spoil size crouch wedding earn luxury holiday amateur parent entire potato vintage heavy trouble there define")
+    let test = JSON.parse(SECSDK.default.txSign(tx))
+    let postData3 = this.$qs.stringify(
+      {
+        "method":"sec_sendRawTransaction",
+        "params":[
+            {
+            "timesTamp": "1551912659",
+            "from": test.from,
+            "to": test.to,
+            "value": test.value,
+            "contractAddress":"",
+            "gasLimit":"0",
+            "gas":"0",
+            "gasPrice":"0",
+            "data":"",
+            "inputData":""
+             }
+            ]
+      })
+
+    //获取测试币
+    let postData2 = this.$qs.stringify(
+      {
+        "method":"sec_freeCharge",
+        "params":[
+            {"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13",
+             "value":"1000"}
+             ]
+      })
     
-    this.$JsonRPCClient.chargeWallet([{
-      to: walletAddress,
-      value: "1000"
-    }], (err, result) => {
-        console.log(result)
+    this.$axios({
+        method: 'post',
+        url:url,
+        data:postData
+    }).then((res)=>{
+        console.log(res.data.result)
     })
   },
 }

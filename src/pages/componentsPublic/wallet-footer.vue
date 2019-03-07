@@ -1,15 +1,23 @@
 <template>
   <p>
     Copyright &copy; 2019 SEC
-  </p>
+  </p>  
 </template>
 
 <script>
 export default {
   name: 'walletFooter',
   data () {
-    return {}
-  }
+    return {
+     
+    }
+  },
+  components: {
+    
+  },
+  methods: {
+    
+  },
 }
 </script>
 

@@ -26,7 +26,14 @@
               <section>
                 <span>{{ $t(KeyStoreVal) }}</span>
               </section>
-              <public-ipt-pass :placeholder="$t('passTips.passEncryption')" :class="walletPassError?'errorBorder':''"  maxlength="30" class="mt1" v-if="showPass" v-model="passVal"></public-ipt-pass>
+              <public-ipt-pass 
+                  v-if="showPass"
+                  v-model="passVal"
+                  maxlength="30" 
+                  class="mt1"
+                  :class="walletPassError?'errorBorder':''"  
+                  :placeholder="$t('passTips.passEncryption')" 
+                  @input="inputContentPass"></public-ipt-pass>
               <tips-content :tipsTxt="walletPassErrorTxt" v-show="walletPassError"></tips-content>
               <public-btn class="key_store_btn"
                 :disabled="!keyStoreActive" :class="keyStoreActive?'btn_active':''"
@@ -35,10 +42,13 @@
             <!-- 私钥登陆 -->
             <section class="private_key" v-if="radioPages == 1">
               <p>{{$t('walletInfo.inputPrivateKey1')}}</p>
-              <textarea :placeholder="$t('walletInfo.inputPrivateKey2')" maxlength="64" 
-                :class="privateKeyError?'errorBorder':''" 
+              <textarea 
                 v-model="privateKeyVal"
-                :rows="textRows"></textarea>
+                maxlength="64" 
+                :placeholder="$t('walletInfo.inputPrivateKey2')" 
+                :class="privateKeyError?'errorBorder':''" 
+                :rows="textRows"
+                @input="inputContentKey"></textarea>
               <tips-content :tipsTxt="privateKeyErrorTxt" v-show="privateKeyError"></tips-content>
               <public-btn class="private_key_btn"
                 :disabled="!privateKeyActive" :class="privateKeyActive?'btn_active':''"
@@ -48,11 +58,22 @@
           <!-- 转账信息 -->
           <section class="content_list" v-if="transferPages == 2">
             <h3>{{$t('transfer.youAddress')}}</h3>
-            <public-ipt :placeholder="$t('transfer.youAddress')" max-length="40" v-model="address" type="text" readonly></public-ipt>
-            <public-ipt :placeholder="$t('transfer.transferAdddress')" :class="addressError?'errorBorder':''" max-length="40" type="text" v-model="walletAddress" class="mt1"></public-ipt>
+            <public-ipt :placeholder="$t('transfer.youAddress')" maxlength="42" v-model="address" type="text" readonly></public-ipt>
+            <public-ipt 
+              v-model="walletAddress"
+              :placeholder="$t('transfer.transferAdddress')" 
+              :class="addressError?'errorBorder':''" 
+              maxlength="42" 
+              type="text"  
+              class="mt1"
+              @input="inputContentAddress"></public-ipt>
             <tips-content :tipsTxt="addressTxt" v-show="addressError"></tips-content>
             <section class="ipt_number mt1" :class="moneyShow?'errorBorder':''">
-              <input type="text" :placeholder="$t('transfer.transferNumber')" v-model="walletMoney" maxlength="20">
+              <input type="text" 
+                :placeholder="$t('transfer.transferNumber')" 
+                v-model="walletMoney" 
+                maxlength="20"
+                @input="inputContentAmount">
               <span>SEC</span>
             </section>
             <section class="transfer_money">
@@ -121,7 +142,7 @@ import publicIpt from '../componentsPublic/pubic-ipt'
 import publicBtn from '../componentsPublic/public-btn'
 import tipsContent from '../componentsPublic/tips-content'
 import SECSDK from '../../lib/SECSDK.bundle.js'
- import updateAmount from '../../utils/publicMethode.js'
+import walletMethods from '../../utils/publicMethode.js'
 export default {
   name: 'transferAccounts',
   data () {
@@ -167,6 +188,35 @@ export default {
     
   },
   methods: {
+    //keyStore文件登陆 去空
+     inputContentPass () {
+        this.passVal = this.passVal.replace(/^\s+|\s+$/g, '')
+        this.$nextTick(()=> {
+          this.passVal = this.passVal.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+     //私钥登陆 去空
+     inputContentKey () {
+       this.privateKeyVal = this.privateKeyVal.replace(/^\s+|\s+$/g, '')
+       this.$nextTick(()=> {
+          this.privateKeyVal = this.privateKeyVal.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+     //转账地址 去空
+     inputContentAddress () {
+        this.walletAddress = this.walletAddress.replace(/^\s+|\s+$/g, '')
+        this.$nextTick(()=> {
+          this.walletAddress = this.walletAddress.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+     //转账金额 去空
+     inputContentAmount () {
+       this.walletMoney = this.walletMoney.replace(/^\s+|\s+$/g, '')
+       this.$nextTick(()=> {
+          this.walletMoney = this.walletMoney.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+     },
+    //登陆
     walletInfoForm () {
       var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
             index,arr) => {
@@ -183,7 +233,7 @@ export default {
       })
       //1 私钥登陆  0 keyStore登陆
       if (this.radioPages === 1) {
-        let privateVal = this.privateKeyVal
+        let privateVal = this.privateKeyVal.replace(/^\s+|\s+$/g, '')
         var key = /^[A-Za-z0-9]+$/
         if (!key.test(privateVal)) {
           this.privateKeyError = true
@@ -193,29 +243,26 @@ export default {
           let flag3 = keystoreArr.filter(item=> JSON.parse(item).privateKey === privateVal)
           if (flag1) {
             this.transferPages = 2
-            this.address = JSON.parse(flag3[0]).address
+            this.address = "0x" + JSON.parse(flag3[0]).address
             this.allMoney = JSON.parse(flag3[0]).amount
           } else {
-            this.privateKeyError = true
+            this.privateKeyError = true //提示私钥不正确
           }
         }
       } else {
-        let passVal = this.passVal
-        let keyStoreAddress = this.KeyStoreVal.substring(3,43)
-        let flag2 = keystoreArr.filter(item=> JSON.parse(item).address === keyStoreAddress)
-        var userPass = JSON.parse(flag2[0]).pass
-        var pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
-        if (!pass.test(passVal)) {
-          this.walletPassError = true
-          return
-        } else if (userPass!=passVal) {
-            this.walletPassError = true
-            return
-        } else {
-            this.transferPages = 2
-            this.address = JSON.parse(flag2[0]).address
-            this.allMoney = JSON.parse(flag2[0]).amount
-        }
+          let passVal = this.passVal.replace(/^\s+|\s+$/g, '')
+          let keyStoreAddress = this.KeyStoreVal.substring(3,43)
+          let flag2 = keystoreArr.filter(item=> JSON.parse(item).address === keyStoreAddress)
+          var userPass = JSON.parse(flag2[0]).pass
+          if (userPass != passVal) {
+              this.walletPassError = true
+              return
+          } else {
+              this.transferPages = 2
+               this.walletPassError = false
+              this.address = "0x" + JSON.parse(flag2[0]).address
+              this.allMoney = JSON.parse(flag2[0]).amount
+          }
       }
     },
     //获取input file上传文件的相关属性
@@ -226,6 +273,8 @@ export default {
         this.showPass = true
       } else {
         this.KeyStoreVal = 'walletInfo.checkKeyStore2'
+        this.passVal = ''
+        this.walletPassError = false
         this.showPass = false
       }
     },
@@ -239,7 +288,7 @@ export default {
     },
     //转账
     transferFrom () {
-      var walletAddress = this.walletAddress
+      var walletAddress = this.walletAddress.replace(/^\s+|\s+$/g, '')
       var key = /^[A-Za-z0-9]+$/
       if (!key.test(walletAddress)) {
         this.addressError = true
@@ -269,8 +318,8 @@ export default {
       //  
       let privateVal = this.privateKeyVal //私钥
       let fromAddress = this.address  //发送地址
-      let toAddress = this.walletAddress  //接收地址
-      let amount = this.walletMoney  //转账金额
+      let toAddress = this.walletAddress.replace(/^\s+|\s+$/g, '')  //接收地址
+      let amount = this.walletMoney.replace(/^\s+|\s+$/g, '')  //转账金额
       let balance = Number(this.allMoney) - Number(amount) //余额
       this.allMoney = balance
       
@@ -287,7 +336,7 @@ export default {
       // SECSDK.default.txSign(tx)
 
       this.maskPage = 2
-      updateAmount(balance, fromAddress)
+      walletMethods.updateAmount(balance, fromAddress)
 
       var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
             index,arr) => {
@@ -314,17 +363,15 @@ export default {
       localStorage.setItem("keystore",keystoreArr.substring(1,keystoreArr.length-1))
     }
   },
-  mounted() {
-      
-  },
-  created () {
-
-  },
   components: {
     contentFooter,
+
     publicIpt,
+
     publicBtn,
+
     tipsContent,
+
     publicIptPass
   },
   computed: {
@@ -334,8 +381,12 @@ export default {
         this.addressTxt = 'transfer.transferAddressError2'
         this.addressError = true
         return false
+      } else {
+        this.addressError = false
       }
-      return this.walletAddress.length > 39 && this.walletMoney.length > 0 && Number(this.walletMoney) > 0 ? true : false
+      return this.walletAddress.length > 41
+        && 0 < Number(this.walletMoney)
+        && Number(this.walletMoney) <= Number(this.allMoney) ? true : false
     },
 
     //转账数量
@@ -360,14 +411,21 @@ export default {
 
     //keyStore按钮是否可点击
     keyStoreActive () {
-      return this.passVal.length > 7 ? true : false
+      let pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
+      if (this.passVal.length == 0) {
+        this.walletPassError = false
+      }
+      return this.passVal.length > 7 && pass.test(this.passVal)  ? true : false
     },
 
     //私钥按钮是否可点击
     privateKeyActive () {
       if (this.privateKeyVal.length > 40) {
         this.textRows = 2
-      } else {
+      } else if (this.privateKeyVal.length == 0) {
+        this.textRows = 1
+        this.privateKeyError = false
+      }  else {
         this.textRows = 1
       }
       return this.privateKeyVal.length > 63 ? true : false
@@ -377,12 +435,13 @@ export default {
 </script>
 
 <style scoped>
+  main .el-row {height: 30.35rem;}
   .content_list h3 {font-size: 1rem;margin: 7.2rem 0 .6rem;}
   .content_list .ipt_number {height: 2.4rem;border: .05rem solid rgba(145,162,170,1);border-radius: .5rem;
     color: #42535B;font-size: .7rem;font-weight: 400;padding: 0 1rem;display: flex;align-items: center;
     justify-content: space-around;max-width: 100%!important;}
   .content_list .ipt_number input {height: 2rem;flex: 1;border: 0;}
-  .content_list .transfer_btn {margin: 1.8rem 0 5.9rem;}
+  .content_list .transfer_btn {margin-top: 1.8rem;}
 
   .transfer_money {display: flex;align-items: center;justify-content: space-between;font-size: .7rem;
     color: #91A2AA;width: 20.6rem;padding-top: .6rem;}

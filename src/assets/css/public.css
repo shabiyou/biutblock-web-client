@@ -40,6 +40,7 @@ body.modal-open {
 body,p,ul,li {margin: 0;padding: 0;}
 ul li {list-style: none!important;}
 input,button {outline: none!important;}
+input,textarea{-webkit-appearance: none;appearance: none;}
 
 .clearfix:after{content:‘’;display:block; height:0; line-height:0; visibility:hidden;}
 .clearfix{*zoom:1;}
@@ -49,7 +50,7 @@ button:hover {cursor: pointer;}
 
 main {background: #fff;width: 100%;}
 main .mt1 {margin-top: 1rem;}
-main h2 {color: #42535B;font-size: 1.7rem;font-weight: 500;margin: 7.4rem 0 3.1rem;}
+main h2 {color: #42535B;font-size: 1.7rem;font-weight: 500;margin: 6.4rem 0 3.1rem;}
 main .content_list {width: 20.6rem;margin: 0 auto;max-width: 100%!important;}
 main .create_cnt {width: 24.5rem;margin: 0 auto;max-width: 100%!important;}
 main .content_bg {width: 100%;background: url('../images/public_bg.png') no-repeat;
@@ -91,11 +92,11 @@ main .content_bg p {font-size: .6rem;color: #728087;font-weight: 400;padding: 4.
 
 /* keyStore 与 私钥 */
 .key_store p,.private_key p {font-size: .9rem;color: #42535B;font-weight: 500;padding: 1.45rem 0 .55rem;}
-.key_store .key_store_btn {margin: 1.8rem 0 3.5rem;}
-.private_key .private_key_btn {margin: 1.6rem 0 4.5rem;}
+.key_store .key_store_btn {margin-top: 1.8rem;}
+.private_key .private_key_btn {margin-top: 1.6rem;}
 
 .private_key textarea {width: 18.5rem;color: #42535B;font-size: .7rem;padding: .8rem 1rem;
-  outline: none;resize: none;border-radius: .5rem;}
+  outline: none;resize: none;border-radius: .5rem;border: .05rem solid rgba(145,162,170,1);}
 
 .key_store {position: relative;}
 .key_store input[type='file'] {width: 20.5rem;height: 2.4rem;position: absolute;top: 3rem;opacity: 0;

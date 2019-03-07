@@ -10,12 +10,26 @@
           <section class="content_list">
             <section v-if="pages==1">
               <h2>{{$t('newWallet.createWallet')}}</h2>
-              <public-ipt :placeholder="$t('newWallet.enterPass1')" :class="formatError?'errorBorder':''" maxlength="30" v-model="walletPass1" />
+              <public-ipt
+                  v-model="walletPass1"
+                  maxlength="30"
+                  :class="formatError?'errorBorder':''" 
+                  :placeholder="$t('newWallet.enterPass1')"
+                  @input="inputContent1"
+                  @loseFocus="loseFocus"
+                  @getFocus="getFocus"
+                  :value="walletPass1" />
               <tips-content v-show="showFormat" :tipsTxt="tipsTxt1"></tips-content>
-              <public-ipt :placeholder="$t('newWallet.enterPass2')" :class="DontAgree?'errorBorder':''" maxlength="30" class="mt1" v-model="walletPass2" />
+              <public-ipt 
+                  v-model="walletPass2"
+                  maxlength="30"
+                  class="mt1"
+                  :placeholder="$t('newWallet.enterPass2')" 
+                  :class="DontAgree?'errorBorder':''" 
+                  @input="inputContent2"/>
               <tips-content v-show="errorTxt2" :tipsTxt="tipsTxt2"></tips-content>
               <tips-list :tipsListKey="tipsListPass" class="tips_m2"></tips-list>
-              <public-btn type="button" class="create_btn" @click.native="createWallet" :disabled="!createActive" :class="createActive?'btn_active':''">{{$t('newWallet.createWallet')}}</public-btn>
+              <public-btn type="button" @click.native="createWallet" :disabled="!createActive" :class="createActive?'btn_active':''">{{$t('newWallet.createWallet')}}</public-btn>
             </section>
           </section>
 
@@ -54,7 +68,7 @@
   import tipsList from './compoents/tips-list'
   import tipsImg from '../../assets/images/tipsImg.png'
   import walletsHandler from '../../lib/WalletsHandler.js'
- 
+  import walletMethods from '../../utils/publicMethode.js'
   export default {
     name: 'createWallet',
     data() {
@@ -65,6 +79,7 @@
         errorTxt2: false, //两次密码不一致设置true
         formatError: false, //密码格式错误
         DontAgree: false, //两次密码不一致border
+        showFormat: false,//密码提示不显示
         pages: 1, //控制显示页面 1 创建钱包  2 保存Keystore文件 3 保存私钥
         tipsTxt1: 'passTips.passFormat',
         tipsTxt2: 'passTips.passNoMatch',
@@ -105,37 +120,51 @@
         ],
       }
     },
-    created() {
-      
-    },
     methods: {
+      //失去焦点
+      loseFocus () {
+        this.showFormat = false
+      },
+      //得到焦点
+      getFocus () {
+        this.showFormat = true
+      },
+      //去掉开头空格
+      inputContent1 (e) {
+        this.walletPass1 = this.walletPass1.replace(/^\s+|\s+$/g, '')
+        this.$nextTick(()=> {
+          this.walletPass1 = this.walletPass1.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+      },
+      //去掉开头空格 不能输入中文
+      inputContent2 () {
+        this.walletPass2 = this.walletPass2.replace(/^\s+|\s+$/g, '')
+        this.$nextTick(()=> {
+          this.walletPass2 = this.walletPass2.replace(/[\u4E00-\u9FA5]/g,'')
+        })
+      },
       //创建钱包
       createWallet() {
-        var pass1 = this.walletPass1
-        var pass2 = this.walletPass2
-        var pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
-        if (pass1!=pass2) {
+        let pass1 = this.walletPass1.replace(/^\s+|\s+$/g, '')
+        let pass2 = this.walletPass2.replace(/^\s+|\s+$/g, '')
+        if (pass1 != pass2) {
           this.errorTxt2 = true
           this.DontAgree = true
           this.formatError = false
           this.tipsTxt2 = 'passTips.passNoMatch'
           return
-        } else if (!pass.test(pass1)) {
-          this.errorTxt2 = true
-          this.DontAgree = false
-          this.formatError = true
-          this.tipsTxt2 = 'passTips.passFormatError'
-          return
         } else {
           this.errorTxt2 = false
-           this.DontAgree = false
-           this.formatError = false
+          this.DontAgree = false
+          this.formatError = false
           this.pages = 2 //保存Keystore文件
 
-          let keys = walletsHandler.getWalletKeys()
+          let amount = 0
+          let keys = walletsHandler.getWalletKeys() //创建钱包
           this.privateKey = keys.privateKey //获取创建钱包的私钥
           this.userAddress = keys.userAddress //获取创建钱包的地址
           
+          walletMethods.createNewWallet(pass1,this.userAddress,this.privateKey,amount)
           //存储密码、地址、私钥、余额
           let keystoreArr = localStorage.getItem("keystore") ? localStorage.getItem('keystore').split(/},{/).map((item,
             index,arr) => {
@@ -165,14 +194,18 @@
       continueKey() {
         this.pages = 3
       },
-      downUrlTxt() {
-        var json = "SEC" + this.userAddress + ".json"
-        this.download("" + json + "", "{'version':3,'privateKey':'" + this.privateKey + "'}");
+      //下载json文件
+      downUrlTxt () {
+        var filename = "SEC" + this.userAddress + ".json";
+        this.download(filename, "{'version':3,'privateKey':'" + this.privateKey + "'}");
       },
-      download(filename, text) {
+      download (filename, content) {
         var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-        element.setAttribute('download', filename);
+        var fdata = JSON.stringify(content);
+        var blob = new Blob([fdata], { type: "application/octet-stream" });
+        var objectUrl = URL.createObjectURL(blob);
+        element.setAttribute('href',objectUrl)
+        element.setAttribute('download', filename)
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
@@ -181,74 +214,44 @@
     },
     components: {
       publicBtn,
+
       publicIpt,
+
       tipsContent,
+
       tipsList,
+
       contentFooter
     },
     computed: {
-      // 显示密码格式
-      showFormat() {
-        return this.walletPass1.length > 0 ? true : false
-      },
-      // 创建钱包按钮是否可点击
+      //创建钱包按钮是否可点击
       createActive() {
-        return this.walletPass1.length > 7 && this.walletPass2.length > 7 ? true : false
+        var pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
+        if (this.walletPass1 == this.walletPass2 && pass.test(this.walletPass2)) {
+          this.errorTxt2 = false
+          this.DontAgree = false
+        }
+        return this.walletPass1.length > 7 
+          && pass.test(this.walletPass2)
+          && pass.test(this.walletPass1) ? true : false
       }
-    },
+    }
   }
 
 </script>
 
 <style scoped>
-  /* 创建钱包 */
-  main .create_btn {
-    margin-bottom: 4rem;
-  }
-
+  main .el-row  {height: 30.35rem;}
   /* 保存keyStore */
-  main .down_keystore {
-    display: block;
-    height: 2.4rem;
-    background: rgba(255, 255, 255, 1);
-    border-radius: .5rem;
-    border: .05rem solid rgba(145, 162, 170, 1);
-    text-align: center;
-    line-height: 2.4rem;
-    color: #42535B;
-    font-size: .8rem;
-    font-weight: 500;
-    text-decoration: none;
-  }
+  main .down_keystore {display: block;height: 2.4rem;background: rgba(255, 255, 255, 1);border-radius: .5rem;
+    border: .05rem solid rgba(145, 162, 170, 1);text-align: center;line-height: 2.4rem;color: #42535B;font-size: .8rem;
+    font-weight: 500;text-decoration: none;}
   main .down_keystore:hover {cursor: pointer;}
-  main .continue_btn {
-    width: 9.1rem;
-    margin-bottom: 6.9rem;
-  }
-
+  main .continue_btn {width: 9.1rem;}
   /* 保存私钥 */
-  main article {
-    background: rgba(245, 245, 245, 1);
-    color: #42535B;
-    border: .05rem solid rgba(145, 162, 170, 1);
-    border-radius: .5rem;
-    font-size: .8rem;
-    font-weight: 500;
-    padding: 1rem;
-    word-wrap: break-word;
-    line-height: 1.5;
-  }
-
-  main .tips_m1 {
-    margin: .4rem auto 1.8rem;
-  }
-
-  main .tips_m2 {
-    margin: .8rem auto 2.2rem;
-  }
-
-  main .tips_m3 {
-    margin: 1.2rem auto 8.5rem;
-  }
-
+  main article {background: rgba(245, 245, 245, 1);color: #42535B;border: .05rem solid rgba(145, 162, 170, 1);
+    border-radius: .5rem;font-size: .8rem;font-weight: 500;padding: 1rem;word-wrap: break-word;line-height: 1.5;}
+  main .tips_m1 {margin: .4rem auto 1.8rem;}
+  main .tips_m2 {margin: .8rem auto 2.2rem;}
+  main .tips_m3 {margin: 1.2rem auto 0;}
 </style>

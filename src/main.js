@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import VueI8n from 'vue-i18n'
 import i18n from './utils/index'
+import axios from 'axios'
+import qs from 'qs'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
@@ -12,6 +14,11 @@ import 'normalize.css'
 import './assets/css/public.css'
 
 import Element from 'element-ui'
+
+
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+Vue.prototype.$axios = axios
+Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false
 
