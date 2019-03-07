@@ -168,9 +168,10 @@ export default {
  
     	fetch(url, {
         method: 'post',
+ 
         body: JSON.stringify([{"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13","value":"1000"}]), // request is a string
         headers: {
-          'access-control-allow-origin': 'http://localhost',
+          'access-control-allow-origin': '*',
           'access-control-allow-methods': '*',
           'access-control-allow-headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
           'accept': 'application/json',
@@ -182,8 +183,8 @@ export default {
 
     
     // this.$axios({
-    //     method: 'post',
-    //     mode: 'no-cors',
+    //     method: 'POST',
+
     //     url:url,
     //     data:postData,
     //     headers: {
