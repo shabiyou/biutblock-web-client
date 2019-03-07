@@ -4,17 +4,17 @@ let fetch = require('node-fetch')
 
 let callServer = function (request, callback) {
   var options = {
-    method: 'GET',
+    method: 'POST',
     mode: 'no-cors',
     body: request, // request is a string
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:1024',
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Content-Type': 'application/json',
       'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
     }
   }
-  fetch('http://13.209.3.183:3002', options)
+  fetch('http://35.158.171.46:3002', options)
     .then(function (res) { return res.text() })
     .then(function (text) { callback(null, text) })
     .catch(function (err) { callback(err) })

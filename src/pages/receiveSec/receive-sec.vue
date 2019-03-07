@@ -58,6 +58,8 @@ import contentFooter from '../componentsPublic/content-footer'
 import walletMethods from '../../utils/publicMethode.js'
 import rpc from '../../lib/rpc.js'
 import SECSDK from '../../lib/SECSDK.bundle.js'
+let fetch = require('node-fetch')
+
 export default {
   name: 'receiveSec',
   data () {
@@ -114,7 +116,8 @@ export default {
     }
   },
   created() {
-    let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+    //let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+    let url = 'http://localhost:3001/web/rpcfreecharge'
 
     //查询余额
     let postData = this.$qs.stringify({
@@ -162,14 +165,38 @@ export default {
              "value":"1000"}
              ]
       })
-    
-    this.$axios({
+ 
+    	fetch(url, {
         method: 'post',
-        url:url,
-        data:postData
-    }).then((res)=>{
-        console.log(res.data.result)
-    })
+        body: JSON.stringify([{"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13","value":"1000"}]), // request is a string
+        headers: {
+          'access-control-allow-origin': 'http://localhost',
+          'access-control-allow-methods': '*',
+          'access-control-allow-headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+          'accept': 'application/json',
+          'content-type': 'application/json',
+      }
+     }).then( (res) => {
+        console.log(JSON.stringify(res.json))
+      })
+
+    
+    // this.$axios({
+    //     method: 'post',
+    //     mode: 'no-cors',
+    //     url:url,
+    //     data:postData,
+    //     headers: {
+    //       'accept': 'application/json',
+    //       "access-control-allow-origin": "*",
+    //       "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+    //       "access-control-allow-headers": "Origin, Content-Type, X-Auth-Token",
+    //       "content-type": "application/json"
+    //     }
+    // }).then((res)=>{
+    //     console.log(res.data.result)
+    // })
+
   },
 }
 </script>
