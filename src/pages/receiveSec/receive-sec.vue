@@ -60,6 +60,10 @@ import rpc from '../../lib/rpc.js'
 import SECSDK from '../../lib/SECSDK.bundle.js'
 let fetch = require('node-fetch')
 
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
+
 export default {
   name: 'receiveSec',
   data () {
@@ -117,86 +121,57 @@ export default {
   },
   created() {
     //let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
-    let url = 'http://localhost:3001/web/rpcfreecharge'
+    let url = 'http://localhost:3001/web/callrpc'
 
-    //查询余额
-    let postData = this.$qs.stringify({
-        "method":"sec_getBalance",
-        "params":["2ea55ca2492ba1a3da67f75cb773682d57bc8a13"]
-    })
-
-
-    //转账数据
-    let privateVal = 'a262db30966fd7a8968b5f66014ac6a377df16b4d8a099b00612034f44d68dc0'
-    let fromAddress = '75d1bd308cf2301b22db23c657e917a29f9b6f6a'
-    let toAddress = 'e77b8994508ae42632f91cf462c5132c65cc7706'
-    let amount = 10
-    //签名
-    const tx = "{\"privateKey\":\""+privateVal+"\",\"from\":\""+fromAddress+"\",\"to\":\""+toAddress+"\",\"value\":\""+amount+"\",\"inputData\":\"Test\"}"
-    SECSDK.default.generateSecKeys()
-    SECSDK.default.entropyToMnemonic(""+privateVal+"")
-    SECSDK.default.mnemonicToEntropy("river position steel require girl someone build truck spoil size crouch wedding earn luxury holiday amateur parent entire potato vintage heavy trouble there define")
-    let test = JSON.parse(SECSDK.default.txSign(tx))
-    let postData3 = this.$qs.stringify(
-      {
-        "method":"sec_sendRawTransaction",
-        "params":[
-            {
-            "timesTamp": "1551912659",
-            "from": test.from,
-            "to": test.to,
-            "value": test.value,
-            "contractAddress":"",
-            "gasLimit":"0",
-            "gas":"0",
-            "gasPrice":"0",
-            "data":"",
-            "inputData":""
-             }
-            ]
-      })
-
-    //获取测试币
-    let postData2 = this.$qs.stringify(
-      {
-        "method":"sec_freeCharge",
-        "params":[
-            {"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13",
-             "value":"1000"}
-             ]
-      })
+      let bodyRequest = {
+        'method': 'sec_freeCharge',
+        'params': [{"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13","value":"1000"}]
+      }
  
     	fetch(url, {
         method: 'post',
- 
-        body: JSON.stringify([{"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13","value":"1000"}]), // request is a string
-        headers: {
-          'access-control-allow-origin': '*',
-          'access-control-allow-methods': '*',
-          'access-control-allow-headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-          'accept': 'application/json',
-          'content-type': 'application/json',
-      }
-     }).then( (res) => {
-        console.log(JSON.stringify(res.json))
+        body: JSON.stringify(bodyRequest), // request is a string
+        headers: httpHeaderOption
+     }).then( (res) => res.json()).then((text) => {
+        console.log(text)
       })
 
-    
-    // this.$axios({
-    //     method: 'POST',
 
-    //     url:url,
-    //     data:postData,
-    //     headers: {
-    //       'accept': 'application/json',
-    //       "access-control-allow-origin": "*",
-    //       "access-control-allow-methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-    //       "access-control-allow-headers": "Origin, Content-Type, X-Auth-Token",
-    //       "content-type": "application/json"
-    //     }
-    // }).then((res)=>{
-    //     console.log(res.data.result)
-    // })
+        // //转账数据
+    // let privateVal = 'a262db30966fd7a8968b5f66014ac6a377df16b4d8a099b00612034f44d68dc0'
+    // let fromAddress = '75d1bd308cf2301b22db23c657e917a29f9b6f6a'
+    // let toAddress = 'e77b8994508ae42632f91cf462c5132c65cc7706'
+    // let amount = 10
+    // //签名
+    // const transfer = {
+    //   'privateKey': privateVal,
+    //   'from': fromAddress,
+    //   'to': toAddress,
+    //   'amount': amount
+    // }
+    // const tx = JSON.stringify(transfer)
+    // // transfer转换成json string 然后通过此方法对交易进行签名， 
+    // let test = JSON.parse(SECSDK.default.txSign(tx))
+    
+    // let postData3 = 
+    //   {
+    //     "method":"sec_sendRawTransaction",
+    //     "params":[test]
+    //   }
+    //   console.log(test)
+
+    //   let bodyRequest = {
+    //     'method': 'sec_getBalance',
+    //     'params': ['2ea55ca2492ba1a3da67f75cb773682d57bc8a13']
+    //   }
+ 
+    // 	fetch(url, {
+    //     method: 'post',
+    //     body: JSON.stringify(postData3), // request is a string
+    //     headers: httpHeaderOption
+    //  }).then( (res) => res.json()).then((text) => {
+    //     console.log(text)
+    //   })
 
   },
 }
