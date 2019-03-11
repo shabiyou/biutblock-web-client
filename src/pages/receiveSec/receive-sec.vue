@@ -120,58 +120,59 @@ export default {
     }
   },
   created() {
-    //let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
-    let url = 'http://localhost:3001/web/callrpc'
-
-      let bodyRequest = {
-        'method': 'sec_freeCharge',
-        'params': [{"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13","value":"1000"}]
-      }
- 
-    	fetch(url, {
-        method: 'post',
-        body: JSON.stringify(bodyRequest), // request is a string
-        headers: httpHeaderOption
-     }).then( (res) => res.json()).then((text) => {
-        console.log(text)
-      })
-
-
-        // //转账数据
-    // let privateVal = 'a262db30966fd7a8968b5f66014ac6a377df16b4d8a099b00612034f44d68dc0'
-    // let fromAddress = '75d1bd308cf2301b22db23c657e917a29f9b6f6a'
-    // let toAddress = 'e77b8994508ae42632f91cf462c5132c65cc7706'
-    // let amount = 10
-    // //签名
-    // const transfer = {
-    //   'privateKey': privateVal,
-    //   'from': fromAddress,
-    //   'to': toAddress,
-    //   'amount': amount
-    // }
-    // const tx = JSON.stringify(transfer)
-    // // transfer转换成json string 然后通过此方法对交易进行签名， 
-    // let test = JSON.parse(SECSDK.default.txSign(tx))
-    
-    // let postData3 = 
-    //   {
-    //     "method":"sec_sendRawTransaction",
-    //     "params":[test]
-    //   }
-    //   console.log(test)
+    let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+    //let url = 'http://localhost:3001/web/callrpc'
 
     //   let bodyRequest = {
-    //     'method': 'sec_getBalance',
-    //     'params': ['2ea55ca2492ba1a3da67f75cb773682d57bc8a13']
+    //     'method': 'sec_freeCharge',
+    //     'params': [{"to":"2ea55ca2492ba1a3da67f75cb773682d57bc8a13","value":"1000"}]
     //   }
  
     // 	fetch(url, {
     //     method: 'post',
-    //     body: JSON.stringify(postData3), // request is a string
+    //     body: JSON.stringify(bodyRequest), // request is a string
     //     headers: httpHeaderOption
     //  }).then( (res) => res.json()).then((text) => {
     //     console.log(text)
     //   })
+
+
+        // //转账数据
+    let privateVal = 'bad50f54db86259e077749d2593cd0fc74550a9b303da02972a37a16a7d23819'
+    let fromAddress = '0858768edb7c24b329efd1133888c2e1d0c23e76'
+    let toAddress = '04d7e0cd097bf5da8a6ac64b333d606639ffd7e8'
+    let amount = '3'
+    let inputData = 'Test'
+    //签名
+    const transfer = {
+      'privateKey': privateVal,
+      'from': fromAddress,
+      'to': toAddress,
+      'value': amount,
+      'inputData': inputData
+    }
+    const tx = JSON.stringify(transfer)
+    // transfer转换成json string 然后通过此方法对交易进行签名， 
+    let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+    
+    let postData = 
+      {
+        "method":"sec_sendRawTransaction",
+        "params":[txSigned]
+      }
+
+      let bodyRequest = {
+        'method': 'sec_getBalance',
+        'params': ['2ea55ca2492ba1a3da67f75cb773682d57bc8a13']
+      }
+ 
+    	fetch(url, {
+        method: 'post',
+        body: JSON.stringify(postData), // request is a string
+        headers: httpHeaderOption
+     }).then( (res) => res.json()).then((text) => {
+        console.log(text)
+      })
 
   },
 }
