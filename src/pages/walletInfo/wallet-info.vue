@@ -123,6 +123,9 @@ import Qrcode from '@xkeshi/vue-qrcode'
 import walletsHandler from '../../lib/WalletsHandler.js'
 import walletMethods from '../../utils/publicMethode.js'
 let fetch = require('node-fetch')
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
 export default {
   name: '',
   data () {
