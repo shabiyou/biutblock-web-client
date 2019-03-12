@@ -69,6 +69,8 @@
   import tipsImg from '../../assets/images/tipsImg.png'
   import walletsHandler from '../../lib/WalletsHandler.js'
   import walletMethods from '../../utils/publicMethode.js'
+  const SECUtil = require('@sec-block/secjs-util')
+  const CryptoJS = require('crypto-js')
   export default {
     name: 'createWallet',
     data() {
@@ -120,6 +122,36 @@
         ],
       }
     },
+
+    created() {
+      /** 加密过程*/
+      let walletName = 'my first wallet'
+      let walletPassword = '123'
+      let keys = SECUtil.generateSecKeys()
+      let privKey64 = keys.privKey
+      let privateKey = privKey64
+      let englishWords = SECUtil.entropyToMnemonic(privKey64)
+      let pubKey128 = keys.publicKey
+      let pubKey128ToString = pubKey128.toString('hex')
+      let userAddressToString = keys.secAddress
+
+      let keyFileDataJS = {
+        [walletName]: {
+          'privateKey': privateKey,
+          'publicKey': pubKey128ToString,
+          'walletAddress': userAddressToString
+        }
+      }
+
+      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), walletPassword)
+      console.log(cipherKeyData) // you can also save the cipherKeyData in a file
+      console.log(cipherKeyData.toString())
+
+      /** keyStore解密过程 */
+      let keyData = CryptoJS.AES.decrypt(cipherKeyData.toString(), walletPassword).toString(CryptoJS.enc.Utf8)
+      console.log(keyData)
+    },
+
     methods: {
       //失去焦点
       loseFocus () {
