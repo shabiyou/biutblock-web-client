@@ -126,7 +126,8 @@
     created() {
       /** 加密过程*/
       let walletName = 'my first wallet'
-      let walletPassword = '123'
+      let walletPassword = 'zxc123456'
+      let tests = 'ead41afbd1f11ed0d1eaedc7fdf5e5ba70404188d32d18d6388d666b73de38b6'
       let keys = SECUtil.generateSecKeys()
       let privKey64 = keys.privKey
       let privateKey = privKey64
@@ -137,18 +138,18 @@
 
       let keyFileDataJS = {
         [walletName]: {
-          'privateKey': privateKey,
+          'privateKey': tests,
           'publicKey': pubKey128ToString,
           'walletAddress': userAddressToString
         }
       }
 
-      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), walletPassword)
-      console.log(cipherKeyData) // you can also save the cipherKeyData in a file
-      console.log(cipherKeyData.toString())
-
+      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), tests)
+      //console.log(cipherKeyData) // you can also save the cipherKeyData in a file
+      //console.log(cipherKeyData.toString())
+      console.log(tests)
       /** keyStore解密过程 */
-      let keyData = CryptoJS.AES.decrypt(cipherKeyData.toString(), walletPassword).toString(CryptoJS.enc.Utf8)
+      let keyData = CryptoJS.AES.decrypt(cipherKeyData.toString(), tests).toString(CryptoJS.enc.Utf8)
       console.log(keyData)
     },
 
@@ -195,7 +196,20 @@
           let keys = walletsHandler.getWalletKeys() //创建钱包
           this.privateKey = keys.privateKey //获取创建钱包的私钥
           this.userAddress = keys.userAddress //获取创建钱包的地址
-          
+        
+          let walletName = 'my first wallet'
+          let keyFileDataJS = {
+            [walletName]: {
+              'privateKey': keys.privateKey,
+              'publicKey': keys.publicKey,
+              'walletAddress': keys.userAddress
+            }
+          }
+          let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), pass1)
+
+          console.log(keys)
+
+
           walletMethods.createNewWallet(pass1,this.userAddress,this.privateKey,amount)
           //存储密码、地址、私钥、余额
           let keystoreArr = localStorage.getItem("keystore") ? localStorage.getItem('keystore').split(/},{/).map((item,

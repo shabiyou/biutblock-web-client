@@ -245,6 +245,7 @@ export default {
     //获取input file上传文件的相关属性
     tirggerFile (event) {
       var file = event.target.files; // (利用console.log输出看结构就知道如何处理档案资料)
+      console.log(event)
       if (file.length === 1 && file[0].type == "application/json") {
         this.KeyStoreVal = file[0].name
         this.showPass = true
