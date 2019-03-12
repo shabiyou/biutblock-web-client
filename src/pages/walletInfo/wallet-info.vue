@@ -122,6 +122,7 @@ import publicBtn from '../componentsPublic/public-btn'
 import Qrcode from '@xkeshi/vue-qrcode'
 import walletsHandler from '../../lib/WalletsHandler.js'
 import walletMethods from '../../utils/publicMethode.js'
+let fetch = require('node-fetch')
 export default {
   name: '',
   data () {
@@ -328,6 +329,24 @@ export default {
         this.passTips = false
       } 
       return this.newWalletPass.length > 7 && pass.test(this.newWalletPass) ? true : false
+    },
+
+    getWalletBalance () {
+      //Example how to get balance of wallet
+
+      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+      let bodyRequest = {
+        'method': 'sec_getBalance',
+        'params': ["2ea55ca2492ba1a3da67f75cb773682d57bc8a13"]
+      }
+ 
+    	fetch(url, {
+        method: 'post',
+        body: JSON.stringify(bodyRequest), // request is a string
+        headers: httpHeaderOption
+     }).then( (res) => res.json()).then((text) => {
+        console.log(text)
+      })
     }
   }
 }
