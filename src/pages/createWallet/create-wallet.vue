@@ -138,7 +138,7 @@
 
       let keyFileDataJS = {
         [walletName]: {
-          'privateKey': tests,
+          'privateKey': privateKey,
           'publicKey': pubKey128ToString,
           'walletAddress': userAddressToString
         }
@@ -151,6 +151,16 @@
       /** keyStore解密过程 */
       let keyData = CryptoJS.AES.decrypt(cipherKeyData.toString(), tests).toString(CryptoJS.enc.Utf8)
       console.log(keyData)
+
+
+      /** 通过私钥privateKey获取publicKey 以及 wallet adress 的方法事例 */
+      /** 使用变量 tests作为实例 */
+      let privateKeyBuffer = SECUtil.privateToBuffer(keyFileDataJS[walletName].privateKey)
+      let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
+      let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer)
+      console.log(`public key: ${extractPublicKey.toString('hex')}`)
+      console.log(`wallet address: ${extractAddress.toString('hex')}`)
+
     },
 
     methods: {
