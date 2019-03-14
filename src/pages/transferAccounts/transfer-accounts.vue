@@ -42,13 +42,14 @@
             <!-- 私钥登陆 -->
             <section class="private_key" v-if="radioPages == 1">
               <p>{{$t('walletInfo.inputPrivateKey1')}}</p>
-              <textarea 
-                v-model="privateKeyVal"
-                maxlength="64" 
-                :placeholder="$t('walletInfo.inputPrivateKey2')" 
-                :class="privateKeyError?'errorBorder':''" 
-                :rows="textRows"
-                @input="inputContentKey"></textarea>
+
+              <public-ipt-pass 
+                  v-model="privateKeyVal"
+                  maxlength="64" 
+                  :placeholder="$t('walletInfo.inputPrivateKey2')" 
+                  :class="privateKeyError?'errorBorder':''" 
+                  @input="inputContentKey"></public-ipt-pass>
+              
               <tips-content :tipsTxt="privateKeyErrorTxt" v-show="privateKeyError"></tips-content>
               <public-btn class="private_key_btn"
                 :disabled="!privateKeyActive" :class="privateKeyActive?'btn_active':''"
@@ -175,7 +176,6 @@ export default {
       walletPassError: false,//密码
       addressError: false,//转账地址无效
       maskShow: false,//遮罩层默认的状态下关闭
-      textRows: 1,//多行文本框控制
       maskPage: 1,//默认先显示确认转账信息
       showPass: false,//默认不显示密码输入框
       radioPages: 0, //keyStore与私钥切换显示  0 显示keyStore  1 显示私钥
@@ -426,14 +426,6 @@ export default {
 
     //私钥按钮是否可点击
     privateKeyActive () {
-      if (this.privateKeyVal.length > 40) {
-        this.textRows = 2
-      } else if (this.privateKeyVal.length == 0) {
-        this.textRows = 1
-        this.privateKeyError = false
-      }  else {
-        this.textRows = 1
-      }
       return this.privateKeyVal.length > 63 ? true : false
     },
   },

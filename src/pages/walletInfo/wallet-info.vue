@@ -43,13 +43,12 @@
             <section class="private_key" v-if="radioPages == 1">
               <p>{{$t('walletInfo.inputPrivateKey1')}}</p>
 
-              <textarea 
+              <public-ipt
                   v-model="privateKeyVal"
                   maxlength="64" 
-                  :placeholder="$t('walletInfo.inputPrivateKey2')"
+                  :placeholder="$t('walletInfo.inputPrivateKey2')" 
                   :class="privateKeyError?'errorBorder':''" 
-                  :rows="textRows"
-                  @input="inputContentKey"></textarea>
+                  @input="inputContentKey"></public-ipt>
               
               <tips-content :tipsTxt="privateKeyErrorTxt" v-show="privateKeyError"></tips-content>
               <public-btn class="private_key_btn"
@@ -138,7 +137,6 @@ export default {
       maskShow: false,//弹窗显示与隐藏
       privateKeyError: false,//私钥错误true显示
       walletPassError: false,//密码
-      textRows: 1,//多行文本框控制
       showPass: false,//默认不显示密码输入框
       radioPages: 0, //keyStore与私钥切换显示  0 显示keyStore  1 显示私钥
       KeyStoreVal: 'walletInfo.checkKeyStore2', //绑定keyStore的值
@@ -319,14 +317,6 @@ export default {
 
     //私钥按钮是否可点击
     privateKeyActive () {
-      if (this.privateKeyVal.length > 40) {
-        this.textRows = 2
-      } else if (this.privateKeyVal.length == 0) {
-        this.textRows = 1
-        this.privateKeyError = false
-      } else {
-        this.textRows = 1
-      } 
       return this.privateKeyVal.length > 63 ? true : false
     },
 
