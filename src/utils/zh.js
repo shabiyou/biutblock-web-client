@@ -64,6 +64,7 @@ export default {
     transferMoney1: "转账金额必不能为0",
     transferAddressError: "转账地址无效",
     transferAddressError2: "相同地址不能转账",
+    transferError: '转账失败，请稍后重试...'
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果:",

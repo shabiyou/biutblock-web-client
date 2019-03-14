@@ -117,9 +117,19 @@
             <span>{{ walletMoney }} SEC</span>
           </li>
         </ul>
+        <p class="transferError" v-show="transferError">{{$t('transfer.transferError')}}</p>
         <section>
-          <button type="button" @click="closeTransfer">{{$t('mask.cancel')}}</button>
-          <button type="button" @click="confirmTransfer">{{$t('mask.confirm')}}</button>
+          <button type="button" 
+            @click="closeTransfer"
+            :disabled="confirmDisabled">
+            {{$t('mask.cancel')}}
+          </button>
+          <button type="button" 
+            @click="confirmTransfer"
+            :disabled="confirmDisabled"
+            :class="confirmDisabled?'confirmDisabled':''">
+            {{$t('mask.confirm')}}
+          </button>
         </section>
       </section>
       <!-- 操作成功 -->
@@ -143,14 +153,20 @@ import publicBtn from '../componentsPublic/public-btn'
 import tipsContent from '../componentsPublic/tips-content'
 import SECSDK from '../../lib/SECSDK.bundle.js'
 import walletMethods from '../../utils/publicMethode.js'
+const SECUtil = require('@sec-block/secjs-util')
+const CryptoJS = require('crypto-js')
+let fetch = require('node-fetch')
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
 export default {
   name: 'transferAccounts',
   data () {
     return {
-      walletAddress: '',
+      walletAddress: '', //
       walletMoney: '',
-      address: '',
-      allMoney: 0,
+      address: '', //当前钱包地址
+      allMoney: 0, //当前钱包总金额
       privateKeyErrorTxt: 'walletInfo.invalidPrivateKey',
       walletPassErrorTxt: 'passTips.passError',
       transferPages: 1,//页面相关展示  1 登陆 2 转账
@@ -163,10 +179,11 @@ export default {
       maskPage: 1,//默认先显示确认转账信息
       showPass: false,//默认不显示密码输入框
       radioPages: 0, //keyStore与私钥切换显示  0 显示keyStore  1 显示私钥
+      confirmDisabled: false,//确认转账按钮
+      transferError: false,//转账失败提示
       KeyStoreVal: 'walletInfo.checkKeyStore2', //绑定keyStore的值
       passVal: '', //绑定pass的值
       privateKeyVal: '', //绑定私钥的值
-      newWalletPass: '',//新钱包密码
       addressTxt: 'transfer.transferAddressError',
       moneyTxt: 'transfer.transferMoney',
       radioList:[
@@ -181,7 +198,8 @@ export default {
             isChecked: false,
           },
       ],
-      successUrl: 'https://test.explorer.intchain.io/#/blockchain/txdetai'
+      successUrl: 'http://scan.secblock.io',
+      KeyStoreUrl: ''
     }
   },
   created() {
@@ -218,19 +236,6 @@ export default {
      },
     //登陆
     walletInfoForm () {
-      var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
-            index,arr) => {
-            if(arr.length<2){
-                return item
-            }
-            if (index == 0) {
-              return item + '}'
-            } else if (index == arr.length - 1) {
-              return '{' + item
-            } else {
-              return '{' + item + '}'
-            }
-      })
       //1 私钥登陆  0 keyStore登陆
       if (this.radioPages === 1) {
         let privateVal = this.privateKeyVal.replace(/^\s+|\s+$/g, '')
@@ -239,36 +244,42 @@ export default {
           this.privateKeyError = true
           return
         } else {
-          let flag1 = keystoreArr.some(item=> JSON.parse(item).privateKey === privateVal)
-          let flag3 = keystoreArr.filter(item=> JSON.parse(item).privateKey === privateVal)
-          if (flag1) {
+            let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
+            let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
+            let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer)
             this.transferPages = 2
-            this.address = "0x" + JSON.parse(flag3[0]).address
-            this.allMoney = JSON.parse(flag3[0]).amount
-          } else {
-            this.privateKeyError = true //提示私钥不正确
-          }
+            this.address = `0x${extractAddress.toString('hex')}`
+            this.privateKeyVal = privateVal
+            this.getWalletBalance (`${extractAddress.toString('hex')}`).then(res=>{
+                this.allMoney = res
+            })
         }
       } else {
           let passVal = this.passVal.replace(/^\s+|\s+$/g, '')
-          let keyStoreAddress = this.KeyStoreVal.substring(3,43)
-          let flag2 = keystoreArr.filter(item=> JSON.parse(item).address === keyStoreAddress)
-          var userPass = JSON.parse(flag2[0]).pass
-          if (userPass != passVal) {
-              this.walletPassError = true
-              return
-          } else {
-              this.transferPages = 2
-               this.walletPassError = false
-              this.address = "0x" + JSON.parse(flag2[0]).address
-              this.allMoney = JSON.parse(flag2[0]).amount
-          }
+           let that = this
+          //解锁钱包
+          this.$axios.get(''+this.KeyStoreUrl+'').then(function (response) {
+                let jsonstr = eval('(' + response.data + ')')
+                let keyData = CryptoJS.AES.decrypt(jsonstr.data.toString(), passVal).toString(CryptoJS.enc.Utf8)
+                if (response.status == 200) {
+                  let walletData = JSON.parse(keyData)
+                  that.address = '0x'+ walletData.SECundefined.walletAddress
+                  that.privateKeyVal = walletData.SECundefined.privateKey
+                  that.getWalletBalance (walletData.SECundefined.walletAddress).then(res=>{
+                    that.allMoney = res
+                  })
+                  that.transferPages = 2
+                }
+            }).catch(function (error) {
+                that.walletPassError = true
+            });
       }
     },
     //获取input file上传文件的相关属性
     tirggerFile (event) {
       var file = event.target.files; // (利用console.log输出看结构就知道如何处理档案资料)
-      if (file.length === 1 && file[0].type == "application/json") {
+      if (file.length === 1) {
+        this.KeyStoreUrl = this.getObjectURL(file[0]) // 上传钱包获取本地地址
         this.KeyStoreVal = file[0].name
         this.showPass = true
       } else {
@@ -315,52 +326,47 @@ export default {
     },
     //确认转账
     confirmTransfer () {
-      //  
+      this.confirmDisabled = true
+      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
       let privateVal = this.privateKeyVal //私钥
-      let fromAddress = this.address  //发送地址
-      let toAddress = this.walletAddress.replace(/^\s+|\s+$/g, '')  //接收地址
+      let fromAddress = this.address.replace("0x","")  //发送地址
+      let toAddress = this.walletAddress.replace(/^\s+|\s+$/g, '').replace("0x","")  //接收地址
       let amount = this.walletMoney.replace(/^\s+|\s+$/g, '')  //转账金额
-      let balance = Number(this.allMoney) - Number(amount) //余额
-      this.allMoney = balance
+      let inputData = 'Test'
       
-      //转账信息
-      // let transferData = this._encryptTransaction()
-      // this.$JsonRPCClient.sendTransactions(this.walletAddress, transferData, (walletBalance) => {
-      //       this.allMoney = walletBalance
-      // })
       //签名
-      // const tx = "{\"privateKey\":\""+privateVal+"\",\"from\":\""+fromAddress+"\",\"to\":\""+toAddress+"\",\"value\":\""+amount+"\",\"inputData\":\"Test\"}"
-      // SECSDK.default.generateSecKeys()
-      // SECSDK.default.entropyToMnemonic(""+privateVal+"")
-      // SECSDK.default.mnemonicToEntropy("river position steel require girl someone build truck spoil size crouch wedding earn luxury holiday amateur parent entire potato vintage heavy trouble there define")
-      // SECSDK.default.txSign(tx)
+      const transfer = {
+        'privateKey': privateVal,
+        'from': fromAddress,
+        'to': toAddress,
+        'value': amount,
+        'inputData': inputData
+      }
+      const tx = JSON.stringify(transfer)
+      // transfer转换成json string 然后通过此方法对交易进行签名， 
+      let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      let postData = 
+        {
+          "method":"sec_sendRawTransaction",
+          "params":[txSigned]
+        }
 
-      this.maskPage = 2
-      walletMethods.updateAmount(balance, fromAddress)
-
-      var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
-            index,arr) => {
-            if(arr.length<2){
-                return item
-            }
-            if (index == 0) {
-              return item + '}'
-            } else if (index == arr.length - 1) {
-              return '{' + item
-            } else {
-              return '{' + item + '}'
-            }
-      })
-      keystoreArr = keystoreArr.map(item=>{
-          const keystore = JSON.parse(item)
-          if(keystore.address == toAddress){
-            keystore.amount = Number(keystore.amount) + Number(amount)
-            return keystore
+      fetch(url, {
+          method: 'post',
+          body: JSON.stringify(postData), // request is a string
+          headers: httpHeaderOption
+        }).then( (res) => res.json()).then((text) => {
+          if (JSON.parse(text.body).result.status == 1) {
+            this.maskPage = 2
+            this.getWalletBalance (fromAddress).then(res=>{
+                this.allMoney = res || "0"
+            })
+            this.confirmDisabled
+          } else {
+            this.transferError = true
+            this.confirmDisabled
           }
-          return keystore
-      })
-      keystoreArr = JSON.stringify(keystoreArr)
-      localStorage.setItem("keystore",keystoreArr.substring(1,keystoreArr.length-1))
+        })
     }
   },
   components: {
@@ -457,10 +463,13 @@ export default {
   
   .transfer_mask ul li span:first-child {display: inline-block;}
   .transfer_mask ul li .firstChild {width: 4rem;}
-  .transfer_mask ul li .firstChilds {width: 6.2rem;}
+  .transfer_mask ul li .firstChilds {width: 5.4rem;font-size: 12px;}
 
   .transfer_mask section {float: right;padding-top: 1.5rem;}
   .transfer_mask section button {float: left;}
   .transfer_mask section button:first-child {background:linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);
     margin-right: .6rem;}
+
+  .transferError {font-size: 16px;color: #EE1C39;padding-top: 10px;}
+  .confirmDisabled {background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%)!important;}
 </style>

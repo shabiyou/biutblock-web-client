@@ -1,14 +1,15 @@
 <template>
   <el-container>
     <main>
-        <embed style="width: 100%;height: 100%" :src="guideUrl" internalinstanceid="8">
+        <iframe :src="guideUrl"  width="100%" height="100%">
+          This browser does not support PDFs. Please download the PDF to view it: 
+          <a :href="guideUrl">Download PDF</a>
+        </iframe>
     </main>
   </el-container>
 </template>
 
 <script>
-// import SECHelpEN from '../../assets/help/SECHelp_EN.pdf'
-// import SECHelpZH from '../../assets/help/SECHelp_ZH.pdf'
 export default {
   name: 'walletHelp',
   data () {
@@ -17,10 +18,9 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$i18n.locale)
+    
   },
   created() {
-    console.log(this.$i18n.locale)
     if (this.$i18n.locale == "zh") {
       this.guideUrl = "https://test.wallet.intchain.io/images/helpZh.pdf"
     }

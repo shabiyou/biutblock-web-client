@@ -122,17 +122,15 @@ import publicBtn from '../componentsPublic/public-btn'
 import Qrcode from '@xkeshi/vue-qrcode'
 import walletsHandler from '../../lib/WalletsHandler.js'
 import walletMethods from '../../utils/publicMethode.js'
-let fetch = require('node-fetch')
-let httpHeaderOption = {
-  'content-type': 'application/json'
-}
+const SECUtil = require('@sec-block/secjs-util')
+const CryptoJS = require('crypto-js')
 export default {
   name: '',
   data () {
     return {
       walletAddress: '',//钱包地址
       walletKey: '',//钱包私钥
-      walletMoney: '',//钱包SEC币
+      walletMoney: '0',//钱包SEC币
       infoTxt: 'passTips.passFormat',
       privateKeyErrorTxt: 'walletInfo.invalidPrivateKey',
       walletPassErrorTxt: 'passTips.passError',
@@ -149,8 +147,8 @@ export default {
       privateKeyVal: '', //绑定私钥的值
       newWalletPass: '',//新钱包密码
       passTips: false,
-      privateInoKey: "",
-      userInoAddress: "",
+      // privateInoKey: "",
+      // userInoAddress: "",
       radioList:[
           {
             id: '0',
@@ -162,7 +160,8 @@ export default {
             value: 'walletInfo.privateKey',
             isChecked: false,
           },
-      ]
+      ],
+      KeyStoreUrl: ''
     }
   },
   methods: {
@@ -189,21 +188,8 @@ export default {
      },
     //登陆
     walletInfoForm () {
-      var keystoreArr = localStorage.getItem("keystore").split(/},{/).map((item,
-            index,arr) => {
-            if(arr.length<2){
-                return item
-            }
-            if (index == 0) {
-              return item + '}'
-            } else if (index == arr.length - 1) {
-              return '{' + item
-            } else {
-              return '{' + item + '}'
-            }
-      })
-      //1 私钥登陆  0 keyStore登陆
       
+      //1 私钥登陆  0 keyStore登陆
       if (this.radioPages === 1) {
         let privateVal = this.privateKeyVal.replace(/^\s+|\s+$/g, '')
         var key = /^[A-Za-z0-9]+$/
@@ -211,43 +197,53 @@ export default {
           this.privateKeyError = true
           return
         } else {
-          let flag1 = keystoreArr.some(item=> JSON.parse(item).privateKey === privateVal)
-          let flag3 = keystoreArr.filter(item=> JSON.parse(item).privateKey === privateVal)
-          if (flag1) {
+            //let privateKey = "3f1c81dc0cbd62f1561b4e10f34d88c7944239cff5faccecd3339f6514bbe390"
+            let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
+            let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
+            let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer)
             this.infoPages = 2
-            this.walletAddress = "0x" + JSON.parse(flag3[0]).address
-            this.walletKey = JSON.parse(flag3[0]).privateKey
-            this.walletMoney = JSON.parse(flag3[0]).amount
-          } else {
-            this.privateKeyError = true
-          }
+            this.walletAddress = `0x${extractAddress.toString('hex')}`
+            this.walletKey = privateVal
+            this.getWalletBalance (`${extractAddress.toString('hex')}`).then(res=>{
+                this.walletMoney = res
+            })
         }
       } else {
           var passVal = this.passVal.replace(/^\s+|\s+$/g, '')
-          let keyStoreAddress = this.KeyStoreVal.substring(3,43)
-          let flag2 = keystoreArr.filter(item=> JSON.parse(item).address === keyStoreAddress)
-          var userPass = JSON.parse(flag2[0]).pass
+          let that = this
           var pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
           if (!pass.test(passVal)) {
             this.walletPassError = true
             return
-          } else if (userPass!=passVal) {
-            this.walletPassError = true
-            return
           } else {
-            this.infoPages = 2
-            this.walletAddress = "0x" + JSON.parse(flag2[0]).address
-            this.walletKey = JSON.parse(flag2[0]).privateKey
-            this.walletMoney = JSON.parse(flag2[0]).amount
+            //解锁钱包
+            this.$axios.get(''+this.KeyStoreUrl+'').then(function (response) {
+                let jsonstr = eval('(' + response.data + ')')
+                let keyData = CryptoJS.AES.decrypt(jsonstr.data.toString(), passVal).toString(CryptoJS.enc.Utf8)
+                if (response.status == 200) {
+                  let walletData = JSON.parse(keyData)
+                  that.walletAddress = '0x'+ walletData.SECundefined.walletAddress
+                  that.walletKey = walletData.SECundefined.privateKey
+                  that.getWalletBalance (walletData.SECundefined.walletAddress).then(res=>{
+                    that.walletMoney = res
+                  })
+                  that.infoPages = 2
+                }
+            }).catch(function (error) {
+                that.walletPassError = true
+            });
           }
       }
     },
+    
     //获取input file上传文件的相关属性
     tirggerFile (event) {
-      var file = event.target.files; // (利用console.log输出看结构就知道如何处理档案资料)
-      console.log(event)
-      if (file.length === 1 && file[0].type == "application/json") {
+      var file = event.target.files;
+     
+      if (file.length === 1) {
+        this.KeyStoreUrl = this.getObjectURL(file[0]) // 上传钱包获取本地地址 
         this.KeyStoreVal = file[0].name
+         console.log(file[0].name)
         this.showPass = true
       } else {
         this.KeyStoreVal = 'walletInfo.checkKeyStore2'
@@ -265,15 +261,25 @@ export default {
     //确认创建钱包
     createWallet () {
       let newPass = this.newWalletPass.replace(/^\s+|\s+$/g, '')
-      let amount = 0
-      let keys = walletsHandler.getWalletKeys() //创建钱包
-      this.privateInoKey = keys.privateKey //获取创建钱包的私钥
-      this.userInoAddress = keys.userAddress //获取创建钱包的地址
-
-      walletMethods.createNewWallet(newPass,this.userInoAddress,this.privateInoKey,amount)
-
-      var json = "" + this.userInoAddress + ".json"
-      this.download("SEC" + json + "", "{'version':3,'privateKey':'" + this.privateInoKey + "'}")
+      let keys = SECUtil.generateSecKeys() //创建钱包
+      let privKey64 = keys.privKey //获取创建钱包的私钥
+      let privateKey = privKey64
+      let englishWords = SECUtil.entropyToMnemonic(privKey64)
+      let pubKey128 = keys.publicKey //公钥
+      let pubKey128ToString = pubKey128.toString('hex')
+      let userAddressToString = keys.secAddress //地址
+      let walletName  = 'SEC' + ""+ keys.userAddress +"" 
+      let keyFileDataJS = {
+            [walletName]: {
+              'privateKey': privateKey,
+              'publicKey': pubKey128ToString,
+              'walletAddress': userAddressToString
+            }
+      }
+      //通过密码加密钱包  
+      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
+      var json = "" + userAddressToString + ".json"
+      this.download("SEC" + json + "", "{'version':3,'data':'" + cipherKeyData.toString() + "'}")
       this.closeMask()
     },
     //下载keyStore文件
@@ -334,25 +340,10 @@ export default {
       } 
       return this.newWalletPass.length > 7 && pass.test(this.newWalletPass) ? true : false
     },
-
-    getWalletBalance () {
-      //Example how to get balance of wallet
-
-      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
-      let bodyRequest = {
-        'method': 'sec_getBalance',
-        'params': ["2ea55ca2492ba1a3da67f75cb773682d57bc8a13"]
-      }
- 
-    	fetch(url, {
-        method: 'post',
-        body: JSON.stringify(bodyRequest), // request is a string
-        headers: httpHeaderOption
-     }).then( (res) => res.json()).then((text) => {
-        console.log(text)
-      })
-    }
-  }
+  },
+  created() {
+    
+  },
 }
 </script>
 

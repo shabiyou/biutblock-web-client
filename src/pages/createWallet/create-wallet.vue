@@ -120,47 +120,12 @@
             'tips_cnt': 'tipsListKey.tipsCnt3',
           }
         ],
+        keyData: '' //当前创建钱包的加密信息
       }
     },
 
     created() {
-      /** 加密过程*/
-      let walletName = 'my first wallet'
-      let walletPassword = 'zxc123456'
-      let tests = 'ead41afbd1f11ed0d1eaedc7fdf5e5ba70404188d32d18d6388d666b73de38b6'
-      let keys = SECUtil.generateSecKeys()
-      let privKey64 = keys.privKey
-      let privateKey = privKey64
-      let englishWords = SECUtil.entropyToMnemonic(privKey64)
-      let pubKey128 = keys.publicKey
-      let pubKey128ToString = pubKey128.toString('hex')
-      let userAddressToString = keys.secAddress
-
-      let keyFileDataJS = {
-        [walletName]: {
-          'privateKey': privateKey,
-          'publicKey': pubKey128ToString,
-          'walletAddress': userAddressToString
-        }
-      }
-
-      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), tests)
-      //console.log(cipherKeyData) // you can also save the cipherKeyData in a file
-      //console.log(cipherKeyData.toString())
-      console.log(tests)
-      /** keyStore解密过程 */
-      let keyData = CryptoJS.AES.decrypt(cipherKeyData.toString(), tests).toString(CryptoJS.enc.Utf8)
-      console.log(keyData)
-
-
-      /** 通过私钥privateKey获取publicKey 以及 wallet adress 的方法事例 */
-      /** 使用变量 tests作为实例 */
-      let privateKeyBuffer = SECUtil.privateToBuffer(keyFileDataJS[walletName].privateKey)
-      let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
-      let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer)
-      console.log(`public key: ${extractPublicKey.toString('hex')}`)
-      console.log(`wallet address: ${extractAddress.toString('hex')}`)
-
+      
     },
 
     methods: {
@@ -201,49 +166,28 @@
           this.DontAgree = false
           this.formatError = false
           this.pages = 2 //保存Keystore文件
-
-          let amount = 0
-          let keys = walletsHandler.getWalletKeys() //创建钱包
-          this.privateKey = keys.privateKey //获取创建钱包的私钥
-          this.userAddress = keys.userAddress //获取创建钱包的地址
-        
-          let walletName = 'my first wallet'
+          
+          let keys = SECUtil.generateSecKeys() //创建钱包
+          let privKey64 = keys.privKey //获取创建钱包的私钥
+          this.privateKey = keys.privKey //赋值当前显示私钥
+          let privateKey = privKey64
+          let englishWords = SECUtil.entropyToMnemonic(privKey64)
+          let pubKey128 = keys.publicKey //公钥
+          let pubKey128ToString = pubKey128.toString('hex')
+          let userAddressToString = keys.secAddress //地址
+          this.userAddress = keys.secAddress //赋值当前地址用作创建json文件
+          
+          let walletName = 'SEC' + ""+ keys.userAddress +"" //下载json文件名称
           let keyFileDataJS = {
             [walletName]: {
-              'privateKey': keys.privateKey,
-              'publicKey': keys.publicKey,
-              'walletAddress': keys.userAddress
+              'privateKey': privateKey,
+              'publicKey': pubKey128ToString,
+              'walletAddress': userAddressToString
             }
           }
+          //通过密码加密钱包  
           let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), pass1)
-
-          console.log(keys)
-
-
-          walletMethods.createNewWallet(pass1,this.userAddress,this.privateKey,amount)
-          //存储密码、地址、私钥、余额
-          let keystoreArr = localStorage.getItem("keystore") ? localStorage.getItem('keystore').split(/},{/).map((item,
-            index,arr) => {
-            if(arr.length<2){
-                return item
-            }
-            if (index == 0) {
-              return item + '}'
-            } else if (index == arr.length - 1) {
-              return '{' + item
-            } else {
-              return '{' + item + '}'
-            }
-          }) : []
-          localStorage.setItem("keystore", [...keystoreArr, JSON.stringify({
-            pass: this.walletPass1,
-            address: this.userAddress,
-            privateKey: this.privateKey,
-            amount: 0
-          })])
-          //存储私钥
-          // var arrayList = localStorage.getItem('array') ? localStorage.getItem('array').split(',') : []
-          // localStorage.setItem("array", [...arrayList, keys.privateKey])
+          this.keyData = cipherKeyData.toString()
         }
       },
       //保存keyStore之后继续查看私钥
@@ -253,7 +197,7 @@
       //下载json文件
       downUrlTxt () {
         var filename = "SEC" + this.userAddress + ".json";
-        this.download(filename, "{'version':3,'privateKey':'" + this.privateKey + "'}");
+        this.download(filename, "{'version':3,'data':'"+this.keyData+"'}");
       },
       download (filename, content) {
         var element = document.createElement('a');

@@ -64,6 +64,7 @@ export default {
     transferMoney1: "The transfer amount must not be 0",
     transferAddressError: "This is not a valid private key",
     transferAddressError2: "The same address cannot be transferred",
+    transferError: 'Transfer failed, please try again later'
   },
   mask: {
     tips: "Operation success, click the URL below to view the results:",
