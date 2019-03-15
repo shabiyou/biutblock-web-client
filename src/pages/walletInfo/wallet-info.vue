@@ -301,7 +301,31 @@ export default {
         item.isChecked = false;
       });
       this.radioList[index].isChecked = true;
+    },
+
+    //获取钱包的交易信息
+    getTransferHistory () {
+      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+      let walletAddress = ''
+      let postData = 
+      {
+        "method":"sec_getTransactions",
+        "params":[walletAddress]
+      }
+
+      fetch(url, {
+          method: 'post',
+          body: JSON.stringify(postData), // request is a string
+          headers: httpHeaderOption
+        }).then( (res) => res.json()).then((text) => {
+          //交易池中的交易
+          JSON.parse(text.body).result.resultInPool
+          //该钱包上链的交易
+          JSON.parse(text.body).result.resultInChain
+        })
     }
+
+
   },
   components: {
     contentFooter,
