@@ -197,19 +197,21 @@
       //下载json文件
       downUrlTxt () {
         var filename = "SEC" + this.userAddress + ".json";
-        this.download(filename, "{'version':3,'data':'"+this.keyData+"'}");
+        this.funDownload(filename, "{'version':3,'data':'"+this.keyData+"'}");
       },
-      download (filename, content) {
-        var element = document.createElement('a');
-        var fdata = JSON.stringify(content);
-        var blob = new Blob([fdata], { type: "application/octet-stream" });
-        var objectUrl = URL.createObjectURL(blob);
-        element.setAttribute('href',objectUrl)
-        element.setAttribute('download', filename)
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
+      // 下载文件方法
+      funDownload (filename, content) {
+          var eleLink = document.createElement('a');
+          eleLink.download = filename;
+          eleLink.style.display = 'none';
+          // 字符内容转变成blob地址
+          var blob = new Blob([content], {type: "application/octet-stream"});
+          eleLink.href = URL.createObjectURL(blob);
+          // 触发点击
+          document.body.appendChild(eleLink);
+          eleLink.click();
+          // 然后移除
+          document.body.removeChild(eleLink);
       }
     },
     components: {

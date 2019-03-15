@@ -277,18 +277,22 @@ export default {
       //通过密码加密钱包  
       let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
       var json = "" + userAddressToString + ".json"
-      this.download("SEC" + json + "", "{'version':3,'data':'" + cipherKeyData.toString() + "'}")
+      this.funDownload("SEC" + json + "", "{'version':3,'data':'" + cipherKeyData.toString() + "'}")
       this.closeMask()
     },
-    //下载keyStore文件
-    download(filename, text) {
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-      element.setAttribute('download', filename);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
+    // 下载文件方法
+    funDownload (filename, content) {
+          var eleLink = document.createElement('a');
+          eleLink.download = filename;
+          eleLink.style.display = 'none';
+          // 字符内容转变成blob地址
+          var blob = new Blob([content], {type: "application/octet-stream"});
+          eleLink.href = URL.createObjectURL(blob);
+          // 触发点击
+          document.body.appendChild(eleLink);
+          eleLink.click();
+          // 然后移除
+          document.body.removeChild(eleLink);
     },
     //切换登陆方式
     checkTab (index) {
