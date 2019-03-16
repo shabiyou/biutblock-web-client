@@ -103,7 +103,7 @@ export default {
         this.tipsError = true
         return
       }
-      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+      let url = _const.url
       let bodyRequest = {
         'method': 'sec_freeCharge',
         'params': [{"to":""+address+"","value":"1000"}]

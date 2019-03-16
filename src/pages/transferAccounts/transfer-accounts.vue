@@ -327,7 +327,7 @@ export default {
     //确认转账
     confirmTransfer () {
       this.confirmDisabled = true
-      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+      let url = _const.url
       let privateVal = this.privateKeyVal //私钥
       let fromAddress = this.address.replace("0x","")  //发送地址
       let toAddress = this.walletAddress.replace(/^\s+|\s+$/g, '').replace("0x","")  //接收地址

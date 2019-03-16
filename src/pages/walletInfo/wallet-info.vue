@@ -123,6 +123,10 @@ import walletsHandler from '../../lib/WalletsHandler.js'
 import walletMethods from '../../utils/publicMethode.js'
 const SECUtil = require('@sec-block/secjs-util')
 const CryptoJS = require('crypto-js')
+let fetch = require('node-fetch')
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
 export default {
   name: '',
   data () {
@@ -241,7 +245,6 @@ export default {
       if (file.length === 1) {
         this.KeyStoreUrl = this.getObjectURL(file[0]) // 上传钱包获取本地地址 
         this.KeyStoreVal = file[0].name
-         console.log(file[0].name)
         this.showPass = true
       } else {
         this.KeyStoreVal = 'walletInfo.checkKeyStore2'
@@ -305,7 +308,7 @@ export default {
 
     //获取钱包的交易信息
     getTransferHistory () {
-      let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+      let url = _const.url
       let walletAddress = ''
       let postData = 
       {
@@ -360,7 +363,27 @@ export default {
     },
   },
   created() {
-    
+      let url = _const.url
+      let walletAddress = 'bc181cde35667474c55f8a83eb737d8128bceccf'
+      let postData = 
+      {
+        "method":"sec_getTransactions",
+        "params":[walletAddress]
+      }
+
+      fetch(url, {
+          method: 'post',
+          body: JSON.stringify(postData), // request is a string
+          headers: httpHeaderOption
+        }).then( (res) => res.json()).then((text) => {
+          console.log("交易查询")
+          console.log(text)
+          //交易池中的交易
+          JSON.parse(text.body).result.resultInPool
+          //该钱包上链的交易
+          JSON.parse(text.body).result.resultInChain
+        })
+      //console.log(_const.url)
   },
 }
 </script>

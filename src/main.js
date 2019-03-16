@@ -13,6 +13,8 @@ import 'element-ui/lib/theme-chalk/display.css'
 import 'normalize.css'
 import './assets/css/public.css'
 
+import './utils/global.js'
+
 import Element from 'element-ui'
 
 
@@ -26,7 +28,7 @@ let httpHeaderOption = {
 let fetch = require('node-fetch')
 //获取钱包余额
 Vue.prototype.getWalletBalance = async (address)=> {
-  let url = 'http://13.209.3.183:3001/rpctransfer/callrpc'
+  let url = _const.url
   let bodyRequest = {
     'method': 'sec_getBalance',
     'params': [""+address+""]
