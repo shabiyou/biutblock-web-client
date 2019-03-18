@@ -363,26 +363,26 @@ export default {
     },
   },
   created() {
-      let url = _const.url
-      let walletAddress = 'bc181cde35667474c55f8a83eb737d8128bceccf'
-      let postData = 
-      {
-        "method":"sec_getTransactions",
-        "params":[walletAddress]
-      }
+      // let url = _const.url
+      // let walletAddress = 'c50c026d153d3d548a0e9ee8e460d662ecaf4f1e'
+      // let postData = 
+      // {
+      //   "method":"sec_getTransactions",
+      //   "params":[walletAddress]
+      // }
 
-      fetch(url, {
-          method: 'post',
-          body: JSON.stringify(postData), // request is a string
-          headers: httpHeaderOption
-        }).then( (res) => res.json()).then((text) => {
-          console.log("交易查询")
-          console.log(text)
-          //交易池中的交易
-          JSON.parse(text.body).result.resultInPool
-          //该钱包上链的交易
-          JSON.parse(text.body).result.resultInChain
-        })
+      // fetch(url, {
+      //     method: 'post',
+      //     body: JSON.stringify(postData), // request is a string
+      //     headers: httpHeaderOption
+      //   }).then( (res) => res.json()).then((text) => {
+      //     console.log("交易查询")
+      //     console.log(text)
+      //     //交易池中的交易
+      //     JSON.parse(text.body).result.resultInPool
+      //     //该钱包上链的交易
+      //     JSON.parse(text.body).result.resultInChain
+      //   })
       //console.log(_const.url)
   },
 }

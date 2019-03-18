@@ -44,7 +44,7 @@
           <img src="../../assets/images/success.png" alt="">
           {{$t('mask.tips')}}
         </article>
-        <a :href="successUrl"> {{ successUrl }} </a>
+        <a :href="successUrl" target="_blank"> {{ successUrl }} </a>
         <button type="button" @click="closeMask">{{$t('mask.confirm')}}</button>
       </section>
     </section>
@@ -72,7 +72,7 @@ export default {
       secAddress: '',//SEC币领取地址
       tipsError: false,//sec地址不对的提示语是否显示
       tipsTxt: 'receiveSec.errorAddress',//地址提示语
-      successUrl: 'http://scan.secblock.io',
+      successUrl: '',
       readonlyButton: false
     } 
   },
@@ -113,6 +113,7 @@ export default {
         body: JSON.stringify(bodyRequest), // request is a string
         headers: httpHeaderOption
      }).then( (res) => res.json()).then((text) => {
+        this.successUrl = "http://54.250.166.137/accountdetails?address="+address+""
         this.maskShow = true
         this.readonlyButton = false
       })

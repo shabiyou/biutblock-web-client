@@ -139,7 +139,7 @@
           <img src="../../assets/images/success.png" alt="">
           {{$t('mask.tips')}}
         </article>
-        <a :href="successUrl"> {{ successUrl }} </a>
+        <a :href="successUrl" target="_blank"> {{ successUrl }} </a>
         <button type="button" @click="closeTransfer">{{$t('mask.confirm')}}</button>
       </section>
     </section>
@@ -198,7 +198,7 @@ export default {
             isChecked: false,
           },
       ],
-      successUrl: 'http://scan.secblock.io',
+      successUrl: '',
       KeyStoreUrl: ''
     }
   },
@@ -350,21 +350,25 @@ export default {
           "method":"sec_sendRawTransaction",
           "params":[txSigned]
         }
-
+      let x = delete postData.params[0].contractAddress
+      console.log(x)
+      console.log(postData)
       fetch(url, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
         }).then( (res) => res.json()).then((text) => {
+          console.log(text)
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
             this.getWalletBalance (fromAddress).then(res=>{
                 this.allMoney = res || "0"
             })
-            this.confirmDisabled
+            this.successUrl = "http://54.250.166.137/accountdetails?address="+toAddress+""
+            this.confirmDisabled = true
           } else {
             this.transferError = true
-            this.confirmDisabled
+            this.confirmDisabled = false
           }
         })
     }

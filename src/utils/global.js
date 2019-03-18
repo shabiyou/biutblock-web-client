@@ -1,5 +1,5 @@
 const config = {
-  url: 'http://54.250.166.137:3002/rpctransfer/callrpc'
+  url: 'http://54.250.166.137:3001/rpctransfer/callrpc'
 }
 
 let bindToGlobal = (obj, key) => {
