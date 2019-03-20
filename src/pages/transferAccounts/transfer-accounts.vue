@@ -323,6 +323,7 @@ export default {
       this.maskShow = false
       this.walletAddress = ''
       this.walletMoney = ''
+      this.confirmDisabled = false
     },
     //确认转账
     confirmTransfer () {
@@ -362,7 +363,7 @@ export default {
                 this.allMoney = res || "0"
             })
             this.successUrl = "http://54.250.166.137/accountdetails?address="+toAddress+""
-            this.confirmDisabled = true
+            this.confirmDisabled = false
           } else {
             this.transferError = true
             this.confirmDisabled = false
