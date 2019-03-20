@@ -351,14 +351,11 @@ export default {
           "params":[txSigned]
         }
       let x = delete postData.params[0].contractAddress
-      console.log(x)
-      console.log(postData)
       fetch(url, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
         }).then( (res) => res.json()).then((text) => {
-          console.log(text)
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
             this.getWalletBalance (fromAddress).then(res=>{
