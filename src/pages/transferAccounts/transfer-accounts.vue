@@ -385,7 +385,8 @@ export default {
   computed: {
     //转账是否可点击
     transferActive () {
-	    var num = /^(([1-9]\d*)|\d)(\.\d{1,8})?$/ 	
+      var num = /^(([1-9]\d*)|\d)(\.\d{1,8})?$/
+      var key = /^(0x)(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/
       if (this.walletAddress == this.address) {
         this.addressTxt = 'transfer.transferAddressError2'
         this.addressError = true
@@ -396,7 +397,8 @@ export default {
       return this.walletAddress.length > 41
         && 0 < Number(this.walletMoney)
         && Number(this.walletMoney) <= Number(this.allMoney)
-		    && num.test(this.walletMoney) ? true : false
+        && num.test(this.walletMoney)
+        && key.test(this.walletAddress) ? true : false
     },
 
     //转账数量

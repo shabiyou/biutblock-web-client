@@ -98,9 +98,11 @@ export default {
     receiveSec () {
       this.readonlyButton = true
       let address = this.secAddress.replace(/^\s+|\s+$/g, '').replace("0x","")
-      var key = /^[A-Za-z0-9]+$/
-      if (!key.test(address)) {
+      //let address = this.secAddress.replace(/^\s+|\s+$/g, '')
+      var key = /^(0x)(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/
+      if (!key.test(this.secAddress)) {
         this.tipsError = true
+        this.readonlyButton = false
         return
       }
       let url = _const.url
@@ -127,10 +129,11 @@ export default {
   computed: {
     //领取测试币的按钮是否可点击
     receiveActive () {
+      var key = /^(0x)(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/
       if (this.secAddress.length == 0) {
         this.tipsError = false
-      } 
-      return this.secAddress.length > 41 ? true : false
+      }
+      return this.secAddress.length > 41 && key.test(this.secAddress) ? true : false
     }
   },
   created() {
