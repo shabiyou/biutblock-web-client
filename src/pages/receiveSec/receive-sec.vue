@@ -115,7 +115,7 @@ export default {
         body: JSON.stringify(bodyRequest), // request is a string
         headers: httpHeaderOption
      }).then( (res) => res.json()).then((text) => {
-        this.successUrl = "http://54.250.166.137/accountdetails?address="+address+""
+        this.successUrl = "http://scan.secblock.io/accountdetails?address="+address+""
         this.maskShow = true
         this.readonlyButton = false
       })

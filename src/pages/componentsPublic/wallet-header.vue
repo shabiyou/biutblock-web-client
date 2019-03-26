@@ -73,22 +73,22 @@ export default {
           'imgs': '',
           'urlPath': 'walletInfo'
         },
+        // {
+        //   'id': '5',
+        //   'nav_cnt': 'headerNav.GetTestCoin',
+        //   'img': '',
+        //   'imgs': '',
+        //   'urlPath': 'receiveSec'
+        // },
         {
           'id': '3',
-          'nav_cnt': 'headerNav.GetTestCoin',
-          'img': '',
-          'imgs': '',
-          'urlPath': 'receiveSec'
-        },
-        {
-          'id': '4',
           'nav_cnt': 'headerNav.TransferSEC',
           'img': '',
           'imgs': '',
           'urlPath': 'transferAccounts'
         },
         {
-          'id': '5',
+          'id': '4',
           'nav_cnt': 'headerNav.Guide',
           'img': '',
           'imgs': '',

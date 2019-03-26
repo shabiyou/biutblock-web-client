@@ -22,7 +22,7 @@
             <!-- keyStore 登陆 -->
             <section class="key_store" v-if="radioPages == 0">
               <p>{{$t('walletInfo.checkKeyStore1')}}</p>
-              <input type="file" accept="application/json" :placeholder="$t('walletInfo.checkKeyStore2')" @change="tirggerFile($event)">
+              <input type="file" :placeholder="$t('walletInfo.checkKeyStore2')" @change="tirggerFile($event)">
               <section>
                 <span>{{ $t(KeyStoreVal) }}</span>
               </section>

@@ -22,7 +22,7 @@
             <!-- keyStore 登陆 -->
             <section class="key_store" v-if="radioPages == 0">
               <p>{{$t('walletInfo.checkKeyStore1')}}</p>
-              <input type="file" accept="application/json" :placeholder="$t('walletInfo.checkKeyStore2')" @change="tirggerFile($event)">
+              <input type="file" :placeholder="$t('walletInfo.checkKeyStore2')" @change="tirggerFile($event)">
               <section>
                 <span>{{ $t(KeyStoreVal) }}</span>
               </section>
@@ -362,7 +362,7 @@ export default {
             this.getWalletBalance (fromAddress).then(res=>{
                 this.allMoney = res || "0"
             })
-            this.successUrl = "http://54.250.166.137/accountdetails?address="+toAddress+""
+            this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
             this.confirmDisabled = false
           } else {
             this.transferError = true
