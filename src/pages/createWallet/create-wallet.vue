@@ -165,10 +165,12 @@
           
           let walletName = 'SEC' + ""+ keys.userAddress +"" //下载json文件名称
           let keyFileDataJS = {
-            [walletName]: {
-              'privateKey': privateKey,
-              'publicKey': pubKey128ToString,
-              'walletAddress': userAddressToString
+            [privateKey]: {
+              walletName: "New Import",
+              privateKey: privateKey,
+              publicKey: pubKey128ToString,
+              walletAddress: userAddressToString,
+              englishWords: englishWords,
             }
           }
         //通过密码加密钱包  
@@ -183,7 +185,7 @@
       //下载json文件
       downUrlTxt () {
         var filename = "SEC" + this.userAddress + ".json";
-        this.funDownload(filename, "{'version':3,'data':'"+this.keyData+"'}");
+        this.funDownload(filename, "" + this.keyData + "");
       },
       // 下载文件方法
       funDownload (filename, content) {

@@ -215,18 +215,21 @@ export default {
           let that = this
           //解锁钱包
           this.$axios.get(''+this.KeyStoreUrl+'').then(function (response) {
-            let jsonstr = eval('(' + response.data + ')')
-            let keyData = CryptoJS.AES.decrypt(jsonstr.data.toString(), passVal).toString(CryptoJS.enc.Utf8)
+            let jsonstr = response.data
+            let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
             if (response.status == 200) {
-              let walletData = JSON.parse(keyData)
-              that.walletAddress = '0x'+ walletData.SECundefined.walletAddress
-              that.walletKey = walletData.SECundefined.privateKey
+              let walletData = keyData.split(':{')
+              let arrData1 = '{' + walletData[1].replace("}}","") + '}'
+              let arrData = eval('(' + arrData1 + ')')
+              that.walletAddress = '0x'+ arrData.walletAddress
+              that.walletKey = arrData.privateKey
               //获取SEC余额
-              that.getWalletBalance (walletData.SECundefined.walletAddress).then(res=>{
+              that.getWalletBalance (arrData.walletAddress).then(res=>{
                 that.walletMoney = res
               })
               that.infoPages = 2
             }
+
           }).catch(function (error) {
             that.walletPassError = true
           });
@@ -265,16 +268,18 @@ export default {
       let userAddressToString = keys.secAddress //地址
       let walletName  = 'SEC' + ""+ keys.userAddress +"" 
       let keyFileDataJS = {
-            [walletName]: {
-              'privateKey': privateKey,
-              'publicKey': pubKey128ToString,
-              'walletAddress': userAddressToString
+            [privateKey]: {
+              walletName: "New Import",
+              privateKey: privateKey,
+              publicKey: pubKey128ToString,
+              walletAddress: userAddressToString,
+              englishWords: englishWords,
             }
       }
       //通过密码加密钱包  
       let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
       var json = "" + userAddressToString + ".json"
-      this.funDownload("SEC" + json + "", "{'version':3,'data':'" + cipherKeyData.toString() + "'}")
+      this.funDownload("SEC" + json + "", "" + cipherKeyData.toString() + "")
       this.closeMask()
     },
     // 下载文件方法

@@ -343,13 +343,15 @@ export default {
           let that = this
           //解锁钱包
           this.$axios.get(''+this.KeyStoreUrl+'').then(function (response) {
-                let jsonstr = eval('(' + response.data + ')')
-                let keyData = CryptoJS.AES.decrypt(jsonstr.data.toString(), passVal).toString(CryptoJS.enc.Utf8)
+                let jsonstr = response.data
+                let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
                 if (response.status == 200) {
-                  let walletData = JSON.parse(keyData)
-                  that.address = '0x'+ walletData.SECundefined.walletAddress
-                  that.privateKeyVal = walletData.SECundefined.privateKey
-                  that.getWalletBalance (walletData.SECundefined.walletAddress).then(res=>{
+                  let walletData = keyData.split(':{')
+                  let arrData1 = '{' + walletData[1].replace("}}","") + '}'
+                  let arrData = eval('(' + arrData1 + ')')
+                  that.address = '0x'+ arrData.walletAddress
+                  that.privateKeyVal = arrData.privateKey
+                  that.getWalletBalance (arrData.walletAddress).then(res=>{
                     that.allMoney = res
                   })
                   that.transferPages = 2
