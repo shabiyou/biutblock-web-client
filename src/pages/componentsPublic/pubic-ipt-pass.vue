@@ -1,5 +1,5 @@
 <template>
-  <div class="ipt_arr">
+  <div class="ipt-arr">
     <input :type="typeIpt" 
       ref="input"
       :value="value"
@@ -7,7 +7,8 @@
       :maxlength="maxlength"
       @blur="blur"
       @focus="focus"
-      @input="$emit('input', $event.target.value)"/>
+      @input="$emit('input', $event.target.value)"
+      onkeyup="this.value=this.value.replace(/\s+/g,'')"/>
     <img :src="passUrl" alt="" @click="checkImg">
   </div>
 </template>
@@ -48,10 +49,10 @@ export default {
 </script>
 
 <style scoped>
-  .ipt_arr {height: 2.3rem;background:rgba(255,255,255,1);opacity:1;border-radius: 0.5rem;
-    border: 0.05rem solid rgba(145,162,170,1);display: flex;display:-webkit-flex;
+  .ipt-arr {height: 2.3rem;background:rgba(255,255,255,1);opacity:1;border-radius: 0.5rem;
+    border: 1px solid rgba(145,162,170,1);display: flex;display:-webkit-flex;box-sizing: border-box;
     justify-content: space-between;align-items: center;padding: 0 1rem;flex: 1;}
-  .ipt_arr input {height: 1.5rem;line-height:1.5rem;flex: 1;border: none;border-radius: 0.5rem;font-size: .7rem;font-weight: normal;
-  color: #42535B;}
-  .ipt_arr img {width: .85rem;height: .75rem;}
+  .ipt-arr input {height: 1.5rem;line-height:1.5rem;flex: 1;border: none;border-radius: 0.5rem;font-size: .7rem;font-weight: normal;
+    color: #42535B;}
+  .ipt-arr img {width: .85rem;height: .75rem;}
 </style>

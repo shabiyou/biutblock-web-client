@@ -66,7 +66,7 @@ main .content_bg p {font-size: .6rem;color: #728087;font-weight: 400;padding: 4.
 
 /* 操作成功遮罩层 */
 .mask {position: fixed;top: 0;left: 0;right: 0;bottom: 0;background:rgba(0,0,0,.1);z-index: 1;}
-.mask_cnt {position: fixed;left: 50%;top: 50%;background:rgba(255,255,255,1);z-index: 99;margin-top: -4.38rem;
+.mask_cnt {position: fixed;left: 50%;top: 50%;background:rgba(255,255,255,1);z-index: 9999;margin-top: -4.38rem;
   box-shadow:0rem 0rem 1rem rgba(0,0,0,0.16);border-radius: .5rem;margin-left: -12.4rem;padding: .8rem 1.2rem .6rem;
   width: 22.4rem;}
 .mask_cnt article {font-size: .75rem;color: #42535B;display: flex;}
@@ -92,16 +92,12 @@ main .content_bg p {font-size: .6rem;color: #728087;font-weight: 400;padding: 4.
 
 /* keyStore 与 私钥 */
 .key_store p,.private_key p {font-size: .9rem;color: #42535B;font-weight: 500;padding: 1.45rem 0 .55rem;}
-.key_store .key_store_btn {margin-top: 1.8rem;}
-.private_key .private_key_btn {margin-top: 1.6rem;}
-
-.private_key textarea {width: 18.5rem;color: #42535B;font-size: .7rem;padding: .8rem 1rem;
-  outline: none;resize: none;border-radius: .5rem;border: .05rem solid rgba(145,162,170,1);}
+.key_store .key_store_btn,.private_key .private_key_btn {margin-top: 1.6rem;}
 
 .key_store {position: relative;}
 .key_store input[type='file'] {width: 20.5rem;height: 2.4rem;position: absolute;top: 3rem;opacity: 0;
   max-width: 100%!important;}
-.key_store section {width: 20.5rem;height: 2.4rem;border: .05rem solid rgba(145,162,170,1);text-align: center;
+.key_store section {width: 20.5rem;height: 2.3rem;border: .05rem solid rgba(145,162,170,1);text-align: center;
   border-radius: .5rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;line-height: 2.4rem;
-  color: #42535B;font-size: .7rem;font-weight: 400;max-width: 100%!important;}
+  color: #42535B;font-size: .7rem;font-weight: 400;max-width: 100%!important;box-sizing: border-box;}
 .key_store section:hover,.key_store input[type='file']:hover {cursor: pointer;}

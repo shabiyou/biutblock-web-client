@@ -5,7 +5,8 @@
     :value="value"
     :placeholder="placeholder"
     :maxlength="maxlength"
-    @input="$emit('input', $event.target.value)">
+    @input="$emit('input', $event.target.value)"
+    onkeyup="this.value=this.value.replace(/\s+/g,'')">
 </template>
 
 <script>
@@ -19,6 +20,6 @@ export default {
 </script>
 
 <style scoped>
-  .ipt {width: 19.5rem;height: 2.4rem;border: .05rem solid rgba(145,162,170,1);border-radius: .5rem;
-    color: #42535B;font-size: .7rem;font-weight: 400;padding-left: 1rem;max-width: calc(100% - 1rem)!important;}
+  .ipt {width: 100%;height: 2.4rem;border: .05rem solid rgba(145,162,170,1);border-radius: .5rem;box-sizing: border-box;
+    color: #42535B;font-size: .7rem;font-weight: 400;text-indent: 1rem;}
 </style>

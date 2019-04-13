@@ -48,7 +48,7 @@ export default {
   },
   transfer: {
     youAddress: "From address",
-    transferAdddress: "To address",
+    transferAdddress: "To",
     transferNumber: "Amount",
     balance: "Balance",
     all: "All",
@@ -64,7 +64,10 @@ export default {
     transferMoney1: "The transfer amount must not be 0",
     transferAddressError: "This is not a valid private key",
     transferAddressError2: "The same address cannot be transferred",
-    transferError: 'Transfer failed, please try again later'
+    transferError: 'Transfer failed, please try again later',
+    transferPoundage: 'Fee',
+    transferFast: 'Fast',
+    transferSlow: 'Slow',
   },
   mask: {
     tips: "Operation success, click the URL below to view the results:",
@@ -78,6 +81,7 @@ export default {
     "TransferSEC": "Transfer SEC",
     "Guide": "Guide",
     "Language": "Language",
+    "Mapping": "Mapping"
   },
   footer: {
     FooterCnt: "Any question? Please contact us.Official email address"

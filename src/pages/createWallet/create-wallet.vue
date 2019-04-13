@@ -139,34 +139,20 @@
       },
       //去掉开头空格
       inputContent1 (e) {
-        this.walletPass1 = this.walletPass1.replace(/^\s+|\s+$/g, '')
         this.$nextTick(()=> {
-          this.walletPass1 = this.walletPass1.replace(/[\u4E00-\u9FA5]/g,'')
+          this.walletPass1 = (this.walletPass1).replace(/[\u4E00-\u9FA5]/g,'')
         })
       },
       //去掉开头空格 不能输入中文
       inputContent2 () {
-        this.walletPass2 = this.walletPass2.replace(/^\s+|\s+$/g, '')
         this.$nextTick(()=> {
-          this.walletPass2 = this.walletPass2.replace(/[\u4E00-\u9FA5]/g,'')
+          this.walletPass2 = (this.walletPass2).replace(/[\u4E00-\u9FA5]/g,'')
         })
       },
       //创建钱包
       createWallet() {
-        let pass1 = this.walletPass1.replace(/^\s+|\s+$/g, '')
-        let pass2 = this.walletPass2.replace(/^\s+|\s+$/g, '')
-        if (pass1 != pass2) {
-          this.errorTxt2 = true
-          this.DontAgree = true
-          this.formatError = false
-          this.tipsTxt2 = 'passTips.passNoMatch'
-          return
-        } else {
-          this.errorTxt2 = false
-          this.DontAgree = false
-          this.formatError = false
-          this.pages = 2 //保存Keystore文件
-          
+        let pass1 = this.walletPass1.replace(/\s+/g, "")
+        this.pages = 2 //保存Keystore文件
           let keys = SECUtil.generateSecKeys() //创建钱包
           let privKey64 = keys.privKey //获取创建钱包的私钥
           this.privateKey = keys.privKey //赋值当前显示私钥
@@ -185,10 +171,10 @@
               'walletAddress': userAddressToString
             }
           }
-          //通过密码加密钱包  
-          let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), pass1)
-          this.keyData = cipherKeyData.toString()
-        }
+        //通过密码加密钱包  
+        let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), pass1)
+        this.keyData = cipherKeyData.toString()
+    
       },
       //保存keyStore之后继续查看私钥
       continueKey() {
@@ -228,14 +214,26 @@
     computed: {
       //创建钱包按钮是否可点击
       createActive() {
-        var pass = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
-        if (this.walletPass1 == this.walletPass2 && pass.test(this.walletPass2)) {
+        let pass1 = (this.walletPass1).replace(/\s+/g, "")
+        let pass2 = (this.walletPass2).replace(/\s+/g, "")
+        
+        if (pass1.length > 0 && !(_const.passReg.test(pass1))) {
+          //密码格式错误
+          this.errorTxt2 = true
+          this.formatError = true
+          this.tipsTxt2 = 'passTips.passFormatError'
+        } else if (_const.passReg.test(pass1) && pass2.length > 0 && pass1 != pass2) {
+          //两次密码不一致
+          this.errorTxt2 = true
+          this.DontAgree = true
+          this.formatError = false
+          this.tipsTxt2 = 'passTips.passNoMatch'
+        } else {
+          this.formatError = false
           this.errorTxt2 = false
           this.DontAgree = false
         }
-        return this.walletPass1.length > 7 
-          && pass.test(this.walletPass2)
-          && pass.test(this.walletPass1) ? true : false
+        return _const.passReg.test(pass1) && pass1 == pass2 ? true : false
       }
     }
   }

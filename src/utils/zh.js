@@ -50,8 +50,10 @@ export default {
     youAddress: "你的地址",
     transferAdddress: "转账地址",
     transferNumber: "转账数量",
+
     balance: "余额",
     all: "全部",
+    
     generateTrading: "生成交易",
     confirmTransferInfo: "请确认您的转帐信息",
     orderInfo: "订单信息",
@@ -64,7 +66,12 @@ export default {
     transferMoney1: "转账金额必不能为0",
     transferAddressError: "转账地址无效",
     transferAddressError2: "相同地址不能转账",
-    transferError: '转账失败，请稍后重试...'
+    transferError: '转账失败，请稍后重试...',
+
+
+    transferPoundage: '手续费',
+    transferFast: '快',
+    transferSlow: '慢',
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果:",
@@ -78,6 +85,7 @@ export default {
     "TransferSEC": "转账",
     "Guide": "帮助",
     "Language": "语言",
+    "Mapping": "映射"
   },
   footer: {
     FooterCnt: "有任何问题，请与我们联系官方邮箱"
