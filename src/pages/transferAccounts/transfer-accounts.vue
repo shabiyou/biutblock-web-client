@@ -507,19 +507,23 @@ export default {
       if (address.length > 0 && !(_const.addressReg.test(address)) && address.length < 42) {
         this.addressError = true
         this.addressTxt = 'transfer.transferAddressError'
+		return false
       } else if (_const.addressReg.test(address) && address.length == 42 && address == this.address) {
         this.addressError = true
         this.addressTxt = 'transfer.transferAddressError2'
+		return false
       } else {
         //转账SEC
         if (this.transferIdx === 0) {
           if (amount.length > 0 && amount > this.allMoneyC) {
             this.moneyShow = true
+			return false
           } else {
             this.moneyShow = false
             this.addressError = false
             return address.length == 42
               && amount > 0
+			  && address != this.address
               && amount <= this.allMoneyC
               && _const.addressReg.test(address)
               && 0 < this.feeVal
@@ -529,11 +533,13 @@ export default {
           //转账SEN
           if (amount.length > 0 && amount > allNumber) {
             this.moneyShow = true
+			return false
           } else {
             this.moneyShow = false
             this.addressError = false
             return address.length == 42
               && amount > 0
+			  && address != this.address
               && amount <= allNumber
               && _const.addressReg.test(address)
               && 0 < this.feeVal ? true : false
