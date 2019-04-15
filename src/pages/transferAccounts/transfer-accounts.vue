@@ -86,7 +86,7 @@
 
             <section class="trading-error">
               <span>{{$t('transfer.transferNumber')}}</span>
-              <span></span>
+			        <span><tips-content :tipsTxt="moneyTxt" v-show="moneyShow"></tips-content></span>
             </section>
 
             <section class="money-arr">
@@ -116,8 +116,8 @@
 
             <section class="money-list">
               <span>{{$t('transfer.balance')}}：</span>
-              <label>{{allMoney}}</label>
-              <span>SEC</span>
+              <label>{{transferIdx == 0 ? allMoneyC : allMoneyN}}</label>
+              <span>{{transferCurrency}}</span>
               <span @click="allTranferMoney">{{$t('transfer.all')}}</span>
             </section>
 
@@ -125,6 +125,7 @@
 
             <section class="trading-error">
               <span>{{$t('transfer.transferPoundage')}}</span>
+			        <span><tips-content :tipsTxt="moneyTxtN" v-show="moneyShowN"></tips-content></span>
             </section>
             <section class="transfer-slider">
               <el-slider v-model="feeVal" 
@@ -137,6 +138,7 @@
                 <span>{{$t('transfer.transferFast')}}</span>
               </section>
             </section>
+			
 
             <public-btn class="transfer_btn" 
               :disabled="!transferActive" :class="transferActive?'btn_active':''"
@@ -227,10 +229,11 @@ export default {
       walletAddress: '', //转账地址
       walletMoney: '',//转账金额
       address: '', //当前钱包地址
-      allMoney: 0, //当前钱包总金额
+      allMoneyC: 0, //当前钱包总金额	SEC
+	    allMoneyN: 0.015,//当前钱包总金额 SEN
       privateKeyErrorTxt: 'walletInfo.invalidPrivateKey',
       walletPassErrorTxt: 'passTips.passError',
-      transferPages: 1,//页面相关展示  1 登陆 2 转账
+      transferPages: 2,//页面相关展示  1 登陆 2 转账
       listChild: true, //默认英文版的长度
       privateKeyError: false,//私钥错误true显示
       walletPassError: false,//密码
@@ -246,6 +249,9 @@ export default {
       privateKeyVal: '', //绑定私钥的值
       addressTxt: 'transfer.transferAddressError',
       moneyTxt: 'transfer.transferMoney',
+      moneyShow: false,
+      moneyShowN: false,
+	    moneyTxtN: 'transfer.transferMoneyN',//SEN silder金额大于余额
       radioList:[
           {
             id: '0',
@@ -306,6 +312,12 @@ export default {
 
      //转账只能输入金额
     clearAmount () {
+      this.$nextTick(()=> {
+        this.walletMoney =  this.walletMoney.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+        this.walletMoney =  this.walletMoney.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+        this.walletMoney =  this.walletMoney.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+        this.walletMoney =  this.walletMoney.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,'$1$2.$3');//只能输入两个小数  
+      })
       if (String(this.walletMoney.length) > 10 && this.walletMoney.indexOf(".") < 0) {
         this.$nextTick(()=> {
           this.walletMoney = String(this.walletMoney).substring(0,10)
@@ -313,13 +325,6 @@ export default {
       } else if (this.walletMoney.indexOf(".") == 0) {
         this.$nextTick(()=> {
           this.walletMoney = String(this.walletMoney).substring(0,9)
-        })
-      } else {
-        this.$nextTick(()=> {
-          this.walletMoney =  this.walletMoney.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
-          this.walletMoney =  this.walletMoney.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
-          this.walletMoney =  this.walletMoney.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
-          this.walletMoney =  this.walletMoney.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,'$1$2.$3');//只能输入两个小数  
         })
       }
     },
@@ -336,7 +341,7 @@ export default {
         this.address = `0x${extractAddress.toString('hex')}`
         this.privateKeyVal = privateVal
         this.getWalletBalance (`${extractAddress.toString('hex')}`).then(res=>{
-          this.allMoney = res
+          this.allMoneyC = res
         })
       } else {
           let passVal = this.passVal.replace(/\s+/g, "")
@@ -352,7 +357,7 @@ export default {
                   that.address = '0x'+ arrData.walletAddress
                   that.privateKeyVal = arrData.privateKey
                   that.getWalletBalance (arrData.walletAddress).then(res=>{
-                    that.allMoney = res
+                    that.allMoneyC = res
                   })
                   that.transferPages = 2
                 }
@@ -401,7 +406,11 @@ export default {
     },
     //全部转出
     allTranferMoney () {
-      this.walletMoney = this.allMoney
+      if (this.transferIdx == 0) {
+        this.walletMoney = this.allMoneyC
+      } else {
+        this.walletMoney = (this.allMoneyN - this.feeVal).toFixed(3)
+      }
     },
     //取消转账
     closeTransfer () {
@@ -443,7 +452,7 @@ export default {
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
             this.getWalletBalance (fromAddress).then(res=>{
-                this.allMoney = res || "0"
+                this.allMoneyC = res || "0"
             })
             this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
             this.confirmDisabled = false
@@ -478,28 +487,61 @@ export default {
     publicIptPass
   },
   computed: {
+  
     //转账是否可点击
-    transferActive () {
-      let address = this.walletAddress.replace(/\s+/g, "")
-      let amount = this.walletMoney.replace(/\s+/g, "")
-       
+	transferActive () {
+      let amount = String(this.walletMoney).replace(/\s+/g, "") //当前输入金额
+      let address = (this.walletAddress).replace(/\s+/g, "") //转账地址
+      let allNumber = (this.allMoneyN - this.feeVal).toFixed(3) // SEN可转账金额
+
+      if (this.feeVal > this.allMoneyN) {
+        this.moneyTxtN = 'transfer.transferMoneyN'
+        this.moneyShowN = true
+      } else if (this.feeVal === 0) {
+        this.moneyTxtN = 'transfer.transferMoneyN1'
+        this.moneyShowN = true
+      } else {
+        this.moneyShowN = false
+      }
+		
       if (address.length > 0 && !(_const.addressReg.test(address)) && address.length < 42) {
-        this.addressError = true 
+        this.addressError = true
         this.addressTxt = 'transfer.transferAddressError'
       } else if (_const.addressReg.test(address) && address.length == 42 && address == this.address) {
-        this.addressTxt = 'transfer.transferAddressError2'
         this.addressError = true
+        this.addressTxt = 'transfer.transferAddressError2'
       } else {
-        this.addressError = false
+        //转账SEC
+        if (this.transferIdx === 0) {
+          if (amount.length > 0 && amount > this.allMoneyC) {
+            this.moneyShow = true
+          } else {
+            this.moneyShow = false
+            this.addressError = false
+            return address.length == 42
+              && amount > 0
+              && amount <= this.allMoneyC
+              && _const.addressReg.test(address)
+              && 0 < this.feeVal
+              && this.feeVal < this.allMoneyN ? true : false
+          }
+        } else {
+          //转账SEN
+          if (amount.length > 0 && amount > allNumber) {
+            this.moneyShow = true
+          } else {
+            this.moneyShow = false
+            this.addressError = false
+            return address.length == 42
+              && amount > 0
+              && amount <= allNumber
+              && _const.addressReg.test(address)
+              && 0 < this.feeVal ? true : false
+          }
+        }
       }
-      return this.walletAddress.length == 42
-        && 0 < Number(amount)
-        && Number(amount) <= Number(this.allMoney)
-        && _const.addressReg.test(address) 
-        && this.feeVal <= this.allFeeVal
-        && 0 < Number(this.feeVal) ? true : false
     },
-    
+
     //keyStore按钮是否可点击
     keyStoreActive () {
       let passVal = this.passVal.replace(/\s+/g, "")

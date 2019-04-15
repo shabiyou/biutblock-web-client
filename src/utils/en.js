@@ -62,6 +62,8 @@ export default {
     transferMoneyError: "Please enter the correct transfer amount",
     transferMoney: "Amount is not valid",
     transferMoney1: "The transfer amount must not be 0",
+    transferMoneyN: "Transfer fee must be less than balance",
+    transferMoneyN1: "Poundage cannot be 0",
     transferAddressError: "This is not a valid private key",
     transferAddressError2: "The same address cannot be transferred",
     transferError: 'Transfer failed, please try again later',

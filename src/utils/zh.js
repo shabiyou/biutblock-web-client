@@ -63,11 +63,12 @@ export default {
     transferAomunt: "金额",
     transferMoneyError: "请输入正确的转账金额",
     transferMoney: "转账金额必须小于余额",
-    transferMoney1: "转账金额必不能为0",
+    transferMoney1: "转账金额不能为0",
+    transferMoneyN: "转账手续费必须小于余额",
+    transferMoneyN1: "手续费不能为0",
     transferAddressError: "转账地址无效",
     transferAddressError2: "相同地址不能转账",
     transferError: '转账失败，请稍后重试...',
-
 
     transferPoundage: '手续费',
     transferFast: '快',
