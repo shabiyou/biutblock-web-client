@@ -68,6 +68,7 @@ export default {
     transferAddressError2: "The same address cannot be transferred",
     transferError: 'Transfer failed, please try again later',
     transferPoundage: 'Fee',
+    transferPoundage1: 'Gas Price',
     transferFast: 'Fast',
     transferSlow: 'Slow',
   },

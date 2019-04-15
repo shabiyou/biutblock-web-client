@@ -171,7 +171,7 @@
             <span>{{ address }}</span>
           </li>
           <li>
-            <span :class="listChild?'firstChilds':'firstChild'">{{$t('transfer.paymentAddress')}}</span>
+            <span :class="listChild?'firstChilds':'firstChild'">{{$t('transfer.transferPoundage1')}}</span>
             <span>{{ feeVal }} SEN</span>
           </li>
           <li>

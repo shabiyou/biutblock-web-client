@@ -71,6 +71,7 @@ export default {
     transferError: '转账失败，请稍后重试...',
 
     transferPoundage: '手续费',
+    transferPoundage1: '手续费',
     transferFast: '快',
     transferSlow: '慢',
   },
