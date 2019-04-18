@@ -325,9 +325,24 @@ export default {
           //该钱包上链的交易
           JSON.parse(text.body).result.resultInChain
         })
-    }
+    },
 
+	_getWalletBalance (walletAddress) {
+      this.$JsonRPCClient.getWalletBalanceOfBothChains(walletAddress, (balanceSEC) => {
+        this.walletMoneyC = this._checkValueFormat(balanceSEC)
+      }, (balanceSEN) => {
+        this.walletMoneyN = this._checkValueFormat(balanceSEN)
+      })
+    },
 
+    _checkValueFormat (value) {
+      let splitValue = value.split("e-")
+      if (splitValue.length > 1) {
+        return Number(value).toFixed(Number(splitValue[1])).toString()
+      } else {
+        return value
+      }
+    },
   },
   components: {
     contentFooter,
@@ -370,7 +385,9 @@ export default {
     },
   },
   created() {
-
+	console.log(this.$JsonRPCClient)
+	let e = '0x15712c7b95c1f81f68313f01418ad4acb6642225'
+	this._getWalletBalance(e)
   },
 }
 </script>

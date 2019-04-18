@@ -18,6 +18,11 @@ import './utils/global.js'
 import Element from 'element-ui'
 
 
+import JsonRPCClient from './lib/jayson-rpc-vue'
+
+Vue.use(JsonRPCClient)
+
+
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
