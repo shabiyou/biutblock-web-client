@@ -1,6 +1,28 @@
 import jayson from 'jayson/lib/client'
 import WalletsHandler from './WalletsHandler'
+const jaysonBrowserClient = require('jayson/lib/client/browser')
+const fetch = require('node-fetch')
+
 const moment = require('moment-timezone')
+
+const callServer = function (request, callback) {
+  const options = {
+    method: 'POST',
+    body: request,
+    headers: {
+      'content-type': 'application/json'
+    }
+  }
+
+  fetch('http://54.250.166.137:3001/rpctransfer/callrpc', options)
+    .then((res) => res.text())
+    .then((text) => {
+      let body = JSON.parse(text).body
+      callback(null, body)
+    })
+    .catch((err) => { callback(err, null) })
+}
+
 export default {
   install: function (Vue, options) {
     let externalServerAddress = '54.250.166.137' //'54.250.166.137'  //'18.197.120.79' Test node
@@ -173,7 +195,9 @@ export default {
       }
     }
 
-    jsonRPC.client = jayson.http(`http://${externalServerAddress}:${externalServerPort}`)
+    jsonRPC.client = jaysonBrowserClient(callServer, {})
+
+    // jsonRPC.client = jayson.http(`http://${externalServerAddress}:${externalServerPort}`)
     jsonRPC.clientSEN = jayson.http(`http://${externalServerAddress}:${externalServerPortSEN}`)
 
     Object.defineProperty(Vue.prototype, '$JsonRPCClient', {

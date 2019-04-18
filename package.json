@@ -25,6 +25,7 @@
     "jayson-rpc-vue": "^1.1.2",
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.5.0",
+    "moment-timezone": "^0.5.25",
     "node-fetch": "^2.3.0",
     "normalize.css": "^8.0.1",
     "style-loader": "^0.23.1",

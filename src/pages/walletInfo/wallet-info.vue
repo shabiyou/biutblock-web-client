@@ -328,11 +328,26 @@ export default {
     },
 
 	_getWalletBalance (walletAddress) {
-      this.$JsonRPCClient.getWalletBalanceOfBothChains(walletAddress, (balanceSEC) => {
+      this.$JsonRPCClient.getWalletBalance(walletAddress, (balanceSEC) => {
         this.walletMoneyC = this._checkValueFormat(balanceSEC)
-      }, (balanceSEN) => {
-        this.walletMoneyN = this._checkValueFormat(balanceSEN)
       })
+      // let url = _const.url
+      // let postData = 
+      // {
+      //   "method":"sec_getTransactions",
+      //   "params":[walletAddress]
+      // }
+
+      // fetch(url, {
+      //     method: 'post',
+      //     body: JSON.stringify(postData), // request is a string
+      //     headers: httpHeaderOption
+      //   }).then( (res) => res.json()).then((text) => {
+      //     //交易池中的交易
+      //     JSON.parse(text.body).result.resultInPool
+      //     //该钱包上链的交易
+      //     JSON.parse(text.body).result.resultInChain
+      //   })
     },
 
     _checkValueFormat (value) {
@@ -386,7 +401,7 @@ export default {
   },
   created() {
 	console.log(this.$JsonRPCClient)
-	let e = '0x15712c7b95c1f81f68313f01418ad4acb6642225'
+	let e = '15712c7b95c1f81f68313f01418ad4acb6642225'
 	this._getWalletBalance(e)
   },
 }
