@@ -233,7 +233,7 @@ export default {
 	    allMoneyN: 0.015,//当前钱包总金额 SEN
       privateKeyErrorTxt: 'walletInfo.invalidPrivateKey',
       walletPassErrorTxt: 'passTips.passError',
-      transferPages: 2,//页面相关展示  1 登陆 2 转账
+      transferPages: 1,//页面相关展示  1 登陆 2 转账
       listChild: true, //默认英文版的长度
       privateKeyError: false,//私钥错误true显示
       walletPassError: false,//密码
@@ -343,6 +343,10 @@ export default {
         this.getWalletBalance (`${extractAddress.toString('hex')}`).then(res=>{
           this.allMoneyC = res
         })
+        this.getWalletBalanceSEN (`${extractAddress.toString('hex')}`).then(res=>{
+          this.allMoneyN = res
+          this.allFeeVal = res
+        })
       } else {
           let passVal = this.passVal.replace(/\s+/g, "")
           let that = this
@@ -358,6 +362,10 @@ export default {
                   that.privateKeyVal = arrData.privateKey
                   that.getWalletBalance (arrData.walletAddress).then(res=>{
                     that.allMoneyC = res
+                  })
+                  that.getWalletBalanceSEN (arrData.walletAddress).then(res=>{
+                    that.allMoneyN = res
+                    that.allFeeVal = res
                   })
                   that.transferPages = 2
                 }
@@ -420,13 +428,16 @@ export default {
     //确认转账
     confirmTransfer () {
       this.confirmDisabled = true
-      let url = _const.url_sen
       let privateVal = this.privateKeyVal //私钥
       let fromAddress = this.address.replace("0x","")  //发送地址
       let toAddress = this.walletAddress.replace(/\s+/g, "").replace("0x","")  //接收地址
       let amount = this.walletMoney.replace(/\s+/g, "")  //转账金额
       let gasFeel = this.feeVal.toString()
       let inputData = 'Test'
+      let url = _const.url_sen
+      if (this.transferIdx == 0) {
+        url = _const.url
+      }
       
       //签名
       const transfer = {
@@ -455,7 +466,11 @@ export default {
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
             this.getWalletBalance (fromAddress).then(res=>{
-                this.allMoneyC = res || "0"
+              this.allMoneyC = res || "0"
+            })
+            this.getWalletBalanceSEN (fromAddress).then(res=>{
+              this.allMoneyN = res
+              this.allFeeVal = res
             })
             this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
             this.confirmDisabled = false

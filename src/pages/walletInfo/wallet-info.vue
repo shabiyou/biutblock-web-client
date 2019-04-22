@@ -210,6 +210,10 @@ export default {
         this.getWalletBalance (`${extractAddress.toString('hex')}`).then(res=>{
           this.walletMoney = res
         })
+        //获取SEN余额
+        this.getWalletBalanceSEN (`${extractAddress.toString('hex')}`).then(res=>{
+          this.walletMoneyN = res
+        })
       } else {
           var passVal = this.passVal.replace(/\s+/g, "")
           let that = this
@@ -226,6 +230,10 @@ export default {
               //获取SEC余额
               that.getWalletBalance (arrData.walletAddress).then(res=>{
                 that.walletMoney = res
+              })
+              //获取SEN余额
+              that.getWalletBalanceSEN (arrData.walletAddress).then(res=>{
+                that.walletMoneyN = res
               })
               that.infoPages = 2
             }
