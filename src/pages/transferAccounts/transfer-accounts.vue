@@ -420,11 +420,12 @@ export default {
     //确认转账
     confirmTransfer () {
       this.confirmDisabled = true
-      let url = _const.url
+      let url = _const.url_sen
       let privateVal = this.privateKeyVal //私钥
       let fromAddress = this.address.replace("0x","")  //发送地址
       let toAddress = this.walletAddress.replace(/\s+/g, "").replace("0x","")  //接收地址
       let amount = this.walletMoney.replace(/\s+/g, "")  //转账金额
+      let gasFeel = this.feeVal.toString()
       let inputData = 'Test'
       
       //签名
@@ -433,12 +434,13 @@ export default {
         'from': fromAddress,
         'to': toAddress,
         'value': amount,
-        'inputData': inputData
+        'inputData': inputData,
+        'gas': gasFeel
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
-      let postData = 
+      let postData = callrpc_sen
         {
           "method":"sec_sendRawTransaction",
           "params":[txSigned]
@@ -489,7 +491,7 @@ export default {
   computed: {
   
     //转账是否可点击
-	transferActive () {
+	  transferActive () {
       let amount = String(this.walletMoney).replace(/\s+/g, "") //当前输入金额
       let address = (this.walletAddress).replace(/\s+/g, "") //转账地址
       let allNumber = (this.allMoneyN - this.feeVal).toFixed(3) // SEN可转账金额
@@ -507,23 +509,23 @@ export default {
       if (address.length > 0 && !(_const.addressReg.test(address)) && address.length < 42) {
         this.addressError = true
         this.addressTxt = 'transfer.transferAddressError'
-		return false
+		    return false
       } else if (_const.addressReg.test(address) && address.length == 42 && address == this.address) {
         this.addressError = true
         this.addressTxt = 'transfer.transferAddressError2'
-		return false
+		    return false
       } else {
         //转账SEC
         if (this.transferIdx === 0) {
           if (amount.length > 0 && amount > this.allMoneyC) {
             this.moneyShow = true
-			return false
+			      return false
           } else {
             this.moneyShow = false
             this.addressError = false
             return address.length == 42
               && amount > 0
-			  && address != this.address
+			        && address != this.address
               && amount <= this.allMoneyC
               && _const.addressReg.test(address)
               && 0 < this.feeVal
@@ -533,13 +535,13 @@ export default {
           //转账SEN
           if (amount.length > 0 && amount > allNumber) {
             this.moneyShow = true
-			return false
+			      return false
           } else {
             this.moneyShow = false
             this.addressError = false
             return address.length == 42
               && amount > 0
-			  && address != this.address
+			        && address != this.address
               && amount <= allNumber
               && _const.addressReg.test(address)
               && 0 < this.feeVal ? true : false
@@ -562,7 +564,7 @@ export default {
     //私钥按钮是否可点击
     privateKeyActive () {
       let privateKeyVal = this.privateKeyVal.replace(/\s+/g, "")
-      if (privateKeyVal.length > 0 && !(_const.priverKeyReg.test(privateKeyVal))) {
+      if (privateKeyVal.length > 0 && !(_const.priverKeyReg.test(privateKeyVal)) && privateKeyVal.length < 64) {
         this.privateKeyError = true
       } else {
         this.privateKeyError = false

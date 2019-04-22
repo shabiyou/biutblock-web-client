@@ -141,7 +141,7 @@ export default {
       walletAddress: '',//钱包地址
       walletKey: '',//钱包私钥
       walletMoney: 0,//钱包SEC币
-      walletMoneyN: 1000,//钱包SEN币
+      walletMoneyN: 0,//钱包SEN币
       infoTxt: 'passTips.passFormat',
       privateKeyErrorTxt: 'walletInfo.invalidPrivateKey',
       walletPassErrorTxt: 'passTips.passError',
