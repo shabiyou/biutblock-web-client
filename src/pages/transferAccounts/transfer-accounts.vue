@@ -440,12 +440,13 @@ export default {
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
-      let postData = callrpc_sen
+      let postData = 
         {
-          "method":"sec_sendRawTransaction",
-          "params":[txSigned]
+          "method": "sec_sendRawTransaction", //callrpc_sen
+          "params": [txSigned]
         }
       let x = delete postData.params[0].contractAddress
+      console.log(x)
       fetch(url, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
