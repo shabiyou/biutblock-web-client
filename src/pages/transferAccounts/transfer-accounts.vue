@@ -445,12 +445,12 @@ export default {
         'from': fromAddress,
         'to': toAddress,
         'value': amount,
-        'inputData': inputData,
-        'gas': gasFeel
+        'inputData': inputData
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      txSigned.txFee = gasFeel
       let postData = 
         {
           "method": "sec_sendRawTransaction", //callrpc_sen
