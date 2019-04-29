@@ -131,11 +131,12 @@
               <el-slider v-model="feeVal" 
                 :show-tooltip="false"
                 :step="stepFee"
+                :min="minFee"
                 :max="maxFee"></el-slider>
               <section>
-                <span>{{$t('transfer.transferSlow')}}</span>
+                <span :class="slowTips ? 'slow-color' : ''">{{$t('transfer.transferSlow')}}</span>
                 <span>{{feeVal}} SEN</span>
-                <span>{{$t('transfer.transferFast')}}</span>
+                <span :class="fastTips ? 'fast-color' : ''">{{$t('transfer.transferFast')}}</span>
               </section>
             </section>
 			
@@ -267,10 +268,13 @@ export default {
       successUrl: '',
       KeyStoreUrl: '',
 
-      feeVal: 0.01, //初始值
-      maxFee: 0.02, //最大值
-      stepFee: 0.001, //步长
-      allFeeVal: 100,//所有的SEN币种
+      feeVal: 0.02, //初始值
+      minFee: 0.01,//最小值
+      maxFee: 0.1, //最大值
+      stepFee: 0.00818182, //步长
+      allFeeVal: 0,//所有的SEN币种
+      fastTips: false,
+      slowTips: false,
       transferListShow: false,
       transferCurrency: 'SEC',
       transferIdx: 0,
@@ -588,6 +592,21 @@ export default {
       return privateKeyVal.length == 64 && _const.priverKeyReg.test(privateKeyVal) ? true : false
     },
   },
+  watch: {
+    //监听滚动条变化
+    feeVal (newFee, oldFee) {
+      if (Number(newFee) > 0.02636364) {
+        this.fastTips = true
+        this.slowTips = false
+      } else if (Number(newFee) < 0.02636364) {
+        this.slowTips = true
+        this.fastTips = false
+      } else {
+        this.fastTips = false
+        this.slowTips = false
+      }
+    },
+  },
 }
 </script>
 
@@ -643,6 +662,9 @@ export default {
   .confirmDisabled {background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%)!important;}
 
   .list-active {color: #00D86D;}
+  .slow-color {color: #0B7FE6!important;}
+  .fast-color {color: #F5A623!important;}
+
 
   .transfer-slider section {display: flex;justify-content: space-between;align-items: center;font-size: 14px;box-sizing: border-box;}
   .transfer-slider >>> .el-slider__runway {height: 2px;}
