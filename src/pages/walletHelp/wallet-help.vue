@@ -14,7 +14,7 @@ export default {
   name: 'walletHelp',
   data () {
     return {
-      guideUrl: "https://test.wallet.intchain.io/images/helpEn.pdf"
+       guideUrl: "http://scan.secblock.io/secwallet-web-help-en.pdf"
     }
   },
   mounted() {
@@ -22,7 +22,7 @@ export default {
   },
   created() {
     if (this.$i18n.locale == "zh") {
-      this.guideUrl = "https://test.wallet.intchain.io/images/helpZh.pdf"
+      this.guideUrl = "http://scan.secblock.io/secwallet-web-help-cn.pdf"
     }
   },
 }

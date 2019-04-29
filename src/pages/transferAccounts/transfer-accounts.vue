@@ -480,7 +480,7 @@ export default {
             this.confirmDisabled = false
             this.walletMoney = ''
             this.walletAddress = ''
-            this.feeVal = 0.01
+            this.feeVal = 0.02
           } else {
             this.transferError = true
             this.confirmDisabled = false
