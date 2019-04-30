@@ -42,7 +42,7 @@ export default {
     newKeyStore: "Download New Keystore",
   },
   receiveSec: {
-    secAddress: "SEC Wallet Address",
+    secAddress: "BIUT Wallet Address",
     receiveBtn: "Get Test Coin",
     errorAddress: "This is not a valid private key",
   },
@@ -81,7 +81,7 @@ export default {
     "Newallet": "New Wallet",
     "ViewWalletInfo": "View Wallet Info",
     "GetTestCoin": "Get Test Coin",
-    "TransferSEC": "Transfer SEC",
+    "TransferSEC": "Transfer BIUT",
     "Guide": "Guide",
     "Language": "Language",
     "Mapping": "Mapping"

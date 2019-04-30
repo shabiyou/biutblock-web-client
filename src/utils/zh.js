@@ -42,7 +42,7 @@ export default {
     newKeyStore: "下载新的Keystore",
   },
   receiveSec: {
-    secAddress: "SEC地址",
+    secAddress: "BIUT地址",
     receiveBtn: "领取测试币",
     errorAddress: "无效的地址",
   },

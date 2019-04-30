@@ -2,7 +2,7 @@
   <main>
     <el-container>
       <nav>
-        <router-link tag="img" to="/" :src="logoUrl" alt="SEC-Logo" title="SEC"></router-link>
+        <router-link tag="img" to="/" :src="logoUrl" alt="BIUT-Logo" title="BIUT"></router-link>
         <!-- <button @click="closeNav" class="hidden-md-and-up">三</button> -->
         <!-- <ul class="clearfix" v-show="navShow == 1"> -->
         <ul class="clearfix">

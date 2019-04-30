@@ -163,7 +163,7 @@
           let userAddressToString = keys.secAddress //地址
           this.userAddress = keys.secAddress //赋值当前地址用作创建json文件
           
-          let walletName = 'SEC' + ""+ keys.userAddress +"" //下载json文件名称
+          let walletName = 'BIUT' + ""+ keys.userAddress +"" //下载json文件名称
           let keyFileDataJS = {
             [privateKey]: {
               walletName: "New Import",
@@ -184,7 +184,7 @@
       },
       //下载json文件
       downUrlTxt () {
-        var filename = "SEC" + this.userAddress + ".json";
+        var filename = "BIUT" + this.userAddress + ".json";
         this.funDownload(filename, "" + this.keyData + "");
       },
       // 下载文件方法

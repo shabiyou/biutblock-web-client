@@ -135,7 +135,7 @@
                 :max="maxFee"></el-slider>
               <section>
                 <span :class="slowTips ? 'slow-color' : ''">{{$t('transfer.transferSlow')}}</span>
-                <span>{{feeVal}} SEN</span>
+                <span>{{feeVal}} BIU</span>
                 <span :class="fastTips ? 'fast-color' : ''">{{$t('transfer.transferFast')}}</span>
               </section>
             </section>
@@ -173,7 +173,7 @@
           </li>
           <li>
             <span :class="listChild?'firstChilds':'firstChild'">{{$t('transfer.transferPoundage1')}}</span>
-            <span>{{ feeVal }} SEN</span>
+            <span>{{ feeVal }} BIU</span>
           </li>
           <li>
             <span :class="listChild?'firstChilds':'firstChild'">{{$t('transfer.transferAomunt')}}</span>
@@ -230,8 +230,8 @@ export default {
       walletAddress: '', //转账地址
       walletMoney: '',//转账金额
       address: '', //当前钱包地址
-      allMoneyC: 0, //当前钱包总金额	SEC
-	    allMoneyN: 0.015,//当前钱包总金额 SEN
+      allMoneyC: 0, //当前钱包总金额	BIUT
+	    allMoneyN: 0.015,//当前钱包总金额 BIU
       privateKeyErrorTxt: 'walletInfo.invalidPrivateKey',
       walletPassErrorTxt: 'passTips.passError',
       transferPages: 1,//页面相关展示  1 登陆 2 转账
@@ -252,7 +252,7 @@ export default {
       moneyTxt: 'transfer.transferMoney',
       moneyShow: false,
       moneyShowN: false,
-	    moneyTxtN: 'transfer.transferMoneyN',//SEN silder金额大于余额
+	    moneyTxtN: 'transfer.transferMoneyN',//BIU silder金额大于余额
       radioList:[
           {
             id: '0',
@@ -276,17 +276,17 @@ export default {
       fastTips: false,
       slowTips: false,
       transferListShow: false,
-      transferCurrency: 'SEC',
+      transferCurrency: 'BIUT',
       transferIdx: 0,
       imgUrl: tradingCheck,
       itemList: [
         {
           id: '01',
-          cnt: 'SEC'
+          cnt: 'BIUT'
         },
         {
           id: '02',
-          cnt: 'SEN'
+          cnt: 'BIU'
         }
       ]
     }
@@ -461,7 +461,6 @@ export default {
           "params": [txSigned]
         }
       let x = delete postData.params[0].contractAddress
-      console.log(x)
       fetch(url, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
@@ -476,7 +475,11 @@ export default {
               this.allMoneyN = res
               this.allFeeVal = res
             })
-            this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
+            if (this.transferIdx == 0) {
+               this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
+            } else {
+              this.successUrl = "http://scan.secblock.io/sen/accountdetails?address="+fromAddress+""
+            }
             this.confirmDisabled = false
             this.walletMoney = ''
             this.walletAddress = ''

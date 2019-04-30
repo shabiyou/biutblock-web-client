@@ -7,7 +7,7 @@
         <el-col :xs="2" :sm="0" :md="0">&nbsp;</el-col>
         <el-col :xs="20" :sm="24" :md="24">
           <section class="content_list">
-            <!-- SEC地址 -->
+            <!-- BIUT地址 -->
             <section>
               <h2>{{$t('receiveSec.secAddress')}}</h2>
               <!-- input输入框组件 -->

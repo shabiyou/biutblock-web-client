@@ -31,7 +31,7 @@ let httpHeaderOption = {
   'content-type': 'application/json'
 }
 let fetch = require('node-fetch')
-//获取钱包余额 SEC
+//获取钱包余额 BIUT
 Vue.prototype.getWalletBalance = async (address)=> {
   let url = _const.url
   let bodyRequest = {
@@ -48,7 +48,7 @@ Vue.prototype.getWalletBalance = async (address)=> {
   return amount
 }
 
-//获取钱包余额 SEN
+//获取钱包余额 BIU
 Vue.prototype.getWalletBalanceSEN = async (address)=> {
   let url = _const.url_sen
   let bodyRequest = {

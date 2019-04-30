@@ -74,10 +74,10 @@
               <h4>{{$t('walletInfo.walletMoney')}}</h4>
               <section class="amount-list">
                 <section class="amount-content">
-                  {{ walletMoney }} <span>SEC</span>
+                  {{ walletMoney }} <span>BIUT</span>
                 </section>
                 <section class="amount-content">
-                  {{ walletMoneyN }} <span>SEN</span>
+                  {{ walletMoneyN }} <span>BIU</span>
                 </section>
               </section>
             </li>
@@ -206,7 +206,7 @@ export default {
         this.infoPages = 2
         this.walletAddress = `0x${extractAddress.toString('hex')}`
         this.walletKey = privateVal
-        //获取钱包余额 SEC
+        //获取钱包余额 BIUT
         this.getWalletBalance (`${extractAddress.toString('hex')}`).then(res=>{
           this.walletMoney = res
         })
@@ -274,7 +274,7 @@ export default {
       let pubKey128 = keys.publicKey //公钥
       let pubKey128ToString = pubKey128.toString('hex')
       let userAddressToString = keys.secAddress //地址
-      let walletName  = 'SEC' + ""+ keys.userAddress +"" 
+      let walletName  = 'BIUT' + ""+ keys.userAddress +"" 
       let keyFileDataJS = {
             [privateKey]: {
               walletName: "New Import",
@@ -287,7 +287,7 @@ export default {
       //通过密码加密钱包  
       let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
       var json = "" + userAddressToString + ".json"
-      this.funDownload("SEC" + json + "", "" + cipherKeyData.toString() + "")
+      this.funDownload("BIUT" + json + "", "" + cipherKeyData.toString() + "")
       this.closeMask()
     },
     // 下载文件方法

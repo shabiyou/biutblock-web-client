@@ -1,6 +1,6 @@
 <template>
   <p>
-    Copyright &copy; 2019 SEC
+    Copyright &copy; 2019 BIUT
   </p>  
 </template>
 
