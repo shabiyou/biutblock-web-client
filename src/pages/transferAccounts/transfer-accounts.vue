@@ -540,34 +540,34 @@ export default {
       } else {
         //转账SEC
         if (this.transferIdx === 0) {
-          if (amount.length > 0 && amount > this.allMoneyC) {
+          if (amount.length > 0 && Number(amount) > Number(this.allMoneyC)) {
             this.moneyShow = true
 			      return false
           } else {
             this.moneyShow = false
             this.addressError = false
             return address.length == 42
-              && amount > 0
+              && Number(amount) > 0
 			        && address != this.address
-              && amount <= this.allMoneyC
+              && Number(amount) <= Number(this.allMoneyC)
               && _const.addressReg.test(address)
-              && 0 < this.feeVal
-              && this.feeVal < this.allMoneyN ? true : false
+              && 0 < Number(this.feeVal)
+              && Number(this.feeVal) < Number(this.allMoneyN) ? true : false
           }
         } else {
           //转账SEN
-          if (amount.length > 0 && amount > allNumber) {
+          if (amount.length > 0 && Number(amount) > Number(allNumber)) {
             this.moneyShow = true
 			      return false
           } else {
             this.moneyShow = false
             this.addressError = false
             return address.length == 42
-              && amount > 0
+              && Number(amount) > 0
 			        && address != this.address
-              && amount <= allNumber
+              && Number(amount) <= Number(allNumber)
               && _const.addressReg.test(address)
-              && 0 < this.feeVal ? true : false
+              && 0 < Number(this.feeVal) ? true : false
           }
         }
       }
@@ -640,7 +640,7 @@ export default {
 
   .money-list {color: #91A2AA;font-size: 14px;padding: 10px 0 26px;}
   .money-list label {color: #42535B;}
-  .money-list span:last-child {color: #00D86D;margin-left: 12px;}
+  .money-list span:last-child {color: #00D69B;margin-left: 12px;}
   .money-list span:last-child:hover {cursor: pointer;}
   
 
@@ -664,14 +664,14 @@ export default {
   .transferError {font-size: 16px;color: #EE1C39;padding-top: 10px;}
   .confirmDisabled {background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%)!important;}
 
-  .list-active {color: #00D86D;}
+  .list-active {color: #00D69B;}
   .slow-color {color: #0B7FE6!important;}
   .fast-color {color: #F5A623!important;}
 
 
   .transfer-slider section {display: flex;justify-content: space-between;align-items: center;font-size: 14px;box-sizing: border-box;}
   .transfer-slider >>> .el-slider__runway {height: 2px;}
-  .transfer-slider >>> .el-slider__bar {background-color: #00D86D;height: 2px;}
-  .transfer-slider >>> .el-slider__button {border-color: #00D86D;}
+  .transfer-slider >>> .el-slider__bar {background-color: #00D69B;height: 2px;}
+  .transfer-slider >>> .el-slider__button {border-color: #00D69B;}
   .transfer-slider >>> .el-slider__button-wrapper {width: 24px;height: 24px;}
 </style>

@@ -176,12 +176,12 @@ export default {
   nav ul .li_margin {margin-left: 2.2rem;}
   nav ul .li_margins {margin-left: 1.8rem;}
   nav ul li:first-child {margin-left: 0;}
-  .check_color {color: #00D86D;font-weight: 500;}
+  .check_color {color: #00D69B;font-weight: 500;}
   .check_color:after {border-left: .45rem solid transparent;border-right: .45rem solid transparent;
     border-bottom: .45rem solid #F5F5F5;content: "";position: absolute;width: 0;
     bottom: 0;left: calc(50% - .45rem);}
   nav ul li:hover {cursor: pointer;}
-  nav ul li:last-child:hover {color: #00D86D;}
+  nav ul li:last-child:hover {color: #00D69B;}
   nav ul li:last-child {padding-left: 1.1rem;margin-left: 1.1rem;}
 
   .languageList {position: absolute;top: 3.5rem;right: 0;width: 8.7rem;height: 4.2rem;background:#fff;
