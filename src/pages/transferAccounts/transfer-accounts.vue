@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container @click.native="closeAmountList">
     <!-- 白色大背景 -->
     <main>
       <!-- 内容展示区域 -->
@@ -98,7 +98,7 @@
                 @input="clearAmount"
                 onpaste="return false"/>
               <section>
-                <span @click="openTransferList">
+                <span @click="openTransferList" id="amountListImg">
                   {{transferCurrency}}
                   <img src="../../assets/images/tradingDown.png"/>
                 </span>
@@ -295,6 +295,14 @@ export default {
     
   },
   methods: {
+    //点击其他地方关闭sec、sen选择
+    closeAmountList (event) {
+      let amountList = document.getElementById('amountListImg')
+      if (this.transferListShow && !amountList.contains(event.target) ) {
+        this.transferListShow = false
+      }
+    },
+
     //keyStore文件登陆 去空
      inputContentPass () {
         this.$nextTick(()=> {
