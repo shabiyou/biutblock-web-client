@@ -1,0 +1,130 @@
+<template>
+  <section class="mask">
+    <section class="mask_cnt info_mask clearfix">
+      <p>{{ $t("passTips.newWalletPass") }}</p>
+
+      <public-pass
+        v-model.trim="newWalletPass"
+        maxlength="30"
+        :placeholder="$t('passTips.newWalletPass')"
+        @input="inputContentNewPass"/>
+
+      <public-tips :tipsTxt="infoTxt" v-show="passTips" />
+
+      <section>
+        <button type="button" @click="closeMask">
+          {{ $t("mask.cancel") }}
+        </button>
+        <button
+          type="button"
+          :disabled="!passActive"
+          :class="passActive ? 'btn-active' : ''"
+          @click="createFrom">
+          {{ $t("mask.confirm") }}
+        </button>
+      </section>
+    </section>
+  </section>
+</template>
+
+<script>
+
+import publicPass from '../../../components/publicPass'
+import publicTips from '../../../components/publicTips'
+import walletsHandler from '../../../lib/WalletsHandler.js'
+const SECUtil = require('@sec-block/secjs-util')
+const CryptoJS = require('crypto-js')
+export default {
+  name: '',
+  props: {},
+  components: {
+    publicPass,
+    publicTips,
+  },
+  data() {
+    return {
+      newWalletPass: '', //新钱包密码
+      infoTxt: 'passTips.passFormat',//密码提示语
+      passTips: false, //密码提示语是否显示
+    }
+  },
+  computed: {
+    //新钱包密码按钮是否激活
+    passActive () {
+      var passReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
+      let pass = (this.newWalletPass).replace(/\s+/g, "")
+      if (pass.length > 0) {
+        this.passTips = true
+      } else {
+        this.passTips = false
+      }
+      return passReg.test(pass) ? true : false
+    }
+  },
+  methods: {
+    //不能输入中文
+    inputContentNewPass () {
+      this.$nextTick(()=> {
+        this.newWalletPass = this.newWalletPass.replace(/[\u4E00-\u9FA5]/g,'')
+      })
+    },
+
+    //取消创建钱包
+    closeMask () {
+      this.passTips = false
+      this.newWalletPass = ''
+      this.$emit("close")
+    },
+
+    //创建钱包
+    createFrom () {
+      let newPass = this.newWalletPass.replace(/\s+/g, "")
+      let keys = SECUtil.generateSecKeys() //创建钱包
+      let privKey64 = keys.privKey //获取创建钱包的私钥
+      let privateKey = privKey64
+      let englishWords = SECUtil.entropyToMnemonic(privKey64)
+      let pubKey128 = keys.publicKey //公钥
+      let pubKey128ToString = pubKey128.toString('hex')
+      let userAddressToString = keys.secAddress //地址
+      let walletName  = 'BIUT' + ""+ keys.userAddress +"" 
+      let keyFileDataJS = {
+        [privateKey]: {
+            walletName: "New Import",
+            privateKey: privateKey,
+            publicKey: pubKey128ToString,
+            walletAddress: userAddressToString,
+            englishWords: englishWords,
+        }
+      }
+      //通过密码加密钱包  
+      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
+      var json = "" + userAddressToString + ".json"
+      this.funDownload("BIUT" + json + "", "" + cipherKeyData.toString() + "")
+      this.closeMask()
+    },
+
+    // 下载文件方法
+    funDownload (filename, content) {
+      var eleLink = document.createElement('a');
+      eleLink.download = filename;
+      eleLink.style.display = 'none';
+      // 字符内容转变成blob地址
+      var blob = new Blob([content], {type: "application/octet-stream"});
+      eleLink.href = URL.createObjectURL(blob);
+      // 触发点击
+      document.body.appendChild(eleLink);
+      eleLink.click();
+      // 然后移除
+      document.body.removeChild(eleLink);
+    },
+  },
+}
+</script>
+
+<style scoped>
+  .info_mask {padding: .8rem 1.2rem .6rem;}
+  .info_mask p {color: #42535B;font-size: .8rem;padding-bottom: .6rem;}
+  .info_mask section {float: right;padding-top: 1rem;}
+  .info_mask section button {float: left;background:linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}
+  .info_mask section button:first-child {margin-right: .6rem;}
+</style>
