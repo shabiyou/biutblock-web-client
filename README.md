@@ -1,4 +1,4 @@
-# pc_wallet
+# wallet-pc
 
 > A Vue.js project
 
