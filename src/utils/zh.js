@@ -84,7 +84,8 @@ export default {
     confirmMapping: '确认以下信息',
     tipTxt: '提示',
     mappingButton: '映射',
-    mappingSuccess: '映射成功，请等待1-3个工作日查看新钱包地址中新币映射到账情况，如有任何疑问，请联系SEC工作人员。'
+    mappingSuccess: '映射成功，请等待1-3个工作日查看新钱包地址中新币映射到账情况，如有任何疑问，请联系SEC工作人员。',
+    mappingFailure: '映射失败，请添加微信客服号进行咨询！'
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果:",

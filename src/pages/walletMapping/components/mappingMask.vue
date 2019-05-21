@@ -34,7 +34,7 @@
         <figure>
           <img :src="mappingResImg" alt="">
           <figcaption>
-            {{ $t("mapping.mappingSuccess") }}
+            {{ $t(mappingResTxt) }}
           </figcaption>
         </figure>
       </section>
@@ -56,6 +56,10 @@
 import successImg from '../../../assets/images/success.png'
 import failureImg from '../../../assets/images/tipsImg.png'
 import publicButton from '../../../components/publicButton'
+let fetch = require('node-fetch')
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
 export default {
   name: '',
   props: {
@@ -69,13 +73,14 @@ export default {
     return {
       maskPages: 1,
       mappingResImg: successImg,
-      //mappingResTxt: 'mapping.mappingSuccess', // 映射失败，请添加微信客服号进行咨询！
+      mappingResTxt: 'mapping.mappingSuccess', //  mapping.mappingFailure 失败
     }
   },
   created() {
     
   },
   computed: {
+    //中英文宽度
     maskWidth () {
       if (this.$i18n.locale == 'zh') {
         return true
@@ -84,6 +89,7 @@ export default {
       }
     },
 
+    //确认数据列表
     maskList () {
       return [
         {
@@ -100,6 +106,7 @@ export default {
     }
   },
   methods: {
+    //关闭遮罩层
     closeMask () {
       let maskPages = this.maskPages
       this.$emit('close', maskPages)
@@ -109,11 +116,28 @@ export default {
     /** 确认映射 */
     confirmMapping () {
       this.maskPages = 2
+      let urls = "http://scan.secblock.io/mapping"
+      let address = this.biutAddress.replace("0x","")
+     
+     let postData = {
+        ethprivatekey: this.ethprivateKey,
+        biutaddress: address
+     }
+     fetch(urls, {
+          method: 'post',
+          body: JSON.stringify(postData), // request is a string
+          headers: httpHeaderOption
+        }).then((res) => {
+          if (res.status == 200) {
+            this.mappingResTxt = 'mapping.mappingSuccess'
+            this.mappingResImg = successImg
+          } else {
+            this.mappingResTxt = 'mapping.mappingFailure'
+            this.mappingResImg = failureImg
+          }
+        })
     }
-  },
-  watch: {
-    
-  },
+  }
 }
 </script>
 
