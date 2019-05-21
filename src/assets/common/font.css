@@ -1,0 +1,24 @@
+@font-face {  
+  font-family: 'source-Bold';
+  src: url('./source/SOURCEHANSANSCN-BOLD.ttf');
+  font-weight: normal;  
+  font-style: normal;
+}
+@font-face {  
+  font-family: 'source-Light';
+  src: url('./source/SOURCEHANSANSCN-LIGHT.ttf');
+  font-weight: normal;  
+  font-style: normal;
+}
+@font-face {  
+  font-family: 'source-Medium';
+  src: url('./source/SOURCEHANSANSCN-MEDIUM.ttf');
+  font-weight: normal;  
+  font-style: normal;
+}
+@font-face {  
+  font-family: 'source-Regular';
+  src: url('./source/SOURCEHANSANSCN-REGULAR.ttf');
+  font-weight: normal;  
+  font-style: normal;
+}

@@ -50,7 +50,7 @@ export default {
   ul li {border-bottom: 1px solid #CFDEDB;color: #42535B;padding-top: 2.2rem;}
   ul li:first-child {padding-top: 0rem;}
   ul li:last-child {border: 0;}
-  ul li h4 {margin: 0;font-size: 1rem;font-weight: 300;}
+  ul li h4 {margin: 0;font-size: 1rem;font-weight: normal;}
   ul li p {padding: .8rem 0 2.3rem;font-size: .8rem;font-weight: 500;word-wrap:break-word;white-space:pre-wrap;}
   .amount-list {display: flex;align-items: center;margin-top: .8rem;}
   .amount-list .amount-content {width: 13.5rem;height: 2.5rem;padding: 0 1rem;display: flex;align-items: center;

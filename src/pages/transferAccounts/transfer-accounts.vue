@@ -145,7 +145,7 @@ export default {
       moneyShowN: false,
 
       feeVal: 0.02, //初始值
-      minFee: 0.01, //最小值
+      minFee: 0.0001, //最小值
       maxFee: 0.1, //最大值
       stepFee: 0.00818182, //步长
       fastTips: false,
@@ -287,7 +287,7 @@ export default {
       if (this.transferIdx == 0) {
         this.walletMoney = this.allMoneyC
       } else {
-        this.walletMoney =  (this.allMoneyN - this.feeVal).toFixed(3)
+        this.walletMoney =  this.allMoneyN - this.feeVal
       }
     },
 

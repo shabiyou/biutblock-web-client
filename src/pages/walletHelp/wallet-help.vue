@@ -3,14 +3,19 @@
     <el-row>
       <el-col :xs="24" :sm="24" :md="24">
         <main class="wallet-help">
-          <!-- <iframe :src="guideUrl"  width="100%" height="100%">
-              This browser does not support PDFs. Please download the PDF to view it: 
-              <a :href="guideUrl">Download PDF</a>
-          </iframe> -->
 
-          <object width="100%" height="100%" border="0"><param name="src" :value="guideUrl"> </object>
+          <embed v-show="guideUrls" 
+            src="http://scan.secblock.io/secwallet-web-help-en.pdf"  
+            width="100%" 
+            height="100%">
+          </embed>
 
-          <!-- <embed :src="guideUrl"  width="100%" height="100%"></embed> -->
+          <embed v-show="!guideUrls" 
+            src="http://scan.secblock.io/secwallet-web-help-cn.pdf"  
+            width="100%" 
+            height="100%">
+          </embed>
+
         </main>
       </el-col>
     </el-row>  
@@ -20,25 +25,26 @@
 <script>
 export default {
   name: '',
-  components: {
-    
-  },
   props: {},
   data () {
     return {
-      guideUrl: "http://scan.secblock.io/secwallet-web-help-en.pdf"
+
     }
   },
   computed: {
-
+    guideUrls () {
+      if (this.$i18n.locale == "zh") {
+        return  false
+      } else {
+        return true
+      }
+    }
   },
   created () {
 
   },
   mounted () {
-    if (this.$i18n.locale == "zh") {
-      this.guideUrl = "http://scan.secblock.io/secwallet-web-help-cn.pdf"
-    }
+    
   },
   destroyed () {},
   methods: {

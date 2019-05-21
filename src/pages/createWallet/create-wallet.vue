@@ -4,7 +4,7 @@
       <el-row>
         <el-col :xs="24" :sm="24" :md="24">
           <!-- 创建钱包 -->
-          <section class="create-pages wallet-content" v-show="pages == 1">
+          <section class="create-pages wallet-content" v-if="pages == 1">
             <h2>{{$t('newWallet.createWallet')}}</h2>
 
             <public-pass
@@ -37,7 +37,7 @@
           </section>
 
           <!-- 下载keystroe文件 -->
-          <section class="down-keystroe wallet-content" v-show="pages == 2">
+          <section class="down-keystroe wallet-content" v-if="pages == 2">
             <h2>{{$t('newWallet.saveKeyStore')}}</h2>
             <span @click="downUrlTxt">{{$t('newWallet.keyStoreDown')}}</span>
 
@@ -49,16 +49,11 @@
               :text="$t('newWallet.next')"
               @click.native="continueKey" />
           </section>
-
-
         </el-col>
       </el-row>  
-      
-
-      
 
       <!-- 保存私钥 -->
-      <section class="save-privateKey wallet-content" v-show="pages == 3">
+      <section class="save-privateKey wallet-content" v-if="pages == 3">
         <h2>{{$t('newWallet.savePrivateKey')}}</h2>
         <article> {{ privateKey }} </article>
 

@@ -21,7 +21,7 @@
         </section>
 
         <!-- keyStore 登陆 -->
-        <section class="key-store" v-if="radioPages == 0">
+        <section class="key-store" v-show="radioPages == 0">
           <p>{{ $t("walletInfo.checkKeyStore1") }}</p>
           <input
             type="file"
@@ -50,7 +50,7 @@
         </section>
 
         <!-- 私钥登陆 -->
-        <section class="private-key" v-if="radioPages == 1">
+        <section class="private-key" v-show="radioPages == 1">
           <p>{{ $t("walletInfo.inputPrivateKey1") }}</p>
 
           <public-pass
@@ -251,12 +251,13 @@ export default {
 
 h2 {margin: 8.4rem auto 2.7rem;}
 
-.key-store p,.private-key p {font-size: .9rem;color: #42535B;font-weight: 500;padding: 1.45rem 0 .55rem;}
+.key-store p,.private-key p {font-size: .9rem;color: #42535B;font-weight: 500;
+  padding: 1.45rem 0 .55rem;font-family: source-Medium;}
 .key-store .key-store-btn,.private-key .private-key-btn {margin-top: 1.6rem;}
 
 .key-store {position: relative;}
 .key-store input[type='file'] {width: 20.6rem;height: 2.4rem;position: absolute;top: 3rem;opacity: 0;
-  max-width: 100%!important;}
+  max-width: 100%!important;font-family: source-Regular;}
 .key-store section {width: 20.6rem;height: 2.3rem;border: .05rem solid rgba(145,162,170,1);text-align: center;
   border-radius: .5rem;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;line-height: 2.4rem;
   color: #42535B;font-size: .7rem;font-weight: 400;max-width: 100%!important;box-sizing: border-box;}

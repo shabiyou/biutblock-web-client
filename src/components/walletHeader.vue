@@ -210,7 +210,8 @@ export default {
 <style scoped>
   main {background:rgba(66,83,91,1);}
   nav {height: 3.5rem;display: flex;align-items: center;justify-content: space-between;width: 100%;}
-  nav ul {font-size: .8rem;font-weight: 300;color: #B9C4C2;height: 3.5rem;line-height: 3.5rem;padding: 0;margin: 0;}
+  nav ul {font-size: .8rem;font-weight: 300;color: #B9C4C2;height: 3.5rem;line-height: 3.5rem;
+    padding: 0;margin: 0;font-family: source-Light;}
   nav ul li {float: left;position: relative;}
   nav ul .li_margin {margin-left: 2.2rem;}
   nav ul .li_margins {margin-left: 1.8rem;}

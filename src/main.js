@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import 'normalize.css'
 import './assets/css/public.css'
+import './assets/common/font.css'
 
 import VueI8n from 'vue-i18n'
 import i18n from './utils/index'

@@ -141,7 +141,7 @@ export default {
 <style scoped>
   .wallet-mapping {height: 26.25rem;padding: 4.1rem 6.2rem 0;width: 20.6rem;margin: 0 auto;}
 
-  .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .5rem;}
+  .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .5rem;font-family: source-Bold;}
   .wallet-mapping .mapping-top {margin-top: 1.2rem;}
   
   .mapping-tips {display: flex;background:rgba(238,28,57,0.1);padding: 1rem .4rem .5rem .55rem;margin: 1.4rem 0 2.3rem;}
