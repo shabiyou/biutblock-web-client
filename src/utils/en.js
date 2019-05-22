@@ -81,7 +81,7 @@ export default {
     tipTxt: 'Prom',
     confirmMapping: 'Confirm the following information',
     mappingButton: 'Mapping',
-    mappingSuccess: 'Submit the mapping successfully. Please wait 1-3 business days to check the SGD mapping in the new wallet address. If you have any questions, please contact the SEC staff.',
+    mappingSuccess: 'Submit the mapping successfully. Please wait 1-3 business days to check the SGD mapping in the new wallet address. If you have any questions, please contact the BIUT staff.',
     mappingFailure: 'Mapping failed, please add WeChat customer service number for consultation!'
   },
   

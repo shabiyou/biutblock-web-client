@@ -146,13 +146,13 @@ export default {
   .mask-list h4 {font-size: .9rem;color: #252F33;font-weight: 500;padding-bottom: .7rem;
     border-bottom: .05rem solid #E6E6E6;margin-bottom: 1.2rem;}
   .mask-list ul {margin: 0;padding: 0;}
-  .mask-list ul li {font-size: .7rem;padding-bottom: 1.1rem;color: #252F33;display: flex;}
+  .mask-list ul li {font-size: .7rem;padding-bottom: 1.1rem;color: #252F33;display: flex;line-height: 1.5;}
   .mask-list ul li span:first-child {margin-right: 1rem;display: inline-block;color: #566066;width: 8rem;}
   .mask-list ul li span:last-child {word-break:break-all;flex: 1;}
   .mask-list section {display: flex;justify-content: flex-end;}
-  .mask-list section button {width: 5.4rem;height: 1.8rem;}
+  .mask-list section button {width: 5.4rem;height: 1.8rem;background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}
   .mask-list section button:last-child {margin-left: .6rem;}
-  .mask-list ul li .enWidth {width: 5rem!important;}
+  .mask-list ul li .enWidth {width: 3.5rem!important;}
 
   .mask-res {height: 7.6rem;display: flex;flex-direction: column;justify-content: space-between;}
   .mask-res section:last-child {display: flex;justify-content: flex-end;}
