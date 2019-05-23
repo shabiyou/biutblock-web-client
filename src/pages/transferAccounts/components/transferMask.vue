@@ -113,6 +113,7 @@ export default {
     
     //确认转账
     confirmTransfer () {
+      this.confirmDisabled = true
       let privateVal = this.maskInfo[0].privateKey //钱包私钥
       let fromAddress = this.maskInfo[0].fromAddress.replace("0x","") //发送地址
       let toAddress = this.maskInfo[0].toAddress.replace("0x","") //接收地址
