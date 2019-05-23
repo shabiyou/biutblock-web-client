@@ -78,7 +78,7 @@ export default {
     mappingTipsTxt: 'Attention! During the mapping process, please carefully check that the BIUT wallet address to be mapped is the BIUT wallet address that you created! If you map to a wrong wallet address which is not belong to you, you need to responsible for your loss. ',
     ethKeyErrorTxt: 'ETH private key is invalid',
     biutAddressErrorTxt: 'BIUT address error',
-    tipTxt: 'Prom',
+    tipTxt: 'Notice',
     confirmMapping: 'Confirm the following information',
     mappingButton: 'Mapping',
     mappingSuccess: 'Submit the mapping successfully. Please wait 1-3 business days to check the SGD mapping in the new wallet address. If you have any questions, please contact the BIUT staff.',

@@ -156,6 +156,6 @@ export default {
     .input-list {justify-content: center!important;padding-top: 0!important;}
     .input-list >>> section {width: 90%!important;}
     .input-list >>> section p {padding-top: 1rem!important;}
-    .wallet-mapping button {margin-left: 5%;margin-bottom: 1rem;}
+    .wallet-mapping button {margin-bottom: 1rem;}
   }
 </style>
