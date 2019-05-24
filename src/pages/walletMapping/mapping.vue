@@ -4,37 +4,64 @@
       <section class="wallet-mapping">
         <section class="mapping-tips">
           <img src="../../assets/images/tipsImg.png" alt="">
-          <span>
-            {{ $t('mapping.mappingTipsTxt') }}
-          </span>
+          <ul>
+            <li>
+              <span>1、</span>
+              <span>{{ $t('mapping.mappingTipsTxt1') }}</span>
+            </li>
+            <li>
+              <span>2、</span>
+              <span>{{ $t('mapping.mappingTipsTxt2') }}</span>
+            </li>
+          </ul>
         </section>
 
-        <section class="tips-list">
-          <p>{{ $t('mapping.ethprivateKey') }}</p>
-          <public-tips v-show="showKey" :tipsTxt="tipsTxt1"/>
+        <section class="input-content">
+          <section class="input-text">
+            <section class="tips-list">
+              <p>{{ $t('mapping.ethprivateKey') }}</p>
+              <public-tips v-show="showKey" :tipsTxt="tipsTxt2"/>
+            </section>
+            <public-input 
+              v-model.trim = "ethprivateKey"
+              :class="showKey ? 'error-border' : ''"
+              :placeholder = "$t('mapping.ethprivateKey')"
+              :maxlength = "64" />
+          </section>
+          
+          <section class="input-text">
+            <p>{{ $t('mapping.ethddress') }}</p>
+            <span v-show="ethAddressShow"> {{ $t('mapping.ethddress') }} </span>
+            <span v-show="!ethAddressShow" class="address-color"> {{ ethAddressText }} </span>
+          </section>
         </section>
-        <public-input 
-          v-model.trim = "ethprivateKey"
-          :class="showKey ? 'error-border' : ''"
-          :placeholder = "$t('mapping.ethprivateKey')"
-          :maxlength = "64" />
-        
 
-        <section class="tips-list mapping-top">
-          <p>{{ $t('mapping.biutAddress') }}</p>
-          <public-tips v-show="showAddress" :tipsTxt="tipsTxt2"/>
+
+        <section class="input-content mapping-top">
+          <section class="input-text">
+            <section class="tips-list">
+              <p>{{ $t('mapping.biutprivateKey') }}</p>
+              <public-tips v-show="showBiutKey" :tipsTxt="tipsTxt1"/>
+            </section>
+            <public-input 
+              v-model.trim = "biutprivateKey"
+              :class="showBiutKey ? 'error-border' : ''"
+              :placeholder = "$t('mapping.biutprivateKey')"
+              :maxlength = "64" />
+          </section>
+          
+          <section class="input-text">
+            <p>{{ $t('mapping.biutAddress') }}</p>
+            <span v-show="biutAddressShow"> {{ $t('mapping.biutAddress') }} </span>
+            <span v-show="!biutAddressShow" class="address-color"> {{ biutAddressText }} </span>
+          </section>
         </section>
-        
-        <public-input 
-          v-model.trim = "biutAddress"
-          :class="showAddress ? 'error-border' : ''"
-          :placeholder = "$t('mapping.biutAddress')"
-          :maxlength = "42" />
-        
+
         <!-- 映射按钮 --> 
         <public-button
           type="button"
           :text="$t('mapping.mappingButton')"
+          :disabled="!confirmFrom"
           :class="confirmFrom ? 'btn-active' : ''"
           @click.native="confirmMapping" />
 
@@ -46,8 +73,8 @@
     <!-- mask 弹窗 -->
     <mapping-mask 
       v-show="maskShow"
-      :biutAddress = 'biutAddress'
-      :ethprivateKey = 'ethprivateKey'
+      :biutAddress = 'biutAddressText'
+      :ethAddress = 'ethAddressText'
       @close="cloaseMask"/>
   </main>
 </template>
@@ -59,6 +86,7 @@ import mappingMask from './components/mappingMask'
 
 import publicInput from '../../components/publicInput'
 import publicTips from '../../components/publicTips'
+const SECUtil = require('@biut-block/biutjs-util')
 export default {
   name: '',
   components: {
@@ -73,13 +101,21 @@ export default {
   data () {
     return {
       ethprivateKey: '',
-      biutAddress: '',
+      ethddress: 'mapping.ethddress',
+      biutprivateKey: '',
+      biutAddress: 'mapping.biutAddress',
       gasPriceTxt: 'Gas Price',
       gasLimitTxt: 'Gas Limit',
-      tipsTxt1: 'mapping.ethKeyErrorTxt',
-      tipsTxt2: 'mapping.biutAddressErrorTxt',
+      tipsTxt1: 'mapping.biutKeyErrorTxt', // biut私钥无效
+      tipsTxt2: 'mapping.ethKeyErrorTxt', // eth私钥无效
+
+      ethAddressShow: true,
+      biutAddressShow: true,
+      ethAddressText: '',
+      biutAddressText: '',
+
       showKey: false,
-      showAddress: false,
+      showBiutKey: false,
 
       maskShow: false, //关闭弹窗
     }
@@ -88,7 +124,10 @@ export default {
     //是否可点击
     confirmFrom () {
       let ethprivateKey = this.ethprivateKey.replace(/\s+/g, "")
-      let biutAddress = this.biutAddress.replace(/\s+/g, "")
+      let biutrivateKey = this.biutprivateKey.replace(/\s+/g, "")
+      let ethAddress = this.ethAddressText.replace(/\s+/g, "")
+      let biutAddress = this.biutAddressText.replace(/\s+/g, "")
+      
       if (ethprivateKey.length > 0 && ethprivateKey.length < 64) {
         this.showKey =  true
       } else if (ethprivateKey.length == 64 && !(_const.priverKeyReg.test(ethprivateKey))) {
@@ -96,21 +135,28 @@ export default {
       } else {
         this.showKey =  false
       }
-      if (biutAddress.length > 0 && biutAddress.length < 42) {
-        this.showAddress = true
-      } else if (!(_const.addressReg.test(biutAddress)) && biutAddress.length == 42) {
-        this.showAddress = true
+      if (biutrivateKey.length > 0 && biutrivateKey.length < 64) {
+        this.showBiutKey =  true
+      } else if (biutrivateKey.length == 64 && !(_const.priverKeyReg.test(biutrivateKey))) {
+        this.showBiutKey =  true
+      } else if (biutrivateKey.length == 64 && biutrivateKey == ethprivateKey) {
+        this.showBiutKey =  true
       } else {
-        this.showAddress = false
+        this.showBiutKey =  false
       }
+      
       return ethprivateKey.length == 64
+        &&  biutrivateKey.length == 64
         && _const.priverKeyReg.test(ethprivateKey) 
+        && _const.priverKeyReg.test(biutrivateKey) 
+        && ethAddress.length == 40
         && biutAddress.length == 42
+        && biutrivateKey != ethprivateKey
         && _const.addressReg.test(biutAddress) ? true : false
     }
   },
   created () {
-
+    
   },
   mounted () {
 
@@ -126,12 +172,63 @@ export default {
       this.maskShow = true
     },
 
+    /**
+     * 
+     * 获取eth的地址
+     * 
+     */
+    getEthAddress (privateKeys) {
+      let address = SECUtil.privateToAddress(SECUtil.privateToBuffer(privateKeys)).toString('hex')
+      return address
+    },
+
+    /**
+     * 
+     * 获取biut的地址
+     * 
+     */
+    getBiutAddress (privateKeys) {
+      let privateKeyBuffer = SECUtil.privateToBuffer(privateKeys)
+      let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
+      let address = `0x${extractAddress.toString('hex')}`
+      return address
+    },
+
     /** 关闭弹窗 */
     cloaseMask (e) {
       this.maskShow = false
       if (e == 2) {
         this.ethprivateKey = ""
-        this.biutAddress = ""
+        this.biutprivateKey = ""
+        this.biutAddressShow = true
+        this.ethAddressShow = true
+        this.ethAddressText = ''
+        this.biutAddressText = ''
+      }
+    }
+  },
+  watch: {
+    //监听eth 私钥输入
+    ethprivateKey (newVal, oldVal) {
+      if (newVal.length == 64 && _const.priverKeyReg.test(newVal)) {
+        let address = this.getEthAddress(newVal)
+        this.ethAddressShow = false
+        this.ethAddressText = address
+      } else {
+        this.ethAddressShow = true
+        this.ethAddressText = ''
+      }
+    },
+
+    //监听 biut私钥输入
+    biutprivateKey (newKey, oldKey) {
+      if (newKey.length == 64 && _const.priverKeyReg.test(newKey)) {
+        let address = this.getBiutAddress(newKey)
+        this.biutAddressShow = false
+        this.biutAddressText = address
+      } else {
+        this.biutAddressShow = true
+        this.biutAddressText = ''
       }
     }
   },
@@ -139,23 +236,33 @@ export default {
 </script>
 
 <style scoped>
-  .wallet-mapping {height: 26.25rem;padding: 4.1rem 6.2rem 0;width: 20.6rem;margin: 0 auto;}
+  .wallet-mapping {height: 25.95rem;padding: 4.4rem 6.2rem 0;width: 42.7rem;margin: 0 auto;}
+  .input-content {display: flex;justify-content: space-between;}
+  .input-text {flex: 1;}
+  .input-text:first-child {margin-right: 1.5rem;}
+  .input-text span {border: 0.05rem solid rgba(145,162,170,1);height: 2.4rem;box-sizing: border-box;
+    border-radius: .5rem;display: flex;align-items: center;text-indent: 1rem;color: #839299;
+    font-size: .7rem;}
+  .input-text .address-color {color: #42535B;}
 
   .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .5rem;font-family: source-Bold;}
   .wallet-mapping .mapping-top {margin-top: 1.2rem;}
+
   
-  .mapping-tips {display: flex;background:rgba(238,28,57,0.1);padding: 1rem .4rem .5rem .55rem;margin: 1.4rem 0 2.3rem;}
-  .mapping-tips img {width: .8rem;height: .8rem;margin-right: .5rem;}
-  .mapping-tips span {color: #42535B;font-size: .6rem;line-height: 1.5;}
+  .mapping-tips {display: flex;background:rgba(238,28,57,0.1);padding: .85rem .9rem;margin-bottom: 2.4rem;}
+  .mapping-tips img {width: .8rem;height: .8rem;margin: .15rem .5rem 0 0;}
+  .mapping-tips ul {margin: 0;padding: 0;}
+  .mapping-tips ul li {display: flex;}
+  .mapping-tips ul li span {color: #42535B;font-size: .6rem;line-height: 1.8;}
 
   .tips-list {display: flex;align-items: center;justify-content: space-between;}
   .tips-list >>> .tips_content {padding-top: 0;font-size: .7rem;}
-  .wallet-mapping button {margin-top: 2.1rem;}
+
+  .wallet-mapping button {margin-top: 2.7rem;width: 11.8rem;}
   @media (max-width: 767px) {
-    .wallet-mapping {padding: 1.2rem .2rem 0;height: auto;width: 90%;}
-    .input-list {justify-content: center!important;padding-top: 0!important;}
-    .input-list >>> section {width: 90%!important;}
-    .input-list >>> section p {padding-top: 1rem!important;}
-    .wallet-mapping button {margin-bottom: 1rem;}
+    .wallet-mapping {padding: 1.2rem .2rem;height: auto;width: 90%;}
+    .input-content {display: block;margin: 0!important;}
+    .input-content .input-text {width: 100%;margin-top: 1.2rem;}
+    .wallet-mapping button {margin-bottom: 1rem;width: 100%;}
   }
 </style>
