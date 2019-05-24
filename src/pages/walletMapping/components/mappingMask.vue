@@ -63,8 +63,8 @@ let httpHeaderOption = {
 export default {
   name: '',
   props: {
-    ethprivateKey: String,
-    biutAddress: String
+    biutAddress: String,
+    ethAddress: String
   },
   components: {
     publicButton
@@ -94,8 +94,8 @@ export default {
       return [
         {
           id: '03',
-          tit: 'mapping.ethprivateKey',
-          txt: this.ethprivateKey
+          tit: 'mapping.ethddress',
+          txt: this.ethAddress
         },
         {
           id: '02',
@@ -120,7 +120,7 @@ export default {
       let address = this.biutAddress.replace("0x","")
      
      let postData = {
-        ethprivatekey: this.ethprivateKey,
+        ethAddress: this.ethAddress,
         biutaddress: address
      }
      fetch(urls, {

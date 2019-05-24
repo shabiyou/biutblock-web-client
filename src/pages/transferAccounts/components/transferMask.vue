@@ -137,12 +137,14 @@ export default {
         'gas': fee
       }
       const tx = JSON.stringify(transfer)
+      console.log(tx)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       let postData = {
           "method": "sec_sendRawTransaction",
           "params": [txSigned]
         }
+      console.log(txSigned)
       delete postData.params[0].contractAddress //删除 contractAddress 字段
       fetch(url, {
           method: 'post',
