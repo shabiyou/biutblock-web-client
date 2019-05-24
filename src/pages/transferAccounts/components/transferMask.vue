@@ -134,7 +134,11 @@ export default {
         'to': toAddress,
         'value': amount,
         'inputData': inputData,
-        'gas': fee
+        'txFee': fee,
+        'gasLimit': '0',
+        'gas': '0',
+        'gasPrice': '0',
+        'data': ''
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
