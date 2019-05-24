@@ -32,7 +32,7 @@
 import publicPass from '../../../components/publicPass'
 import publicTips from '../../../components/publicTips'
 import walletsHandler from '../../../lib/WalletsHandler.js'
-const SECUtil = require('@sec-block/secjs-util')
+const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
   name: '',

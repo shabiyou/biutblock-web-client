@@ -13,7 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@sec-block/secjs-util": "^1.1.22",
+    "@biut-block/biutjs-util": "^1.0.0",
     "@xkeshi/vue-qrcode": "github:xkeshi/vue-qrcode",
     "axios": "^0.18.0",
     "babel-plugin-component": "^1.1.1",
@@ -22,6 +22,7 @@
     "css-loader": "^0.28.11",
     "element-ui": "^2.6.1",
     "fastclick": "^1.0.6",
+    "is-hex-prefixed": "^1.0.0",
     "jayson": "^2.1.2",
     "jayson-rpc-vue": "^1.1.2",
     "js-cookie": "^2.2.0",

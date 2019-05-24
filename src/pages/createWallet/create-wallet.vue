@@ -76,7 +76,7 @@ import tipsList from './components/tipsList'
 import tipsImg from '../../assets/images/tipsImg.png'
 
 import walletsHandler from '../../lib/WalletsHandler.js'
-const SECUtil = require('@sec-block/secjs-util')
+const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
   name: '',

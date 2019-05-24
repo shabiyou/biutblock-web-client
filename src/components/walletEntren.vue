@@ -82,7 +82,7 @@ import contentFooter from './contentFooter'
 import publicButton from './publicButton'
 import publicPass from './publicPass'
 import publicTips from './publicTips'
-const SECUtil = require('@sec-block/secjs-util')
+const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
   name: '',
