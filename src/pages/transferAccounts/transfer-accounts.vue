@@ -134,7 +134,7 @@ export default {
       privateKey: '',//当前钱包私钥
 
 
-      tradingPages: 2, //默认显示登陆页面
+      tradingPages: 1, //默认显示登陆页面
       maskShow: false,//遮罩层
 
       addressTxt: 'transfer.transferAddressError', //地址错误
@@ -186,7 +186,7 @@ export default {
     transferActive () {
       let amount = String(this.walletMoney).replace(/\s+/g, "") //当前输入金额
       let address = (this.walletAddress).replace(/\s+/g, "") //转账地址
-      let allNumber = (this.allMoneyN - this.feeVal).toFixed(3) // BIU可转账金额
+      let allNumber = this.getPointNum(this.allMoneyN - this.feeVal, 8) // BIU可转账金额
 
       if (this.feeVal > this.allMoneyN) {
         this.moneyTxtN = 'transfer.transferMoneyN'
@@ -287,8 +287,17 @@ export default {
       if (this.transferIdx == 0) {
         this.walletMoney = this.allMoneyC
       } else {
-        this.walletMoney =  this.allMoneyN - this.feeVal
+        this.walletMoney =  this.getPointNum(this.allMoneyN - this.feeVal, 8)
       }
+    },
+
+    //截取小数点后 八位
+    getPointNum (num,n){  
+      let str = String(num);
+      let index = str.indexOf(".");
+      let str1 = str.substring(0,index+n+1);
+      str1 = Number(str1);
+      return str1;
     },
 
     //打开显示列表
@@ -323,7 +332,7 @@ export default {
       } else {
         this.walletAddress = ''
         this.walletMoney = ''
-        this.feeVal = 0.02
+        this.feeVal = 0.0002
         this.maskShow = false
         this.$nextTick(() => {
           this.selectMoney (this.address.replace("0x",""))
