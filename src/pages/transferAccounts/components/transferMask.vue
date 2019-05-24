@@ -144,6 +144,7 @@ export default {
       console.log(tx)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      txSigned.txFee = fee
       let postData = {
           "method": "sec_sendRawTransaction",
           "params": [txSigned]
