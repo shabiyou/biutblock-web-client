@@ -120,7 +120,7 @@ export default {
       let address = this.biutAddress.replace("0x","")
      
      let postData = {
-        ethAddress: this.ethAddress,
+        ethaddress: this.ethAddress,
         biutaddress: address
      }
      fetch(urls, {
