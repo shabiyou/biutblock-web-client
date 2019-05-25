@@ -134,7 +134,7 @@ export default {
       privateKey: '',//当前钱包私钥
 
 
-      tradingPages: 2, //默认显示登陆页面
+      tradingPages: 1, //默认显示登陆页面
       maskShow: false,//遮罩层
 
       addressTxt: 'transfer.transferAddressError', //地址错误
