@@ -134,7 +134,7 @@ export default {
       privateKey: '',//当前钱包私钥
 
 
-      tradingPages: 1, //默认显示登陆页面
+      tradingPages: 2, //默认显示登陆页面
       maskShow: false,//遮罩层
 
       addressTxt: 'transfer.transferAddressError', //地址错误
@@ -144,10 +144,10 @@ export default {
       moneyTxtN: 'transfer.transferMoneyN',//BIU silder金额大于余额
       moneyShowN: false,
 
-      feeVal: 0.0002, //初始值
-      minFee: 0.0001, //最小值
-      maxFee: 0.001, //最大值
-      stepFee: 0.00009091, //步长
+      feeVal: 0.02, //初始值
+      minFee: 0.01, //最小值
+      maxFee: 0.1, //最大值
+      stepFee: 0.00818182, //步长
       fastTips: false,
       slowTips: false,
 
@@ -332,7 +332,7 @@ export default {
       } else {
         this.walletAddress = ''
         this.walletMoney = ''
-        this.feeVal = 0.0002
+        this.feeVal = 0.02
         this.maskShow = false
         this.$nextTick(() => {
           this.selectMoney (this.address.replace("0x",""))
@@ -355,10 +355,10 @@ export default {
   watch: {
     //监听滚动条变化
     feeVal (newFee, oldFee) {
-      if (Number(newFee) > 0.00028182) {
+      if (Number(newFee) > 0.02636364) {
         this.fastTips = true
         this.slowTips = false
-      } else if (Number(newFee) < 0.00028182) {
+      } else if (Number(newFee) < 0.02636364) {
         this.slowTips = true
         this.fastTips = false
       } else {
