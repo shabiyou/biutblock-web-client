@@ -3,7 +3,7 @@
     <main class="wallet-background">
       <section class="wallet-mapping">
         <section class="mapping-tips">
-          <img src="../../assets/images/tipsImg.png" alt="">
+          <!-- <img src="../../assets/images/tipsImg.png" alt=""> -->
           <ul>
             <li>
               <span>1、</span>
@@ -31,8 +31,8 @@
           
           <section class="input-text">
             <p>{{ $t('mapping.ethddress') }}</p>
-            <span v-show="ethAddressShow"> {{ $t('mapping.ethddress') }} </span>
-            <span v-show="!ethAddressShow" class="address-color"> {{ ethAddressText }} </span>
+            <span v-show="ethAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.ethddress') }} </span>
+            <span v-show="!ethAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ ethAddressText }} </span>
           </section>
         </section>
 
@@ -52,8 +52,8 @@
           
           <section class="input-text">
             <p>{{ $t('mapping.biutAddress') }}</p>
-            <span v-show="biutAddressShow"> {{ $t('mapping.biutAddress') }} </span>
-            <span v-show="!biutAddressShow" class="address-color"> {{ biutAddressText }} </span>
+            <span v-show="biutAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.biutAddress') }} </span>
+            <span v-show="!biutAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ biutAddressText }} </span>
           </section>
         </section>
 
@@ -113,6 +113,7 @@ export default {
       biutAddressShow: true,
       ethAddressText: '',
       biutAddressText: '',
+      iosTextIndent: false,
 
       showKey: false,
       showBiutKey: false,
@@ -159,7 +160,27 @@ export default {
     
   },
   mounted () {
-
+    let browser = {
+        versions: function () {
+          var u = navigator.userAgent, app = navigator.appVersion;
+          return {         //移动终端浏览器版本信息
+            trident: u.indexOf('Trident') > -1, //IE内核
+            presto: u.indexOf('Presto') > -1, //opera内核
+            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 || u.indexOf('Adr') > -1, //android终端或uc浏览器
+            iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+            iPad: u.indexOf('iPad') > -1, //是否iPad
+            webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+          };
+        }(),
+        language: (navigator.browserLanguage || navigator.language).toLowerCase()
+      }
+    if (browser.versions.mobile && browser.versions.ios) {
+      this.iosTextIndent = true
+    }
   },
   destroyed () {},
   methods: {
@@ -205,7 +226,20 @@ export default {
         this.ethAddressText = ''
         this.biutAddressText = ''
       }
-    }
+    },
+
+    /**
+     * 
+     */
+    // 移动端判断
+    ismobile () {
+		  var mobileArry = ["iPhone", "iPad", "Android", "Windows Phone", "BB10; Touch", "BB10; Touch", "PlayBook", "Nokia"];
+		  var ua = navigator.userAgent;
+		  var res=mobileArry.filter(function(arr) {
+			return ua.indexOf(arr) > 0;
+		  });
+		  return res.length > 0;
+		}
   },
   watch: {
     //监听eth 私钥输入
@@ -241,8 +275,9 @@ export default {
   .input-text {flex: 1;}
   .input-text:first-child {margin-right: 1.5rem;}
   .input-text span {border: 0.05rem solid rgba(145,162,170,1);height: 2.4rem;box-sizing: border-box;
-    border-radius: .5rem;display: flex;align-items: center;text-indent: 1rem;color: #839299;
-    font-size: .7rem;}
+    border-radius: .5rem;display: flex;align-items: center;padding-left: 1rem;color: #839299;
+    font-size: .7rem;font-family: source-Light;}
+  .input-text .iost-padding {padding-left: 1.3rem!important;}
   .input-text .address-color {color: #42535B;}
 
   .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .5rem;font-family: source-Bold;}

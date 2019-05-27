@@ -2,7 +2,7 @@
   <main>
     <el-container>
       <nav>
-        <router-link tag="img" to="/" :src="logoUrl" alt="BIUT-Logo" title="BIUT"></router-link>
+        <router-link tag="img" to="/" :src="logoUrl" alt="BIUT-Logo" title="BIUT" class="logo-img"></router-link>
         <!-- 切换按钮 -->
         <section class="tabNav" @click="closeNav" v-show="navButton">
           <span></span>
@@ -120,6 +120,7 @@ export default {
       let flg = this.ismobile()
       if (flg) {
         this.navShow = false //点击切换隐藏
+        document.body.removeAttribute("class","body-hidden");
       }
     },
 
@@ -129,6 +130,7 @@ export default {
       let flg = this.ismobile()
       if (flg) {
         this.navShow = false //点击切换隐藏
+        document.body.removeAttribute("class","body-hidden");
       }
       if (index === 0) {
         this.$i18n.locale = 'zh'
@@ -164,7 +166,13 @@ export default {
     // },
 
     closeNav () {
-      this.navShow = !this.navShow
+      if (this.navShow) {
+        this.navShow = false
+        document.body.removeAttribute("class","body-hidden");
+      } else {
+        this.navShow = true
+        document.getElementsByTagName("body")[0].className="body-hidden"
+      }
     },
 
     ismobile () {
@@ -208,8 +216,10 @@ export default {
 </script>
 
 <style scoped>
+  
   main {background:rgba(66,83,91,1);}
   nav {height: 3.5rem;display: flex;align-items: center;justify-content: space-between;width: 100%;}
+  .logo-img {width: 4.4rem;height: 1.6rem;}
   nav ul {font-size: .8rem;font-weight: 300;color: #B9C4C2;height: 3.5rem;line-height: 3.5rem;
     padding: 0;margin: 0;font-family: source-Light;}
   nav ul li {float: left;position: relative;}
@@ -240,8 +250,8 @@ export default {
 
   @media (max-width: 767px) {
       nav {height: 4rem;padding: 0 1rem;}
-      nav ul {display: flex;flex-direction: column;flex: 1;z-index: 99;position: absolute;
-        top: 4rem;left: 0;right: 0;bottom: 0;height: auto;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);}
+      nav ul {display: flex;flex-direction: column;flex: 1;z-index: 9999;position: absolute;
+        top: 4rem;left: 0;right: 0;bottom: 0;height: auto;}
       nav ul .li_margin {margin-left: 0;padding-left: 1.75rem;}
       nav ul .li_margins,nav ul li:last-child {margin-left: 0;padding-left: 1.75rem;}
       

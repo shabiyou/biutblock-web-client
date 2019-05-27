@@ -105,6 +105,9 @@ export default {
     "Language": "语言",
     "Mapping": "映射"
   },
+  helpTips: {
+    helpTipsTxt: '请在电脑上查看相关教程'
+  },
   footer: {
     FooterCnt: "有任何问题，请与我们联系官方邮箱"
   }

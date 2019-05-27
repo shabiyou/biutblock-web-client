@@ -9,27 +9,27 @@ export default {
     savePrivateKey: "Save your Private Key"
   },
   tipsListPass: {
-    "tipsCnt1": "Please ensure it is a strong password",
-    "tipsCnt2": "Password should not start or end with space ",
-    "tipsCnt3": "The download file contains your wallet info, don't share it to others, otherwise your money will be stolen"
+    "tipsCnt1": "Please ensure it is a strong password.",
+    "tipsCnt2": "Password should not start or end with space.",
+    "tipsCnt3": "The download file contains your wallet info, don't share it to others, otherwise your money will be stolen."
   },
   tipsListKey: {
-    "tipsCnt1": "Do not lose it! It cannot be recovered if you lose it ",
-    "tipsCnt2": "Do not share it! Your funds may be stolen if you use this file on a malicious/phishing site ",
-    "tipsCnt3": "Make a backup! Secure it like the millions of dollars it may one day be worth "
+    "tipsCnt1": "Do not lose it! It cannot be recovered if you lose it.",
+    "tipsCnt2": "Do not share it! Your funds may be stolen if you use this file on a malicious/phishing site.",
+    "tipsCnt3": "Make a backup! Secure it like the millions of dollars it may one day be worth."
   },
   passTips: {
-    passFormat:"8-30 characters, must contain at least 2 types of numbers, English letters, and special characters",
-    passNoMatch: "Password doesn't match , please try again",
-    passFormatError: "The password format is incorrect, please reenter it",
+    passFormat:"8-30 characters, must contain at least 2 types of numbers, English letters, and special characters.",
+    passNoMatch: "Password doesn't match , please try again.",
+    passFormatError: "The password format is incorrect, please reenter it.",
     passEncryption: "Your wallet is encrypted.Good! Please enter the password",
     newWalletPass: "Enter your new wallet password",
-    passError: "Password error, unlock fail",
+    passError: "Password error, unlock fail.",
   },
   walletInfo: {
     accessWallet: "How would you like to access your wallet?",
     privateKey: "Private Key",
-    invalidPrivateKey: "This is not a valid private key",
+    invalidPrivateKey: "This is not a valid private key.",
     checkKeyStore1: "Select Your Keystore",
     checkKeyStore2: "Select Keystore",
     unlock: "Unlock",
@@ -59,14 +59,14 @@ export default {
     collectionAddress: "Receive",
     paymentAddress: "Sent",
     transferAomunt: "Amount",
-    transferMoneyError: "Please enter the correct transfer amount",
-    transferMoney: "Amount is not valid",
+    transferMoneyError: "Please enter the correct transfer amount.",
+    transferMoney: "Amount is not valid.",
     transferMoney1: "The transfer amount must not be 0",
-    transferMoneyN: "Transfer fee must be less than balance",
-    transferMoneyN1: "Poundage cannot be 0",
-    transferAddressError: "This is not a valid address",
-    transferAddressError2: "The same address cannot be transferred",
-    transferError: 'Transfer failed, please try again later',
+    transferMoneyN: "Transfer fee must be less than balance.",
+    transferMoneyN1: "Poundage cannot be 0.",
+    transferAddressError: "This is not a valid address.",
+    transferAddressError2: "The same address cannot be transferred.",
+    transferError: 'Transfer failed, please try again later.',
     transferPoundage: 'Fee',
     transferPoundage1: 'Gas Price',
     transferFast: 'Fast',
@@ -79,8 +79,8 @@ export default {
     ethddress: 'ETH Wallet Address',
     mappingTipsTxt1: 'During the mapping process, please carefully check that the BIUT wallet address to be mapped is the BIUT wallet address that you created! In case some users may accidentally input wrong private key, and map to a wrong wallet address. If you map to a wrong wallet address which is not belong to you, you need to responsible for your loss. ',
     mappingTipsTxt2: 'The same ETH address should be mapped completely at one time, one transaction transfer, corresponding to submit a mapping request; if you transfer multiple transactions, you need to submit multiple mapping requests.',
-    ethKeyErrorTxt: 'ETH private key is invalid',
-    biutKeyErrorTxt: 'BIUT private key is invalid',
+    ethKeyErrorTxt: 'ETH private key is invalid.',
+    biutKeyErrorTxt: 'BIUT private key is invalid.',
     biutAddressErrorTxt: 'BIUT address error',
     tipTxt: 'Notice',
     confirmMapping: 'Confirm the following information',
@@ -102,6 +102,9 @@ export default {
     "Guide": "Guide",
     "Language": "Language",
     "Mapping": "Mapping"
+  },
+  helpTips: {
+    helpTipsTxt: 'Check out the tutorial on your computer.'
   },
   footer: {
     FooterCnt: "Any question? Please contact us.Official email address"
