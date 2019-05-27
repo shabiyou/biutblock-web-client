@@ -221,10 +221,10 @@ export default {
             return address.length == 42
               && amount > 0
 			        && address != this.address
-              && amount <= this.allMoneyC
+              && Number(amount) <= Number(this.allMoneyC)
               && _const.addressReg.test(address)
               && 0 < this.feeVal
-              && this.feeVal < this.allMoneyN ? true : false
+              && this.feeVal <= this.allMoneyN ? true : false
           }
         } else {
           //转账BIU
@@ -237,7 +237,7 @@ export default {
             return address.length == 42
               && amount > 0
 			        && address != this.address
-              && amount <= allNumber
+              && Number(amount) <= Number(allNumber)
               && _const.addressReg.test(address)
               && 0 < this.feeVal ? true : false
           }
