@@ -19,7 +19,7 @@ export default {
     "tipsCnt3": "备份！保护它就像哪天它有可能值数百万美元"
   },
   passTips: {
-    passFormat:"请输入8-30位密码，密码必须包含字符、数字和特殊字符至少两种",
+    passFormat:"请输入8-30位密码，密码必须包含字母、数字和特殊字符至少两种",
     passNoMatch: "密码输入不一致，请重试",
     passFormatError: "密码格式不正确，请重新输入",
     passEncryption: "你的钱包是加密的！请输入密码",
@@ -83,7 +83,7 @@ export default {
     mappingTipsTxt1: '在映射过程中，请仔细检查要映射的BIUT钱包地址是您创建的BIUT钱包地址！因为某些用户可能会意外输入错误的私钥，并映射到错误的钱包地址。如果您映射到不属于您的错误钱包地址，您需要为您的损失负责。',
     mappingTipsTxt2: '同一ETH地址请尽量一次性映射完全，一笔交易转账，对应提交一次映射请求；若分多笔交易转账，则需要对应提交多次映射请求。',
     ethKeyErrorTxt: 'ETH私钥无效',
-    biutKeyErrorTxt: 'ETH私钥无效',
+    biutKeyErrorTxt: 'BIUT私钥无效',
     biutAddressErrorTxt: 'BIUT地址无效',
     confirmMapping: '确认以下信息',
     tipTxt: '提示',
@@ -109,6 +109,6 @@ export default {
     helpTipsTxt: '请在电脑上查看相关教程'
   },
   footer: {
-    FooterCnt: "有任何问题，请与我们联系官方邮箱"
+    FooterCnt: "有任何问题，请与我们联系。官方邮箱"
   }
 }

@@ -158,7 +158,7 @@ export default {
         }).then( (res) => res.json()).then((text) => {
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
-            if (this.transferIdx == 0) {
+            if (tradingType == 0) {
               this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
             } else {
               this.successUrl = "http://scan.secblock.io/sen/accountdetails?address="+fromAddress+""

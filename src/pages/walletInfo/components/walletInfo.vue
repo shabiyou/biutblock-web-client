@@ -30,8 +30,8 @@ export default {
   props: {
     infoAddress: String,
     infoKey: String,
-    infoMoneyC: Number,
-    infoMoneyN: Number
+    infoMoneyC: String,
+    infoMoneyN: String
   },
   data() {
     return {

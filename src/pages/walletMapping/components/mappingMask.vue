@@ -118,12 +118,13 @@ export default {
       this.maskPages = 2
       let urls = "http://scan.secblock.io/mapping"
       let address = this.biutAddress.replace("0x","")
+      let ethaddress = this.ethAddress.replace("0x","")
      
-     let postData = {
-        ethaddress: this.ethAddress,
+      let postData = {
+        ethaddress: ethaddress,
         biutaddress: address
-     }
-     fetch(urls, {
+      }
+      fetch(urls, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
@@ -136,7 +137,7 @@ export default {
             this.mappingResImg = failureImg
           }
         })
-    }
+      }
   }
 }
 </script>

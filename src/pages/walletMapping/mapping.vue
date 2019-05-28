@@ -150,7 +150,7 @@ export default {
         &&  biutrivateKey.length == 64
         && _const.priverKeyReg.test(ethprivateKey) 
         && _const.priverKeyReg.test(biutrivateKey) 
-        && ethAddress.length == 40
+        && ethAddress.length == 42
         && biutAddress.length == 42
         && biutrivateKey != ethprivateKey
         && _const.addressReg.test(biutAddress) ? true : false
@@ -245,7 +245,7 @@ export default {
     //监听eth 私钥输入
     ethprivateKey (newVal, oldVal) {
       if (newVal.length == 64 && _const.priverKeyReg.test(newVal)) {
-        let address = this.getEthAddress(newVal)
+        let address = "0x" + this.getEthAddress(newVal)
         this.ethAddressShow = false
         this.ethAddressText = address
       } else {

@@ -47,8 +47,8 @@ export default {
     return {
       walletAddress: '',//钱包地址
       walletKey: '',//钱包私钥
-      walletMoneyC: 0,//钱包SEC币
-      walletMoneyN: 0,//钱包SEN币
+      walletMoneyC: "0",//钱包SEC币
+      walletMoneyN: "0",//钱包SEN币
       infoPages: 1, //钱包默认显示登陆页面
       maskShow: false, //遮罩层 
     }
@@ -82,14 +82,37 @@ export default {
       let address = e.address.replace("0x","")
       //查询SEC余额
       this.getWalletBalance (address).then(res=>{
-        this.walletMoneyC = Number(res)
+        this.walletMoneyC = this.scientificNotationToString(res)
       })
 
       //查询SEN余额
       this.getWalletBalanceSEN (address).then(res=>{
-        this.walletMoneyN = Number(res)
+        this.walletMoneyN = this.scientificNotationToString(res)
       })
-    }
+    },
+
+    //讲科学计算法转化成数字
+    scientificNotationToString(param) {
+      let strParam = String(param)
+      let flag = /e/.test(strParam)
+      if (!flag) return param
+
+      // 指数符号 true: 正，false: 负
+      let sysbol = true
+      if (/e-/.test(strParam)) {
+        sysbol = false
+      }
+      // 指数
+      let index = Number(strParam.match(/\d+$/)[0])
+      // 基数
+      let basis = strParam.match(/^[\d\.]+/)[0].replace(/\./, '')
+
+      if (sysbol) {
+        return basis.padEnd(index + 1, 0)
+      } else {
+        return basis.padStart(index + basis.length, 0).replace(/^0/, '0.')
+      }
+    },
   },
 }
 </script>

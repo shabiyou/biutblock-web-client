@@ -2,7 +2,7 @@ export default {
   newWallet: {
     createWallet: "Create New Wallet",
     enterPass1: "Enter your wallet password",
-    enterPass2: "Enter your wallet password",
+    enterPass2: "Confirm your wallet password",
     saveKeyStore: "Save Your Keystore File",
     keyStoreDown: "Keystore Download",
     next: "Next",
@@ -22,7 +22,7 @@ export default {
     passFormat:"8-30 characters, must contain at least 2 types of numbers, English letters, and special characters.",
     passNoMatch: "Password doesn't match , please try again.",
     passFormatError: "The password format is incorrect, please reenter it.",
-    passEncryption: "Your wallet is encrypted.Good! Please enter the password",
+    passEncryption: "Your wallet is encrypted! Please enter the password",
     newWalletPass: "Enter your new wallet password",
     passError: "Password error, unlock fail.",
   },
@@ -85,7 +85,7 @@ export default {
     tipTxt: 'Notice',
     confirmMapping: 'Confirm the following information',
     mappingButton: 'Mapping',
-    mappingSuccess: 'Submit the mapping successfully. Please wait 1-3 business days to check the SGD mapping in the new wallet address. If you have any questions, please contact the BIUT staff.',
+    mappingSuccess: 'Submit the mapping successfully. Please wait for 1-3 working days to check BIUT arrival in the new wallet address.  If you have any questions, please contact the BIUT staff.',
     mappingFailure: 'Mapping failed, please add WeChat customer service number for consultation!'
   },
   

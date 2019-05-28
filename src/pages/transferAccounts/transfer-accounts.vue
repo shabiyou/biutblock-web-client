@@ -291,6 +291,29 @@ export default {
       }
     },
 
+    //讲科学计算法转化成数字
+    scientificNotationToString(param) {
+      let strParam = String(param)
+      let flag = /e/.test(strParam)
+      if (!flag) return param
+
+      // 指数符号 true: 正，false: 负
+      let sysbol = true
+      if (/e-/.test(strParam)) {
+        sysbol = false
+      }
+      // 指数
+      let index = Number(strParam.match(/\d+$/)[0])
+      // 基数
+      let basis = strParam.match(/^[\d\.]+/)[0].replace(/\./, '')
+
+      if (sysbol) {
+        return basis.padEnd(index + 1, 0)
+      } else {
+        return basis.padStart(index + basis.length, 0).replace(/^0/, '0.')
+      }
+    },
+
     //截取小数点后 八位
     getPointNum (num,n){  
       let str = String(num);
@@ -344,11 +367,11 @@ export default {
     selectMoney (address) {
       //查询SEC余额
       this.getWalletBalance (address).then(res=>{
-        this.allMoneyC = res
+        this.allMoneyC = this.scientificNotationToString(res)
       })
       //查询BIU余额
       this.getWalletBalanceSEN (address).then(res=>{
-        this.allMoneyN = Number(res)
+        this.allMoneyN = this.scientificNotationToString(res)
       })
     }
   },
