@@ -86,13 +86,16 @@ export default {
     confirmMapping: 'Confirm the following information',
     mappingButton: 'Mapping',
     mappingSuccess: 'Submit the mapping successfully. Please wait for 1-3 working days to check BIUT arrival in the new wallet address.  If you have any questions, please contact the BIUT staff.',
-    mappingFailure: 'Mapping failed, please add WeChat customer service number for consultation!'
+    mappingFailure: 'Mapping failed, please add WeChat customer service number for consultation!',
+    mappingHash: 'Transaction Hash',
+    mappingHashError: 'Invalid transaction hash',
+    mappingHashTxt: 'Please enter the transaction hash value transferred on ETH',
   },
   
   mask: {
     tips: "Operation success, click the URL below to view the results:",
     confirm: "Confirm",
-    cancel: "Cancrl"
+    cancel: "Cancal"
   },
   headerNav: {
     "Newallet": "New Wallet",

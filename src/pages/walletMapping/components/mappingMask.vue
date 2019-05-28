@@ -64,7 +64,8 @@ export default {
   name: '',
   props: {
     biutAddress: String,
-    ethAddress: String
+    ethAddress: String,
+    txhash: String
   },
   components: {
     publicButton
@@ -101,6 +102,11 @@ export default {
           id: '02',
           tit: 'mapping.biutAddress',
           txt: this.biutAddress
+        },
+        {
+          id: '03',
+          tit: 'mapping.mappingHash',
+          txt: this.txhash
         }
       ]
     }
@@ -118,11 +124,13 @@ export default {
       this.maskPages = 2
       let urls = "http://scan.secblock.io/mapping"
       let address = this.biutAddress.replace("0x","")
-      let ethaddress = this.ethAddress.replace("0x","")
+      let ethaddress = this.ethAddress
+      let txhash = this.txhash.replace("0x","").toLowerCase()
      
       let postData = {
         ethaddress: ethaddress,
-        biutaddress: address
+        biutaddress: address,
+        txhash: txhash
       }
       fetch(urls, {
           method: 'post',

@@ -19,7 +19,7 @@
         <section class="input-content">
           <section class="input-text">
             <section class="tips-list">
-              <p>{{ $t('mapping.ethprivateKey') }}</p>
+              <p>{{ $t('mapping.ethprivateKey') }}<label style="color: red;">*</label></p>
               <public-tips v-show="showKey" :tipsTxt="tipsTxt2"/>
             </section>
             <public-input 
@@ -29,18 +29,10 @@
               :maxlength = "64" />
           </section>
           
-          <section class="input-text">
-            <p>{{ $t('mapping.ethddress') }}</p>
-            <span v-show="ethAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.ethddress') }} </span>
-            <span v-show="!ethAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ ethAddressText }} </span>
-          </section>
-        </section>
-
-
-        <section class="input-content mapping-top">
+          
           <section class="input-text">
             <section class="tips-list">
-              <p>{{ $t('mapping.biutprivateKey') }}</p>
+              <p>{{ $t('mapping.biutprivateKey') }}<label style="color: red;">*</label></p>
               <public-tips v-show="showBiutKey" :tipsTxt="tipsTxt1"/>
             </section>
             <public-input 
@@ -49,11 +41,39 @@
               :placeholder = "$t('mapping.biutprivateKey')"
               :maxlength = "64" />
           </section>
+        </section>
+
+        <section class="input-content mapping-top">
+          <section class="input-text">
+            <p>{{ $t('mapping.ethddress') }}</p>
+            <span v-show="ethAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.ethddress') }} </span>
+            <span v-show="!ethAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ ethAddressText }} </span>
+          </section>
+
+
+          
           
           <section class="input-text">
             <p>{{ $t('mapping.biutAddress') }}</p>
             <span v-show="biutAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.biutAddress') }} </span>
             <span v-show="!biutAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ biutAddressText }} </span>
+          </section>
+        </section>
+
+        <section class="input-content mapping-top">
+          <section class="input-text">
+            <section class="tips-list">
+              <p>{{ $t('mapping.mappingHash') }}<label style="color: red;">*</label></p>
+              <public-tips v-show="showHashKey" :tipsTxt="tipsTxt3"/>
+            </section>
+            <public-input 
+              v-model.trim = "txhash"
+              :class="showHashKey ? 'error-border' : ''"
+              :placeholder = "$t('mapping.mappingHashTxt')"
+              :maxlength = "66" />
+          </section>
+
+          <section class="input-text">
           </section>
         </section>
 
@@ -75,6 +95,7 @@
       v-show="maskShow"
       :biutAddress = 'biutAddressText'
       :ethAddress = 'ethAddressText'
+      :txhash = 'txhash'
       @close="cloaseMask"/>
   </main>
 </template>
@@ -108,15 +129,18 @@ export default {
       gasLimitTxt: 'Gas Limit',
       tipsTxt1: 'mapping.biutKeyErrorTxt', // biut私钥无效
       tipsTxt2: 'mapping.ethKeyErrorTxt', // eth私钥无效
+      tipsTxt3: 'mapping.mappingHashError', // eth私钥无效
 
       ethAddressShow: true,
       biutAddressShow: true,
       ethAddressText: '',
       biutAddressText: '',
+      txhash: '', //交易has值
       iosTextIndent: false,
 
       showKey: false,
       showBiutKey: false,
+      showHashKey: false,
 
       maskShow: false, //关闭弹窗
     }
@@ -128,6 +152,7 @@ export default {
       let biutrivateKey = this.biutprivateKey.replace(/\s+/g, "")
       let ethAddress = this.ethAddressText.replace(/\s+/g, "")
       let biutAddress = this.biutAddressText.replace(/\s+/g, "")
+      let txhash = this.txhash.replace(/\s+/g, "")
       
       if (ethprivateKey.length > 0 && ethprivateKey.length < 64) {
         this.showKey =  true
@@ -136,6 +161,7 @@ export default {
       } else {
         this.showKey =  false
       }
+
       if (biutrivateKey.length > 0 && biutrivateKey.length < 64) {
         this.showBiutKey =  true
       } else if (biutrivateKey.length == 64 && !(_const.priverKeyReg.test(biutrivateKey))) {
@@ -145,11 +171,21 @@ export default {
       } else {
         this.showBiutKey =  false
       }
+
+      if (txhash.length > 0 && txhash.length < 66) {
+        this.showHashKey = true
+      } else if (txhash.length  == 66 && !(_const.hashReg.test(txhash))) {
+        this.showHashKey = true
+      } else {
+        this.showHashKey = false
+      }
       
       return ethprivateKey.length == 64
-        &&  biutrivateKey.length == 64
+        && biutrivateKey.length == 64
+        && txhash.length == 66
         && _const.priverKeyReg.test(ethprivateKey) 
         && _const.priverKeyReg.test(biutrivateKey) 
+        && _const.hashReg.test(txhash) 
         && ethAddress.length == 42
         && biutAddress.length == 42
         && biutrivateKey != ethprivateKey
@@ -200,7 +236,20 @@ export default {
      */
     getEthAddress (privateKeys) {
       let address = SECUtil.privateToAddress(SECUtil.privateToBuffer(privateKeys)).toString('hex')
-      return address
+
+      var arr = address.replace(/(.{4})/g,"$1,").split(',')
+      arr.pop()
+      let addArr = arr.map(item=>{
+        let word = item[3]
+        item = item.substring(0,3)
+        if(/[a-z]/.test(word)){
+          word = word.toUpperCase()
+        }
+        return item + word
+      })
+
+      let addressStr = addArr.join(',').replace(/,/g,"")
+      return addressStr
     },
 
     /**

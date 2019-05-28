@@ -4,6 +4,7 @@ const config = {
   passReg: /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/,
   priverKeyReg: /[0-9a-f]{64}$/, 
   addressReg: /^(0x)(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/,
+  hashReg: /^(0x)/,
   amountReg: /^(([1-9]\d*)|\d)(\.\d{1,8})?$/,
 }
 
