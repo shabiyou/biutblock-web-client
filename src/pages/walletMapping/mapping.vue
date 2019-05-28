@@ -274,6 +274,7 @@ export default {
         this.ethAddressShow = true
         this.ethAddressText = ''
         this.biutAddressText = ''
+        this.txhash = ''
       }
     },
 
