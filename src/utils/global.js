@@ -1,6 +1,6 @@
 const config = {
-  url: 'http://54.250.166.137:3001/rpctransfer/callrpc',
-  url_sen: 'http://54.250.166.137:3001/rpctransfer/callrpc-sen',
+  url: 'http://scan.secblock.io/rpctransfer/callrpc',
+  url_sen: 'http://scan.secblock.io/rpctransfer/callrpc-sen',
   passReg: /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/,
   priverKeyReg: /[0-9a-f]{64}$/, 
   addressReg: /^(0x)(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/,

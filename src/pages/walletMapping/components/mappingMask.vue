@@ -95,12 +95,12 @@ export default {
       return [
         {
           id: '03',
-          tit: 'mapping.ethddress',
+          tit: 'mapping.ethwalletddress',
           txt: this.ethAddress
         },
         {
           id: '02',
-          tit: 'mapping.biutAddress',
+          tit: 'mapping.biutwalletAddress',
           txt: this.biutAddress
         },
         {
@@ -161,7 +161,7 @@ export default {
   .mask-list section {display: flex;justify-content: flex-end;}
   .mask-list section button {width: 5.4rem;height: 1.8rem;background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}
   .mask-list section button:last-child {margin-left: .6rem;}
-  .mask-list ul li .enWidth {width: 3.5rem!important;}
+  .mask-list ul li .enWidth {width: 5.5rem!important;}
 
   .mask-res {height: 7.6rem;display: flex;flex-direction: column;justify-content: space-between;}
   .mask-res section:last-child {display: flex;justify-content: flex-end;}
