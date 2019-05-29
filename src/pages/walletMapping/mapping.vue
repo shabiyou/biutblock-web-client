@@ -320,7 +320,7 @@ export default {
 </script>
 
 <style scoped>
-  .wallet-mapping {height: 25.95rem;padding: 4.4rem 6.2rem 0;width: 42.7rem;margin: 0 auto;}
+  .wallet-mapping {height: 25.75rem;padding: 2.8rem 6.2rem 1.8rem;width: 42.7rem;margin: 0 auto;}
   .input-content {display: flex;justify-content: space-between;}
   .input-text {flex: 1;}
   .input-text:first-child {margin-right: 1.5rem;}
@@ -330,11 +330,11 @@ export default {
   .input-text .iost-padding {padding-left: 1.3rem!important;}
   .input-text .address-color {color: #42535B;}
 
-  .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .5rem;font-family: source-Bold;}
-  .wallet-mapping .mapping-top {margin-top: 1.2rem;}
+  .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .4rem;font-family: source-Bold;}
+  .wallet-mapping .mapping-top {margin-top: 1rem;}
 
   
-  .mapping-tips {display: flex;background:rgba(238,28,57,0.1);padding: .85rem .9rem;margin-bottom: 2.4rem;}
+  .mapping-tips {display: flex;background:rgba(238,28,57,0.1);padding: .85rem .9rem .7rem;margin-bottom: 2rem;}
   .mapping-tips img {width: .8rem;height: .8rem;margin: .15rem .5rem 0 0;}
   .mapping-tips ul {margin: 0;padding: 0;}
   .mapping-tips ul li {display: flex;}
@@ -343,7 +343,7 @@ export default {
   .tips-list {display: flex;align-items: center;justify-content: space-between;}
   .tips-list >>> .tips_content {padding-top: 0;font-size: .7rem;}
 
-  .wallet-mapping button {margin-top: 2.7rem;width: 11.8rem;}
+  .wallet-mapping button {margin-top: 1.8rem;width: 11.8rem;}
   @media (max-width: 767px) {
     .wallet-mapping {padding: 1.2rem .2rem;height: auto;width: 90%;}
     .input-content {display: block;margin: 0!important;}
