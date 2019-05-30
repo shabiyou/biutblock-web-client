@@ -13,6 +13,10 @@
               <span>2、</span>
               <span>{{ $t('mapping.mappingTipsTxt2') }}</span>
             </li>
+            <li>
+              <span>3、</span>
+              <span>{{ $t('mapping.mappingTipsTxt3') }}</span>
+            </li>
           </ul>
         </section>
 
@@ -159,10 +163,9 @@ export default {
 </script>
 
 <style scoped>
-  .wallet-mapping {height: 25.75rem;padding: 2.8rem 6.2rem 1.8rem;width: 42.7rem;margin: 0 auto;}
+  .wallet-mapping {height: 25.75rem;padding: 2.8rem 6.2rem 1.8rem;width: 24.6rem;margin: 0 auto;}
   .input-content {display: flex;justify-content: space-between;}
   .input-text {flex: 1;}
-  .input-text:first-child {margin-right: 1.5rem;}
   .input-text span {border: 0.05rem solid rgba(145,162,170,1);height: 2.4rem;box-sizing: border-box;
     border-radius: .5rem;display: flex;align-items: center;padding-left: 1rem;color: #839299;
     font-size: .7rem;font-family: source-Light;}
@@ -181,7 +184,7 @@ export default {
   .tips-list {display: flex;align-items: center;justify-content: space-between;}
   .tips-list >>> .tips_content {padding-top: 0;font-size: .7rem;}
 
-  .wallet-mapping button {margin-top: 1.8rem;width: 11.8rem;}
+  .wallet-mapping button {margin-top: 1.8rem;}
   @media (max-width: 767px) {
     .wallet-mapping {padding: 1.2rem .2rem;height: auto;width: 90%;}
     .input-content {display: block;margin: 0!important;}

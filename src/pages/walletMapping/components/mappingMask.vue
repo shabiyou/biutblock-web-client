@@ -22,6 +22,7 @@
         <public-button
           type="button"
           class="btn-active"
+          :disabled="maskConfirmBtn"
           :text="$t('mask.confirm')"
           @click.native="confirmMapping" />
       </section>
@@ -73,6 +74,7 @@ export default {
     return {
       maskPages: 1,
       mappingResImg: successImg,
+      maskConfirmBtn: false,
       mappingResTxt: 'mapping.mappingSuccess', //  mapping.mappingFailure 失败
     }
   },
@@ -120,7 +122,7 @@ export default {
 
     /** 确认映射 */
     confirmMapping () {
-      this.maskPages = 2
+      this.maskConfirmBtn = true
       let urls = "http://scan.secblock.io/mapping"
       let ethaddress = this.ethAddress.replace("0x","")
       let txhash = this.txhash.replace("0x","").toLowerCase()
@@ -134,11 +136,29 @@ export default {
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
         }).then((res) => {
+           console.log(res.statusText)
+          /*
+            statusText = 'txhash not found in eth network' 哈希值或地址不正确
+
+            statusText = 'txhash duplicated' 已经映射过了
+
+            statusText = 'request error' 不应该会出现，如果出现就提示系统错误，请联系客服人员
+
+            status = 200 成功
+          */
+          this.maskConfirmBtn = false
+          this.maskPages = 2
           if (res.status == "success") {
             this.mappingResTxt = 'mapping.mappingSuccess'
             this.mappingResImg = successImg
+          } else if (res.statusText == 'txhash not found in eth network') {
+            this.mappingResTxt = 'mapping.mappingFailure1'
+            this.mappingResImg = failureImg
+          } else if (res.statusText == 'txhash duplicated') {
+            this.mappingResTxt = 'mapping.mappingFailure2'
+            this.mappingResImg = failureImg
           } else {
-            this.mappingResTxt = 'mapping.mappingFailure'
+            this.mappingResTxt = 'mapping.mappingFailure3'
             this.mappingResImg = failureImg
           }
         })
