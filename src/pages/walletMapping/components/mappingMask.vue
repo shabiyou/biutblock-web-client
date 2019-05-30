@@ -63,7 +63,6 @@ let httpHeaderOption = {
 export default {
   name: '',
   props: {
-    biutAddress: String,
     ethAddress: String,
     txhash: String
   },
@@ -98,11 +97,11 @@ export default {
           tit: 'mapping.ethwalletddress',
           txt: this.ethAddress
         },
-        {
-          id: '02',
-          tit: 'mapping.biutwalletAddress',
-          txt: this.biutAddress
-        },
+        // {
+        //   id: '02',
+        //   tit: 'mapping.biutwalletAddress',
+        //   txt: this.biutAddress
+        // },
         {
           id: '03',
           tit: 'mapping.mappingHash',
@@ -123,13 +122,11 @@ export default {
     confirmMapping () {
       this.maskPages = 2
       let urls = "http://scan.secblock.io/mapping"
-      let address = this.biutAddress.replace("0x","")
-      let ethaddress = this.ethAddress
+      let ethaddress = this.ethAddress.replace("0x","")
       let txhash = this.txhash.replace("0x","").toLowerCase()
      
       let postData = {
         ethaddress: ethaddress,
-        biutaddress: address,
         txhash: txhash
       }
       fetch(urls, {
@@ -137,7 +134,7 @@ export default {
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
         }).then((res) => {
-          if (res.status == 200) {
+          if (res.status == "success") {
             this.mappingResTxt = 'mapping.mappingSuccess'
             this.mappingResImg = successImg
           } else {

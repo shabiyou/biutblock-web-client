@@ -19,44 +19,14 @@
         <section class="input-content">
           <section class="input-text">
             <section class="tips-list">
-              <p>{{ $t('mapping.ethprivateKey') }}<label style="color: red;">*</label></p>
+              <p>{{ $t('mapping.ethaddress') }}<label style="color: red;">*</label></p>
               <public-tips v-show="showKey" :tipsTxt="tipsTxt2"/>
             </section>
             <public-input 
-              v-model.trim = "ethprivateKey"
+              v-model.trim = "ethAddress"
               :class="showKey ? 'error-border' : ''"
-              :placeholder = "$t('mapping.ethprivateKey')"
-              :maxlength = "64" />
-          </section>
-          
-          
-          <section class="input-text">
-            <section class="tips-list">
-              <p>{{ $t('mapping.biutprivateKey') }}<label style="color: red;">*</label></p>
-              <public-tips v-show="showBiutKey" :tipsTxt="tipsTxt1"/>
-            </section>
-            <public-input 
-              v-model.trim = "biutprivateKey"
-              :class="showBiutKey ? 'error-border' : ''"
-              :placeholder = "$t('mapping.biutprivateKey')"
-              :maxlength = "64" />
-          </section>
-        </section>
-
-        <section class="input-content mapping-top">
-          <section class="input-text">
-            <p>{{ $t('mapping.ethddress') }}</p>
-            <span v-show="ethAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.ethddress') }} </span>
-            <span v-show="!ethAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ ethAddressText }} </span>
-          </section>
-
-
-          
-          
-          <section class="input-text">
-            <p>{{ $t('mapping.biutAddress') }}</p>
-            <span v-show="biutAddressShow" :class="iosTextIndent ? 'iost-padding' : ''"> {{ $t('mapping.biutAddress') }} </span>
-            <span v-show="!biutAddressShow" class="address-color" :class="iosTextIndent ? 'iost-padding' : ''"> {{ biutAddressText }} </span>
+              :placeholder = "$t('mapping.ethaddress')"
+              :maxlength = "42" />
           </section>
         </section>
 
@@ -73,8 +43,6 @@
               :maxlength = "66" />
           </section>
 
-          <section class="input-text">
-          </section>
         </section>
 
         <!-- 映射按钮 --> 
@@ -93,8 +61,7 @@
     <!-- mask 弹窗 -->
     <mapping-mask 
       v-show="maskShow"
-      :biutAddress = 'biutAddressText'
-      :ethAddress = 'ethAddressText'
+      :ethAddress = 'ethAddress'
       :txhash = 'txhash'
       @close="cloaseMask"/>
   </main>
@@ -121,55 +88,28 @@ export default {
   props: {},
   data () {
     return {
-      ethprivateKey: '',
-      ethddress: 'mapping.ethddress',
-      biutprivateKey: '',
-      biutAddress: 'mapping.biutAddress',
-      gasPriceTxt: 'Gas Price',
-      gasLimitTxt: 'Gas Limit',
-      tipsTxt1: 'mapping.biutKeyErrorTxt', // biut私钥无效
-      tipsTxt2: 'mapping.ethKeyErrorTxt', // eth私钥无效
+      ethAddress: '',
+      tipsTxt2: 'mapping.ethAddressErrorTxt', // eth私钥无效
       tipsTxt3: 'mapping.mappingHashError', // eth私钥无效
-
-      ethAddressShow: true,
-      biutAddressShow: true,
-      ethAddressText: '',
-      biutAddressText: '',
       txhash: '', //交易has值
-      iosTextIndent: false,
-
       showKey: false,
-      showBiutKey: false,
       showHashKey: false,
-
       maskShow: false, //关闭弹窗
     }
   },
   computed: {
     //是否可点击
     confirmFrom () {
-      let ethprivateKey = this.ethprivateKey.replace(/\s+/g, "")
-      let biutrivateKey = this.biutprivateKey.replace(/\s+/g, "")
-      let ethAddress = this.ethAddressText.replace(/\s+/g, "")
-      let biutAddress = this.biutAddressText.replace(/\s+/g, "")
+      let ethAddress = this.ethAddress.replace(/\s+/g, "")
+      //let biutAddress = this.biutAddressText.replace(/\s+/g, "")
       let txhash = this.txhash.replace(/\s+/g, "")
       
-      if (ethprivateKey.length > 0 && ethprivateKey.length < 64) {
+      if (ethAddress.length > 0 && ethAddress.length < 42) {
         this.showKey =  true
-      } else if (ethprivateKey.length == 64 && !(_const.priverKeyReg.test(ethprivateKey))) {
+      } else if (ethAddress.length == 42 && !(_const.addressReg.test(ethAddress))) {
         this.showKey =  true
       } else {
         this.showKey =  false
-      }
-
-      if (biutrivateKey.length > 0 && biutrivateKey.length < 64) {
-        this.showBiutKey =  true
-      } else if (biutrivateKey.length == 64 && !(_const.priverKeyReg.test(biutrivateKey))) {
-        this.showBiutKey =  true
-      } else if (biutrivateKey.length == 64 && biutrivateKey == ethprivateKey) {
-        this.showBiutKey =  true
-      } else {
-        this.showBiutKey =  false
       }
 
       if (txhash.length > 0 && txhash.length < 66) {
@@ -180,43 +120,17 @@ export default {
         this.showHashKey = false
       }
       
-      return ethprivateKey.length == 64
-        && biutrivateKey.length == 64
-        && txhash.length == 66
-        && _const.priverKeyReg.test(ethprivateKey) 
-        && _const.priverKeyReg.test(biutrivateKey) 
+      return txhash.length == 66
         && _const.hashReg.test(txhash) 
         && ethAddress.length == 42
-        && biutAddress.length == 42
-        && biutrivateKey != ethprivateKey
-        && _const.addressReg.test(biutAddress) ? true : false
+        && _const.addressReg.test(ethAddress) ? true : false
     }
   },
   created () {
     
   },
   mounted () {
-    let browser = {
-        versions: function () {
-          var u = navigator.userAgent, app = navigator.appVersion;
-          return {         //移动终端浏览器版本信息
-            trident: u.indexOf('Trident') > -1, //IE内核
-            presto: u.indexOf('Presto') > -1, //opera内核
-            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 || u.indexOf('Adr') > -1, //android终端或uc浏览器
-            iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
-            iPad: u.indexOf('iPad') > -1, //是否iPad
-            webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
-          };
-        }(),
-        language: (navigator.browserLanguage || navigator.language).toLowerCase()
-      }
-    if (browser.versions.mobile && browser.versions.ios) {
-      this.iosTextIndent = true
-    }
+   
   },
   destroyed () {},
   methods: {
@@ -229,92 +143,17 @@ export default {
       this.maskShow = true
     },
 
-    /**
-     * 
-     * 获取eth的地址
-     * 
-     */
-    getEthAddress (privateKeys) {
-      let address = SECUtil.privateToAddress(SECUtil.privateToBuffer(privateKeys)).toString('hex')
-
-      var arr = address.replace(/(.{4})/g,"$1,").split(',')
-      arr.pop()
-      let addArr = arr.map(item=>{
-        let word = item[3]
-        item = item.substring(0,3)
-        if(/[a-z]/.test(word)){
-          word = word.toUpperCase()
-        }
-        return item + word
-      })
-
-      let addressStr = addArr.join(',').replace(/,/g,"")
-      return addressStr
-    },
-
-    /**
-     * 
-     * 获取biut的地址
-     * 
-     */
-    getBiutAddress (privateKeys) {
-      let privateKeyBuffer = SECUtil.privateToBuffer(privateKeys)
-      let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
-      let address = `0x${extractAddress.toString('hex')}`
-      return address
-    },
-
     /** 关闭弹窗 */
     cloaseMask (e) {
       this.maskShow = false
       if (e == 2) {
-        this.ethprivateKey = ""
-        this.biutprivateKey = ""
-        this.biutAddressShow = true
-        this.ethAddressShow = true
-        this.ethAddressText = ''
-        this.biutAddressText = ''
+        this.ethAddress = ''
         this.txhash = ''
       }
     },
-
-    /**
-     * 
-     */
-    // 移动端判断
-    ismobile () {
-		  var mobileArry = ["iPhone", "iPad", "Android", "Windows Phone", "BB10; Touch", "BB10; Touch", "PlayBook", "Nokia"];
-		  var ua = navigator.userAgent;
-		  var res=mobileArry.filter(function(arr) {
-			return ua.indexOf(arr) > 0;
-		  });
-		  return res.length > 0;
-		}
   },
   watch: {
-    //监听eth 私钥输入
-    ethprivateKey (newVal, oldVal) {
-      if (newVal.length == 64 && _const.priverKeyReg.test(newVal)) {
-        let address = "0x" + this.getEthAddress(newVal)
-        this.ethAddressShow = false
-        this.ethAddressText = address
-      } else {
-        this.ethAddressShow = true
-        this.ethAddressText = ''
-      }
-    },
 
-    //监听 biut私钥输入
-    biutprivateKey (newKey, oldKey) {
-      if (newKey.length == 64 && _const.priverKeyReg.test(newKey)) {
-        let address = this.getBiutAddress(newKey)
-        this.biutAddressShow = false
-        this.biutAddressText = address
-      } else {
-        this.biutAddressShow = true
-        this.biutAddressText = ''
-      }
-    }
   },
 }
 </script>
@@ -333,7 +172,6 @@ export default {
   .wallet-mapping p {font-size: .8rem;color: #42535B;padding-bottom: .4rem;font-family: source-Bold;}
   .wallet-mapping .mapping-top {margin-top: 1rem;}
 
-  
   .mapping-tips {display: flex;background:rgba(238,28,57,0.1);padding: .85rem .9rem .7rem;margin-bottom: 2rem;}
   .mapping-tips img {width: .8rem;height: .8rem;margin: .15rem .5rem 0 0;}
   .mapping-tips ul {margin: 0;padding: 0;}
