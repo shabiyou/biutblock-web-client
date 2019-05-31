@@ -38,6 +38,32 @@ let WalletHandler = {
     let keyData = CryptoJS.AES.decrypt(encryptedData.toString(), pwd).toString(CryptoJS.enc.Utf8)
     let keyDataJSON = JSON.parse(keyData)
     return keyDataJSON
+  },
+
+  saveKeyStore: function (walletName, walletData, pwd) {
+    let ciperData = this.ecryptWalletKeys(JSON.stringify(walletData), pwd)
+    let blob = new Blob([ciperData], {
+      type: 'text/plain;charset=utf-8'
+    })
+    FileSaver.saveAs(blob, `${walletName}.json`)
+  },
+
+  savePhrase: function (walletName, phrase) {
+    let blob = new Blob([phrase], {
+      type: 'text/plain;charset=utf-8'
+    })
+    FileSaver.saveAs(blob, `${walletName}_Phrase.data`)
+  },
+
+  savePrivteKey: function (walletName, privateKey) {
+    let blob = new Blob([privateKey], {
+      type: 'text/plain;charset=utf-8'
+    })
+    FileSaver.saveAs(blob, `${walletName}_PrivateKey.data`)
+  },
+
+  ecryptWalletKeys: function (walletKeys, pwd) {
+    return CryptoJS.AES.encrypt(walletKeys, pwd)
   }
 }
 
