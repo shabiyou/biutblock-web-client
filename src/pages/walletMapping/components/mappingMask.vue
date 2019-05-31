@@ -24,7 +24,7 @@
           type="button"
           class="btn-active"
           :disabled="maskConfirmBtn"
-          :text="$t(mappingText)"
+          :text="$t('mask.confirm')"
           @click.native="confirmMapping" />
       </section>
     </section>
