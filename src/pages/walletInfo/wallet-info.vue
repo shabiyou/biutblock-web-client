@@ -23,7 +23,13 @@
       <content-footer></content-footer>
     </main>
     <!-- 遮罩层 -->
-    <info-mask v-show="maskShow" @close = "closeMask"/>
+    <info-mask 
+      v-show="maskShow"
+      :infoAddress = "walletAddress"
+      :infoKey = "walletKey"
+      :infoWord = "walletWords"
+      :infoPublicKey = "walletPublicKey"
+      @close = "closeMask"/>
   </main>
 </template>
 
@@ -47,6 +53,8 @@ export default {
     return {
       walletAddress: '',//钱包地址
       walletKey: '',//钱包私钥
+      walletPublicKey: '',//钱包私钥
+      walletWords: '',//钱包助记词
       walletMoneyC: "0",//钱包SEC币
       walletMoneyN: "0",//钱包SEN币
       infoPages: 1, //钱包默认显示登陆页面
@@ -79,6 +87,8 @@ export default {
       this.infoPages = 2
       this.walletAddress = e.address
       this.walletKey = e.privateKey
+      this.walletWords = e.englishWords
+      this.walletPublicKey = e.publicKey
       let address = e.address.replace("0x","")
       //查询SEC余额
       this.getWalletBalance (address).then(res=>{

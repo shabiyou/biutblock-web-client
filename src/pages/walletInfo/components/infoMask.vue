@@ -36,7 +36,12 @@ const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
   name: '',
-  props: {},
+  props: {
+    infoAddress: String,
+    infoKey: String,
+    infoWord: String,
+    infoPublicKey: String
+  },
   components: {
     publicPass,
     publicTips,
@@ -76,29 +81,27 @@ export default {
       this.$emit("close")
     },
 
-    //创建钱包
+    //下载keystroe文件
     createFrom () {
-      let newPass = this.newWalletPass.replace(/\s+/g, "")
-      let keys = SECUtil.generateSecKeys() //创建钱包
-      let privKey64 = keys.privKey //获取创建钱包的私钥
-      let privateKey = privKey64
-      let englishWords = SECUtil.entropyToMnemonic(privKey64)
-      let pubKey128 = keys.publicKey //公钥
-      let pubKey128ToString = pubKey128.toString('hex')
-      let userAddressToString = keys.secAddress //地址
-      let walletName  = 'BIUT' + ""+ keys.userAddress +"" 
+      let walletAddress = this.infoAddress.replace("0x","")
+      let walletKey = this.infoKey
+      let walletWord = this.infoWord
+      let walletPublickKey = this.infoPublicKey
+      let newPass = this.newWalletPass
+
       let keyFileDataJS = {
-        [privateKey]: {
+        [walletKey]: {
             walletName: "New Import",
-            privateKey: privateKey,
-            publicKey: pubKey128ToString,
-            walletAddress: userAddressToString,
-            englishWords: englishWords,
+            privateKey: walletKey,
+            publicKey: walletPublickKey,
+            walletAddress: walletAddress,
+            englishWords: walletWord,
         }
       }
       //通过密码加密钱包  
       let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
-      var json = "" + userAddressToString + ".json"
+
+      var json = "" + walletAddress + ".json"
       this.funDownload("BIUT" + json + "", "" + cipherKeyData.toString() + "")
       this.closeMask()
     },

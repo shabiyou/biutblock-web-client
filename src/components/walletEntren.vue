@@ -173,12 +173,17 @@ export default {
       if (this.radioPages === 1) {
         let privateVal = this.privateKeyVal.replace(/\s+/g, "")
         let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
-        let extractAddress = SECUtil.privateToAddress(privateKeyBuffer) //返回值
-        let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer)
+
+        let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')
+        let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')
+        let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)
+
         //传递给父级需要的参数
         let parm = {
-          address: `0x${extractAddress.toString('hex')}`,
-          privateKey: privateVal
+          address: '0x' + extractAddress,
+          privateKey: privateVal,
+          englishWords: extractPhrase,
+          publicKey: extractPublicKey
         }
         this.$emit('login', parm)
       } else {
@@ -194,7 +199,9 @@ export default {
                   let arrData = eval('(' + arrData1 + ')')
                   let parm = {
                     address: '0x'+ arrData.walletAddress,
-                    privateKey: arrData.privateKey
+                    privateKey: arrData.privateKey,
+                    englishWords: arrData.englishWords,
+                    publicKey: arrData.publicKey
                   }
                   that.$emit('login', parm)
                 }
