@@ -82,6 +82,7 @@ export default {
     tipTxt: 'Notice',
     confirmMapping: 'Confirm the following information',
     mappingButton: 'Mapping',
+    mappingButtonAcitve: 'Mapping...',
     mappingSuccess: 'Submit the mapping successfully. Please wait for 1-3 working days to check BIUT arrival in the new wallet address.  If you have any questions, please contact the BIUT staff.',
     mappingFailure1: 'Eth Transaction Hash Error or Eth Address Error or Your transaction not confirmed in Eth network, please try again later...',
     mappingFailure2: 'You have already submitted!',

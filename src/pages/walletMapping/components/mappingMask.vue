@@ -15,6 +15,7 @@
         <!-- 映射按钮 --> 
         <public-button
           type="button"
+          :disabled="maskConfirmBtn"
           :text="$t('mask.cancel')"
           @click.native="closeMask" />
         
@@ -23,7 +24,7 @@
           type="button"
           class="btn-active"
           :disabled="maskConfirmBtn"
-          :text="$t('mask.confirm')"
+          :text="$t(mappingText)"
           @click.native="confirmMapping" />
       </section>
     </section>
@@ -75,6 +76,7 @@ export default {
       maskPages: 1,
       mappingResImg: successImg,
       maskConfirmBtn: false,
+      mappingText: 'mapping.confirm',
       mappingResTxt: 'mapping.mappingSuccess', //  mapping.mappingFailure 失败
     }
   },
@@ -123,6 +125,7 @@ export default {
     /** 确认映射 */
     confirmMapping () {
       this.maskConfirmBtn = true
+      this.mappingText = 'mapping.mappingButtonAcitve'
       let urls = "http://scan.secblock.io/mapping"
       let ethaddress = this.ethAddress.replace("0x","")
       let txhash = this.txhash.replace("0x","").toLowerCase()
@@ -136,7 +139,7 @@ export default {
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
         }).then((res) => {
-           console.log(res.statusText)
+          //console.log(res)
           /*
             statusText = 'txhash not found in eth network' 哈希值或地址不正确
 
@@ -147,8 +150,9 @@ export default {
             status = 200 成功
           */
           this.maskConfirmBtn = false
+          this.mappingText = 'mapping.mappingButton'
           this.maskPages = 2
-          if (res.status == "success") {
+          if (res.status == 200) {
             this.mappingResTxt = 'mapping.mappingSuccess'
             this.mappingResImg = successImg
           } else if (res.statusText == 'txhash not found in eth network') {

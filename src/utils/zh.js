@@ -85,6 +85,7 @@ export default {
     confirmMapping: '确认以下信息',
     tipTxt: '提示',
     mappingButton: '映射',
+    mappingButtonAcitve: '映射中...',
     mappingSuccess: '提交映射成功，请等待1-3个工作日查看新钱包地址中新币映射到账情况，如有任何疑问，请联系BIUT工作人员。',
     mappingFailure1: '提交的hash和eth地址错误，或者您的提交还未在以太网络确认，请稍候再试！',
     mappingFailure2: '您已经提交过了，请不要重复提交！',
