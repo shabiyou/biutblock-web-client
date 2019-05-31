@@ -64,6 +64,24 @@ let WalletHandler = {
 
   ecryptWalletKeys: function (walletKeys, pwd) {
     return CryptoJS.AES.encrypt(walletKeys, pwd)
+  },
+
+  _getKeysFromPrivateKey: function (privateKey, fnAfterImport) {
+    try {
+      let privateKeyBuffer = SECUtil.privateToBuffer(privateKey)
+      let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')
+      let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')
+      let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)
+      return {
+        walletName: walletName,
+        privateKey: privateKey,
+        publicKey: extractPublicKey,
+        englishWords: extractPhrase,
+        walletAddress: extractAddress
+      }
+    } catch (e) {
+      fnAfterImport('error')
+    }
   }
 }
 
