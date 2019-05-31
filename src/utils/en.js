@@ -75,9 +75,9 @@ export default {
   mapping: {
     ethaddress: 'ETH Wallet Address',
     ethwalletddress: 'ETH Wallet Address',
-    mappingTipsTxt1: 'During the mapping process, please carefully check that the BIUT wallet address to be mapped is the BIUT wallet address that you created! In case some users may accidentally input wrong private key, and map to a wrong wallet address. If you map to a wrong wallet address which is not belong to you, you need to responsible for your loss. ',
-    mappingTipsTxt2: 'The same ETH address should be mapped completely at one time, one transaction transfer, corresponding to submit a mapping request; if you transfer multiple transactions, you need to submit multiple mapping requests.',
-    mappingTipsTxt3: 'Please use eth-privatekey to login BIUT PC-Miner and BIUT Web Client later.',
+    mappingTipsTxt1: 'Please try to map the same ETH address completely, one transfer, corresponding to submit a mapping request; if you transfer multiple transactions, you need to submit multiple mapping requests.',
+    mappingTipsTxt2: "Please use ETH's private key to log in and view BIUT wallet.",
+    mappingTipsTxt3: 'If in doubt, check out the help mapping tutorial.',
     ethAddressErrorTxt: 'ETH address error',
     tipTxt: 'Notice',
     confirmMapping: 'Confirm the following information',

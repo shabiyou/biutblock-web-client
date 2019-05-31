@@ -78,9 +78,9 @@ export default {
   mapping: {
     ethaddress: 'ETH地址',
     ethwalletddress: 'ETH钱包地址',
-    mappingTipsTxt1: '在映射过程中，请仔细检查要映射的BIUT钱包地址是您创建的BIUT钱包地址！因为某些用户可能会意外输入错误的私钥，并映射到错误的钱包地址。如果您映射到不属于您的错误钱包地址，您需要为您的损失负责。',
-    mappingTipsTxt2: '同一ETH地址请尽量一次性映射完全，一笔交易转账，对应提交一次映射请求；若分多笔交易转账，则需要对应提交多次映射请求。',
-    mappingTipsTxt3: '用户使用ETH的私钥登录我们的钱包。',
+    mappingTipsTxt1: '同一ETH地址请尽量一次性映射完全，一笔交易转账，对应提交一次映射请求；若分多笔交易转账，则需要对应提交多次映射请求。',
+    mappingTipsTxt2: '请使用ETH的私钥登录查看BIUT钱包；',
+    mappingTipsTxt3: '如有疑问，请查看帮助的映射教程。',
     ethAddressErrorTxt: 'ETH地址无效',
     confirmMapping: '确认以下信息',
     tipTxt: '提示',
