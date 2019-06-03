@@ -94,7 +94,9 @@ export default {
   
   mask: {
     tips: "Operation success, click the URL below to view the results:",
+    maskTimeout: 'The network request has timed out. Please try again later...',
     confirm: "Confirm",
+    confirms: "Confirm...",
     cancel: "Cancal"
   },
   headerNav: {

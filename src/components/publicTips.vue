@@ -1,7 +1,7 @@
 <template>
   <div class="tips_content">
     <img src="../assets/images/tipsImg.png" alt="" class="tips_img">
-    <span>{{ $t(this.tipsTxt) }}</span>
+    <span>{{ $t(tipsTxt) }}</span>
   </div>
 </template>
 

@@ -96,7 +96,9 @@ export default {
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果:",
+    maskTimeout: '网络请求超时，请稍后重试...',
     confirm: "确定",
+    confirms: "确定...",
     cancel: "取消"
   },
   headerNav: {

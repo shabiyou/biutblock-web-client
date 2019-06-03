@@ -26,9 +26,8 @@
         <button
           type="button"
           @click="confirmTransfer"
-          :disabled="confirmDisabled"
-          :class="confirmDisabled ? 'confirm-disabled' : ''">
-          {{ $t("mask.confirm") }}
+          :disabled="confirmDisabled">
+          {{ $t(confrimButton) }}
         </button>
       </section>
     </section>
@@ -63,7 +62,8 @@ export default {
       maskPage: 1,
       transferError: false, //转账错误
       confirmDisabled: false, //确认转账按钮
-      successUrl: ''
+      successUrl: '',
+      confrimButton: 'mask.confirm'
     }
   },
   computed: {
@@ -74,11 +74,9 @@ export default {
         return true
       }
     },
-
     amountType() {
       return this.maskInfo[0].transferType === 0 ? 'BIUT' : 'BIU'
     },
-
     itemList() {
       return  [
         {
@@ -113,6 +111,7 @@ export default {
     
     //确认转账
     confirmTransfer () {
+      this.confrimButton = 'mask.confirms'
       this.confirmDisabled = true
       let privateVal = this.maskInfo[0].privateKey //钱包私钥
       let fromAddress = this.maskInfo[0].fromAddress.replace("0x","") //发送地址
@@ -126,7 +125,6 @@ export default {
       if (tradingType == 1) {
         url = _const.url_sen
       }
-
       //签名
       const transfer = {
         'privateKey': privateVal,
@@ -141,7 +139,7 @@ export default {
         'data': ''
       }
       const tx = JSON.stringify(transfer)
-      console.log(tx)
+      //console.log(tx)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       txSigned.txFee = fee
@@ -149,24 +147,25 @@ export default {
           "method": "sec_sendRawTransaction",
           "params": [txSigned]
         }
-      console.log(txSigned)
+      //console.log(txSigned)
       delete postData.params[0].contractAddress //删除 contractAddress 字段
       fetch(url, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
         }).then( (res) => res.json()).then((text) => {
+          this.confirmDisabled = false
+          this.confrimButton = 'mask.confirm'
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
             if (tradingType == 0) {
-              this.successUrl = "http://scan.secblock.io/accountdetails?address="+fromAddress+""
+              this.successUrl = "http://scan.biut.io/accountdetails?address="+fromAddress+""
             } else {
-              this.successUrl = "http://scan.secblock.io/sen/accountdetails?address="+fromAddress+""
+              this.successUrl = "http://scan.biut.io/sen/accountdetails?address="+fromAddress+""
             }
-            this.confirmDisabled = false
+            
           } else {
             this.transferError = true
-            this.confirmDisabled = false
           }
         })
     }
@@ -180,8 +179,6 @@ export default {
 <style scoped>
   .transfer-error {font-size: .8rem;color: #EE1C39;padding-top: 10px;}
   .confirm-disabled {background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%)!important;}
-
-
   .transfer-mask {width: 29.8rem;}
   .transfer-mask h3 {font-size: .8rem;color: #42535B;font-weight: 500;padding-bottom: .5rem;margin: 0;
     border-bottom: .05rem solid #CFDEDB;}
@@ -192,12 +189,10 @@ export default {
   .transfer-mask ul li span:first-child {display: inline-block;color: #91A2AA;}
   .transfer-mask ul li .firstChild {width: 4rem;}
   .transfer-mask ul li .firstChilds {width: 6.75rem;font-size: .7rem;}
-
   .transfer-mask section {float: right;padding-top: 1.5rem;}
   .transfer-mask section button {float: left;}
   .transfer-mask section button:first-child {background:linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);
     margin-right: .6rem;}
-
   @media (max-width: 767px) {
     .transfer-mask {width: 80%;}
   }

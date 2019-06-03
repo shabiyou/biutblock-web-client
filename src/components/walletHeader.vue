@@ -17,7 +17,9 @@
                 :key="item.id"
                 @click.native="isClick(item.nav_cnt)" 
                 tag="li" :to="item.urlPath"
-                :class="[item.nav_cnt===navCnt?'check_color':'',distance?'li_margins':'li_margin']"> 
+                active-class="check_color"
+                exact
+                :class="distance?'li_margins':'li_margin'"> 
                 {{ $t(item.nav_cnt) }}
               </router-link>
 

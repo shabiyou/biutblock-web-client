@@ -10,13 +10,16 @@
           <span :class="maskWidth ? 'enWidth' : ''"> {{ $t(item.tit) }}: </span>
           <span> {{item.txt}} </span>
         </li>
+        <li v-show="timeoutShow">
+          <p>{{ $t('mask.maskTimeout') }}</p>
+        </li>
       </ul>
       <section>
         <!-- 映射按钮 --> 
         <public-button
           type="button"
-          :disabled="maskConfirmBtn"
           :text="$t('mask.cancel')"
+          :disabled="maskConfirmBtn"
           @click.native="closeMask" />
         
         <!-- 映射按钮 --> 
@@ -24,7 +27,7 @@
           type="button"
           class="btn-active"
           :disabled="maskConfirmBtn"
-          :text="$t('mask.confirm')"
+          :text="confirmButton"
           @click.native="confirmMapping" />
       </section>
     </section>
@@ -76,8 +79,10 @@ export default {
       maskPages: 1,
       mappingResImg: successImg,
       maskConfirmBtn: false,
-      mappingText: 'mapping.confirm',
+      confirmButton: 'mask.confirm',
       mappingResTxt: 'mapping.mappingSuccess', //  mapping.mappingFailure 失败
+      timeoutShow: false,
+      //source: null, //存放取消的请求方法
     }
   },
   created() {
@@ -120,53 +125,83 @@ export default {
       let maskPages = this.maskPages
       this.$emit('close', maskPages)
       this.maskPages = 1
+      this.timeoutShow = false
     },
 
     /** 确认映射 */
     confirmMapping () {
-      this.maskConfirmBtn = true
-      this.mappingText = 'mapping.mappingButtonAcitve'
+      let _that = this
+      this.timeoutShow = false
+      _that.maskConfirmBtn = true
+      _that.confirmButton = 'mapping.mappingButtonAcitve'
       let urls = "http://scan.secblock.io/mapping"
-      let ethaddress = this.ethAddress.replace("0x","")
-      let txhash = this.txhash.replace("0x","").toLowerCase()
-     
+      let ethaddress = _that.ethAddress.replace("0x","")
+      let txhash = _that.txhash.replace("0x","").toLowerCase()
+
       let postData = {
         ethaddress: ethaddress,
         txhash: txhash
       }
-      fetch(urls, {
-          method: 'post',
-          body: JSON.stringify(postData), // request is a string
-          headers: httpHeaderOption
-        }).then((res) => {
-          //console.log(res)
-          /*
-            statusText = 'txhash not found in eth network' 哈希值或地址不正确
 
-            statusText = 'txhash duplicated' 已经映射过了
+      let controller = new AbortController();
+      let signal = controller.signal;
 
-            statusText = 'request error' 不应该会出现，如果出现就提示系统错误，请联系客服人员
-
-            status = 200 成功
-          */
-          this.maskConfirmBtn = false
-          this.mappingText = 'mapping.mappingButton'
-          this.maskPages = 2
-          if (res.status == 200) {
-            this.mappingResTxt = 'mapping.mappingSuccess'
-            this.mappingResImg = successImg
-          } else if (res.statusText == 'txhash not found in eth network') {
-            this.mappingResTxt = 'mapping.mappingFailure1'
-            this.mappingResImg = failureImg
-          } else if (res.statusText == 'txhash duplicated') {
-            this.mappingResTxt = 'mapping.mappingFailure2'
-            this.mappingResImg = failureImg
+      //请求超时
+      let timeoutPromise = (timeout) => {
+          return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                  resolve(new Response("timeout", { status: 504, statusText: "timeout " }));
+                  controller.abort();
+              }, timeout);
+          });
+      }
+      //请求内容
+      let requestPromise = (url) => {
+          return fetch(url, {
+              method: 'post',
+              body: JSON.stringify(postData), // request is a string
+              headers: httpHeaderOption,
+              signal: signal
+          });
+      };
+      Promise.race([timeoutPromise(30000), requestPromise(urls)])
+        .then(resp => {
+          /**
+           * 504 请求超时
+           * 
+           * 200 请求成功
+           * 
+           * 500 请求错误
+           *  statusText == 'txhash not found in eth network' 哈希值或者地址错误
+           *  statusText == 'txhash duplicated' 重复提交
+           *  其他 网络崩溃
+           */
+          _that.maskConfirmBtn = false
+          _that.confirmButton = 'mask.confirm'
+          if (resp.status == 504 && resp.statusText == 'timeout ') {
+            this.timeoutShow = true
           } else {
-            this.mappingResTxt = 'mapping.mappingFailure3'
-            this.mappingResImg = failureImg
+            _that.maskPages = 2
+            if (resp.status == 200) {
+              _that.mappingResTxt = 'mapping.mappingSuccess'
+              _that.mappingResImg = successImg
+            } else if (resp.statusText == 'txhash not found in eth network') {
+              _that.mappingResTxt = 'mapping.mappingFailure1'
+              _that.mappingResImg = failureImg
+            } else if (resp.statusText == 'txhash duplicated') {
+              _that.mappingResTxt = 'mapping.mappingFailure2'
+              _that.mappingResImg = failureImg
+            } else {
+              _that.mappingResTxt = 'mapping.mappingFailure3'
+              _that.mappingResImg = failureImg
+            }
           }
         })
-      }
+        .catch(error => {
+          alert("系统维护中，请稍后重试！")
+          console.log(error);
+        })
+      },
   }
 }
 </script>
@@ -183,6 +218,7 @@ export default {
   .mask-list section button {width: 5.4rem;height: 1.8rem;background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}
   .mask-list section button:last-child {margin-left: .6rem;}
   .mask-list ul li .enWidth {width: 5.5rem!important;}
+  .mask-list ul li p {color: #EE1C39;}
 
   .mask-res {height: 7.6rem;display: flex;flex-direction: column;justify-content: space-between;}
   .mask-res section:last-child {display: flex;justify-content: flex-end;}

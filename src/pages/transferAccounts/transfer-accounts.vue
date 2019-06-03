@@ -287,7 +287,12 @@ export default {
       if (this.transferIdx == 0) {
         this.walletMoney = this.allMoneyC
       } else {
-        this.walletMoney =  this.getPointNum(this.allMoneyN - this.feeVal, 8)
+        let amountN=  this.getPointNum(this.allMoneyN - this.feeVal, 8) //转出的所有金额是否小于0的判断
+        if (amountN < 0) {
+          this.walletMoney = 0
+        } else {
+          this.walletMoney = amountN
+        }
       }
     },
 

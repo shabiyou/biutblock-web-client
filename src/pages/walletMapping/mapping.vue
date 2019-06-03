@@ -52,7 +52,7 @@
         <!-- 映射按钮 --> 
         <public-button
           type="button"
-          :text="$t('mapping.mappingButton')"
+          :text="mappingButton"
           :disabled="!confirmFrom"
           :class="confirmFrom ? 'btn-active' : ''"
           @click.native="confirmMapping" />
@@ -95,6 +95,7 @@ export default {
       ethAddress: '',
       tipsTxt2: 'mapping.ethAddressErrorTxt', // eth私钥无效
       tipsTxt3: 'mapping.mappingHashError', // eth私钥无效
+      mappingButton: 'mapping.mappingButton',
       txhash: '', //交易has值
       showKey: false,
       showHashKey: false,

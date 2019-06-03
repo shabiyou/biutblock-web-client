@@ -1,5 +1,7 @@
 const config = {
+  //http://test.secblock.io/rpctransfer/callrpc  测试网络
   url: 'http://scan.secblock.io/rpctransfer/callrpc',
+  //http://test.secblock.io/rpctransfer/callrpc-sen  测试网络
   url_sen: 'http://scan.secblock.io/rpctransfer/callrpc-sen',
   passReg: /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/,
   priverKeyReg: /[0-9a-f]{64}$/, 

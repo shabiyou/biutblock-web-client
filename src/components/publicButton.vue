@@ -1,14 +1,18 @@
 <template>
-  <button class="publicBtn" :type="type">{{ this.text }}</button>
+  <button class="publicBtn">{{ $t(text) }}</button>
 </template>
 
 <script>
 export default {
   name: '',
-  props: ["type","text"],
+  props: {
+    text: String
+  },
   data () {
-    return {}
-  }
+    return {
+      
+    }
+  },
 }
 </script>
 

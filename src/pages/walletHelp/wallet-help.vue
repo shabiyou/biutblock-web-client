@@ -4,12 +4,12 @@
       <el-col :xs="24" :sm="24" :md="24">
         <main class="wallet-help" v-show="mobilePages">
           <embed v-show="guideUrls" 
-            src="http://scan.secblock.io/secwallet-web-help-en.pdf"  
+            src="http://scan.biut.io/biutwallet.web-help-en.pdf"  
             width="100%" 
             height="100%">
           </embed>
           <embed v-show="!guideUrls" 
-            src="http://scan.secblock.io/secwallet-web-help-cn.pdf"  
+            src="http://scan.biut.io/biutwallet.web-help-cn.pdf"  
             width="100%" 
             height="100%">
           </embed>

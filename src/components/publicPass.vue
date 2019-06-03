@@ -55,4 +55,5 @@ export default {
   .ipt-arr input {height: 1.5rem;line-height:1.5rem;flex: 1;border: none;border-radius: 0.5rem;font-size: .7rem;font-weight: normal;
     color: #42535B;}
   .ipt-arr img {width: .85rem;height: .75rem;}
+  .ipt-arr img:hover {cursor: pointer;}
 </style>
