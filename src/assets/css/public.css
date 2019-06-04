@@ -51,8 +51,7 @@ main h2 {color: #42535B;font-size: 1.7rem;font-weight: 500;font-family: source-M
 main .btn-active {background:linear-gradient(90deg,rgba(41,216,147,1) 0%,rgba(12,197,183,1) 100%)!important;}
 main .error-border {border: 1px solid #EE1C39!important;}
 
-main .tips_content {font-size: .6rem;color: #EE1C39;font-weight: 400;display: flex;align-items: center;
-  padding-top: .6rem;}
+main .tips_content {font-size: .6rem;color: #EE1C39;font-weight: 400;display: flex;padding-top: .6rem;}
 main .tips_img {width: .8rem;height: .8rem;margin-right: .4rem;}
 
 /* 操作成功遮罩层 */
