@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="(item, index) in this.tipsListKey" :key="item.id"> 
+    <li v-for="(item, index) in tipsListKey" :key="index"> 
       <img :src="item.tips_img" alt=""  class="tips_img"> 
       <span>{{ $t(item.tips_cnt) }}</span>
     </li>

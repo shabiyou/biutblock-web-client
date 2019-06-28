@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import walletHeader from "../components/walletHeader.vue"
-import walletFooter from "../components/walletFooter"
+import walletHeader from "../components/wallet-header"
+import walletFooter from "../components/wallet-footer"
 export default {
   name: 'Index',
   props: {},
@@ -35,9 +35,6 @@ export default {
 </script>
 
 <style scoped>
-  /* .wallet-index {height: 100%;box-sizing: border-box;background: #F5F5F5;overflow: auto;}
-  .wallet-index .wallet-header {height: 100%;margin-bottom: -3rem;box-sizing: border-box;}
-  .wallet-index footer {height:3rem;box-sizing: border-box;} */
   .wallet-index {height: 100%;}
   .wallet-index .wallet-header {background:rgba(245,245,245,1)}
 </style>

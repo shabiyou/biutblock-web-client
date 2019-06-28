@@ -104,7 +104,6 @@ export default {
   headerNav: {
     "Newallet": "新钱包",
     "ViewWalletInfo": "钱包信息",
-    "GetTestCoin": "领取测试币",
     "TransferSEC": "转账",
     "Guide": "帮助",
     "Language": "语言",

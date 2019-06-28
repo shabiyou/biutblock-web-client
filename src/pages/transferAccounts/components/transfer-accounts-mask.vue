@@ -53,7 +53,7 @@ let httpHeaderOption = {
   'content-type': 'application/json'
 }
 export default {
-  name: '',
+  name: 'transferAccountsMask',
   props: {
     maskInfo: Array
   },
@@ -139,7 +139,6 @@ export default {
         'data': ''
       }
       const tx = JSON.stringify(transfer)
-      //console.log(tx)
       // transfer转换成json string 然后通过此方法对交易进行签名， 
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       txSigned.txFee = fee
@@ -147,7 +146,6 @@ export default {
           "method": "sec_sendRawTransaction",
           "params": [txSigned]
         }
-      //console.log(txSigned)
       delete postData.params[0].contractAddress //删除 contractAddress 字段
       fetch(url, {
           method: 'post',
@@ -159,9 +157,9 @@ export default {
           if (JSON.parse(text.body).result.status == 1) {
             this.maskPage = 2
             if (tradingType == 0) {
-              this.successUrl = "http://scan.biut.io/accountdetails?address="+fromAddress+""
+              this.successUrl = "https://scan.biut.io/accountdetails?address="+fromAddress+""
             } else {
-              this.successUrl = "http://scan.biut.io/sen/accountdetails?address="+fromAddress+""
+              this.successUrl = "https://scan.biut.io/sen/accountdetails?address="+fromAddress+""
             }
             
           } else {

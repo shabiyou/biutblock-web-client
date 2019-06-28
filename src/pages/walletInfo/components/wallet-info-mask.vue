@@ -1,14 +1,13 @@
 <template>
-  <section class="mask">
+  <main class="mask">
     <section class="mask_cnt info_mask clearfix">
       <p>{{ $t("passTips.newWalletPass") }}</p>
 
       <public-pass
-        v-model.trim="newWalletPass"
-        maxlength="30"
-        :placeholder="$t('passTips.newWalletPass')"
-        @input="inputContentNewPass"/>
-
+        v-model = 'newWalletPass'
+        maxlength = '30'
+        :placeholder = "$t('passTips.newWalletPass')"
+        @input = 'passChange' />
       <public-tips :tipsTxt="infoTxt" v-show="passTips" />
 
       <section>
@@ -16,26 +15,26 @@
           {{ $t("mask.cancel") }}
         </button>
         <button
-          type="button"
-          :disabled="!passActive"
-          :class="passActive ? 'btn-active' : ''"
-          @click="createFrom">
+          type = 'button'
+          :disabled = '!passActive'
+          :class = "passActive ? 'btn-active' : ''"
+          @click = 'createFrom'>
           {{ $t("mask.confirm") }}
         </button>
       </section>
+
     </section>
-  </section>
+  </main>
 </template>
 
 <script>
-
-import publicPass from '../../../components/publicPass'
-import publicTips from '../../../components/publicTips'
+const publicPass = () => import("../../../components/public-pass")
+const publicTips = () => import("../../../components/public-tips")
 import walletsHandler from '../../../lib/WalletsHandler.js'
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
-  name: '',
+  name: 'walletInfoMask',
   props: {
     infoAddress: String,
     infoKey: String,
@@ -50,27 +49,26 @@ export default {
     return {
       newWalletPass: '', //新钱包密码
       infoTxt: 'passTips.passFormat',//密码提示语
-      passTips: false, //密码提示语是否显示
+      passTips: false //密码提示语是否显示
     }
   },
   computed: {
     //新钱包密码按钮是否激活
     passActive () {
-      var passReg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/
       let pass = (this.newWalletPass).replace(/\s+/g, "")
       if (pass.length > 0) {
         this.passTips = true
       } else {
         this.passTips = false
       }
-      return passReg.test(pass) ? true : false
+      return _const.passReg.test(pass) ? true : false
     }
   },
   methods: {
-    //不能输入中文
-    inputContentNewPass () {
+    //密码不能输入中文、空格
+    passChange () {
       this.$nextTick(()=> {
-        this.newWalletPass = this.newWalletPass.replace(/[\u4E00-\u9FA5]/g,'')
+        this.newWalletPass = this.inputNull(this.newWalletPass)
       })
     },
 
@@ -87,7 +85,7 @@ export default {
       let walletKey = this.infoKey
       let walletWord = this.infoWord
       let walletPublickKey = this.infoPublicKey
-      let newPass = this.newWalletPass
+      let newPass = this.newWalletPass.replace(/\s+/g,'')
 
       let keyFileDataJS = {
         [walletKey]: {
@@ -100,9 +98,8 @@ export default {
       }
       //通过密码加密钱包  
       let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
-
-      var json = "" + walletAddress + ".json"
-      this.funDownload("BIUT" + json + "", "" + cipherKeyData.toString() + "")
+      var walletName = "BIUT" + walletAddress + ".json"
+      this.funDownload(walletName , "" + cipherKeyData.toString() + "")
       this.closeMask()
     },
 

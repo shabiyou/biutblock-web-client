@@ -1,22 +1,22 @@
 <template>
-  <section class="info-qrcode">
+  <main class="info-qrcode">
     <figcaption>
-      <qrcode :value="qrAddress" :options="{ size: 93 }"></qrcode>
+      <qrcode :value="qrAddress" :options="{ size: 93 }" />
       <p>{{ $t("walletInfo.qrCode") }}</p>
     </figcaption>
-    <span @click="createMask">{{ $t("walletInfo.newKeyStore") }}</span>
-  </section>
+    <span @click="createWallet">{{ $t("walletInfo.newKeyStore") }}</span>
+  </main>
 </template>
 
 <script>
-import Qrcode from '@xkeshi/vue-qrcode'
+import qrcode from '@xkeshi/vue-qrcode'
 export default {
-  name: '',
+  name: 'walletInfoQrcode',
   props: {
      qrAddress: String
   },
   components: {
-    qrcode: Qrcode,
+    qrcode
   },
   data() {
     return {
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     //打开创建钱包
-    createMask () {
+    createWallet () {
       this.$emit('createMask')
     }
   },

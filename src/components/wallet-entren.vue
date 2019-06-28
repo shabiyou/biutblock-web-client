@@ -5,70 +5,59 @@
         <h2>{{ $t("walletInfo.accessWallet") }}</h2>
         <!-- 按钮组 -->
         <section class="radio-arr">
-          <section
-            class="radio-box"
-            v-for="(item, index) in radioList"
-            :key="item.id">
+          <section class="radio-box" v-for="(item, index) in radioList" :key="item.id">
             <label class="radio" :class="{ on: item.isChecked }"></label>
             <input
-              class="ipt-radio"
-              :checked="item.isChecked"
-              @click="checkTab(index)"
-              type="radio" />
-              
-            <span>{{ $t(item.value) }}</span>
+              type="radio"
+              class = "ipt-radio"
+              :checked = "item.isChecked"
+              @click = "checkTab(index)" />
+              <span>{{ $t(item.value) }}</span>
           </section>
         </section>
 
         <!-- keyStore 登陆 -->
         <section class="key-store" v-show="radioPages == 0">
           <p>{{ $t("walletInfo.checkKeyStore1") }}</p>
-          <input
-            type="file"
-            :placeholder="$t('walletInfo.checkKeyStore2')"
-            @change="tirggerFile($event)" />
-
+          <input type="file" :placeholder="$t('walletInfo.checkKeyStore2')" @change="tirggerFile($event)" />
           <section>
             <span>{{ $t(KeyStoreVal) }}</span>
           </section>
+          <!-- 密码输入框组件 -->
           <public-pass
-            v-if="showPass"
-            v-model.trim="passVal"
-            maxlength="30"
-            :class="walletPassError ? 'error-border' : ''"
-            :placeholder="$t('passTips.passEncryption')"
-            @input="inputContentPass" />
-
+            maxlength = "30"
+            v-if = "showPass"
+            v-model = "passVal"
+            :class = "walletPassError ? 'error-border' : ''"
+            :placeholder = "$t('passTips.passEncryption')"
+            @input = "passChange" />
           <public-tips :tipsTxt="walletPassErrorTxt" v-show="walletPassError" />
-
+          <!-- 按钮组件 -->
           <public-button
-            class="key-store-btn"
-            :disabled="!keyStoreActive"
-            :class="keyStoreActive ? 'btn-active' : ''"
-            :text = " $t('walletInfo.unlock')"
-            @click.native="walletInfoForm" />
+            class = "key-store-btn"
+            :disabled = "!keyStoreActive"
+            :class = "keyStoreActive ? 'btn-active' : ''"
+            :text = "$t('walletInfo.unlock')"
+            @click.native = "walletInfoForm" />
         </section>
 
         <!-- 私钥登陆 -->
         <section class="private-key" v-show="radioPages == 1">
           <p>{{ $t("walletInfo.inputPrivateKey1") }}</p>
-
+          <!-- 私钥输入组件 -->
           <public-pass
-            v-model.trim="privateKeyVal"
-            maxlength="64"
-            :placeholder="$t('walletInfo.inputPrivateKey2')"
-            :class="privateKeyError ? 'error-border' : ''"
-            @input="inputContentKey" />
-
+            maxlength = '64'
+            v-model = 'privateKeyVal'
+            :placeholder = "$t('walletInfo.inputPrivateKey2')"
+            :class= "privateKeyError ? 'error-border' : ''"
+            @input = 'privateChange' />
           <public-tips :tipsTxt="privateKeyErrorTxt" v-show="privateKeyError" />
-          
           <public-button
-            class="private-key-btn"
-            :disabled="!privateKeyActive"
-            :class="privateKeyActive ? 'btn-active' : ''"
+            class = "private-key-btn"
+            :disabled = "!privateKeyActive"
+            :class = "privateKeyActive ? 'btn-active' : ''"
             :text = "$t('walletInfo.unlock')"
-            @click.native="walletInfoForm" />
-
+            @click.native = "walletInfoForm" />
         </section>
       </el-col>
     </el-row>
@@ -78,14 +67,14 @@
 </template>
 
 <script>
-import contentFooter from './contentFooter'
-import publicButton from './publicButton'
-import publicPass from './publicPass'
-import publicTips from './publicTips'
+const contentFooter = () => import("./content-footer")
+const publicButton = () => import("./public-button")
+const publicPass = () => import("./public-pass")
+const publicTips = () => import("./public-tips")
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
-  name: '',
+  name: 'walletEntren',
   components: {
     contentFooter,
     publicButton,
@@ -98,7 +87,6 @@ export default {
       passVal: '',  //密码
       privateKeyVal: '', //私钥
       KeyStoreUrl: '', //keystroe文件地址
-
       showPass: false,//默认不显示密码输入框
       privateKeyError: false,//私钥错误true显示
       walletPassError: false,//密码
@@ -154,17 +142,17 @@ export default {
   destroyed() { },
   methods: {
     //keyStore文件登陆不能输入中文
-    inputContentPass () {
-        this.$nextTick(()=> {
-          this.passVal = this.passVal.replace(/[\u4E00-\u9FA5]/g,'')
-        })
+    passChange () {
+      this.$nextTick(()=> {
+        this.passVal = this.inputNull(this.passVal)
+      })
     },
 
     //私钥登陆不能输入中文
-    inputContentKey () {
-       this.$nextTick(()=> {
-          this.privateKeyVal = this.privateKeyVal.replace(/[\u4E00-\u9FA5]/g,'')
-        })
+    privateChange () {
+      this.$nextTick(()=> {
+        this.privateKeyVal = this.inputNull(this.privateKeyVal)
+      })
      },
 
     //登陆钱包
@@ -173,11 +161,9 @@ export default {
       if (this.radioPages === 1) {
         let privateVal = this.privateKeyVal.replace(/\s+/g, "")
         let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
-
-        let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')
-        let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')
-        let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)
-
+        let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')//钱包地址
+        let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')//钱包公钥
+        let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)//钱包助记词
         //传递给父级需要的参数
         let parm = {
           address: '0x' + extractAddress,
@@ -191,23 +177,23 @@ export default {
           let that = this
           //解锁钱包
           this.$axios.get(''+this.KeyStoreUrl+'').then(function (response) {
-                let jsonstr = response.data
-                let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
-                if (response.status == 200) {
-                  let walletData = keyData.split(':{')
-                  let arrData1 = '{' + walletData[1].replace("}}","") + '}'
-                  let arrData = eval('(' + arrData1 + ')')
-                  let parm = {
-                    address: '0x'+ arrData.walletAddress,
-                    privateKey: arrData.privateKey,
-                    englishWords: arrData.englishWords,
-                    publicKey: arrData.publicKey
-                  }
-                  that.$emit('login', parm)
-                }
-            }).catch(function (error) {
-                that.walletPassError = true
-            });
+            let jsonstr = response.data
+            let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
+            if (response.status == 200) {
+              let walletData = keyData.split(':{')
+              let arrData1 = '{' + walletData[1].replace("}}","") + '}'
+              let arrData = eval('(' + arrData1 + ')')
+              let parm = {
+                address: '0x'+ arrData.walletAddress,
+                privateKey: arrData.privateKey,
+                englishWords: arrData.englishWords,
+                publicKey: arrData.publicKey
+              }
+              that.$emit('login', parm)
+            }
+          }).catch(function (error) {
+            that.walletPassError = true
+          });
       }
     },
 
@@ -230,9 +216,9 @@ export default {
     checkTab (index) {
       this.radioPages = index
       this.radioList.forEach((item) => {
-        item.isChecked = false;
+        item.isChecked = false
       });
-      this.radioList[index].isChecked = true;
+      this.radioList[index].isChecked = true
     },
   },
 }

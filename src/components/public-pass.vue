@@ -1,15 +1,15 @@
 <template>
   <div class="ipt-arr">
-    <input :type="typeIpt" 
-      ref="input"
-      :value="value"
-      :placeholder="placeholder"
-      :maxlength="maxlength"
-      @blur="blur"
-      @focus="focus"
-      @input="$emit('input', $event.target.value)"
-      onkeyup="this.value=this.value.replace(/\s+/g,'')"/>
-    <img :src="passUrl" alt="" @click="checkImg">
+    <input 
+      ref = "input"
+      :type = "typeIpt" 
+      :value = "value"
+      :placeholder = "placeholder"
+      :maxlength = "maxlength"
+      @blur = "blur"
+      @focus = "focus"
+      @input = "$emit('input', $event.target.value)" />
+    <img :src="passUrl" alt="" @click="checkImg" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@
 import passImg from '../assets/images/passImg.png'
 import passImgs from '../assets/images/passImgs.png'
 export default {
-  name: 'publicIptPass',
+  name: 'publicPass',
   props: ['placeholder', 'value', 'maxlength'],
   data () {
     return {

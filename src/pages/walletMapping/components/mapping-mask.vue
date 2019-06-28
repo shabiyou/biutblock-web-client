@@ -60,7 +60,7 @@
 <script>
 import successImg from '../../../assets/images/success.png'
 import failureImg from '../../../assets/images/tipsImg.png'
-import publicButton from '../../../components/publicButton'
+import publicButton from '../../../components/public-button'
 let fetch = require('node-fetch')
 let httpHeaderOption = {
   'content-type': 'application/json'
@@ -127,14 +127,13 @@ export default {
       this.maskPages = 1
       this.timeoutShow = false
     },
-
+    
     /** 确认映射 */
     confirmMapping () {
       let _that = this
       this.timeoutShow = false
       _that.maskConfirmBtn = true
       _that.confirmButton = 'mapping.mappingButtonAcitve'
-      let urls = "http://scan.secblock.io/mapping"
       let ethaddress = _that.ethAddress.replace("0x","")
       let txhash = _that.txhash.replace("0x","").toLowerCase()
 
@@ -164,7 +163,7 @@ export default {
               signal: signal
           });
       };
-      Promise.race([timeoutPromise(30000), requestPromise(urls)])
+      Promise.race([timeoutPromise(30000), requestPromise(_const.url_mapping)])
         .then(resp => {
           /**
            * 504 请求超时

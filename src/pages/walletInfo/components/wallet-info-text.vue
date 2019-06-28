@@ -1,5 +1,5 @@
 <template>
-  <section class="info-content">
+  <main class="info-content">
     <ul>
       <li>
         <h4>{{ $t("walletInfo.walletAddress") }}</h4>
@@ -21,12 +21,12 @@
         </section>
       </li>
     </ul>
-  </section>
+  </main>
 </template>
 
 <script>
 export default {
-  name: '',
+  name: 'walletInfoText',
   props: {
     infoAddress: String,
     infoKey: String,

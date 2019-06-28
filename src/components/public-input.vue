@@ -1,24 +1,10 @@
 <template>
-  	<input
-      v-bind="$attrs"
-      v-on="listeners"
-      onkeyup="this.value=this.value.replace(/\s+/g,'')"/>
+  	<input v-bind="$attrs" v-on="listeners" />
 </template>
 
 <script>
 export default {
-  name: 'inputVue',
-  components: {
-
-  },
-  props: {
-    
-  },
-  data () {
-    return {
-
-    }
-  },
+  name: 'publicInput',
   computed: {
     listeners() {
       return {
@@ -27,17 +13,7 @@ export default {
           this.$emit('input', event.target.value)
       }
     }
-  },
-  created () {
-    
-  },
-  mounted () {
-
-  },
-  destroyed () {},
-  methods: {
-    
-  },
+  }
 }
 </script>
 

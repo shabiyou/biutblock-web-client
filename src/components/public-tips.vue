@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'tipsContent',
+  name: 'publicTips',
   props: {
     tipsTxt: String
   },

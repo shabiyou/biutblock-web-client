@@ -44,7 +44,7 @@ body {-webkit-overflow-scrolling: touch;}
 .clearfix:after{content:‘’;display:block; height:0; line-height:0; visibility:hidden;}
 .clearfix{*zoom:1;}
 
-button:hover,.info-qrcode span:hover,.down-keystroe span:hover,.money-list span:last-child:hover,
+nav ul li:hover,button:hover,.info-qrcode span:hover,.down-keystroe span:hover,.money-list span:last-child:hover,
 .money-arr span:hover,.money-arr ul li:hover {cursor: pointer;}
 
 main h2 {color: #42535B;font-size: 1.7rem;font-weight: 500;font-family: source-Medium;}
@@ -74,6 +74,10 @@ html {font-size: 20px}
   
   .content-bg p {padding-top: 3.5rem!important;}
   .mask_cnt {width: 80%;}
+   
+  /* 创建钱包 */
+  .create-pages,.down-keystroe,.save-privateKey {width: 90%!important;}
+  .create-pages h2,.down-keystroe h2,.save-privateKey h2 {padding-top: 5.4rem!important;}
 }
 @media (min-width: 768px) {
   /* .el-container {max-width: 750px;margin: 0 auto;padding: 0 9px;} */

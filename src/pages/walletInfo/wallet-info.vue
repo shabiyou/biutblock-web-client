@@ -1,10 +1,10 @@
 <template>
   <main class="el-container">
     <!-- 钱包登陆 -->
-    <wallet-entren v-if="infoPages == 1" @login = "loginWallet" />
+    <wallet-entren v-if="infoPages === 1" @login = "loginWallet" />
     
     <!-- 登陆成功 -->
-    <main class="wallet-background" v-if="infoPages == 2">
+    <main class="wallet-background" v-if="infoPages === 2">
       <section class="wallet-info-content">
         <!-- 钱包基本信息 -->
         <wallet-info 
@@ -15,13 +15,14 @@
 
         <!-- 钱包二维码 -->
         <wallet-qrcode 
-          @createMask = "createdMask" 
-          :qrAddress = "walletAddress" />
+          :qrAddress = "walletAddress"
+          @createMask = "createdMask" />
 
       </section>
       <!-- 公共背景底部 -->
-      <content-footer></content-footer>
+      <content-footer />
     </main>
+
     <!-- 遮罩层 -->
     <info-mask 
       v-show="maskShow"
@@ -29,18 +30,18 @@
       :infoKey = "walletKey"
       :infoWord = "walletWords"
       :infoPublicKey = "walletPublicKey"
-      @close = "closeMask"/>
+      @close = "closeMask" />
   </main>
 </template>
 
 <script>
-import contentFooter from '../../components/contentFooter'
-import walletEntren from '../../components/walletEntren'
-import infoMask from './components/infoMask'
-import walletInfo from './components/walletInfo'
-import walletQrcode from './components/walletQrcode'
+const contentFooter = () => import("../../components/content-footer")
+const walletEntren = () => import("../../components/wallet-entren")
+const infoMask = () => import("./components/wallet-info-mask")
+const walletInfo = () => import("./components/wallet-info-text")
+const walletQrcode = () => import("./components/wallet-info-qrcode")
 export default {
-  name: '',
+  name: 'walletInformation',
   components: {
     contentFooter,
     walletEntren,
@@ -53,11 +54,11 @@ export default {
     return {
       walletAddress: '',//钱包地址
       walletKey: '',//钱包私钥
-      walletPublicKey: '',//钱包私钥
+      walletPublicKey: '',//钱包公钥
       walletWords: '',//钱包助记词
       walletMoneyC: "0",//钱包SEC币
       walletMoneyN: "0",//钱包SEN币
-      infoPages: 1, //钱包默认显示登陆页面
+      infoPages: 1, //默认显示登陆页面
       maskShow: false, //遮罩层 
     }
   },
@@ -99,30 +100,7 @@ export default {
       this.getWalletBalanceSEN (address).then(res=>{
         this.walletMoneyN = this.scientificNotationToString(res)
       })
-    },
-
-    //讲科学计算法转化成数字
-    scientificNotationToString(param) {
-      let strParam = String(param)
-      let flag = /e/.test(strParam)
-      if (!flag) return param
-
-      // 指数符号 true: 正，false: 负
-      let sysbol = true
-      if (/e-/.test(strParam)) {
-        sysbol = false
-      }
-      // 指数
-      let index = Number(strParam.match(/\d+$/)[0])
-      // 基数
-      let basis = strParam.match(/^[\d\.]+/)[0].replace(/\./, '')
-
-      if (sysbol) {
-        return basis.padEnd(index + 1, 0)
-      } else {
-        return basis.padStart(index + basis.length, 0).replace(/^0/, '0.')
-      }
-    },
+    }
   },
 }
 </script>

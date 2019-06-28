@@ -102,7 +102,6 @@ export default {
   headerNav: {
     "Newallet": "New Wallet",
     "ViewWalletInfo": "View Wallet Info",
-    "GetTestCoin": "Get Test Coin",
     "TransferSEC": "Transfer BIUT",
     "Guide": "Guide",
     "Language": "Language",

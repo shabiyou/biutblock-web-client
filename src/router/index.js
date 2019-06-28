@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import i18n from '../utils/index'
-const Index = resolve => require(['@/pages/index'], resolve) 
-const CreateWallet = resolve => require(['@/pages/createWallet/create-wallet'], resolve) 
-const ReceiveSec = resolve => require(['@/pages/receiveSec/receive-sec'], resolve)
-const TransferAccounts = resolve => require(['@/pages/transferAccounts/transfer-accounts'], resolve)
-const WalletInfo = resolve => require(['@/pages/walletInfo/wallet-info'], resolve)
-const WalletHelp = resolve => require(['@/pages/walletHelp/wallet-help'], resolve)
-const WalletMapping = resolve => require(['@/pages/WalletMapping/mapping'], resolve)
+
+const Index = () => import('@/pages/index')
+const CreateWallet = () => import('@/pages/createWallet/create-wallet')
+const TransferAccounts = () => import('@/pages/transferAccounts/transfer-accounts')
+const WalletInfo = () => import('@/pages/walletInfo/wallet-info')
+const WalletHelp = () => import('@/pages/walletHelp/wallet-help')
+const WalletMapping = () => import('@/pages/walletMapping/mapping')
 
 Vue.use(Router)
 
@@ -28,14 +28,6 @@ var router = new Router({
           component: CreateWallet,
           meta: {
             title: 'headerNav.Newallet'
-          }
-        },
-        {
-          path: '/receiveSec',
-          name: 'receiveSec',
-          component: ReceiveSec,
-          meta: {
-            title: 'headerNav.GetTestCoin'
           }
         },
         {
