@@ -3,32 +3,34 @@
     <!-- 确认弹窗 -->
     <section class="mask_cnt mask-list" v-if="maskPages == 1">
       <h4 class="title-line">
-        {{ $t('mapping.confirmMapping') }}
+        {{ $t("mapping.confirmMapping") }}
       </h4>
       <ul>
         <li v-for="(item, index) in maskList" :key="index">
           <span :class="maskWidth ? 'enWidth' : ''"> {{ $t(item.tit) }}: </span>
-          <span> {{item.txt}} </span>
+          <span> {{ item.txt }} </span>
         </li>
-        <li v-show="timeoutShow">
-          <p>{{ $t('mask.maskTimeout') }}</p>
-        </li>
+        <!-- <li v-show="timeoutShow">
+          <p>{{ $t("mask.maskTimeout") }}</p>
+        </li> -->
       </ul>
       <section>
-        <!-- 映射按钮 --> 
+        <!-- 映射按钮 -->
         <public-button
           type="button"
           :text="$t('mask.cancel')"
           :disabled="maskConfirmBtn"
-          @click.native="closeMask" />
-        
-        <!-- 映射按钮 --> 
+          @click.native="closeMask"
+        />
+
+        <!-- 映射按钮 -->
         <public-button
           type="button"
           class="btn-active"
           :disabled="maskConfirmBtn"
           :text="confirmButton"
-          @click.native="confirmMapping" />
+          @click.native="confirmMapping"
+        />
       </section>
     </section>
 
@@ -37,7 +39,7 @@
       <section>
         <p>{{ $t("mapping.tipTxt") }}</p>
         <figure>
-          <img :src="mappingResImg" alt="">
+          <img :src="mappingResImg" alt="" />
           <figcaption>
             {{ $t(mappingResTxt) }}
           </figcaption>
@@ -45,14 +47,14 @@
       </section>
 
       <section>
-        <!-- 映射按钮 --> 
+        <!-- 映射按钮 -->
         <public-button
           type="button"
           class="btn-active"
           :text="$t('mask.confirm')"
-          @click.native="closeMask" />
+          @click.native="closeMask"
+        />
       </section>
-      
     </section>
   </section>
 </template>
@@ -74,23 +76,23 @@ export default {
   components: {
     publicButton
   },
-  data () {
+  data() {
     return {
       maskPages: 1,
       mappingResImg: successImg,
       maskConfirmBtn: false,
       confirmButton: 'mask.confirm',
       mappingResTxt: 'mapping.mappingSuccess', //  mapping.mappingFailure 失败
-      timeoutShow: false,
+      //timeoutShow: false,
       //source: null, //存放取消的请求方法
     }
   },
   created() {
-    
+
   },
   computed: {
     //中英文宽度
-    maskWidth () {
+    maskWidth() {
       if (this.$i18n.locale == 'zh') {
         return true
       } else {
@@ -99,7 +101,7 @@ export default {
     },
 
     //确认数据列表
-    maskList () {
+    maskList() {
       return [
         {
           id: '03',
@@ -121,113 +123,148 @@ export default {
   },
   methods: {
     //关闭遮罩层
-    closeMask () {
+    closeMask() {
       let maskPages = this.maskPages
       this.$emit('close', maskPages)
       this.maskPages = 1
-      this.timeoutShow = false
+      this.confirmButton = 'mask.confirm'
+      this.maskConfirmBtn = false
+      //this.timeoutShow = false
     },
-    
+
     /** 确认映射 */
-    confirmMapping () {
+    confirmMapping() {
       let _that = this
-      this.timeoutShow = false
+      //this.timeoutShow = false
       _that.maskConfirmBtn = true
       _that.confirmButton = 'mapping.mappingButtonAcitve'
-      let ethaddress = _that.ethAddress.replace("0x","")
-      let txhash = _that.txhash.replace("0x","").toLowerCase()
+      let ethaddress = _that.ethAddress.replace("0x", "")
+      let txhash = _that.txhash.replace("0x", "").toLowerCase()
 
       let postData = {
         ethaddress: ethaddress,
         txhash: txhash
       }
 
-      let controller = new AbortController();
-      let signal = controller.signal;
-
-      //请求超时
-      let timeoutPromise = (timeout) => {
-          return new Promise((resolve, reject) => {
-              setTimeout(() => {
-                  resolve(new Response("timeout", { status: 504, statusText: "timeout " }));
-                  controller.abort();
-              }, timeout);
-          });
-      }
-      //请求内容
-      let requestPromise = (url) => {
-          return fetch(url, {
-              method: 'post',
-              body: JSON.stringify(postData), // request is a string
-              headers: httpHeaderOption,
-              signal: signal
-          });
-      };
-      Promise.race([timeoutPromise(30000), requestPromise(_const.url_mapping)])
-        .then(resp => {
-          /**
-           * 504 请求超时
-           * 
-           * 200 请求成功
-           * 
-           * 500 请求错误
-           *  statusText == 'txhash not found in eth network' 哈希值或者地址错误
-           *  statusText == 'txhash duplicated' 重复提交
-           *  其他 网络崩溃
-           */
-          _that.maskConfirmBtn = false
-          _that.confirmButton = 'mask.confirm'
-          if (resp.status == 504 && resp.statusText == 'timeout ') {
-            this.timeoutShow = true
-          } else {
-            _that.maskPages = 2
-            if (resp.status == 200) {
-              _that.mappingResTxt = 'mapping.mappingSuccess'
-              _that.mappingResImg = successImg
-            } else if (resp.statusText == 'txhash not found in eth network') {
-              _that.mappingResTxt = 'mapping.mappingFailure1'
-              _that.mappingResImg = failureImg
-            } else if (resp.statusText == 'txhash duplicated') {
-              _that.mappingResTxt = 'mapping.mappingFailure2'
-              _that.mappingResImg = failureImg
-            } else {
-              _that.mappingResTxt = 'mapping.mappingFailure3'
-              _that.mappingResImg = failureImg
-            }
-          }
-        })
-        .catch(error => {
-          alert("系统维护中，请稍后重试！")
-          console.log(error);
-        })
-      },
+      fetch(_const.url_mapping, {
+        method: 'post',
+        body: JSON.stringify(postData), // request is a string
+        headers: httpHeaderOption
+      }).then((resp) => {
+        _that.maskPages = 2
+        if (resp.status == 200) {
+          _that.mappingResTxt = 'mapping.mappingSuccess'
+          _that.mappingResImg = successImg
+        } else if (resp.statusText == 'txhash not found in eth network') {
+          _that.mappingResTxt = 'mapping.mappingFailure1'
+          _that.mappingResImg = failureImg
+        } else if (resp.statusText == 'txhash duplicated') {
+          _that.mappingResTxt = 'mapping.mappingFailure2'
+          _that.mappingResImg = failureImg
+        } else {
+          _that.mappingResTxt = 'mapping.mappingFailure3'
+          _that.mappingResImg = failureImg
+        }
+      })
+    },
   }
 }
 </script>
 
 <style scoped>
-  .mask-list {width: 27.3rem;}
-  .mask-list h4 {font-size: .9rem;color: #252F33;font-weight: 500;padding-bottom: .7rem;
-    border-bottom: .05rem solid #E6E6E6;margin-bottom: 1.2rem;}
-  .mask-list ul {margin: 0;padding: 0;}
-  .mask-list ul li {font-size: .7rem;padding-bottom: 1.1rem;color: #252F33;display: flex;line-height: 1.5;}
-  .mask-list ul li span:first-child {margin-right: 1rem;display: inline-block;color: #566066;width: 8rem;}
-  .mask-list ul li span:last-child {word-break:break-all;flex: 1;}
-  .mask-list section {display: flex;justify-content: flex-end;}
-  .mask-list section button {width: 5.4rem;height: 1.8rem;background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}
-  .mask-list section button:last-child {margin-left: .6rem;}
-  .mask-list ul li .enWidth {width: 5.5rem!important;}
-  .mask-list ul li p {color: #EE1C39;}
+.mask-list {
+  width: 27.3rem;
+}
+.mask-list h4 {
+  font-size: 0.9rem;
+  color: #252f33;
+  font-weight: 500;
+  padding-bottom: 0.7rem;
+  border-bottom: 0.05rem solid #e6e6e6;
+  margin-bottom: 1.2rem;
+}
+.mask-list ul {
+  margin: 0;
+  padding: 0;
+}
+.mask-list ul li {
+  font-size: 0.7rem;
+  padding-bottom: 1.1rem;
+  color: #252f33;
+  display: flex;
+  line-height: 1.5;
+}
+.mask-list ul li span:first-child {
+  margin-right: 1rem;
+  display: inline-block;
+  color: #566066;
+  width: 8rem;
+}
+.mask-list ul li span:last-child {
+  word-break: break-all;
+  flex: 1;
+}
+.mask-list section {
+  display: flex;
+  justify-content: flex-end;
+}
+.mask-list section button {
+  width: 5.4rem;
+  height: 1.8rem;
+  background: linear-gradient(
+    90deg,
+    rgba(194, 194, 194, 1) 0%,
+    rgba(165, 165, 165, 1) 100%
+  );
+}
+.mask-list section button:last-child {
+  margin-left: 0.6rem;
+}
+.mask-list ul li .enWidth {
+  width: 5.5rem !important;
+}
+.mask-list ul li p {
+  color: #ee1c39;
+}
 
-  .mask-res {height: 7.6rem;display: flex;flex-direction: column;justify-content: space-between;}
-  .mask-res section:last-child {display: flex;justify-content: flex-end;}
-  .mask-res button {width: 5.4rem;height: 1.8rem;}
-  .mask-res p {color: #252F33;font-size: .8rem;margin-bottom: 1.2rem;}
-  .mask-res figure {margin: 0;display: flex;align-items: flex-start;color: #4A5D66;font-size: .7rem;}
-  .mask-res figure img {width: 16px;height: 16px;}
-  .mask-res figure figcaption {line-height: 1.5;margin-left: .6rem;}
+.mask-res {
+  height: 7.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.mask-res section:last-child {
+  display: flex;
+  justify-content: flex-end;
+}
+.mask-res button {
+  width: 5.4rem;
+  height: 1.8rem;
+}
+.mask-res p {
+  color: #252f33;
+  font-size: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.mask-res figure {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  color: #4a5d66;
+  font-size: 0.7rem;
+}
+.mask-res figure img {
+  width: 16px;
+  height: 16px;
+}
+.mask-res figure figcaption {
+  line-height: 1.5;
+  margin-left: 0.6rem;
+}
 
-  @media (max-width: 767px) {
-     .mask-list {width: 80%;}
+@media (max-width: 767px) {
+  .mask-list {
+    width: 80%;
   }
+}
 </style>
