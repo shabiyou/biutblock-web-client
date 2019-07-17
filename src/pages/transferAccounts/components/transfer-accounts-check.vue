@@ -125,6 +125,7 @@ export default {
 
     //切换显示 BIUT BIU
     tabTransfer(index, cnt) {
+      this.walletMoney = ''
       this.transferIdx = index
       this.transferCurrency = cnt
       this.transferListShow = false

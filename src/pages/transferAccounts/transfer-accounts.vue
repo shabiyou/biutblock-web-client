@@ -139,6 +139,7 @@ export default {
         this.addressTxt = 'transfer.transferAddressError2'
         return false
       } else {
+        this.addressError = false
         //转账SEC
         if (this.transferIdx === 0) {
           return address.length == 42 && this.walletMoney > 0 && address != this.address
