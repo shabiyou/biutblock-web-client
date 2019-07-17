@@ -2,7 +2,7 @@
   <main class="info-qrcode">
     <!-- 二维码 -->
     <figcaption>
-      <qrcode :value="qrAddress" :options="{ size: 93 }" />
+      <qrcode :value="walletQr" :options="{ size: 93 }" />
       <p>{{ $t("walletInfo.qrCode") }}</p>
     </figcaption>
 
@@ -23,8 +23,17 @@ export default {
   },
   data() {
     return {
-
+      walletQr: ''
     }
+  },
+  created() {
+    //二维码初始字符串
+    let parm = {
+      "address": this.qrAddress,
+      "value": 0,
+      "type": 0
+    }
+    this.walletQr = JSON.stringify(parm)
   },
   methods: {
     //打开创建钱包
