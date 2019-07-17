@@ -7,14 +7,10 @@
 
     <!-- 转账数量 - silder 滑块 -->
     <section class="transfer-slider">
-      <el-slider
-        v-model="feeIpt"
-        :max="maxFee"
-        :step="stepFee"
-        :min="minFee" />
-      <section>
+      <el-slider v-model="feeIpt" :max="maxFee" :step="stepFee" :min="minFee" />
+      <section class="silder-list">
         <span :class="slowTips ? 'slow-color' : ''">
-          {{$t("transfer.transferSlow") }}
+          {{ $t("transfer.transferSlow") }}
         </span>
         <span>{{ feeIpt }} BIU</span>
         <span :class="fastTips ? 'fast-color' : ''">
@@ -49,13 +45,13 @@ export default {
     }
   },
   methods: {
-    resetSlider () {
+    resetSlider() {
       this.feeIpt = 0.02
     }
   },
   watch: {
     //监听滚动条变化
-    feeIpt (newFee, oldFee) {
+    feeIpt(newFee, oldFee) {
       this.$emit('getFee', newFee)
       if (Number(newFee) > 0.02636364) {
         this.fastTips = true
@@ -77,17 +73,30 @@ export default {
 }
 </script>
 
-<style scoped>
-  .trading-list {display: flex;align-items: center;justify-content: space-between;padding-bottom: .4rem;}
-  .trading-list span:last-child .tips_content {padding-top: 0!important;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.trading-list {
+  @extend %flexBetween;
+  padding-bottom: 0.4rem;
+  span {
+    &:last-child .tips_content {
+      padding-top: 0 !important;
+    }
+  }
+}
 
-  .transfer-slider section {display: flex;justify-content: space-between;align-items: center;font-size: 14px;
-    padding-bottom: 43px;}
-  .transfer-slider >>> .el-slider__runway {height: 2px;}
-  .transfer-slider >>> .el-slider__bar {background-color: #00D69B;height: 2px;}
-  .transfer-slider >>> .el-slider__button {border-color: #00D69B;}
-  .transfer-slider >>> .el-slider__button-wrapper {width: 24px;height: 24px;top: -13px;}
-
-  .slow-color {color: #0B7FE6!important;}
-  .fast-color {color: #F5A623!important;}
+.transfer-slider {
+  .silder-list {
+    @extend %flexBetween;
+    font-size: 14px;
+    padding-bottom: 43px;
+    
+    .slow-color {
+      color: #0b7fe6 !important;
+    }
+    .fast-color {
+      color: #f5a623 !important;
+    }
+  }
+}
 </style>

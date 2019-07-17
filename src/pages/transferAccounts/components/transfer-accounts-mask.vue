@@ -3,30 +3,40 @@
     <!-- 确认转账信息 -->
     <section class="mask_cnt clearfix transfer-mask" v-if="maskPage == 1">
       <h3>{{ $t("transfer.confirmTransferInfo") }}</h3>
+
+      <!-- 确认详细信息列表 -->
       <ul>
         <li>
-          <span :class="maskWidth ? 'firstChilds' : 'firstChild'">{{$t("transfer.orderInfo")}}</span>
+          <span :class="maskWidth ? 'firstChilds' : 'firstChild'">{{
+            $t("transfer.orderInfo")
+          }}</span>
           <span>{{ $t("transfer.transferTxt") }}</span>
         </li>
         <li v-for="(item, index) in itemList" :key="index">
-          <span :class="maskWidth ? 'firstChilds' : 'firstChild'">{{ $t(item.title) }}</span>
-          <span>{{item.cnt}}</span>
+          <span :class="maskWidth ? 'firstChilds' : 'firstChild'">{{
+            $t(item.title)
+          }}</span>
+          <span>{{ item.cnt }}</span>
         </li>
       </ul>
       <p class="transfer-error" v-show="transferError">
         {{ $t("transfer.transferError") }}
       </p>
+
+      <!-- 确认按钮 -->
       <section>
         <button
           type="button"
           @click="closeTransfer"
-          :disabled="confirmDisabled">
+          :disabled="confirmDisabled"
+        >
           {{ $t("mask.cancel") }}
         </button>
         <button
           type="button"
           @click="confirmTransfer"
-          :disabled="confirmDisabled">
+          :disabled="confirmDisabled"
+        >
           {{ $t(confrimButton) }}
         </button>
       </section>
@@ -67,7 +77,7 @@ export default {
     }
   },
   computed: {
-    maskWidth () {
+    maskWidth() {
       if (this.$i18n.locale == 'zh') {
         return false
       } else {
@@ -78,7 +88,7 @@ export default {
       return this.maskInfo[0].transferType === 0 ? 'BIUT' : 'BIU'
     },
     itemList() {
-      return  [
+      return [
         {
           id: '02',
           title: 'transfer.collectionAddress',
@@ -104,24 +114,24 @@ export default {
   },
   methods: {
     //取消转账
-    closeTransfer () {
+    closeTransfer() {
       this.$emit('close', this.maskPage)
       this.maskPage = 1
     },
-    
+
     //确认转账
-    confirmTransfer () {
+    confirmTransfer() {
       this.confrimButton = 'mask.confirms'
       this.confirmDisabled = true
       let privateVal = this.maskInfo[0].privateKey //钱包私钥
-      let fromAddress = this.maskInfo[0].fromAddress.replace("0x","") //发送地址
-      let toAddress = this.maskInfo[0].toAddress.replace("0x","") //接收地址
+      let fromAddress = this.maskInfo[0].fromAddress.replace("0x", "") //发送地址
+      let toAddress = this.maskInfo[0].toAddress.replace("0x", "") //接收地址
       let amount = this.maskInfo[0].transferAmount //转账金额
       let fee = this.maskInfo[0].transferFee.toString() //手续费
       let tradingType = this.maskInfo[0].transferType //转账类型 0 BIUT 1 BIU
       let inputData = 'Test'
-      
-      let url = _const.url 
+
+      let url = _const.url
       if (tradingType == 1) {
         url = _const.url_sen
       }
@@ -143,55 +153,98 @@ export default {
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       txSigned.txFee = fee
       let postData = {
-          "method": "sec_sendRawTransaction",
-          "params": [txSigned]
-        }
+        "method": "sec_sendRawTransaction",
+        "params": [txSigned]
+      }
       delete postData.params[0].contractAddress //删除 contractAddress 字段
       fetch(url, {
-          method: 'post',
-          body: JSON.stringify(postData), // request is a string
-          headers: httpHeaderOption
-        }).then( (res) => res.json()).then((text) => {
-          this.confirmDisabled = false
-          this.confrimButton = 'mask.confirm'
-          if (JSON.parse(text.body).result.status == 1) {
-            this.maskPage = 2
-            if (tradingType == 0) {
-              this.successUrl = "https://scan.biut.io/accountdetails?address="+fromAddress+""
-            } else {
-              this.successUrl = "https://scan.biut.io/sen/accountdetails?address="+fromAddress+""
-            }
-            
+        method: 'post',
+        body: JSON.stringify(postData), // request is a string
+        headers: httpHeaderOption
+      }).then((res) => res.json()).then((text) => {
+        this.confirmDisabled = false
+        this.confrimButton = 'mask.confirm'
+        if (JSON.parse(text.body).result.status == 1) {
+          this.maskPage = 2
+          if (tradingType == 0) {
+            this.successUrl = "https://scan.biut.io/accountdetails?address=" + fromAddress + ""
           } else {
-            this.transferError = true
+            this.successUrl = "https://scan.biut.io/sen/accountdetails?address=" + fromAddress + ""
           }
-        })
+        } else {
+          this.transferError = true
+        }
+      })
     }
   },
   created() {
-    
+
   }
 }
 </script>
 
-<style scoped>
-  .transfer-error {font-size: .8rem;color: #EE1C39;padding-top: 10px;}
-  .confirm-disabled {background: linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%)!important;}
-  .transfer-mask {width: 29.8rem;}
-  .transfer-mask h3 {font-size: .8rem;color: #42535B;font-weight: 500;padding-bottom: .5rem;margin: 0;
-    border-bottom: .05rem solid #CFDEDB;}
-  .transfer-mask ul {padding: 0;}
-  .transfer-mask ul li {color: #42535B;font-size: .7rem;padding-top: .65rem;display: flex;flex-wrap: wrap;}
-  .transfer-mask ul li:first-child {padding-top: .8rem;}
-  
-  .transfer-mask ul li span:first-child {display: inline-block;color: #91A2AA;}
-  .transfer-mask ul li .firstChild {width: 4rem;}
-  .transfer-mask ul li .firstChilds {width: 6.75rem;font-size: .7rem;}
-  .transfer-mask section {float: right;padding-top: 1.5rem;}
-  .transfer-mask section button {float: left;}
-  .transfer-mask section button:first-child {background:linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);
-    margin-right: .6rem;}
-  @media (max-width: 767px) {
-    .transfer-mask {width: 80%;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.transfer-error {
+  font-size: 0.8rem;
+  color: $colorRed;
+  padding-top: 10px;
+}
+.confirm-disabled {
+  background: linear-gradient(90deg, #c2c2c2 0%, #a5a5a5 100%) !important;
+}
+
+.transfer-mask {
+  width: 29.8rem;
+  h3 {
+    font-size: 0.8rem;
+    color: $colorTips;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    margin: 0;
+    @include border($c: #E6E6E6,$d: bottom);
   }
+  ul {
+    padding: 0;
+    li {
+      color: $colorTips;
+      font-size: 0.7rem;
+      padding-top: 0.65rem;
+      @extend %flexWrap;
+      &:first-child {
+        padding-top: 0.8rem;
+      }
+      span {
+        &:first-child {
+          display: inline-block;
+          color: $colorGray2;
+        }
+      }
+      .firstChild {
+        width: 4rem;
+      }
+      .firstChilds {
+        width: 6.75rem;
+        font-size: 0.7rem;
+      }
+    }
+  }
+  section {
+    float: right;
+    padding-top: 1.5rem;
+    button {
+      float: left;
+      &:first-child {
+        background: linear-gradient(90deg, #c2c2c2 0%, #a5a5a5 100%);
+        margin-right: 0.6rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .transfer-mask {
+    width: 80%;
+  }
+}
 </style>

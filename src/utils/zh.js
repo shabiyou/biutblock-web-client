@@ -41,19 +41,12 @@ export default {
     qrCode: "你的地址（二维码）",
     newKeyStore: "下载新的Keystore",
   },
-  receiveSec: {
-    secAddress: "SEC地址",
-    receiveBtn: "领取测试币",
-    errorAddress: "无效的地址",
-  },
   transfer: {
     youAddress: "你的地址",
     transferAdddress: "转账地址",
     transferNumber: "转账数量",
-
     balance: "余额",
     all: "全部",
-    
     generateTrading: "生成交易",
     confirmTransferInfo: "请确认您的转帐信息",
     orderInfo: "订单信息",
@@ -69,7 +62,6 @@ export default {
     transferAddressError: "转账地址无效",
     transferAddressError2: "相同地址不能转账",
     transferError: '转账失败，请稍后重试...',
-
     transferPoundage: '手续费',
     transferPoundage1: '手续费',
     transferFast: '快',
@@ -95,8 +87,7 @@ export default {
     mappingHashTxt: '请输入在ETH上转账的交易哈希值',
   },
   mask: {
-    tips: "操作成功，点击下方链接查看结果:",
-    maskTimeout: '网络请求超时，请稍后重试...',
+    tips: "操作成功，点击下方链接查看结果：",
     confirm: "确定",
     confirms: "确定...",
     cancel: "取消"

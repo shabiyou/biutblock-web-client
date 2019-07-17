@@ -1,13 +1,13 @@
 <template>
   <section class="content-bg">
-    <p>{{$t('footer.FooterCnt')}}：{{ email }}</p>
+    <p>{{ $t("footer.FooterCnt") }}：{{ email }}</p>
   </section>
 </template>
 
 <script>
 export default {
   name: 'contentFooter',
-  data () {
+  data() {
     return {
       email: 'alanlee@secblock.io'
     }
@@ -15,8 +15,17 @@ export default {
 }
 </script>
 
-<style scoped>
-  .content-bg {width: 100%;background: url('../assets/images/public_bg.png') no-repeat;
-    background-size: cover;height: 6.65rem;}
-  .content-bg p {font-size: .6rem;color: #728087;font-weight: 400;padding: 4.5rem 0 0 2.2rem;}
+<style lang="scss" scoped>
+@import "../assets/styless/public";
+.content-bg {
+  width: 100%;
+  height: 6.65rem;
+  @include bgCover("../assets/images/public_bg.png");
+  p {
+    font-size: .6rem;
+    color: $colorGray;
+    font-weight: 400;
+    padding: 4.5rem 0 0 2.2rem;
+  }
+}
 </style>

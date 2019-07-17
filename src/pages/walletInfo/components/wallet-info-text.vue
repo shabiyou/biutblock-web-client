@@ -1,5 +1,6 @@
 <template>
   <main class="info-content">
+    <!-- 钱包信息列表 -->
     <ul>
       <li>
         <h4>{{ $t("walletInfo.walletAddress") }}</h4>
@@ -35,7 +36,7 @@ export default {
   },
   data() {
     return {
-      
+
     }
   },
   methods: {
@@ -44,24 +45,67 @@ export default {
 }
 </script>
 
-<style scoped>
-  .info-content {width: 31.5rem;}
-  ul {padding: 0;margin: 0;}
-  ul li {border-bottom: 1px solid #CFDEDB;color: #42535B;padding-top: 2.2rem;}
-  ul li:first-child {padding-top: 0rem;}
-  ul li:last-child {border: 0;}
-  ul li h4 {margin: 0;font-size: 1rem;font-weight: normal;}
-  ul li p {padding: .8rem 0 2.3rem;font-size: .8rem;font-weight: 500;word-wrap:break-word;white-space:pre-wrap;}
-  .amount-list {display: flex;align-items: center;margin-top: .8rem;}
-  .amount-list .amount-content {width: 13.5rem;height: 2.5rem;padding: 0 1rem;display: flex;align-items: center;
-    border:.05rem solid rgba(185,196,194,1);justify-content: space-between;font-size: .7rem;
-    border-radius: .5rem;}
-  .amount-list .amount-content:first-child {margin-right: .5rem;}
-  .amount-list .amount-content span {font-size: .6rem;}
-
-  @media (max-width: 767px) {
-    .info-content {width: 100%;}
-    ul li {padding-top: 1.2rem;}
-    ul li p {padding-bottom: 1.3rem;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.info-content {
+  width: 31.5rem;
+  ul {
+    padding: 0;
+    margin: 0;
+    li {
+      @include border($c: #cfdedb, $d: bottom);
+      color: $colorTips;
+      padding-top: 2.2rem;
+      &:first-child {
+        padding-top: 0rem;
+      }
+      &:last-child {
+        border: 0;
+      }
+      h4 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: normal;
+      }
+      p {
+        padding: 0.8rem 0 2.3rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
+      .amount-list {
+        @extend %flexBetween;
+        margin-top: 0.8rem;
+        .amount-content {
+          width: 13.5rem;
+          height: 2.5rem;
+          padding: 0 1rem;
+          @include border($d: bor);
+          @extend %flexBetween;
+          font-size: 0.7rem;
+          border-radius: 0.5rem;
+          &:first-child {
+            margin-right: 0.5rem;
+          }
+          span {
+            font-size: 0.6rem;
+          }
+        }
+      }
+    }
   }
+}
+
+@media (max-width: 767px) {
+  .info-content {
+    width: 100%;
+    li {
+      padding-top: 1.2rem;
+      p {
+        padding-bottom: 1.3rem;
+      }
+    }
+  }
+}
 </style>

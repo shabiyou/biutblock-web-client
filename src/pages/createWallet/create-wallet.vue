@@ -5,22 +5,25 @@
         <el-col :xs="24" :sm="24" :md="24">
           <!-- 创建钱包 -->
           <create-wallet
-            v-if = 'pages === 1'
-            :tipsListPass = 'tipsListPass'
-            @created = 'createFrom' />
+            v-if="pages === 1"
+            :tipsListPass="tipsListPass"
+            @created="createFrom"
+          />
 
           <!-- 下载keystroe文件 -->
           <down-keystore
-            v-if = 'pages === 2'
-            :tipsListKey = 'tipsListKey'
-            @down = 'downUrlTxt'
-            @next = 'continueKey' />
+            v-if="pages === 2"
+            :tipsListKey="tipsListKey"
+            @down="downUrlTxt"
+            @next="continueKey"
+          />
 
           <!-- 保存私钥 -->
           <save-priveate
-            v-if = 'pages === 3'
-            :tipsListKey = 'tipsListKey'
-            :privateKey = 'privateKey' />
+            v-if="pages === 3"
+            :tipsListKey="tipsListKey"
+            :privateKey="privateKey"
+          />
         </el-col>
       </el-row>
 
@@ -89,7 +92,7 @@ export default {
     }
   },
   created() {
-    
+
   },
   mounted() {
 
@@ -102,12 +105,12 @@ export default {
       let keys = SECUtil.generateSecKeys() //创建钱包
       let privKey64 = keys.privKey //获取创建钱包的私钥
       let englishWords = SECUtil.entropyToMnemonic(privKey64) //助记词
-      let pubKey128 = keys.publicKey 
+      let pubKey128 = keys.publicKey
       let pubKey128ToString = pubKey128.toString('hex') //公钥
       let userAddressToString = keys.secAddress //地址
       this.userAddress = userAddressToString //赋值当前地址用作创建json文件
       this.privateKey = privKey64 //赋值当前显示私钥
-      
+
       let keyFileDataJS = {
         [privKey64]: {
           walletName: "New Import",
@@ -131,27 +134,9 @@ export default {
     downUrlTxt() {
       var filename = "BIUT" + this.userAddress + ".json";
       this.funDownload(filename, "" + this.keyData + "");
-    },
-
-    // 下载文件方法
-    funDownload(filename, content) {
-      var eleLink = document.createElement('a');
-      eleLink.download = filename;
-      eleLink.style.display = 'none';
-      // 字符内容转变成blob地址
-      var blob = new Blob([content], { type: "application/octet-stream" });
-      eleLink.href = URL.createObjectURL(blob);
-      document.body.appendChild(eleLink);// 触发点击
-      eleLink.click();
-      document.body.removeChild(eleLink);
     }
-  },
-  watch: {
-
-  },
+  }
 }
 </script>
-
 <style scoped>
-
 </style>

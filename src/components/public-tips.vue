@@ -1,6 +1,6 @@
 <template>
   <div class="tips_content">
-    <img src="../assets/images/tipsImg.png" alt="" class="tips_img">
+    <img src="../assets/images/tipsImg.png" alt="" class="tips_img" />
     <span>{{ $t(tipsTxt) }}</span>
   </div>
 </template>
@@ -11,8 +11,8 @@ export default {
   props: {
     tipsTxt: String
   },
-  data () {
-    return { }
+  data() {
+    return {}
   },
   created() {
   },
@@ -20,5 +20,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -1,7 +1,7 @@
 <template>
   <ul>
-    <li v-for="(item, index) in tipsListKey" :key="index"> 
-      <img :src="item.tips_img" alt=""  class="tips_img"> 
+    <li v-for="(item, index) in tipsListKey" :key="index">
+      <img :src="item.tips_img" alt="" class="tips_img" />
       <span>{{ $t(item.tips_cnt) }}</span>
     </li>
   </ul>
@@ -13,17 +13,31 @@ export default {
   props: {
     tipsListKey: Array
   },
-  data () {
+  data() {
     return {
-      
+
     }
   }
 }
 </script>
 
-<style scoped>
-  ul {margin: 0;padding: 0;}
-  ul li {color: #42535B;font-size: .6rem;margin-bottom: .4rem;line-height: 1.5;display: flex;}
-  ul li span {word-wrap:break-word;}
-  ul li:last-child {margin-bottom: 0;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+ul {
+  margin: 0;
+  padding: 0;
+  li {
+    color: $colorTips;
+    font-size: 0.6rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.5;
+    display: flex;
+    span {
+      word-wrap: break-word;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
 </style>

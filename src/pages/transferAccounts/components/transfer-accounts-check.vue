@@ -9,10 +9,11 @@
     <!-- 转账数量 - 输入框 -->
     <section class="money-arr">
       <public-input
-        maxlength = "19"
-        v-model = "walletMoney"
-        :placeholder = "$t('transfer.transferNumber')"
-        @input = "clearAmount" />
+        maxlength="19"
+        v-model="walletMoney"
+        :placeholder="$t('transfer.transferNumber')"
+        @input="clearAmount"
+      />
 
       <!-- BIUT、BIU币种选中 -->
       <section>
@@ -23,11 +24,15 @@
         <ul v-show="transferListShow">
           <li
             v-for="(item, index) in itemList"
-            :key = "index"
+            :key="index"
             :class="transferIdx == index ? 'list-active' : ''"
-            @click="tabTransfer(index, item.cnt)">
-              <span>{{ item.cnt }}</span>
-              <img v-show="transferIdx == index" :src="transferIdx == index ? '' + imgUrl + '' : ''" />
+            @click="tabTransfer(index, item.cnt)"
+          >
+            <span>{{ item.cnt }}</span>
+            <img
+              v-show="transferIdx == index"
+              :src="transferIdx == index ? '' + imgUrl + '' : ''"
+            />
           </li>
         </ul>
       </section>
@@ -38,7 +43,7 @@
       <span>{{ $t("transfer.balance") }}：</span>
       <label>{{ transferIdx == 0 ? amountBiut : amountBiu }}</label>
       <span>{{ transferCurrency }}</span>
-      <span @click = "allTranferMoney">{{ $t("transfer.all") }}</span>
+      <span @click="allTranferMoney">{{ $t("transfer.all") }}</span>
     </section>
   </main>
 </template>
@@ -81,27 +86,27 @@ export default {
   },
   methods: {
     //转账只能输入金额
-    clearAmount () {
-      this.$nextTick(()=> {
-        this.walletMoney =  this.walletMoney.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
-        this.walletMoney =  this.walletMoney.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
-        this.walletMoney =  this.walletMoney.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
-        this.walletMoney =  this.walletMoney.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,'$1$2.$3');//只能输入两个小数  
+    clearAmount() {
+      this.$nextTick(() => {
+        this.walletMoney = this.walletMoney.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        this.walletMoney = this.walletMoney.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+        this.walletMoney = this.walletMoney.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        this.walletMoney = this.walletMoney.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
       })
       if (String(this.walletMoney.length) > 10 && this.walletMoney.indexOf(".") < 0) {
-        this.$nextTick(()=> {
-          this.walletMoney = String(this.walletMoney).substring(0,10)
+        this.$nextTick(() => {
+          this.walletMoney = String(this.walletMoney).substring(0, 10)
         })
       }
       if (this.walletMoney.indexOf(".") == 0) {
-        this.$nextTick(()=> {
-          this.walletMoney = String(this.walletMoney).substring(0,9)
+        this.$nextTick(() => {
+          this.walletMoney = String(this.walletMoney).substring(0, 9)
         })
-      } 
+      }
     },
 
     //转出全部金额
-    allTranferMoney () {
+    allTranferMoney() {
       if (this.transferIdx == 0) {
         this.walletMoney = this.amountBiut
       } else {
@@ -118,20 +123,20 @@ export default {
       this.transferListShow = !this.transferListShow
     },
 
-     //切换显示 BIUT BIU
-    tabTransfer (index, cnt) {
+    //切换显示 BIUT BIU
+    tabTransfer(index, cnt) {
       this.transferIdx = index
       this.transferCurrency = cnt
       this.transferListShow = false
     },
 
     //清空input输入框
-    clearIpt () {
+    clearIpt() {
       this.walletMoney = ''
     }
   },
   watch: {
-    walletMoney (newVal, oldVal) {
+    walletMoney(newVal, oldVal) {
       let param = {
         amount: newVal,
         idx: this.transferIdx
@@ -139,7 +144,7 @@ export default {
       this.$emit('getAmount', param)
       let a = newVal.length > 0 && Number(newVal) > Number(this.amountBiut) && this.transferIdx === 0
       let b = newVal.length > 0 && Number(newVal) > Number(this.tradingMoney) && this.transferIdx === 1
-      if (a || b) { 
+      if (a || b) {
         this.moneyShow = true
       } else {
         this.moneyShow = false
@@ -149,26 +154,92 @@ export default {
 }
 </script>
 
-<style scoped>
-  .trading-list {display: flex;align-items: center;justify-content: space-between;padding-bottom: .4rem;}
-  .trading-list p {font-family: source-Bold;font-size: .8rem;color: #42535B;}
-  .trading-list p label {color: red;}
-  .trading-list span:last-child .tips_content {padding-top: 0!important;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.trading-list {
+  @extend %flexBetween;
+  padding-bottom: 0.4rem;
+  p {
+    font-family: source-Bold;
+    font-size: 0.8rem;
+    color: $colorTips;
+    label {
+      color: $colorRed;
+    }
+  }
+  span {
+    &:last-child {
+      .tips_content {
+        padding-top: 0 !important;
+      }
+    }
+  }
+}
 
-  .money-arr {width: 20.6rem;border: 0.05rem solid rgba(145,162,170,1);box-sizing: border-box;height: 2.4rem;position: relative;
-    display: flex;align-items: center;justify-content: space-between;border-radius: .5rem;
-    font-size: .7rem;}
-  .money-arr input {border: 0;flex: 1;height: 2.2rem;border-radius: .5rem;}
-  .money-arr span {padding-right: 1rem;display: flex;align-items: center;}
-  .money-arr span img {width: .4rem;height: .3rem;margin-left: .5rem;}
-  ul {position: absolute;top: 2.4rem;right: 0;margin: 0;padding: 0;width: 4.3rem;height: 3.2rem;border-radius: .2rem;
-    box-shadow:0 .15rem .3rem rgba(0,0,0,0.16);z-index: 9;background: #fff;}
-  ul li {display: flex;align-items: center;height: 1.6rem;justify-content: space-between;padding: 0 .5rem;}
-  ul li img {width: .8rem;height: .8rem;}
+.money-arr {
+  width: 20.6rem;
+  @include border($d: bor);
+  box-sizing: border-box;
+  height: 2.4rem;
+  position: relative;
+  @extend %flexBetween;
+  border-radius: 0.5rem;
+  font-size: 0.7rem;
+  input {
+    border: 0;
+    flex: 1;
+    height: 2.2rem;
+    border-radius: 0.5rem;
+  }
+  span {
+    padding-right: 1rem;
+    display: flex;
+    align-items: center;
+    img {
+      width: 0.4rem;
+      height: 0.3rem;
+      margin-left: 0.5rem;
+    }
+  }
+  ul {
+    position: absolute;
+    top: 2.4rem;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    width: 4.3rem;
+    height: 3.2rem;
+    border-radius: 0.2rem;
+    box-shadow: 0 0.15rem 0.3rem rgba(0, 0, 0, 0.16);
+    z-index: 9;
+    background: #fff;
+    li {
+      @extend %flexBetween;
+      height: 1.6rem;
+      padding: 0 0.5rem;
+      img {
+        width: 0.8rem;
+        height: 0.8rem;
+      }
+    }
+    .list-active {
+      color: $colorGreen;
+    }
+  }
+}
 
-  .money-list {color: #91A2AA;font-size: .7rem;padding: .5rem 0 1.3rem;}
-  .money-list label {color: #42535B;}
-  .money-list span:last-child {color: #00D69B;margin-left: .6rem;}
-
-  .list-active {color: #00D69B;}
+.money-list {
+  color: $colorGray2;
+  font-size: 0.7rem;
+  padding: 0.5rem 0 1.3rem;
+  label {
+    color: $colorTips;
+  }
+  span {
+    &:last-child {
+      color: $colorGreen;
+      margin-left: 0.6rem;
+    }
+  }
+}
 </style>

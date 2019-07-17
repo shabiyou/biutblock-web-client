@@ -2,7 +2,7 @@
   <main class="wallet-index">
     <wallet-header />
     <section class="wallet-header">
-      <router-view :key="key"/>
+      <router-view :key="key" />
     </section>
     <wallet-footer />
   </main>
@@ -18,7 +18,7 @@ export default {
     walletHeader,
     walletFooter
   },
-  data () {
+  data() {
     return {
 
     }
@@ -28,13 +28,18 @@ export default {
   },
   computed: {
     key() {
-      return this.$route.name !== undefined? this.$route.name +new Date(): this.$route +new Date()
+      return this.$route.name !== undefined ? this.$route.name + new Date() : this.$route + new Date()
     }
   },
 }
 </script>
 
-<style scoped>
-  .wallet-index {height: 100%;}
-  .wallet-index .wallet-header {background:rgba(245,245,245,1)}
+<style lang="scss" scoped>
+@import "../assets/styless/public";
+.wallet-index {
+  height: 100%;
+  .wallet-header {
+    background: $baColor;
+  }
+}
 </style>

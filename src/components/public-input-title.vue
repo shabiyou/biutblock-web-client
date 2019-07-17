@@ -1,20 +1,19 @@
 <template>
   <main>
     <section class="tit-list">
-      <p>
-        {{ $t(iptTitle) }}<label v-show = '!iptRd'>*</label>
-      </p>
+      <p>{{ $t(iptTitle) }}<label v-show="!iptRd">*</label></p>
       <public-tips v-show="errorShow" :tipsTxt="errorTxt" />
     </section>
 
     <public-input
-        v-model = "mappingVal"
-        value = 'iptVal'
-        :readonly = 'iptRd'
-        :placeholder = "$t(iptPlc)"
-        :class = "errorShow ? 'error-border' : ''"
-        :maxlength = "iptLength"
-        @input = 'inputChange' />
+      v-model="mappingVal"
+      value="iptVal"
+      :readonly="iptRd"
+      :placeholder="$t(iptPlc)"
+      :class="errorShow ? 'error-border' : ''"
+      :maxlength="iptLength"
+      @input="inputChange"
+    />
   </main>
 </template>
 
@@ -42,40 +41,59 @@ export default {
     }
   },
   computed: {
-    
+
   },
   created() {
-  
+
   },
   methods: {
     //输入框不能输入中文、空格
-    inputChange () {
-      this.$nextTick(()=>{
+    inputChange() {
+      this.$nextTick(() => {
         this.mappingVal = this.inputNull(this.mappingVal)
       })
     },
 
     //清空组件的值
-    clearIpt () {
+    clearIpt() {
       this.mappingVal = ''
     }
   },
   watch: {
-    mappingVal (newVal, oldVal) {
+    mappingVal(newVal, oldVal) {
       this.$emit("change", newVal.replace(/\s+/g, ""))
     }
   },
 }
 </script>
 
-<style scoped>
-  .tit-list {display: flex;align-content: center;justify-content: space-between;}
-  .tit-list  >>> .tips_content {padding-top: 0;font-size: .7rem;}
-  .tit-list p {font-size: .8rem;color: #42535B;padding-bottom: .4rem;font-family: source-Bold;}
-  .tit-list label {color: red;}
-
-  @media (max-width: 767px) {
-    .input-content {display: block;margin: 0!important;}
-    .input-content .input-text {width: 100%;margin-top: 1.2rem;}
+<style lang="scss" scoped>
+@import "../assets/styless/public";
+.tit-list {
+  @extend %flexBetween;
+  &/deep/.tips_content {
+    padding-top: 0;
+    font-size: .7rem;
   }
+  p {
+    font-size: .8rem;
+    color: $colorTips;
+    padding-bottom: .4rem;
+    font-family: source-Bold;
+  }
+  label {
+    color: $colorRed;
+  }
+}
+
+@media (max-width: 767px) {
+  .input-content {
+    display: block;
+    margin: 0 !important;
+    .input-text {
+      width: 100%;
+      margin-top: 1.2rem;
+    }
+  }
+}
 </style>

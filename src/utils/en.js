@@ -41,11 +41,6 @@ export default {
     qrCode: "Your address (QR Code)",
     newKeyStore: "Download New Keystore",
   },
-  receiveSec: {
-    secAddress: "BIUT Wallet Address",
-    receiveBtn: "Get Test Coin",
-    errorAddress: "This is not a valid private key",
-  },
   transfer: {
     youAddress: "From address",
     transferAdddress: "To",
@@ -93,16 +88,15 @@ export default {
   },
   
   mask: {
-    tips: "Operation success, click the URL below to view the results:",
-    maskTimeout: 'The network request has timed out. Please try again later...',
+    tips: "Operation success, click the URL below to view the results：",
     confirm: "Confirm",
     confirms: "Confirm...",
     cancel: "Cancal"
   },
   headerNav: {
     "Newallet": "New Wallet",
-    "ViewWalletInfo": "View Wallet Info",
-    "TransferSEC": "Transfer BIUT",
+    "ViewWalletInfo": "Wallet Info",
+    "TransferSEC": "Transfer",
     "Guide": "Guide",
     "Language": "Language",
     "Mapping": "Mapping"

@@ -4,44 +4,46 @@
 
     <!-- 用户密码组件 -->
     <public-pass
-      v-model = 'walletPass1'
-      maxlength = '30'
-      :class = "formatError ? 'error-border' : ''"
-      :placeholder = "$t('newWallet.enterPass1')"
-      @loseFocus = 'loseFocus'
-      @getFocus = 'getFocus'
-      @input = 'passChange' />
+      v-model="walletPass1"
+      maxlength="30"
+      :class="formatError ? 'error-border' : ''"
+      :placeholder="$t('newWallet.enterPass1')"
+      @loseFocus="loseFocus"
+      @getFocus="getFocus"
+      @input="passChange"
+    />
     <!-- 用户密码提示语组件 -->
     <public-tips v-show="showFormat" :tipsTxt="tipsTxt1" />
 
     <!-- 用户确认密码组件 -->
     <public-pass
-      v-model = 'walletPass2'
-      maxlength = '30'
-      :placeholder = "$t('newWallet.enterPass2')"
-      :class = "dontAgree ? 'error-border' : ''"
-      @input = 'confrimPassChange' />
+      v-model="walletPass2"
+      maxlength="30"
+      :placeholder="$t('newWallet.enterPass2')"
+      :class="dontAgree ? 'error-border' : ''"
+      @input="confrimPassChange"
+    />
     <!-- 用户确认密码、密码错误组件 -->
     <public-tips v-show="errorTxt2" :tipsTxt="tipsTxt2" />
 
-    <!-- 提示语组件 -->
+    <!-- 提示语列表组件 -->
     <tips-list :tipsListKey="tipsListPass" class="tips-list" />
 
     <public-button
       type="button"
-      :text = "$t('newWallet.createWallet')"
-      :disabled = '!createActive'
-      :class = "createActive ? 'btn-active' : ''"
-      @click.native = 'createFrom'/>
-    
+      :text="$t('newWallet.createWallet')"
+      :disabled="!createActive"
+      :class="createActive ? 'btn-active' : ''"
+      @click.native="createFrom"
+    />
   </main>
 </template>
 
 <script>
-const publicPass = ()=>import("../../../components/public-pass")
-const publicButton = ()=>import("../../../components/public-button")
-const publicTips = ()=>import("../../../components/public-tips")
-const tipsList = ()=>import("./wallet-tips-list")
+const publicPass = () => import("../../../components/public-pass")
+const publicButton = () => import("../../../components/public-button")
+const publicTips = () => import("../../../components/public-tips")
+const tipsList = () => import("./wallet-tips-list")
 export default {
   name: 'createWallet',
   props: {
@@ -90,41 +92,50 @@ export default {
   },
   methods: {
     //失去焦点
-    loseFocus () {
+    loseFocus() {
       this.showFormat = false
     },
 
     //得到焦点
-    getFocus () {
+    getFocus() {
       this.showFormat = true
     },
 
     //密码不能输入中文、空格
-    passChange () {
-      this.$nextTick(()=> {
+    passChange() {
+      this.$nextTick(() => {
         this.walletPass1 = this.inputNull(this.walletPass1)
       })
     },
 
     //确认密码不能输入中文、空格
-    confrimPassChange () {
-      this.$nextTick(()=> {
+    confrimPassChange() {
+      this.$nextTick(() => {
         this.walletPass2 = this.inputNull(this.walletPass2)
       })
     },
 
     //创建钱包
-    createFrom () {
-      let pass = (this.walletPass1).replace(/\s+/g, "") 
+    createFrom() {
+      let pass = (this.walletPass1).replace(/\s+/g, "")
       this.$emit("created", pass)
     }
   },
 }
 </script>
 
-<style scoped>
-  .create-pages {width: 20.6rem;}
-  .create-pages h2 {padding: 7.4rem 0 2.1rem;}
-  .create-pages .ipt-arr {margin-top: 1rem;}
-  .create-pages .tips-list {padding: .6rem 0 1.8rem;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.create-pages {
+  width: 20.6rem;
+  h2 {
+    padding: 7.4rem 0 2.1rem;
+  }
+  .ipt-arr {
+    margin-top: 1rem;
+  }
+  .tips-list {
+    padding: 0.6rem 0 1.8rem;
+  }
+}
 </style>

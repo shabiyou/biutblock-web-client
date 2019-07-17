@@ -1,9 +1,12 @@
 <template>
   <main class="info-qrcode">
+    <!-- 二维码 -->
     <figcaption>
       <qrcode :value="qrAddress" :options="{ size: 93 }" />
       <p>{{ $t("walletInfo.qrCode") }}</p>
     </figcaption>
+
+    <!-- 下载按钮 -->
     <span @click="createWallet">{{ $t("walletInfo.newKeyStore") }}</span>
   </main>
 </template>
@@ -13,7 +16,7 @@ import qrcode from '@xkeshi/vue-qrcode'
 export default {
   name: 'walletInfoQrcode',
   props: {
-     qrAddress: String
+    qrAddress: String
   },
   components: {
     qrcode
@@ -25,23 +28,46 @@ export default {
   },
   methods: {
     //打开创建钱包
-    createWallet () {
+    createWallet() {
       this.$emit('createMask')
     }
   },
 }
 </script>
 
-<style scoped>
-  .info-qrcode {display: flex;flex-direction: column;justify-content: space-between;}
-  .info-qrcode p {font-size: .7rem;}
-  .info-qrcode figcaption {text-align: center;}
-  .info-qrcode span {width: 10.85rem;height: 2.2rem;border-radius: .5rem;color: #fff;font-size: .8rem;display: block;
-    background:linear-gradient(90deg,rgba(41,216,147,1) 0%,rgba(12,197,183,1) 100%);text-align: center;
-    line-height: 2.2rem;margin-bottom: -1.1rem;}
-  
-  @media (max-width: 767px) {
-    .info-qrcode figcaption {text-align: left;}
-    .info-qrcode span {margin-bottom: 1rem;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.info-qrcode {
+  @extend %flexColumn;
+  p {
+    font-size: 0.7rem;
   }
+  figcaption {
+    text-align: center;
+  }
+  span {
+    width: 10.85rem;
+    height: 2.2rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-size: 0.8rem;
+    display: block;
+    background: linear-gradient(90deg, #29d893 0%, #0cc5b7 100%);
+    text-align: center;
+    line-height: 2.2rem;
+    margin-bottom: -1.1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .info-qrcode {
+    margin: 1rem 0;
+    figcaption {
+      text-align: left;
+    }
+    span {
+      margin: 1rem 0 0;
+    }
+  }
+}
 </style>

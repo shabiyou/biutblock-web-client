@@ -1,0 +1,64 @@
+$colorGreen: #00D69B;
+$colorRed: #EE1C39;
+$colorTips: #42535B;//通用的input、提示语颜色
+$colorGray: #728087;//通用灰色
+$colorGray2: #91A2AA;//登录钱包字体颜色
+$navColor: #B9C4C2;//导航栏颜色
+$navActive: #29d893;
+$baColor: #f5f5f5;//背景色
+
+%flex {
+  display: flex;
+}
+
+%flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+%flexEnd {
+  display: flex;
+  justify-content: flex-end;
+}
+
+%flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+%flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+%flexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@mixin border($w: .05rem ,$s: solid,$c: #91a2aa,$d: top) {
+  @if $d == top {
+    border-top: $w $s $c;
+  }
+  @else if $d == right {
+    border-right: $w $s $c;
+  }
+  @else if $d == bottom {
+    border-bottom: $w $s $c;
+  }
+  @else if $d == left {
+    border-left: $w $s $c;
+  }
+  @else if $d == bor {
+    border: $w $s $c;
+  }
+}
+
+@mixin bgCover($url) {
+  background: url($url) center no-repeat;
+  background-size: cover;
+}

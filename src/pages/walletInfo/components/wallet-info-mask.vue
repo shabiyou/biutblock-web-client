@@ -3,26 +3,29 @@
     <section class="mask_cnt info_mask clearfix">
       <p>{{ $t("passTips.newWalletPass") }}</p>
 
+      <!-- 密码组件及提示语 -->
       <public-pass
-        v-model = 'newWalletPass'
-        maxlength = '30'
-        :placeholder = "$t('passTips.newWalletPass')"
-        @input = 'passChange' />
+        v-model="newWalletPass"
+        maxlength="30"
+        :placeholder="$t('passTips.newWalletPass')"
+        @input="passChange"
+      />
       <public-tips :tipsTxt="infoTxt" v-show="passTips" />
 
+      <!-- 取消、确认按钮列表 -->
       <section>
         <button type="button" @click="closeMask">
           {{ $t("mask.cancel") }}
         </button>
         <button
-          type = 'button'
-          :disabled = '!passActive'
-          :class = "passActive ? 'btn-active' : ''"
-          @click = 'createFrom'>
+          type="button"
+          :disabled="!passActive"
+          :class="passActive ? 'btn-active' : ''"
+          @click="createFrom"
+        >
           {{ $t("mask.confirm") }}
         </button>
       </section>
-
     </section>
   </main>
 </template>
@@ -54,7 +57,7 @@ export default {
   },
   computed: {
     //新钱包密码按钮是否激活
-    passActive () {
+    passActive() {
       let pass = (this.newWalletPass).replace(/\s+/g, "")
       if (pass.length > 0) {
         this.passTips = true
@@ -66,65 +69,65 @@ export default {
   },
   methods: {
     //密码不能输入中文、空格
-    passChange () {
-      this.$nextTick(()=> {
+    passChange() {
+      this.$nextTick(() => {
         this.newWalletPass = this.inputNull(this.newWalletPass)
       })
     },
 
     //取消创建钱包
-    closeMask () {
+    closeMask() {
       this.passTips = false
       this.newWalletPass = ''
       this.$emit("close")
     },
 
     //下载keystroe文件
-    createFrom () {
-      let walletAddress = this.infoAddress.replace("0x","")
+    createFrom() {
+      let walletAddress = this.infoAddress.replace("0x", "")
       let walletKey = this.infoKey
       let walletWord = this.infoWord
       let walletPublickKey = this.infoPublicKey
-      let newPass = this.newWalletPass.replace(/\s+/g,'')
+      let newPass = this.newWalletPass.replace(/\s+/g, '')
 
       let keyFileDataJS = {
         [walletKey]: {
-            walletName: "New Import",
-            privateKey: walletKey,
-            publicKey: walletPublickKey,
-            walletAddress: walletAddress,
-            englishWords: walletWord,
+          walletName: "New Import",
+          privateKey: walletKey,
+          publicKey: walletPublickKey,
+          walletAddress: walletAddress,
+          englishWords: walletWord,
         }
       }
       //通过密码加密钱包  
       let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), newPass)
       var walletName = "BIUT" + walletAddress + ".json"
-      this.funDownload(walletName , "" + cipherKeyData.toString() + "")
+      this.funDownload(walletName, "" + cipherKeyData.toString() + "")
       this.closeMask()
-    },
-
-    // 下载文件方法
-    funDownload (filename, content) {
-      var eleLink = document.createElement('a');
-      eleLink.download = filename;
-      eleLink.style.display = 'none';
-      // 字符内容转变成blob地址
-      var blob = new Blob([content], {type: "application/octet-stream"});
-      eleLink.href = URL.createObjectURL(blob);
-      // 触发点击
-      document.body.appendChild(eleLink);
-      eleLink.click();
-      // 然后移除
-      document.body.removeChild(eleLink);
-    },
-  },
+    }
+  }
 }
 </script>
 
-<style scoped>
-  .info_mask {padding: .8rem 1.2rem .6rem;}
-  .info_mask p {color: #42535B;font-size: .8rem;padding-bottom: .6rem;}
-  .info_mask section {float: right;padding-top: 1rem;}
-  .info_mask section button {float: left;background:linear-gradient(90deg,rgba(194,194,194,1) 0%,rgba(165,165,165,1) 100%);}
-  .info_mask section button:first-child {margin-right: .6rem;}
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+.info_mask {
+  padding: 0.8rem 1.2rem 0.6rem;
+  p {
+    color: $colorTips;
+    font-size: 0.8rem;
+    padding-bottom: 0.6rem;
+  }
+  section {
+    float: right;
+    padding-top: 1rem;
+    button {
+      float: left;
+      background: linear-gradient(90deg, #c2c2c2 0%, #a5a5a5 100%);
+      &:first-child {
+        margin-right: 0.6rem;
+      }
+    }
+  }
+}
 </style>

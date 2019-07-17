@@ -3,47 +3,50 @@
     <main class="wallet-background">
       <section class="wallet-mapping">
         <!-- 提示语组件 -->
-        <tips-list :itemList = "itemList"/>
+        <tips-list :itemList="itemList" />
 
         <!-- eth地址组件 -->
-        <input-list 
-          ref = 'addressModel'
-          :iptTitle = "$t('mapping.ethaddress')"
-          :iptPlc = "$t('mapping.ethaddress')"
-          :iptLength = 42
-          :errorShow = addressErrorShow
-          :errorTxt = "addressError"
-          @change = 'addressChange' />
-        
-        <!-- eth的hash组件 -->
-        <input-list 
-          ref = 'hashModel'
-          :iptTitle = "$t('mapping.mappingHash')"
-          :iptPlc = "$t('mapping.mappingHashTxt')"
-          :iptLength = 66
-          :errorShow = hashErrorShow
-          :errorTxt = "hashError"
-          @change = 'hashChange' />
+        <input-list
+          ref="addressModel"
+          :iptTitle="$t('mapping.ethaddress')"
+          :iptPlc="$t('mapping.ethaddress')"
+          :iptLength="42"
+          :errorShow="addressErrorShow"
+          :errorTxt="addressError"
+          @change="addressChange"
+        />
 
-        <!-- 映射按钮 --> 
+        <!-- eth的hash组件 -->
+        <input-list
+          ref="hashModel"
+          :iptTitle="$t('mapping.mappingHash')"
+          :iptPlc="$t('mapping.mappingHashTxt')"
+          :iptLength="66"
+          :errorShow="hashErrorShow"
+          :errorTxt="hashError"
+          @change="hashChange"
+        />
+
+        <!-- 映射按钮 -->
         <public-button
           type="button"
           :text="$t('mapping.mappingButton')"
           :disabled="!confirmFrom"
           :class="confirmFrom ? 'btn-active' : ''"
-          @click.native="maskShow = true" />
-
+          @click.native="maskShow = true"
+        />
       </section>
       <!-- 公共背景底部 -->
       <content-footer />
     </main>
 
     <!-- mask 弹窗 -->
-    <mapping-mask 
-      v-show = "maskShow"
-      :ethAddress = 'ethAddress'
-      :txhash = 'txhash'
-      @close="cloaseMask"/>
+    <mapping-mask
+      v-show="maskShow"
+      :ethAddress="ethAddress"
+      :txhash="txhash"
+      @close="cloaseMask"
+    />
   </main>
 </template>
 
@@ -64,7 +67,7 @@ export default {
     inputList
   },
   props: {},
-  data () {
+  data() {
     return {
       addressError: 'mapping.ethAddressErrorTxt', // eth地址无效
       hashError: 'mapping.mappingHashError', // eth私钥无效
@@ -91,49 +94,49 @@ export default {
   },
   computed: {
     //映射按钮是否可点击
-    confirmFrom () {
+    confirmFrom() {
       let ethAddress = this.ethAddress
       let txhash = this.txhash
       if (ethAddress.length > 0 && ethAddress.length < 42) {
-        this.addressErrorShow =  true
+        this.addressErrorShow = true
       } else if (ethAddress.length == 42 && !(_const.addressReg.test(ethAddress))) {
-        this.addressErrorShow =  true
+        this.addressErrorShow = true
       } else {
-        this.addressErrorShow =  false
+        this.addressErrorShow = false
       }
       if (txhash.length > 0 && txhash.length < 66) {
         this.hashErrorShow = true
-      } else if (txhash.length  == 66 && !(_const.hashReg.test(txhash))) {
+      } else if (txhash.length == 66 && !(_const.hashReg.test(txhash))) {
         this.hashErrorShow = true
       } else {
         this.hashErrorShow = false
       }
       return txhash.length == 66
-        && _const.hashReg.test(txhash) 
+        && _const.hashReg.test(txhash)
         && ethAddress.length == 42
         && _const.addressReg.test(ethAddress) ? true : false
     }
   },
-  created () {
+  created() {
 
   },
-  mounted () {
-   
+  mounted() {
+
   },
-  destroyed () {},
+  destroyed() { },
   methods: {
     // 获取子组件 地址
-    addressChange (e) {
+    addressChange(e) {
       this.ethAddress = e
     },
 
     // 获取子组件 hash
-    hashChange (e) {
+    hashChange(e) {
       this.txhash = e
     },
 
     //关闭弹窗
-    cloaseMask (e) {
+    cloaseMask(e) {
       this.maskShow = false
       if (e == 2) {
         this.$refs.addressModel.clearIpt()
@@ -147,12 +150,29 @@ export default {
 }
 </script>
 
-<style scoped>
-  .wallet-mapping {height: 25.75rem;padding: 2.8rem 6.2rem 1.8rem;width: 24.6rem;margin: 0 auto;}
-  .wallet-mapping >>> main {margin-top: 1rem;}
-  .wallet-mapping button {margin-top: 1.8rem;}
-  @media (max-width: 767px) {
-    .wallet-mapping {padding: 1.2rem .2rem;height: auto;width: 90%;}
-    .wallet-mapping button {margin-bottom: 1rem;width: 100%;}
+<style lang="scss" scoped>
+@import "../../assets/styless/public";
+.wallet-mapping {
+  height: 25.75rem;
+  padding: 2.8rem 6.2rem 1.8rem;
+  width: 24.6rem;
+  margin: 0 auto;
+  &/deep/main {
+    margin-top: 1rem;
   }
+  button {
+    margin-top: 1.8rem;
+  }
+}
+@media (max-width: 767px) {
+  .wallet-mapping {
+    padding: 1.2rem 0.2rem;
+    height: auto;
+    width: 90%;
+    button {
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+  }
+}
 </style>

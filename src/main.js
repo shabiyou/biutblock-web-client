@@ -5,11 +5,10 @@ import App from './App'
 import router from './router'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
-import 'normalize.css'
-import './assets/css/public.css'
+import './assets/css/reset.css'
+import './assets/css/public.scss'
 import './assets/common/font.css'
 
-import VueI8n from 'vue-i18n'
 import i18n from './utils/index'
 import axios from 'axios'
 import qs from 'qs'
@@ -34,26 +33,12 @@ let httpHeaderOption = {
 }
 let fetch = require('node-fetch')
 
-//获取钱包余额 BIUT
-Vue.prototype.getWalletBalance = async (address) => {
+//获取钱包余额 BIUT、BIU
+Vue.prototype.getWalletBalance = async (address,type) => {
   let url = _const.url
-  let bodyRequest = {
-    'method': 'sec_getBalance',
-    'params': ["" + address + ""]
+  if (type == 'biu') {
+    url = _const.url_sen
   }
-  const text = await fetch(url, {
-    method: 'post',
-    body: JSON.stringify(bodyRequest), // request is a string
-    headers: httpHeaderOption
-  }).then((res) => res.json())
-
-  let amount = JSON.parse(text.body).result.value
-  return amount
-}
-
-//获取钱包余额 BIU
-Vue.prototype.getWalletBalanceSEN = async (address) => {
-  let url = _const.url_sen
   let bodyRequest = {
     'method': 'sec_getBalance',
     'params': ["" + address + ""]
@@ -69,6 +54,19 @@ Vue.prototype.getWalletBalanceSEN = async (address) => {
 }
 
 //获取上传url
+Vue.prototype.funDownload = function (filename, content) {
+  var eleLink = document.createElement('a');
+  eleLink.download = filename;
+  eleLink.style.display = 'none';
+  // 字符内容转变成blob地址
+  var blob = new Blob([content], { type: "application/octet-stream" });
+  eleLink.href = URL.createObjectURL(blob);
+  document.body.appendChild(eleLink);// 触发点击
+  eleLink.click();
+  document.body.removeChild(eleLink);
+}
+
+//下载文件方法
 Vue.prototype.getObjectURL = function (file) {
   var url = null;
   if (window.createObjcectURL != undefined) {
@@ -92,7 +90,6 @@ Vue.prototype.scientificNotationToString = function (param) {
   let strParam = String(param)
   let flag = /e/.test(strParam)
   if (!flag) return param
-
   // 指数符号 true: 正，false: 负
   let sysbol = true
   if (/e-/.test(strParam)) {
@@ -120,7 +117,7 @@ Vue.prototype.ismobile = function () {
   return res.length > 0;
 }
 
-//截取小数点后 八位
+//截取小数点后八位
 Vue.prototype.getPointNum = function (num, n) {
   let str = String(num);
   let index = str.indexOf(".");
@@ -129,7 +126,6 @@ Vue.prototype.getPointNum = function (num, n) {
   return str1;
 }
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

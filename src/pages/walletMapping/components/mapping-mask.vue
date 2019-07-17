@@ -10,9 +10,6 @@
           <span :class="maskWidth ? 'enWidth' : ''"> {{ $t(item.tit) }}: </span>
           <span> {{ item.txt }} </span>
         </li>
-        <!-- <li v-show="timeoutShow">
-          <p>{{ $t("mask.maskTimeout") }}</p>
-        </li> -->
       </ul>
       <section>
         <!-- 映射按钮 -->
@@ -83,8 +80,6 @@ export default {
       maskConfirmBtn: false,
       confirmButton: 'mask.confirm',
       mappingResTxt: 'mapping.mappingSuccess', //  mapping.mappingFailure 失败
-      //timeoutShow: false,
-      //source: null, //存放取消的请求方法
     }
   },
   created() {
@@ -108,11 +103,6 @@ export default {
           tit: 'mapping.ethwalletddress',
           txt: this.ethAddress
         },
-        // {
-        //   id: '02',
-        //   tit: 'mapping.biutwalletAddress',
-        //   txt: this.biutAddress
-        // },
         {
           id: '03',
           tit: 'mapping.mappingHash',
@@ -129,13 +119,11 @@ export default {
       this.maskPages = 1
       this.confirmButton = 'mask.confirm'
       this.maskConfirmBtn = false
-      //this.timeoutShow = false
     },
 
-    /** 确认映射 */
+    //确认映射
     confirmMapping() {
       let _that = this
-      //this.timeoutShow = false
       _that.maskConfirmBtn = true
       _that.confirmButton = 'mapping.mappingButtonAcitve'
       let ethaddress = _that.ethAddress.replace("0x", "")
@@ -171,100 +159,113 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+
 .mask-list {
   width: 27.3rem;
-}
-.mask-list h4 {
-  font-size: 0.9rem;
-  color: #252f33;
-  font-weight: 500;
-  padding-bottom: 0.7rem;
-  border-bottom: 0.05rem solid #e6e6e6;
-  margin-bottom: 1.2rem;
-}
-.mask-list ul {
-  margin: 0;
-  padding: 0;
-}
-.mask-list ul li {
-  font-size: 0.7rem;
-  padding-bottom: 1.1rem;
-  color: #252f33;
-  display: flex;
-  line-height: 1.5;
-}
-.mask-list ul li span:first-child {
-  margin-right: 1rem;
-  display: inline-block;
-  color: #566066;
-  width: 8rem;
-}
-.mask-list ul li span:last-child {
-  word-break: break-all;
-  flex: 1;
-}
-.mask-list section {
-  display: flex;
-  justify-content: flex-end;
-}
-.mask-list section button {
-  width: 5.4rem;
-  height: 1.8rem;
-  background: linear-gradient(
-    90deg,
-    rgba(194, 194, 194, 1) 0%,
-    rgba(165, 165, 165, 1) 100%
-  );
-}
-.mask-list section button:last-child {
-  margin-left: 0.6rem;
-}
-.mask-list ul li .enWidth {
-  width: 5.5rem !important;
-}
-.mask-list ul li p {
-  color: #ee1c39;
+  h4 {
+    font-size: 0.9rem;
+    color: $colorTips;
+    font-weight: 500;
+    padding-bottom: 0.7rem;
+    @include border($d: bottom);
+    margin-bottom: 1.2rem;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      font-size: 0.7rem;
+      padding-bottom: 1.1rem;
+      color: $colorTips;
+      display: flex;
+      line-height: 1.5;
+      flex-wrap: wrap;
+      span {
+        &:first-child {
+          margin-right: 1rem;
+          display: inline-block;
+          color: #566066;
+          width: 8rem;
+        }
+        &:last-child {
+          word-break: break-all;
+          flex: 1;
+        }
+      }
+      .enWidth {
+        width: 5.5rem !important;
+      }
+      p {
+        color: $colorRed;
+      }
+    }
+  }
+
+  section {
+    @extend %flexEnd;
+    button {
+      width: 5.4rem;
+      height: 1.8rem;
+      background: linear-gradient(90deg, #c2c2c2 0%, #a5a5a5 100%);
+      &:last-child {
+        margin-left: 0.6rem;
+      }
+    }
+  }
 }
 
 .mask-res {
   height: 7.6rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.mask-res section:last-child {
-  display: flex;
-  justify-content: flex-end;
-}
-.mask-res button {
-  width: 5.4rem;
-  height: 1.8rem;
-}
-.mask-res p {
-  color: #252f33;
-  font-size: 0.8rem;
-  margin-bottom: 1.2rem;
-}
-.mask-res figure {
-  margin: 0;
-  display: flex;
-  align-items: flex-start;
-  color: #4a5d66;
-  font-size: 0.7rem;
-}
-.mask-res figure img {
-  width: 16px;
-  height: 16px;
-}
-.mask-res figure figcaption {
-  line-height: 1.5;
-  margin-left: 0.6rem;
+  @extend %flexColumn;
+  section:last-child {
+    @extend %flexEnd;
+  }
+
+  button {
+    width: 5.4rem;
+    height: 1.8rem;
+  }
+  p {
+    color: #252f33;
+    font-size: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  figure {
+    margin: 0;
+    display: flex;
+    align-items: flex-start;
+    color: #4a5d66;
+    font-size: 0.7rem;
+    img {
+      width: 0.8rem;
+      height: 0.8rem;
+    }
+    figcaption {
+      line-height: 1.5;
+      margin-left: 0.6rem;
+    }
+  }
 }
 
 @media (max-width: 767px) {
   .mask-list {
     width: 80%;
+    ul {
+      li {
+        span {
+          &:first-child {
+            margin-right: 0;
+            display: inline-block;
+            color: #566066;
+            width: 100%;
+            padding-bottom: .25rem;
+          }
+        }
+      }
+    }
+
   }
 }
 </style>

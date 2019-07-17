@@ -1,14 +1,15 @@
 <template>
   <div class="ipt-arr">
-    <input 
-      ref = "input"
-      :type = "typeIpt" 
-      :value = "value"
-      :placeholder = "placeholder"
-      :maxlength = "maxlength"
-      @blur = "blur"
-      @focus = "focus"
-      @input = "$emit('input', $event.target.value)" />
+    <input
+      ref="input"
+      :type="typeIpt"
+      :value="value"
+      :placeholder="placeholder"
+      :maxlength="maxlength"
+      @blur="blur"
+      @focus="focus"
+      @input="$emit('input', $event.target.value)"
+    />
     <img :src="passUrl" alt="" @click="checkImg" />
   </div>
 </template>
@@ -19,7 +20,7 @@ import passImgs from '../assets/images/passImgs.png'
 export default {
   name: 'publicPass',
   props: ['placeholder', 'value', 'maxlength'],
-  data () {
+  data() {
     return {
       passUrl: passImg,
       typeIpt: 'password',
@@ -27,7 +28,7 @@ export default {
     }
   },
   methods: {
-    checkImg () {
+    checkImg() {
       if (this.typeIdx === 1) {
         this.typeIpt = 'text'
         this.passUrl = passImgs
@@ -38,22 +39,43 @@ export default {
         this.typeIdx = 1
       }
     },
-    blur () {
+    blur() {
       this.$emit('loseFocus')
     },
-    focus () {
+    focus() {
       this.$emit('getFocus')
     }
   },
 }
 </script>
 
-<style scoped>
-  .ipt-arr {height: 2.3rem;background:rgba(255,255,255,1);opacity:1;border-radius: 0.5rem;
-    border: 0.05rem solid rgba(145,162,170,1);display: flex;display:-webkit-flex;box-sizing: border-box;
-    justify-content: space-between;align-items: center;padding: 0 1rem;flex: 1;}
-  .ipt-arr input {height: 1.5rem;line-height:1.5rem;flex: 1;border: none;border-radius: 0.5rem;font-size: .7rem;font-weight: normal;
-    color: #42535B;}
-  .ipt-arr img {width: .85rem;height: .75rem;}
-  .ipt-arr img:hover {cursor: pointer;}
+<style lang="scss" scoped>
+@import "../assets/styless/public";
+
+.ipt-arr {
+  @extend %flexCenter;
+  @include border($d: bor);
+  height: 2.3rem;
+  background: #fff;
+  border-radius: .5rem;
+  box-sizing: border-box;
+  padding: 0 1rem;
+  input {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    flex: 1;
+    border: none;
+    border-radius: .5rem;
+    font-size: .7rem;
+    font-weight: normal;
+    color: $colorTips;
+  }
+  img {
+    width: .85rem;
+    height: .75rem;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
 </style>
