@@ -75,7 +75,10 @@ const inputList = () => import("../../components/public-input-title")
 const transferMask = () => import("./components/transfer-accounts-mask")
 const transferSlider = () => import("./components/transfer-accounts-slider")
 import transferCheck from './components/transfer-accounts-check'
-
+let fetch = require('node-fetch')
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
 export default {
   name: 'transferAccounts',
   components: {
@@ -100,6 +103,7 @@ export default {
       walletMoney: '', //转账金额
       feeVal: 0.02,
       transferIdx: 0,
+      nonce: '',
 
       privateKey: '',//当前钱包私钥
 
@@ -117,7 +121,8 @@ export default {
           privateKey: this.privateKey, //当前钱包私钥
           transferType: this.transferIdx, //类型 0 BIUT 1 BIU
           transferAmount: this.walletMoney, //转账金额
-          transferFee: this.feeVal //转账手续费
+          transferFee: this.feeVal, //转账手续费
+          nonce: this.nonce
         }
       ]
     },
@@ -167,8 +172,23 @@ export default {
       this.tradingPages = 2
       this.address = e.address
       this.privateKey = e.privateKey
+      
       let address = e.address.replace("0x", "")
       this.selectMoney(address)
+
+      let nonceData = {
+        "jsonrpc": "2.0",
+        "id":"1",
+        'method': 'sec_getNonce',
+        "params": [""+e.address+""]
+      }
+      fetch(_const.url, {
+        method: 'post',
+        body: JSON.stringify(nonceData), // request is a string
+        headers: httpHeaderOption
+      }).then((res) => res.json()).then((text) => {
+        this.nonce = JSON.parse(text.body).result.Nonce
+      })
     },
 
     //转账钱包地址

@@ -129,12 +129,15 @@ export default {
       let amount = this.maskInfo[0].transferAmount //转账金额
       let fee = this.maskInfo[0].transferFee.toString() //手续费
       let tradingType = this.maskInfo[0].transferType //转账类型 0 BIUT 1 BIU
+      let nonce = this.maskInfo[0].nonce
       let inputData = 'Test'
 
       let url = _const.url
       if (tradingType == 1) {
         url = _const.url_sen
       }
+      
+
       //签名
       const transfer = {
         'privateKey': privateVal,
@@ -146,11 +149,14 @@ export default {
         'gasLimit': '0',
         'gas': '0',
         'gasPrice': '0',
-        'data': ''
+        'data': '',
+        "nonce": nonce
       }
       const tx = JSON.stringify(transfer)
-      // transfer转换成json string 然后通过此方法对交易进行签名， 
+      // transfer转换成json string 然后通过此方法对交易进行签名，
       let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      console.log(nonce)
+      console.log(txSigned)
       txSigned.txFee = fee
       let postData = {
         "method": "sec_sendRawTransaction",
@@ -202,7 +208,7 @@ export default {
     font-weight: 500;
     padding-bottom: 0.5rem;
     margin: 0;
-    @include border($c: #E6E6E6,$d: bottom);
+    @include border($c: #e6e6e6, $d: bottom);
   }
   ul {
     padding: 0;
