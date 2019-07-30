@@ -140,24 +140,23 @@ export default {
 
       //签名
       const transfer = {
-        'from': fromAddress,
-        'to': toAddress,
-        'value': amount,
-        'inputData': inputData,
+        "timeStamp": new Date().getTime(),
+        'walletAddress': fromAddress,
+        'sendToAddress': toAddress,
+        'amount': amount,
         'txFee': fee,
         'gasLimit': '0',
         'gas': '0',
         'gasPrice': '0',
         'data': '',
-        "nonce": nonce
+        "nonce": nonce,
+        'inputData': inputData
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名，
-      let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       let txBody = {
         "method": "sec_signedTransaction",
-        "jsonrpc": "2.0",
-        "id": "1",
         "params": [{
           "companyName": "coinegg",
           "privateKey": privateVal,
@@ -168,8 +167,9 @@ export default {
         method: 'post',
         body: JSON.stringify(txBody),
         headers: httpHeaderOption
-      }).then((res) => res.json()).then(() => {
+      }).then((res) => res.json()).then((text) => {
         let signedTx = JSON.parse(text.body).result.signedTrans
+        console.log(signedTx)
         let postData = {
           "method": "sec_sendRawTransaction",
           "id": "1",
