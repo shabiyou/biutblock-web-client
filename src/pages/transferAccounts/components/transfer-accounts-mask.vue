@@ -174,7 +174,7 @@ export default {
           "method": "sec_sendRawTransaction",
           "id": "1",
           "jsonrpc": "2.0",
-          "params": [signedTx]
+          "params": signedTx
         }
         fetch(url, {
           method: 'post',
