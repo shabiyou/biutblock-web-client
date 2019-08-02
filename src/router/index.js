@@ -8,6 +8,7 @@ const TransferAccounts = () => import('@/pages/transferAccounts/transfer-account
 const WalletInfo = () => import('@/pages/walletInfo/wallet-info')
 const WalletHelp = () => import('@/pages/walletHelp/wallet-help')
 const WalletMapping = () => import('@/pages/walletMapping/mapping')
+const OrePool = () => import('@/pages/orePool/ore-pool')
 
 Vue.use(Router)
 
@@ -60,6 +61,14 @@ var router = new Router({
           component: WalletMapping,
           meta: {
             title: 'headerNav.Mapping'
+          }
+        },
+        {
+          path: '/orePool',
+          name: 'orePool',
+          component: OrePool,
+          meta: {
+            title: 'headerNav.orePool'
           }
         }
       ]

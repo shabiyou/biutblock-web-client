@@ -86,12 +86,52 @@ export default {
     mappingHashError: 'Invalid transaction hash',
     mappingHashTxt: 'Please enter the transaction hash value transferred on ETH',
   },
-  
+  pool: {
+    poolBanner: 'BIUT矿池正式上线啦',
+    poolLogin: '欢迎登入',
+    poolLoginIpt: '请输入钱包私钥',
+    poolLoginIptError: '请输入正确的钱包私钥',
+    poolLoginBtn: '登入',
+
+    poolIndexL: '未登入',
+    poolIndexE: '退出',
+    poolIndexListTit1: '矿池名称',
+    poolIndexListTit2: '日产值',
+    poolIndexListTxt1: '已加入',
+    poolIndexListTxt2: '加入',
+    poolIndexIpt: '搜索',
+    poolIndexTit1: '矿池',
+    poolIndexTitLook: '查看所有矿池',
+    poolIndexTit2: '加入矿池',
+    poolIndexTit3: '收益记录',
+
+    poolIndexTxt1: '过去24小时收益',
+    poolIndexTxt2: '总收益',
+    poolIndexTxt3: '加入矿池冻结资产',
+    poolIndexTxt4: '账户可用余额',
+
+    poolIndexSearch1: '共找到',
+    poolIndexSearch2: '条 关于',
+    poolIndexSearch3: '的矿池结果',
+  },
+  pages: {
+    next: '下一页',
+    prev: '上一页',
+  },
   mask: {
     tips: "Operation success, click the URL below to view the results：",
     confirm: "Confirm",
     confirms: "Confirm...",
-    cancel: "Cancal"
+    cancel: "Cancal",
+
+    poolTips: '提示',
+    poolBtn: '我知道了',
+    poolTxt: '你已加入矿池哦，无法再加入其它矿池！',
+    pooTit: '加入矿池',
+    poolNumber: '抵押数量',
+    poolNumberError: '加入矿池最低数量为1000 BIUT',
+    poolTxt1: '抵押数量会被冻结一年，抵押数量越多，挖到BIU的收益越高哦！',
+    poolBtn1: '确认加入'
   },
   headerNav: {
     "Newallet": "New Wallet",
@@ -99,7 +139,8 @@ export default {
     "TransferSEC": "Transfer",
     "Guide": "Guide",
     "Language": "Language",
-    "Mapping": "Mapping"
+    "Mapping": "Mapping",
+    "orePool": '矿池'
   },
   helpTips: {
     helpTipsTxt: 'Check out the tutorial on your computer.'

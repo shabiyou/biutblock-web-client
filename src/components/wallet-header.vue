@@ -28,8 +28,7 @@
               :key="item.id"
               :class="distance ? 'li_margins' : 'li_margin'"
               :to="item.urlPath"
-              @click.native="isClick()"
-            >
+              @click.native="isClick">
               {{ $t(item.nav_cnt) }}
             </router-link>
 
@@ -41,8 +40,7 @@
                   v-for="(item, index) in languageList"
                   :key="item.id"
                   :class="index === listIdx ? 'check_list' : ''"
-                  @click="tabLanguage(index)"
-                >
+                  @click="tabLanguage(index)">
                   {{ item.cnt }}
                 </span>
               </section>
@@ -102,13 +100,20 @@ export default {
         },
         {
           'id': '4',
+          'nav_cnt': 'headerNav.orePool',
+          'img': '',
+          'imgs': '',
+          'urlPath': 'orePool'
+        },
+        {
+          'id': '5',
           'nav_cnt': 'headerNav.Mapping',
           'img': '',
           'imgs': '',
           'urlPath': 'walletMapping'
         },
         {
-          'id': '5',
+          'id': '6',
           'nav_cnt': 'headerNav.Guide',
           'img': '',
           'imgs': '',

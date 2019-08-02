@@ -1,0 +1,146 @@
+<template>
+  <section>
+    <ul>
+      <li>
+        <section>
+          <span>{{ $t('pool.poolIndexListTit1') }}</span>
+          <span>{{ $t('pool.poolIndexListTit2') }}</span>
+        </section>
+        <span></span>
+      </li>
+      <li class="search-result" v-show="searchNull">
+        <p>{{ $t('pool.poolIndexSearch1') }} {{ total }} {{ $t('pool.poolIndexSearch2') }} {{ poolName }} {{ $t('pool.poolIndexSearch3') }}</p>
+      </li>
+      <li v-for="(item, index) in itemList" :key="index">
+        <section>
+          <span>{{ item.poolNmae }}</span>
+          <span>{{ item.poolMoney }}</span>
+        </section>
+        <span class="list-btn" @click="joinMask">{{ $t('pool.poolIndexListTxt2') }}</span>
+      </li>
+    </ul>
+
+    <!-- 分页 -->
+    <wallet-page
+      ref="pageList"
+      class="page-list"
+      :total="total"
+      @next="nextPage"
+      @prev="prevPage"
+      @goPage="goPage" />
+    
+    <!-- mask 弹窗 -->
+    <pool-mask 
+      v-show="maskShow" 
+      :maskPage="maskPage"
+      @close="closeMask" />
+  </section>
+</template>
+
+<script>
+import poolMask from './ore-pool-mask'
+import walletPage from '../../../components/wallet-page'
+export default {
+  name: '',
+  components: {
+    poolMask,
+    walletPage
+  },
+  props: {
+    itemList: Array,
+    poolName: String
+  },
+  data() {
+    return {
+      maskShow: false,
+      maskPage: 2,//弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
+      searchNull: false
+    }
+  },
+  computed: {
+    total () {
+      return this.itemList.length
+    }
+  },
+  methods: {
+    closeMask () {
+      this.maskShow = false
+    },
+
+    joinMask () {
+      this.maskShow = true
+    },
+
+    nextPage () {
+      alert("下一页")
+    },
+
+    prevPage () {
+      alert("上一页")
+    },
+
+    goPage (e) {
+      if (e > this.itemList.length) {
+        alert("请输入正确的页码")
+        this.$refs.pageList.clearIpt()
+        return
+      } else {
+        alert("跳转指定页" + e)
+      }
+    }
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+@import "../../../assets/styless/public";
+ul {
+  margin: 0;
+  padding: 0 4.4rem;
+  li {
+    height: 3rem;
+    font-size: 0.7rem;
+    color: #2e3a40;
+    @extend %flexBetween;
+    @include border($c: #e6e6e6, $d: bottom);
+    box-sizing: border-box;
+    section {
+      flex: 1;
+      span:first-child {
+        display: inline-block;
+        width: 11.5rem;
+      }
+    }
+    .list-btn {
+      width: 4.8rem;
+      height: 1.8rem;
+      background: #00d69b;
+      border-radius: 1.2rem;
+      color: #fff;
+      font-size: 0.7rem;
+      text-align: center;
+      line-height: 1.8rem;
+      cursor: pointer;
+    }
+    &:first-child {
+      color: #9ca6aa;
+      @include border($c: #e6e6e6, $d: bottom, $w: 0.1rem);
+    }
+  }
+  .search-result {
+    border: 0;
+  }
+}
+.page-list {padding-right: 4.4rem;}
+
+@media (max-width: 767px) {
+  ul {
+    padding: 0 15px;
+    li section span:first-child {
+      max-width: 8rem;
+    }
+  }
+
+  .page-list {padding-right: 15px;}
+}
+</style>

@@ -40,10 +40,10 @@
 </template>
 
 <script>
-const publicPass = () => import("../../../components/public-pass")
-const publicButton = () => import("../../../components/public-button")
 const publicTips = () => import("../../../components/public-tips")
-const tipsList = () => import("./wallet-tips-list")
+import tipsList from './wallet-tips-list'
+import publicPass from '../../../components/public-pass'
+import publicButton from '../../../components/public-button'
 export default {
   name: 'createWallet',
   props: {

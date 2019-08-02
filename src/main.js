@@ -17,12 +17,15 @@ import './utils/global.js'
 
 import Element from 'element-ui'
 import 'babel-polyfill'
+import {currency} from './utils/currency'
+Vue.filter("currency",currency)
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false
+
 
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
