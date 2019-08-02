@@ -140,46 +140,60 @@ export default {
 
       //签名
       const transfer = {
-        'privateKey': privateVal,
-        'from': fromAddress,
-        'to': toAddress,
-        'value': amount,
-        'inputData': inputData,
+        "timeStamp": new Date().getTime(),
+        'walletAddress': fromAddress,
+        'sendToAddress': toAddress,
+        'amount': amount,
         'txFee': fee,
         'gasLimit': '0',
         'gas': '0',
         'gasPrice': '0',
         'data': '',
-        "nonce": nonce
+        "nonce": nonce,
+        'inputData': inputData
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名，
-      let txSigned = JSON.parse(SECSDK.default.txSign(tx))
-      console.log(nonce)
-      console.log(txSigned)
-      txSigned.txFee = fee
-      let postData = {
-        "method": "sec_sendRawTransaction",
-        "params": [txSigned]
+      //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      let txBody = {
+        "method": "sec_signedTransaction",
+        "params": [{
+          "companyName": "coinegg",
+          "privateKey": privateVal,
+          "transfer": transfer
+        }]
       }
-      delete postData.params[0].contractAddress //删除 contractAddress 字段
       fetch(url, {
         method: 'post',
-        body: JSON.stringify(postData), // request is a string
+        body: JSON.stringify(txBody),
         headers: httpHeaderOption
       }).then((res) => res.json()).then((text) => {
-        this.confirmDisabled = false
-        this.confrimButton = 'mask.confirm'
-        if (JSON.parse(text.body).result.status == 1) {
-          this.maskPage = 2
-          if (tradingType == 0) {
-            this.successUrl = "https://scan.biut.io/accountdetails?address=" + fromAddress + ""
-          } else {
-            this.successUrl = "https://scan.biut.io/sen/accountdetails?address=" + fromAddress + ""
-          }
-        } else {
-          this.transferError = true
+        let signedTx = JSON.parse(text.body).result.signedTrans
+        console.log(signedTx)
+        let postData = {
+          "method": "sec_sendRawTransaction",
+          "id": "1",
+          "jsonrpc": "2.0",
+          "params": signedTx
         }
+        fetch(url, {
+          method: 'post',
+          body: JSON.stringify(postData), // request is a string
+          headers: httpHeaderOption
+        }).then((res) => res.json()).then((text) => {
+          this.confirmDisabled = false
+          this.confrimButton = 'mask.confirm'
+          if (JSON.parse(text.body).result.status == 1) {
+            this.maskPage = 2
+            if (tradingType == 0) {
+              this.successUrl = "https://scan.biut.io/accountdetails?address=" + fromAddress + ""
+            } else {
+              this.successUrl = "https://scan.biut.io/sen/accountdetails?address=" + fromAddress + ""
+            }
+          } else {
+            this.transferError = true
+          }
+        })
       })
     }
   },
