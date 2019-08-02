@@ -267,7 +267,7 @@ nav {
       &:after {
         @include border($w: 0.45rem, $c: transparent, $d: left);
         @include border($w: 0.45rem, $c: transparent, $d: right);
-        @include border($w: 0.45rem, $c: $baColor, $d: bottom);
+        @include border($w: 0.45rem, $c: #00D69B, $d: bottom);
         content: "";
         position: absolute;
         width: 0;

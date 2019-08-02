@@ -21,7 +21,6 @@
         </header>
         <section class="error-list">
           <p class="join-txt1">{{ $t('mask.poolNumber') }} <label>*</label></p>
-          <p>{{ $t('mask.poolNumberError') }}</p>
         </section>
         <section class="ipt-list">
           <input type="text" placeholder="1000.00" v-model="joinIpt" />
@@ -32,6 +31,7 @@
           <span @click="allMoney">{{ $t('transfer.all') }}</span>
         </p>
         <p class="join-txt2">{{ $t('mask.poolTxt1') }}</p>
+        <p class="join-txt3">{{ $t('mask.poolNumberError') }}</p>
         <public-button 
           :text="$t('mask.poolBtn1')"
           :class="joinBtn ? 'btn-active' : ''"
@@ -119,12 +119,6 @@ export default {
     }
     .error-list {
        padding: 1.6rem 0 .8rem;
-      @extend %flexBetween;
-      p:last-child {
-        color: $colorRed;
-        font-size: .6rem;
-        width: 8.25rem;
-      }
     }
     .ipt-list {
       @extend %flexBetween;
@@ -149,7 +143,12 @@ export default {
     .join-txt2 {
       font-family: source-Light;
       font-size: .6rem;
-      padding: .9rem 0 1.4rem;
+      padding-top: .9rem;
+    }
+    .join-txt3 {
+      font-size: .6rem;
+      padding: .2rem 0 1.4rem;
+      color: $colorRed;
     }
     .join-txt-all {
       @extend %flexEnd;
@@ -164,6 +163,12 @@ export default {
     button {
       height: 2.4rem;
     }
+  }
+}
+
+@media (max-width: 767px) {
+  .mask_cnt .join-content figure {
+    align-items: flex-start;
   }
 }
 </style>

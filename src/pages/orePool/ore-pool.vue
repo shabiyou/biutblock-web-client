@@ -2,7 +2,7 @@
   <main>
     <section v-show="loginPage === 0">
       <header class="pool-header">
-        <h2>{{ $t('pool.poolBanner') }}</h2>
+        <h2>{{ $t("pool.poolBanner") }}</h2>
         <p>The Biut Mine Pool Is Officially Online.</p>
       </header>
 
@@ -10,39 +10,52 @@
         <section class="pool-body-flex pool-body-head1">
           <!-- 不是登陆状态下隐藏 -->
           <figure>
-            <figcaption>0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630</figcaption>
-            <img src="../../assets/images/go.png" alt="" @click="poolPage = 2" v-show="poolPage === 1" />
+            <figcaption>{{ privateKey }}</figcaption>
+            <img
+              src="../../assets/images/go.png"
+              alt=""
+              @click="poolPage = 2"
+              v-show="poolPage === 1"
+            />
           </figure>
-          <span class="login-btn" @click="goLogin">{{ $t('pool.poolIndexL') }}</span>
+          <span class="login-btn" @click="goLogin">{{
+            $t("pool.poolIndexL")
+          }}</span>
         </section>
 
         <!-- 没有登陆 -->
         <section v-show="poolPage === 1">
           <section class="pool-body-flex pool-body-head2">
-            <span>{{ $t('pool.poolIndexTit1') }}</span>
+            <span>{{ $t("pool.poolIndexTit1") }}</span>
             <section>
-              <input type="text" :placeholder="$t('pool.poolIndexIpt')" v-model="searchIpt"/>
-              <img :src="searchImg" alt="" @click="searchFrom" :class="searchDsb ? 'load' : ''" />
+              <input
+                type="text"
+                :placeholder="$t('pool.poolIndexIpt')"
+                v-model="searchIpt"
+              />
+              <img
+                :src="searchImg"
+                alt=""
+                @click="searchFrom"
+                :class="searchDsb ? 'load' : ''"
+              />
             </section>
           </section>
           <pool-list :itemList="itemLists" :poolName="searchIpt" />
         </section>
-        
+
         <!-- 登录成功 -->
         <section v-show="poolPage === 2">
           <pool-header />
-          <pool-body 
-            @lookAll="poolPage = 1"/>
+          <pool-body @lookAll="poolPage = 1" />
           <pool-footer />
-        </section> 
-
+        </section>
       </section>
     </section>
 
     <section v-show="loginPage === 1">
       <pool-login />
     </section>
-
   </main>
 </template>
 
@@ -71,6 +84,7 @@ export default {
       searchDsb: true,
       poolPage: 1,
       loginPage: 0,
+      privateKey: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
       itemList: [
         {
           id: 0,
@@ -86,7 +100,9 @@ export default {
     }
   },
   created() {
-
+    if (this.ismobile()) {
+      this.privateKey = this.privateKey.replace(/(.{6}).+(.{6})/, '$1...$2')
+    }
   },
   mounted() {
 
@@ -94,18 +110,18 @@ export default {
   destroyed() { },
   methods: {
     //搜索内容
-    searchFrom () {
+    searchFrom() {
       let ipt = this.searchIpt
       alert("")
     },
 
-    goLogin () {
+    goLogin() {
       this.loginPage = 1
       //this.$router.push('/orePoolLogin')
     }
   },
   watch: {
-    searchIpt (newVal, oldVal) {
+    searchIpt(newVal, oldVal) {
       if (newVal.length > 0) {
         this.searchImg = searchs
         this.searchDsb = false
@@ -190,12 +206,13 @@ main {
         input {
           flex: 1;
           border: 0;
+          height: 2rem;
         }
         img {
           cursor: pointer;
           margin-left: 1rem;
         }
-        .load{
+        .load {
           pointer-events: none;
         }
       }
@@ -208,21 +225,23 @@ main {
     .pool-body {
       width: calc(100% - 30px);
       .pool-body-head1 {
-        padding: .8rem 15px;
+        padding: 0.8rem 15px;
         flex-wrap: wrap;
         height: auto;
-      }
-      .pool-body-flex {
-        .login-btn {
-          height: 1.6rem;
-          line-height: 1.6rem;
-          margin-top: .3rem;
+        figure {
+          color: $colorGreen;
         }
       }
       .pool-body-head2 {
         padding: 1.6rem 15px 1.2rem;
+        span {
+          font-size: 1rem;
+        }
         section {
-          max-width: 16rem;
+          input {
+            max-width: 6rem;
+          }
+          max-width: 12rem;
         }
       }
     }

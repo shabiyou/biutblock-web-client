@@ -127,7 +127,6 @@ export default {
     poolTips: '提示',
     poolBtn: '我知道了',
     poolTxt: '你已加入矿池哦，无法再加入其它矿池！',
-    pooTit: '加入矿池',
     poolNumber: '抵押数量',
     poolNumberError: '加入矿池最低数量为1000 BIUT',
     poolTxt1: '抵押数量会被冻结一年，抵押数量越多，挖到BIU的收益越高哦！',

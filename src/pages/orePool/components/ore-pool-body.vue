@@ -1,14 +1,14 @@
 <template>
   <section class="ore-pool-body">
     <header>
-      <h2>{{ $t('pool.poolIndexTit2') }}</h2>
-      <span @click="lookAll">{{ $t('pool.poolIndexTitLook') }}</span>
+      <h2>{{ $t("pool.poolIndexTit2") }}</h2>
+      <span @click="lookAll">{{ $t("pool.poolIndexTitLook") }}</span>
     </header>
     <ul>
       <li>
         <section>
-          <span>{{ $t('pool.poolIndexListTit1') }}</span>
-          <span>{{ $t('pool.poolIndexListTit2') }}</span>
+          <span>{{ $t("pool.poolIndexListTit1") }}</span>
+          <span>{{ $t("pool.poolIndexListTit2") }}</span>
         </section>
         <span></span>
       </li>
@@ -17,7 +17,7 @@
           <span>{{ item.poolName }}</span>
           <span>{{ item.pooolMoney }} BIUT</span>
         </section>
-        <span class="list-btn">{{ $t('pool.poolIndexListTxt1') }}</span>
+        <span class="list-btn">{{ $t("pool.poolIndexListTxt1") }}</span>
       </li>
     </ul>
   </section>
@@ -39,7 +39,7 @@ export default {
     }
   },
   methods: {
-    lookAll () {
+    lookAll() {
       this.$emit('lookAll')
     }
   },
@@ -93,9 +93,9 @@ export default {
         height: 1.8rem;
         line-height: 1.8rem;
         @include border($c: #e6e6e6, $d: bor);
-        color: #9CA6AA;
+        color: #9ca6aa;
         text-align: center;
-        border-radius: .9rem;
+        border-radius: 0.9rem;
       }
     }
   }
@@ -110,9 +110,14 @@ export default {
         max-width: 8rem;
       }
     }
-    header span {
-      height: 1.8rem;
-      line-height: 1.8rem;
+    header {
+      h2 {
+        font-size: 1rem;
+      }
+      span {
+        height: 1.8rem;
+        line-height: 1.8rem;
+      }
     }
   }
 }

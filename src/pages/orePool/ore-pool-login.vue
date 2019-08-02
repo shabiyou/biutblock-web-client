@@ -124,7 +124,7 @@ main {
   main {
     .pool-login-body {
       padding: 2.8rem 15px 15rem;
-      section,button {
+      section,button,p {
         max-width: 19rem;
       }
     }
