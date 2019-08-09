@@ -12,7 +12,7 @@
             @input="pageNull"
             ref="inputVal"
           />
-          <span>/ {{ total }}</span>
+          <span>/ {{ totalPage }}</span>
         </section>
         <span @click="next">下一页</span>
       </li>
@@ -24,11 +24,12 @@
 export default {
   name: '',
   props: {
-    total: Number
+    total: Number,
+    totalPage: Number
   },
   data() {
     return {
-      pageIpt: ''
+      pageIpt: '1'
     }
   },
   methods: {

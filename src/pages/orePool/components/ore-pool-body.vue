@@ -26,16 +26,12 @@
 <script>
 export default {
   name: '',
-  props: {},
+  props: {
+    itemList: Array
+  },
   data() {
     return {
-      itemList: [
-        {
-          id: 0,
-          poolName: '神马M20yanNerjks',
-          pooolMoney: '585454541.2345678 BIUT'
-        }
-      ]
+      
     }
   },
   methods: {
@@ -50,7 +46,6 @@ export default {
 @import "../../../assets/styless/public";
 .ore-pool-body {
   padding: 2.6rem 4.4rem 3.4rem;
-  @include border($c: #e6e6e6, $d: bottom);
   header {
     @extend %flexBetween;
     padding-bottom: 0.5rem;

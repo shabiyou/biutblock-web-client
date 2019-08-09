@@ -11,11 +11,12 @@
     <!-- 分页 -->
     <wallet-page
       ref="pageList"
-      :total="total"
+      :total="itemLists.length"
+      :totalPage=2
       @next="nextPage"
       @prev="prevPage"
       @goPage="goPage"
-    />
+      v-show="itemLists.length > 10" />
   </section>
 </template>
 
@@ -29,7 +30,6 @@ export default {
   },
   data() {
     return {
-      total: 20,
       itemList: [
         {
           id: 0,
@@ -70,6 +70,8 @@ export default {
 @import "../../../assets/styless/public";
 .pool-foot {
   padding: 3.2rem 4.4rem 0;
+  @include border($c: #e6e6e6, $d: top);
+  box-sizing: border-box;
   h2 {
     margin: 0;
     color: #2e3a40;

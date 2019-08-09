@@ -1,26 +1,30 @@
 <template class="pool-container">
   <main>
     <section v-show="loginPage === 0">
+      <!-- banner部分 -->
       <header class="pool-header">
         <h2>{{ $t("pool.poolBanner") }}</h2>
         <p>The Biut Mine Pool Is Officially Online.</p>
       </header>
 
       <section class="pool-body el-container">
-        <section class="pool-body-flex pool-body-head1">
+        <section class="pool-body-flex pool-body-head1" :class="loginStatus ? 'flex-end' : ''">
           <!-- 不是登陆状态下隐藏 -->
-          <figure>
-            <figcaption>{{ privateKey }}</figcaption>
+          <figure v-show="!loginStatus">
+            <figcaption>{{ address }}</figcaption>
             <img
               src="../../assets/images/go.png"
               alt=""
               @click="poolPage = 2"
-              v-show="poolPage === 1"
-            />
+              v-show="poolPage === 1" />
           </figure>
-          <span class="login-btn" @click="goLogin">{{
-            $t("pool.poolIndexL")
-          }}</span>
+
+          <span class="login-btn" @click="goLogin" v-show="loginStatus">
+            {{ $t("pool.poolIndexL") }}
+          </span>
+          <span class="login-btn" v-show="!loginStatus" @click="exitPage">
+            {{ $t("pool.poolIndexE") }}
+          </span>
         </section>
 
         <!-- 没有登陆 -->
@@ -31,30 +35,37 @@
               <input
                 type="text"
                 :placeholder="$t('pool.poolIndexIpt')"
-                v-model="searchIpt"
-              />
+                v-model="searchIpt" />
               <img
                 :src="searchImg"
                 alt=""
                 @click="searchFrom"
-                :class="searchDsb ? 'load' : ''"
-              />
+                :class="searchDsb ? 'load' : ''" />
             </section>
           </section>
+
+          <!-- 所有列表 -->
           <pool-list :itemList="itemLists" :poolName="searchIpt" />
         </section>
 
         <!-- 登录成功 -->
         <section v-show="poolPage === 2">
           <pool-header />
-          <pool-body @lookAll="poolPage = 1" />
-          <pool-footer />
+          <pool-body 
+            @lookAll="poolPage = 1"
+            :itemList="addPoolList" />
+          
+          <!-- 收益列表 -->
+          <pool-footer v-show="addPoolList.length > 0"/>
+          
+          <!-- 没有加入矿池展示 -->
+          <h4 v-show="addPoolList.length === 0">无记录</h4>
         </section>
       </section>
     </section>
 
     <section v-show="loginPage === 1">
-      <pool-login />
+      <pool-login @login="userLogin" />
     </section>
   </main>
 </template>
@@ -79,17 +90,26 @@ export default {
   props: {},
   data() {
     return {
-      searchIpt: '',
+      searchIpt: '', //搜索框
       searchImg: search,
       searchDsb: true,
+      loginStatus: true,
       poolPage: 1,
       loginPage: 0,
-      privateKey: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
+      address: '',//钱包地址
+      privateKey: '',//私钥
       itemList: [
         {
           id: 0,
           poolNmae: '神马M20yanNerjks',
           poolMoney: '1100 BIUT'
+        }
+      ],
+      addPoolList: [
+        {
+          id: 0,
+          poolName: '神马M20yanNerjks',
+          pooolMoney: '585454541.2345678 BIUT'
         }
       ]
     }
@@ -101,7 +121,7 @@ export default {
   },
   created() {
     if (this.ismobile()) {
-      this.privateKey = this.privateKey.replace(/(.{6}).+(.{6})/, '$1...$2')
+      this.address = this.address.replace(/(.{6}).+(.{6})/, '$1...$2')
     }
   },
   mounted() {
@@ -112,12 +132,28 @@ export default {
     //搜索内容
     searchFrom() {
       let ipt = this.searchIpt
-      alert("")
+
+      alert("搜索内容" + ipt)
     },
 
+    //去登陆
     goLogin() {
       this.loginPage = 1
-      //this.$router.push('/orePoolLogin')
+    },
+
+    //登陆成功
+    userLogin (e) {
+      this.loginPage = 0
+      this.address = e.userAddress
+      this.privateKey = e.userPrivateKey 
+
+      this.loginStatus = false
+    },
+
+    //退出登陆、退出成功之后再重新加载一次所有列表
+    exitPage () {
+      this.loginStatus = true
+      
     }
   },
   watch: {
@@ -158,6 +194,7 @@ main {
     background: #fff;
     display: flex;
     flex-direction: column;
+    
     .pool-body-flex {
       @extend %flexBetween;
       figure {
@@ -188,6 +225,16 @@ main {
       box-sizing: border-box;
       padding: 0 4.4rem;
       height: 4.8rem;
+    }
+    .flex-end {
+      justify-content: flex-end;      
+    }
+    h4 {
+      text-align: center;
+      color: #9CA6AA;
+      font-size: .7rem;
+      padding: 2.4rem 0 6.2rem;
+      font-weight: normal;
     }
     .pool-body-head2 {
       padding: 2.6rem 4.4rem 1.8rem;

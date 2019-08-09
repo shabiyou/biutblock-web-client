@@ -44,14 +44,14 @@ export default {
   },
   computed: {
     loginBtn() {
-      let key = this.walletKey
+      let key = this.walletKey.replace(/\s+/g, "")
       if (key.length > 0 && !_const.priverKeyReg.test(key)) {
         this.keyError = true
         this.margnB = true
       } else {
         this.keyError = false
         this.margnB = false
-        return key.length == 64 ? true : false
+        return key.length == 64 && _const.priverKeyReg.test(key) ? true : false
       }
     }
   },
@@ -63,8 +63,17 @@ export default {
   },
   destroyed() { },
   methods: {
+    /**
+     * 登陆成功：记录登陆状态、地址、私钥
+     * 
+     */
     loginFrom() {
-      this.$router.push({ name: 'orePool' })
+      let parm = {
+        userAddress: '0x69e80014122428105e0af5ee4ff1da56f1cbe6a3',
+        userPrivateKey: this.walletKey,
+        loginStatus: '1'
+      }
+      this.$emit('login', parm)
     }
   },
 }

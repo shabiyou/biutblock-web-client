@@ -8,14 +8,20 @@
         </section>
         <span></span>
       </li>
-      <li class="search-result" v-show="searchNull">
-        <p>{{ $t('pool.poolIndexSearch1') }} {{ total }} {{ $t('pool.poolIndexSearch2') }} {{ poolName }} {{ $t('pool.poolIndexSearch3') }}</p>
+
+      <!-- 搜索结果 -->
+      <li class="search-result" v-show="itemList.length === 0">
+        <p>{{ $t('pool.poolIndexSearch1') }} {{ itemList.length }} {{ $t('pool.poolIndexSearch2') }} {{ poolName }} {{ $t('pool.poolIndexSearch3') }}</p>
       </li>
-      <li v-for="(item, index) in itemList" :key="index">
+
+      <!-- 搜索结果列表 -->
+      <li v-for="(item, index) in itemList" :key="index" v-show="itemList.length > 0">
         <section>
           <span>{{ item.poolNmae }}</span>
           <span>{{ item.poolMoney }}</span>
         </section>
+
+        <!-- 判断是否 有加入的矿池，加入的话、第一个显示  后面不现实加入按钮、没有加入 所有按钮不可点击 -->
         <span class="list-btn" @click="joinMask">{{ $t('pool.poolIndexListTxt2') }}</span>
       </li>
     </ul>
@@ -25,9 +31,11 @@
       ref="pageList"
       class="page-list"
       :total="total"
+      :totalPage=2
       @next="nextPage"
       @prev="prevPage"
-      @goPage="goPage" />
+      @goPage="goPage"
+      v-show="itemList.length > 10" />
     
     <!-- mask 弹窗 -->
     <pool-mask 
@@ -53,8 +61,7 @@ export default {
   data() {
     return {
       maskShow: false,
-      maskPage: 2,//弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
-      searchNull: false
+      maskPage: 2 //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
     }
   },
   computed: {

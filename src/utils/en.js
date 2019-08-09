@@ -94,7 +94,7 @@ export default {
     poolLoginBtn: 'Enter Wallet',
 
     poolIndexL: 'Login',
-    poolIndexE: 'Log Out',
+    poolIndexE: 'Log out',
     poolIndexListTit1: 'Name',
     poolIndexListTit2: 'Nissan',
     poolIndexListTxt1: 'Joined',
@@ -105,7 +105,7 @@ export default {
     poolIndexTit2: 'Join The Mine Pool',
     poolIndexTit3: 'Profit Record',
 
-    poolIndexTxt1: 'Profit In Past 24 Hours',
+    poolIndexTxt1: "Last week's earnings",
     poolIndexTxt2: 'Total Profit',
     poolIndexTxt3: 'Frozen Assets In Mine Pool',
     poolIndexTxt4: 'Available Balance',

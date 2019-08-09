@@ -23,7 +23,7 @@
           <p class="join-txt1">{{ $t('mask.poolNumber') }} <label>*</label></p>
         </section>
         <section class="ipt-list">
-          <input type="text" placeholder="1000.00" v-model="joinIpt" />
+          <input type="text" placeholder="1000.00" v-model="joinIpt" @input="clearAmount"/>
           <span>BIUT</span>
         </section>
         <p class="join-txt-all">
@@ -55,13 +55,19 @@ export default {
   data() {
     return {
       joinIpt: '',
-      totalMoney: 100
+      totalMoney: "10000"
     }
+  },
+  mounted() {
+    //查询可用余额
+    // this.getWalletBalance(this.address, 'biut').then(res => {
+    //   this.totalMoney = this.scientificNotationToString(res)
+    // })
   },
   computed: {
     joinBtn () {
-      let ipt = this.joinIpt
-      return ipt > 1000 ? true : false
+      let ipt = this.joinIpt.replace(/\s+/g, "")
+      return 1000 <= ipt &&  ipt <= Number(this.totalMoney) ? true : false
     }
   },
   methods: {
@@ -71,13 +77,40 @@ export default {
     },
 
     joinFrom () {
+      /**
+       * 确认加入矿池
+       * 
+       * 加入成功 调用 close() 关闭弹窗
+       */
+      let ipt = this.joinIpt.replace(/\s+/g, "")
       this.close() 
     },
 
+    //转出全部金额
     allMoney() {
       this.joinIpt = this.totalMoney
+    },
+
+    //转账只能输入金额
+    clearAmount() {
+      this.$nextTick(() => {
+        this.joinIpt = this.joinIpt.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        this.joinIpt = this.joinIpt.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+        this.joinIpt = this.joinIpt.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        this.joinIpt = this.joinIpt.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/, '$1$2.$3');//只能输入两个小数  
+      })
+      if (String(this.joinIpt.length) > 10 && this.joinIpt.indexOf(".") < 0) {
+        this.$nextTick(() => {
+          this.joinIpt = String(this.joinIpt).substring(0, 10)
+        })
+      }
+      if (this.joinIpt.indexOf(".") == 0) {
+        this.$nextTick(() => {
+          this.joinIpt = String(this.joinIpt).substring(0, 9)
+        })
+      }
     }
-  },
+  }
 }
 </script>
 
@@ -149,6 +182,7 @@ export default {
       font-size: .6rem;
       padding: .2rem 0 1.4rem;
       color: $colorRed;
+      text-align: center;
     }
     .join-txt-all {
       @extend %flexEnd;
