@@ -26,6 +26,17 @@
     <!-- 用户确认密码、密码错误组件 -->
     <public-tips v-show="errorTxt2" :tipsTxt="tipsTxt2" />
 
+    <section class="code-input" :class="codeError ? 'error-border' : ''">
+      <input 
+        type="text" 
+        placeholder="请输入邀请码" 
+        v-model="inviteCode"
+        maxlength="8"
+        @input="codeChange" />
+    </section>
+    <!-- 邀请码错误组件 -->
+    <public-tips v-show="codeError" :tipsTxt="tipsCode" />
+
     <!-- 提示语列表组件 -->
     <tips-list :tipsListKey="tipsListPass" class="tips-list" />
 
@@ -66,6 +77,10 @@ export default {
       showFormat: false, //密码提示不显示
       tipsTxt1: 'passTips.passFormat',
       tipsTxt2: 'passTips.passNoMatch',
+
+      inviteCode: '',
+      tipsCode: '输入邀请码',
+      codeError: false,
     }
   },
   computed: {
@@ -73,6 +88,7 @@ export default {
     createActive() {
       let pass1 = (this.walletPass1).replace(/\s+/g, "")
       let pass2 = (this.walletPass2).replace(/\s+/g, "")
+      let code = (this.inviteCode).replace(/\s+/g, "")
       if (pass1.length > 0 && !(_const.passReg.test(pass1))) {
         this.formatError = true
         this.errorTxt2 = true
@@ -86,7 +102,7 @@ export default {
         this.formatError = false
         this.errorTxt2 = false
         this.dontAgree = false
-        return _const.passReg.test(pass1) && pass1 == pass2 ? true : false
+        return _const.passReg.test(pass1) && pass1 == pass2 && code.length === 8 ? true : false
       }
     },
   },
@@ -115,12 +131,27 @@ export default {
       })
     },
 
+    codeChange () {
+      this.$nextTick(() => {
+        this.inviteCode = this.inputNull(this.inviteCode)
+      })
+    },
+
     //创建钱包
     createFrom() {
       let pass = (this.walletPass1).replace(/\s+/g, "")
       this.$emit("created", pass)
     }
   },
+  watch: {
+    inviteCode(newVal, oldVal) {
+      if (newVal.length > 0 && newVal.length < 8) {
+        this.codeError = true
+      } else {
+        this.codeError = false
+      }
+    }
+  }
 }
 </script>
 
@@ -136,6 +167,21 @@ export default {
   }
   .tips-list {
     padding: 0.6rem 0 1.8rem;
+  }
+  .code-input {
+    border: 0.05rem solid #91a2aa;
+    height: 2.3rem;
+    background: #fff;
+    border-radius: .5rem;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 1rem;
+    margin-top: 1rem;
+    @extend %flexCenter;
+    input {
+      border: 0;
+      flex: 1;
+    }
   }
 }
 </style>

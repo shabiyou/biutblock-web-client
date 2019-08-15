@@ -12,6 +12,9 @@
           :infoKey="walletKey"
           :infoMoneyC="walletMoneyC"
           :infoMoneyN="walletMoneyN"
+          :availableAmount="availableAmount"
+          :freezeAmount="freezeAmount"
+          :inviteCode="inviteCode"
         />
 
         <!-- 钱包二维码 -->
@@ -28,8 +31,7 @@
       :infoKey="walletKey"
       :infoWord="walletWords"
       :infoPublicKey="walletPublicKey"
-      @close="closeMask"
-    />
+      @close="closeMask" />
   </main>
 </template>
 
@@ -57,6 +59,11 @@ export default {
       walletWords: '',//钱包助记词
       walletMoneyC: "0",//钱包SEC币
       walletMoneyN: "0",//钱包SEN币
+
+      availableAmount: 1000, //可用余额
+      freezeAmount: 1000, //冻结金额
+      inviteCode: '12345678',//邀请码
+
       infoPages: 1, //默认显示登陆页面
       maskShow: false, //遮罩层 
     }

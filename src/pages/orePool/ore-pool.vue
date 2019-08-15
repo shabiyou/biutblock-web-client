@@ -50,16 +50,38 @@
 
         <!-- 登录成功 -->
         <section v-show="poolPage === 2">
-          <pool-header />
-          <pool-body 
-            @lookAll="poolPage = 1"
-            :itemList="addPoolList" />
+          <p class="tab-line"></p>
+          <ul class="tab-list">
+            <li :class="idx === 0 ? 'active-list' : ''" @click="tabClick(0)">矿池</li>
+            <li :class="idx === 1 ? 'active-list' : ''" @click="tabClick(1)">邀请</li>
+          </ul>
+          <!-- 矿池 -->
+          <section v-show="idx === 0">
+            <pool-header />
+            <pool-body 
+              @lookAll="poolPage = 1"
+              :itemList="addPoolList" />
+            
+            <!-- 收益列表 -->
+            <pool-footer v-show="addPoolList.length > 0"/>
+            
+            <!-- 没有加入矿池展示 -->
+            <h4 v-show="addPoolList.length === 0">无记录</h4>
+          </section>
+
+          <!-- 邀请 -->
+          <section v-show="idx === 1">
+            <invitation-header @look="lookRules"/>
+
+            <invitation-list @look="lookRules"/>
+
+            <invitation-mask 
+              :maskPage="maskPage"
+              v-show="maskShow"
+              @close="closeInvitationMask"/>
+          </section>
+
           
-          <!-- 收益列表 -->
-          <pool-footer v-show="addPoolList.length > 0"/>
-          
-          <!-- 没有加入矿池展示 -->
-          <h4 v-show="addPoolList.length === 0">无记录</h4>
         </section>
       </section>
     </section>
@@ -74,7 +96,10 @@
 import poolList from './components/ore-pool-list'
 import poolHeader from './components/ore-pool-header'
 import poolBody from './components/ore-pool-body'
-import poolLogin from './ore-pool-login'
+import poolLogin from './login/ore-pool-login'
+import invitationHeader from './invitation/invitation-header'
+import invitationList from './invitation/invitation-list'
+import invitationMask from './invitation/invitation-mask'
 import poolFooter from './components/ore-pool-footer'
 import search from '../../assets/images/search.png'
 import searchs from '../../assets/images/searchs.png'
@@ -85,7 +110,10 @@ export default {
     poolHeader,
     poolBody,
     poolFooter,
-    poolLogin
+    poolLogin,
+    invitationHeader,
+    invitationList,
+    invitationMask
   },
   props: {},
   data() {
@@ -98,6 +126,9 @@ export default {
       loginPage: 0,
       address: '',//钱包地址
       privateKey: '',//私钥
+      maskPage: 1,
+      maskShow: false,
+      idx: 0,
       itemList: [
         {
           id: 0,
@@ -154,6 +185,19 @@ export default {
     exitPage () {
       this.loginStatus = true
       
+    },
+
+    tabClick (index) {
+      this.idx =  index
+    },
+
+    lookRules (e) {
+      this.maskPage = e
+      this.maskShow = true
+    },
+
+    closeInvitationMask () {
+      this.maskShow = false
     }
   },
   watch: {
@@ -194,7 +238,6 @@ main {
     background: #fff;
     display: flex;
     flex-direction: column;
-    
     .pool-body-flex {
       @extend %flexBetween;
       figure {
@@ -221,7 +264,6 @@ main {
       }
     }
     .pool-body-head1 {
-      @include border($c: #e6e6e6, $d: bottom);
       box-sizing: border-box;
       padding: 0 4.4rem;
       height: 4.8rem;
@@ -262,6 +304,37 @@ main {
         .load {
           pointer-events: none;
         }
+      }
+    }
+    .tab-line {
+      height: .5rem;
+      background:#f5f5f5;
+    }
+    .tab-list {
+      @extend %flex;
+      align-items: center;
+      height: 4.1rem;
+      @include border($c: #e6e6e6, $d: bottom);
+      margin: 0;
+      padding: 0 0 0 4.4rem;
+      color: #9CA6AA;
+      font-size: .9rem;
+      box-sizing: border-box;
+      li {
+        width: 3.9rem;
+        height: 100%;
+        @extend %flexCenter;
+        cursor: pointer;
+        @include border($c: transparent, $d: bottom,$w: .15rem);
+        margin-bottom: -.15rem;
+        &:first-child {
+          margin-right: 3.2rem;
+        }
+      }
+      .active-list {
+        color: #29D893;
+        @include border($c: #29D893, $d: bottom, $w: .15rem);
+        box-sizing: border-box;
       }
     }
   }

@@ -45,7 +45,7 @@ export default {
     youAddress: "你的地址",
     transferAdddress: "转账地址",
     transferNumber: "转账数量",
-    balance: "余额",
+    balance: "可用",
     all: "全部",
     generateTrading: "生成交易",
     confirmTransferInfo: "请确认您的转帐信息",

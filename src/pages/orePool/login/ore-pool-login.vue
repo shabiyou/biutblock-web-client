@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import publicButton from '../../components/public-button'
+import publicButton from '../../../components/public-button'
 export default {
   name: '',
   components: {
@@ -80,11 +80,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/styless/public";
+@import "../../../assets/styless/public";
 main {
   background: #fff;
   .pool-login-header {
-    @include bgCover("../../assets/images/poolLogin.png");
+    @include bgCover("../../../assets/images/poolLogin.png");
     height: 10rem;
     h2 {
       font-size: 1.6rem;

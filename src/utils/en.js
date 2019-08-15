@@ -45,7 +45,7 @@ export default {
     youAddress: "From address",
     transferAdddress: "To",
     transferNumber: "Amount",
-    balance: "Balance",
+    balance: "Available",
     all: "All",
     generateTrading: "Generate transaction",
     confirmTransferInfo: "Confirm the following information",

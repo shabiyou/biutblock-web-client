@@ -17,6 +17,8 @@ import './utils/global.js'
 
 import Element from 'element-ui'
 import 'babel-polyfill'
+
+//金额，分开
 import {currency} from './utils/currency'
 Vue.filter("currency",currency)
 

@@ -9,7 +9,7 @@ export default {
   name: 'contentFooter',
   data() {
     return {
-      email: 'alanlee@secblock.io'
+      email: 'alanlee@biut.io'
     }
   }
 }

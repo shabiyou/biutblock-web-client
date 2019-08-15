@@ -11,8 +11,6 @@
         </figure>
       </li>
     </ul>
-  
-    <section class="line" />
   </section>
 </template>
 
@@ -64,8 +62,10 @@ export default {
 @import "../../../assets/styless/public";
 ul {
   margin: 0;
-  padding: 2.5rem 4.4rem;
+  padding: 2.8rem 4.4rem;
   @extend %flexBetween;
+  @include border($c: #e6e6e6, $d: bottom);
+  box-sizing: border-box;
   li {
     text-align: center;
     height: 8.1rem;
@@ -102,7 +102,6 @@ ul {
     }
   }
 }
-.line {background: #F5F5F5;height: .5rem;}
 
 @media (max-width: 767px) {
   ul {

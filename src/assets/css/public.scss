@@ -68,6 +68,9 @@ main {
   }
 }
 
+.el-progress-bar {width: 94%;float: left;vertical-align: middle;}
+.el-progress__text {display: none!important;} 
+
 
 /* 操作成功遮罩层 */
 .mask {
