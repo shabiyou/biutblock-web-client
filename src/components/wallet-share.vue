@@ -54,8 +54,8 @@ export default {
   height: auto;
   overflow: auto;
   .share-content {
-    width: 18.75rem;
-    padding: 0.8rem 0.8rem 4.8rem;
+    width: 15.8rem;
+    padding: 0.6rem 0.6rem 1.5rem;
     text-align: center;
     color: #42535b;
     font-size: 0.7rem;
@@ -66,18 +66,18 @@ export default {
       }
     }
     h2 {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
     }
     .share-txt {
-      padding: 5rem 0 .75rem;
+      padding: 4.5rem 0 .5rem;
     }
     .share-cnt {
-      width: 14.6rem;
+      width: 12.5rem;
       height: 3.5rem;
       background: #f7fbfa;
       border-radius: 0.5rem;
       line-height: 3.5rem;
-      margin: 0 auto 4.7rem;
+      margin: 0 auto 1.7rem;
     }
     figure {
       margin: 0;
@@ -87,8 +87,8 @@ export default {
     }
   }
   button {
-    width: 6.8rem;
-    height: 2.4rem;
+    width: 4.8rem;
+    height: 1.8rem;
     background:linear-gradient(90deg,#29d893 0%,#0cc5b7 100%);
     border-radius: .5rem;
     border: 0;
