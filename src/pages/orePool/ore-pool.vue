@@ -368,12 +368,8 @@ main {
       .tab-list {
         padding: 0 15px;
         justify-content: space-between;
-        li {
-          padding: 0;
-        }
         li:first-child {
           margin: 0;
-          padding: 0;
         }
       }
     }

@@ -73,6 +73,7 @@ export default {
         userPrivateKey: this.walletKey,
         loginStatus: '1'
       }
+      this.walletKey = ""
       this.$emit('login', parm)
     }
   },
