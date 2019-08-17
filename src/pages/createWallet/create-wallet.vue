@@ -35,7 +35,7 @@
 
 <script>
 const contentFooter = () => import("../../components/content-footer")
-import createWallet from './components/create-new-wallet'
+const createWallet = () => import("./components/create-new-wallet")
 const downKeystore = () => import("./components/create-wallet-down")
 const savePriveate = () => import("./components/create-wallet-key")
 import tipsImg from '../../assets/images/tipsImg.png'

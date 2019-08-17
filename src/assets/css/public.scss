@@ -68,9 +68,6 @@ main {
   }
 }
 
-.el-progress-bar {width: 94%;float: left;vertical-align: middle;}
-.el-progress__text {display: none!important;} 
-
 
 /* 操作成功遮罩层 */
 .mask {
@@ -117,7 +114,7 @@ main {
     width: 5.4rem;
     height: 1.8rem;
     color: #fff;
-    font-size: .7rem;
+    font-size: 14px;
     border-radius: .5rem;
     background: linear-gradient(90deg, #29d893 0%, #0cc5b7 100%);
     border: none;

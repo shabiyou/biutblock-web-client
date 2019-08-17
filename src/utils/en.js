@@ -45,7 +45,7 @@ export default {
     youAddress: "From address",
     transferAdddress: "To",
     transferNumber: "Amount",
-    balance: "Available",
+    balance: "Balance",
     all: "All",
     generateTrading: "Generate transaction",
     confirmTransferInfo: "Confirm the following information",
@@ -86,51 +86,12 @@ export default {
     mappingHashError: 'Invalid transaction hash',
     mappingHashTxt: 'Please enter the transaction hash value transferred on ETH',
   },
-  pool: {
-    poolBanner: 'The BIUT mine pool is officially online.',
-    poolLogin: 'Enter Wallet',
-    poolLoginIpt: 'Eenter your private key here',
-    poolLoginIptError: 'Please enter the correct wallet private key.',
-    poolLoginBtn: 'Enter Wallet',
-
-    poolIndexL: 'Login',
-    poolIndexE: 'Log out',
-    poolIndexListTit1: 'Name',
-    poolIndexListTit2: 'Nissan',
-    poolIndexListTxt1: 'Joined',
-    poolIndexListTxt2: 'Join',
-    poolIndexIpt: 'Search',
-    poolIndexTit1: 'Mine Pool',
-    poolIndexTitLook: 'View All Mine Pools',
-    poolIndexTit2: 'Join The Mine Pool',
-    poolIndexTit3: 'Profit Record',
-
-    poolIndexTxt1: "Last week's earnings",
-    poolIndexTxt2: 'Total Profit',
-    poolIndexTxt3: 'Frozen Assets In Mine Pool',
-    poolIndexTxt4: 'Available Balance',
-
-    poolIndexSearch1: 'Found',
-    poolIndexSearch2: 'results for',
-    poolIndexSearch3: '',
-  },
-  pages: {
-    next: 'Previous',
-    prev: 'Next',
-  },
+  
   mask: {
     tips: "Operation success, click the URL below to view the results：",
     confirm: "Confirm",
     confirms: "Confirm...",
-    cancel: "Cancal",
-
-    poolTips: 'Information',
-    poolBtn: 'I know it',
-    poolTxt: 'You have joined the mine pool and can not join others.',
-    poolNumber: 'Mortgage amount',
-    poolNumberError: 'At least 1000 BIUT is required to join the mine pool.',
-    poolTxt1: 'The amount of mortgage will be frozen for one year, and higher of the mortgage amount, and higher the profit of BIU token',
-    poolBtn1: 'Join Now'
+    cancel: "Cancal"
   },
   headerNav: {
     "Newallet": "New Wallet",
@@ -138,8 +99,7 @@ export default {
     "TransferSEC": "Transfer",
     "Guide": "Guide",
     "Language": "Language",
-    "Mapping": "Mapping",
-    "orePool": 'Mine Pool'
+    "Mapping": "Mapping"
   },
   helpTips: {
     helpTipsTxt: 'Check out the tutorial on your computer.'

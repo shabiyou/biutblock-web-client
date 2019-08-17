@@ -29,7 +29,7 @@ export default {
   box-sizing: border-box;
   text-align: center;
   font-size: 0.6rem;
-  @include border($d: top,$c: rgba(145,162,170,0.2));
+  @include border($d: top);
   color: $colorGray2;
   background: #fff;
 }
