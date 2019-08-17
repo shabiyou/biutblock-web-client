@@ -29,7 +29,7 @@
     <section class="code-input" :class="codeError ? 'error-border' : ''">
       <input 
         type="text" 
-        placeholder="请输入邀请码" 
+        :placeholder="$t('newWallet.codeIpt')" 
         v-model="inviteCode"
         maxlength="8"
         @input="codeChange" />
@@ -79,9 +79,12 @@ export default {
       tipsTxt2: 'passTips.passNoMatch',
 
       inviteCode: '',
-      tipsCode: '输入邀请码',
+      tipsCode: 'newWallet.codeIptError',
       codeError: false,
     }
+  },
+  created() {
+    this.inviteCode = this.getQueryString('code') || ''
   },
   computed: {
     //创建钱包按钮是否可点击

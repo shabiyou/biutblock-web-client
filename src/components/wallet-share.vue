@@ -4,18 +4,18 @@
       <section class="close-img">
         <img src="../assets/images/closeMasks.png" alt="" @click="close"/>
       </section>
-      <h2>BIUT- PC矿工POW</h2>
-      <h2>挖矿邀请码</h2>
-      <p class="share-txt">我的邀请码</p>
+      <h2>{{ $t("share.shareTit1") }}</h2>
+      <h2 class="share-tit">{{ $t("share.shareTit2") }}</h2>
+      <p class="share-txt">{{ $t("walletInfo.myCodeTxt") }}</p>
       <p class="share-cnt">{{ inviteCode }}</p>
 
       <!-- 二维码 -->
       <figure>
         <qrcode :value="walletQr" :options="{ size: 93 }" />
-        <figcaption>用浏览器扫一扫即可查看</figcaption>
+        <figcaption>{{ $t("share.shareTxt1") }}</figcaption>
       </figure>
     </section>
-    <button type="button" @click="saveImg">保存图片</button>
+    <!-- <button type="button" @click="saveImg">{{ $t("share.shareTxt2") }}</button> -->
   </section>
 </template>
 
@@ -31,8 +31,11 @@ export default {
   },
   data() {
     return {
-      walletQr: '123'
+      walletQr: ''
     }
+  },
+  created() {
+    this.walletQr = _const.websiteUrl + '?code=' +  this.inviteCode
   },
   methods: {
     close () {
@@ -67,6 +70,9 @@ export default {
     }
     h2 {
       font-size: 1.2rem;
+    }
+    .share-tit {
+     font-size: 1rem;
     }
     .share-txt {
       padding: 4.5rem 0 .5rem;

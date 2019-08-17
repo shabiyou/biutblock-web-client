@@ -52,8 +52,8 @@
         <section v-show="poolPage === 2">
           <p class="tab-line"></p>
           <ul class="tab-list">
-            <li :class="idx === 0 ? 'active-list' : ''" @click="tabClick(0)">矿池</li>
-            <li :class="idx === 1 ? 'active-list' : ''" @click="tabClick(1)">邀请</li>
+            <li :class="idx === 0 ? 'active-list' : ''" @click="tabClick(0)"> {{ $t('pool.poolTabTxt1') }} </li>
+            <li :class="idx === 1 ? 'active-list' : ''" @click="tabClick(1)"> {{ $t('pool.poolTabTxt2') }} </li>
           </ul>
           <!-- 矿池 -->
           <section v-show="idx === 0">
@@ -66,7 +66,7 @@
             <pool-footer v-show="addPoolList.length > 0"/>
             
             <!-- 没有加入矿池展示 -->
-            <h4 v-show="addPoolList.length === 0">无记录</h4>
+            <h4 v-show="addPoolList.length === 0">{{ $t('pool.poolListNull') }}</h4>
           </section>
 
           <!-- 邀请 -->
@@ -151,9 +151,7 @@ export default {
     }
   },
   created() {
-    if (this.ismobile()) {
-      this.address = this.address.replace(/(.{6}).+(.{6})/, '$1...$2')
-    }
+    
   },
   mounted() {
 
@@ -176,6 +174,9 @@ export default {
     userLogin (e) {
       this.loginPage = 0
       this.address = e.userAddress
+      if (this.ismobile()) {
+        this.address = e.userAddress.replace(/(.{6}).+(.{6})/, '$1...$2')
+      }
       this.privateKey = e.userPrivateKey 
 
       this.loginStatus = false
@@ -184,7 +185,7 @@ export default {
     //退出登陆、退出成功之后再重新加载一次所有列表
     exitPage () {
       this.loginStatus = true
-      
+      this.poolPage = 1
     },
 
     tabClick (index) {
@@ -321,7 +322,7 @@ main {
       font-size: .9rem;
       box-sizing: border-box;
       li {
-        width: 3.9rem;
+        padding: 0 .9rem 0 1.2rem;
         height: 100%;
         @extend %flexCenter;
         cursor: pointer;
@@ -362,6 +363,17 @@ main {
             max-width: 6rem;
           }
           max-width: 12rem;
+        }
+      }
+      .tab-list {
+        padding: 0 15px;
+        justify-content: space-between;
+        li {
+          padding: 0;
+        }
+        li:first-child {
+          margin: 0;
+          padding: 0;
         }
       }
     }

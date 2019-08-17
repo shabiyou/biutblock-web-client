@@ -2,10 +2,10 @@
   <section class="invitation-header">
     <header>
       <section class="header-level">
-        <span>我的等级</span>
+        <span>{{ $t('invitation.level') }}</span>
         <figure>
           <figcaption>
-            我的邀请码：
+            {{ $t('walletInfo.myCodeTxt') }}：
             <span id="invitationCode">{{ invitationCode }}</span>
           </figcaption>
           <img
@@ -16,7 +16,7 @@
             class="copyButton"
           />
           <button type="button" class="shar-btn" @click="shareShow = true">
-            一键分享
+            {{ $t('walletInfo.shareBtn') }}
           </button>
         </figure>
       </section>
@@ -25,8 +25,8 @@
         <figure>
           <img src="../../../assets/images/levels1.png" alt="" />
           <figcaption>
-            <p>铜牌合伙人</p>
-            <p>金牌</p>
+            <p>{{ partner }}</p>
+            <p>{{ $t('invitation.medal') }}</p>
             <section class="progress-list clearfix">
               <el-progress :percentage="progress" color="#29D893" />
               <span>{{ progress }} / {{ levelNumber }}</span>
@@ -35,7 +35,7 @@
         </figure>
 
         <button type="button" @click="lookRules" class="look-btn">
-          查看规则
+          {{ $t('invitation.rules') }}
         </button>
       </section>
     </header>
@@ -70,6 +70,7 @@ export default {
       copySuccess: '',
       progress: 1,
       levelNumber: 9,
+      partner: '铜牌合伙人'
     }
   },
   methods: {
@@ -177,6 +178,28 @@ export default {
         background: #ffffff;
         @include border($c: #e6e6e6, $d: bor);
         box-sizing: border-box;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .invitation-header {
+    padding: 2.8rem 15px 2.1rem;
+    header {
+      .header-level,.header-img {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-img {
+        padding-top: 1.4rem;
+        figure {
+          width: 100%;
+          padding-bottom: 1rem;
+          figcaption {
+            padding: 0;
+          }
+        }
       }
     }
   }

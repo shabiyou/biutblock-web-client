@@ -19,8 +19,8 @@ import Element from 'element-ui'
 import 'babel-polyfill'
 
 //金额，分开
-import {currency} from './utils/currency'
-Vue.filter("currency",currency)
+import { currency } from './utils/currency'
+Vue.filter("currency", currency)
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 Vue.prototype.$axios = axios
@@ -39,7 +39,7 @@ let httpHeaderOption = {
 let fetch = require('node-fetch')
 
 //获取钱包余额 BIUT、BIU
-Vue.prototype.getWalletBalance = async (address,type) => {
+Vue.prototype.getWalletBalance = async (address, type) => {
   let url = _const.url
   if (type == 'biu') {
     url = _const.url_sen
@@ -126,9 +126,16 @@ Vue.prototype.ismobile = function () {
 Vue.prototype.getPointNum = function (num, n) {
   let str = String(num);
   let index = str.indexOf(".");
-  let str1 = str.substring(0,index+n+1);
+  let str1 = str.substring(0, index + n + 1);
   str1 = Number(str1);
   return str1;
+}
+
+//下载文件方法
+Vue.prototype.getQueryString = function (name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) return (r[2]); return null;
 }
 
 new Vue({

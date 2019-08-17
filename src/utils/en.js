@@ -6,7 +6,10 @@ export default {
     saveKeyStore: "Save Your Keystore File",
     keyStoreDown: "Keystore Download",
     next: "Next",
-    savePrivateKey: "Save your Private Key"
+    savePrivateKey: "Save your Private Key",
+
+    codeIpt: "Please enter the invitation code",
+    codeIptError: "Please enter the correct invitation code",
   },
   tipsListPass: {
     "tipsCnt1": "Please ensure it is a strong password.",
@@ -40,6 +43,9 @@ export default {
     walletMoney: "Balance",
     qrCode: "Your address (QR Code)",
     newKeyStore: "Download New Keystore",
+
+    myCodeTxt: 'My invitation code',
+    shareBtn: 'Share',
   },
   transfer: {
     youAddress: "From address",
@@ -113,10 +119,37 @@ export default {
     poolIndexSearch1: 'Found',
     poolIndexSearch2: 'results for',
     poolIndexSearch3: '',
+
+    poolTabTxt1: 'Mining pool',
+    poolTabTxt2: 'The invitation',
+    poolListNull: 'No record',
   },
-  pages: {
-    next: 'Previous',
-    prev: 'Next',
+  invitation: {
+    level: 'My Level',
+    medal: 'Gold medal',
+    rules: 'View rules',
+
+    inListTit: 'Invitation record',
+    inListSearch: 'Enter address to search',
+    inListTxt1: 'Address',
+    inListTxt2: 'Invitation time',
+    inListTxt3: 'Total reward (BIUT)',
+    inListTxt4: 'View details',
+    inListNull: 'Uninvited record',
+    inListSearchNull: 'No search results yet',
+
+    inMaskTxt: 'Every time the invitation is successful, it will reward BIUT, please check it.',
+    inMaskListTxt1: 'Level',
+    inMaskListTxt2: 'Number of people',
+
+    inMask2ListTxt1: 'Time',
+    inMask2ListTxt2: 'Reward (BUT)',
+
+    level1: 'Bronze partner',
+    level2: 'Silver partner',
+    level3: 'Gold partner',
+    level4: 'Super partner',
+    level4Txt: 'More than 1000',
   },
   mask: {
     tips: "Operation success, click the URL below to view the results：",
@@ -146,5 +179,21 @@ export default {
   },
   footer: {
     FooterCnt: "Any question? Please contact us.Official email address"
+  },
+  public: {
+    available: 'Available',
+    guarantee: 'Guarantee',
+    pageNext: 'Next',
+    pagePrev: 'Prev',
+
+    pageTotal: '',
+    pageRecord: ' records',
+    pageResults: ' of results',
+  },
+  share: {
+    shareTit1: 'BIUT- PC Mining POW',
+    shareTit2: 'Mining invitation code',
+    shareTxt1: 'Use the browser scan to view',
+    shareTxt2: 'Save picture',
   }
 }

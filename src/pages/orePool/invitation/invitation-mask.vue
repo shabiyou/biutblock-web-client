@@ -2,25 +2,25 @@
   <section class="mask">
     <section class="rules-content mask_cnt" v-show="maskPage === 1">
       <header class="public-head">
-        <span>查看规则</span>
+        <span>{{ $t('invitation.rules') }}</span>
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
 
-      <p class="rules-tit">每次邀请成功就会奖励BIUT，请注意查收哦</p>
+      <p class="rules-tit">{{ $t('invitation.inMaskTxt') }}</p>
       <ul>
         <li>
-          <span>级别</span>
-          <span>人数</span>
+          <span>{{ $t('invitation.inMaskListTxt1') }}</span>
+          <span>{{ $t('invitation.inMaskListTxt2') }}</span>
         </li>
         <li v-for="(item, index) in itemList" :key="index">
           <figure>
             <img :src="item.portrait" alt="" />
             <figcaption>
-              {{ item.level }}
+              {{ $t(item.level) }}
             </figcaption>
           </figure>
           <span class="rules-number">
-            {{ item.number }}
+            {{ $t(item.number) }}
           </span>
         </li>
       </ul>
@@ -28,28 +28,28 @@
 
     <section class="details-content mask_cnt" v-show="maskPage === 2">
       <header class="public-head">
-        <span>查看明细</span>
+        <span>{{ $t('invitation.inListTxt4') }}</span>
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
 
-      <p class="details-tit details-tit-top">地址</p>
+      <p class="details-tit details-tit-top">{{ $t('invitation.inListTxt1') }}</p>
       <p class="details-txt">
         {{ maskAddress }}
         <span>
           {{ maskLevel }}
         </span>
       </p>
-      <p class="details-tit">总收益 (BIUT)</p>
+      <p class="details-tit">{{ $t('invitation.inListTxt3') }}</p>
       <p class="details-txt">
         {{ totalRevenue }}
       </p>
 
       <ul>
         <li>
-          <span>时间</span>
-          <span>奖励 (BUT)</span>
+          <span>{{ $t('invitation.inMask2ListTxt1') }}</span>
+          <span>{{ $t('invitation.inMask2ListTxt2') }}</span>
         </li>
-        <li v-for="(item, index) in amountList" :key="index">
+        <li v-for="(item, index) in amountLists" :key="index">
           <span>{{ item.maskTime }}</span>
           <span>{{ item.maskAmount }}</span>
         </li>
@@ -57,7 +57,7 @@
 
       <footer>
         <span class="page-number">
-          共 {{ total }} 条记录
+          {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
         </span>
         <!-- 分页 -->
         <wallet-page
@@ -96,24 +96,24 @@ export default {
       total: 10,
       itemList: [
         {
-          level: '铜牌合伙人',
+          level: 'invitation.level1',
           portrait: level1,
           number: '1-9'
         },
         {
-          level: '银牌合伙人',
+          level: 'invitation.level2',
           portrait: level2,
           number: '10-99'
         },
         {
-          level: '金牌合伙人',
+          level: 'invitation.level3',
           portrait: level3,
           number: '100-909'
         },
         {
-          level: '超级合伙人',
+          level: 'invitation.level4',
           portrait: level4,
-          number: '1000以上'
+          number: 'invitation.level4Txt'
         }
       ],
       amountList: [
@@ -123,6 +123,16 @@ export default {
           maskAmount: '1.345678'
         }
       ]
+    }
+  },
+  computed: {
+    amountLists () {
+      return Array(2).fill(this.amountList[0])
+    },
+  },
+  mounted() {
+    if (this.ismobile()) {
+      this.maskAddress = e.maskAddress.replace(/(.{6}).+(.{6})/, '$1...$2')
     }
   },
   methods: {
@@ -187,7 +197,7 @@ export default {
           padding: 0.425rem 2.8rem 0.425rem 2.2rem;
           span:last-child {
             display: inline-block;
-            width: 3rem;
+            width: 6rem;
             text-align: center;
           }
         }
@@ -200,7 +210,7 @@ export default {
         }
         .rules-number {
           display: inline-block;
-          width: 3rem;
+          width: 6rem;
           text-align: center;
           margin-right: 2.8rem;
         }
@@ -208,7 +218,8 @@ export default {
     }
   }
   .details-content {
-    width: 24.6rem;
+    max-width: 24.6rem;
+    min-height: 26.2rem;
     padding: 1rem 1.2rem 1.2rem;
     .details-tit {
       color: #99a1a6;
@@ -216,12 +227,11 @@ export default {
       padding-top: 1rem;
     }
     .details-tit-top {
-      padding-top: 2rem;
+      padding-top: 1.6rem;
     }
     .details-txt {
       color: #252f33;
       font-size: 0.8rem;
-      padding-top: .4rem;
       span {
         display: inline-block;
         width: 2.8rem;
@@ -237,7 +247,8 @@ export default {
     }
     ul {
       margin: 0;
-      padding: 1.6rem 0 0;
+      padding: 1.2rem 0 0;
+      height: 13.8rem;
       li {
         display: flex;
         align-items: center;
@@ -271,6 +282,12 @@ export default {
         padding: 0;
       }
     }
+  }
+}
+
+@media (max-width: 767px) {
+  .mask .details-content .details-txt span {
+    margin: .2rem 0 0 0;
   }
 }
 </style>

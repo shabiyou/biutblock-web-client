@@ -2,7 +2,7 @@
   <section class="wallet-page">
     <ul>
       <li>
-        <span @click="prev">上一页</span>
+        <span @click="prev">{{ $t('public.pagePrev') }}</span>
         <section>
           <input
             type="text"
@@ -14,7 +14,7 @@
           />
           <span>/ {{ totalPage }}</span>
         </section>
-        <span @click="next">下一页</span>
+        <span @click="next">{{ $t('public.pageNext') }}</span>
       </li>
     </ul>
   </section>
@@ -80,6 +80,7 @@ export default {
         line-height: 1.8rem;
         @include border($c: #e6e6e6, $d: bor);
         cursor: pointer;
+        box-sizing: border-box;
       }
       section {
         margin: 0 0.5rem;

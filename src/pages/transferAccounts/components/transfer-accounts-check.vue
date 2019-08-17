@@ -178,7 +178,7 @@ export default {
 }
 
 .money-arr {
-  width: 20.6rem;
+  max-width: 100%;
   @include border($d: bor);
   box-sizing: border-box;
   height: 2.4rem;

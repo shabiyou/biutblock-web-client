@@ -17,8 +17,8 @@
             {{ infoMoneyC }} <span>BIUT</span>
           </section>
           <p class="amount-list-txt">
-            <span>冻结：{{ availableAmount }}BIUT</span>
-            <span>可用：{{ freezeAmount }}BIUT</span>
+            <span>{{ $t("public.available") }}：{{ availableAmount }}BIUT</span>
+            <span>{{ $t("public.guarantee") }}：{{ freezeAmount }}BIUT</span>
           </p>
           <section class="amount-content">
             {{ infoMoneyN }} <span>BIU</span>
@@ -26,13 +26,13 @@
         </section>
       </li>
       <li>
-        <h4>我的邀请码</h4>
+        <h4>{{ $t("walletInfo.myCodeTxt") }}</h4>
         <section class="invite-list">
           <span id="invitationCode">{{ inviteCode }}</span>
           <img src="../../../assets/images/copy.png" alt="" @click="copyCode"
             data-clipboard-target="#invitationCode"
             class="copyButton"/>
-          <button type="button" @click="shareMask">一键分享</button>
+          <button type="button" @click="shareMask">{{ $t("walletInfo.shareBtn") }}</button>
         </section>
       </li>
     </ul>

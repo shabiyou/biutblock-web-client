@@ -2,10 +2,10 @@
   <section class="invitation-list">
     <header>
       <span class="list-title">
-        邀请记录
+        {{ $t('invitation.inListTit') }}
       </span>
       <section class="ipt-list">
-        <input type="text" v-model="searchIpt" placeholder="搜索" />
+        <input type="text" v-model="searchIpt" :placeholder="$t('invitation.inListSearch')" />
         <img src="../../../assets/images/search.png" alt="" />
       </section>
     </header>
@@ -13,30 +13,30 @@
     <main class="invitation-body">
       <ul>
         <li>
-          <span>地址</span>
-          <span>邀请时间</span>
-          <span>已获得奖励（BIUT）</span>
+          <span>{{ $t('invitation.inListTxt1') }}</span>
+          <span>{{ $t('invitation.inListTxt2') }}</span>
+          <span>{{ $t('invitation.inListTxt3') }}</span>
           <span></span>
         </li>
         <li v-for="(item, index) in itemLists" :key="index">
           <span>{{ item.invitationAddress }}</span>
           <span>{{ item.invitationTime }}</span>
           <span>{{ item.invitationMoney }}</span>
-          <span @click="lookRules">查看明细</span>
+          <span @click="lookRules">{{ $t('invitation.inListTxt4') }}</span>
         </li>
       </ul>
 
       <h4>
-        无邀请记录
+        {{ $t(searchContent) }}
       </h4>
     </main>
 
     <footer>
       <span class="page-number" v-show="!searchRes">
-        共 {{ total }} 条记录
+        {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
       </span>
       <span class="page-number" v-show="searchRes">
-        共 {{ searchTotal }} 条 结果
+        {{ $t('public.pageTotal') }} {{ searchTotal }} {{ $t('public.pageResults') }}
       </span>
       <!-- 分页 -->
       <wallet-page
@@ -62,6 +62,7 @@ export default {
   data() {
     return {
       searchIpt: '',
+      searchContent: 'invitation.inListNull', //invitation.inListNull 列表内容为空  invitation.inListSearchNull 搜索结果为空
       total: 10,
       searchTotal: 1,
       searchRes: false,
@@ -124,6 +125,7 @@ export default {
       @include border($c: #e6e6e6, $d: bor);
       border-radius: 0.2rem;
       padding: 0 1rem;
+      box-sizing: border-box;
       input {
         border: 0;
         flex: 1;
@@ -184,6 +186,41 @@ export default {
     .wallet-page {
       padding-top: 0;
     }
+  }
+}
+
+@media (max-width: 767px) {
+  .invitation-list {
+    padding: 1.4rem 15px 0;
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      .list-title {
+        padding-bottom: .4rem;
+      }
+    }
+    .invitation-body ul li {
+      span {
+        word-wrap: break-word;
+        padding-right: .8rem;
+        display: inline-block;
+        &:first-child {
+          width: 8rem;
+          word-break: break-all;
+        }
+        &:nth-child(2) {
+          width: 6rem;
+        }
+        &:nth-child(3) {
+          width: 8rem;
+        }
+        &:last-child {
+          width: 4rem;
+          padding-right: 0;
+          word-break: normal;
+        }
+      }
+    } 
   }
 }
 </style>

@@ -9,6 +9,8 @@ const config = {
   addressReg: /^(0x)(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/,
   hashReg: /^(0x)/,
   amountReg: /^(([1-9]\d*)|\d)(\.\d{1,8})?$/,
+
+  websiteUrl: "http://192.168.0.39",
 }
 
 let bindToGlobal = (obj, key) => {

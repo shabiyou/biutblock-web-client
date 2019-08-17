@@ -6,7 +6,10 @@ export default {
     saveKeyStore: "保存Keystore文件",
     keyStoreDown: "Keystore文件下载",
     next: "继续",
-    savePrivateKey: "保存私钥"
+    savePrivateKey: "保存私钥",
+
+    codeIpt: "请输入邀请码",
+    codeIptError: "请输入正确的邀请码",
   },
   tipsListPass: {
     "tipsCnt1": "请确保密码强度",
@@ -40,6 +43,9 @@ export default {
     walletMoney: "余额",
     qrCode: "你的地址（二维码）",
     newKeyStore: "下载新的Keystore",
+
+    myCodeTxt: '我的邀请码',
+    shareBtn: '一键分享',
   },
   transfer: {
     youAddress: "你的地址",
@@ -113,10 +119,37 @@ export default {
     poolIndexSearch1: '共找到',
     poolIndexSearch2: '条 关于',
     poolIndexSearch3: '的矿池结果',
+
+    poolTabTxt1: '矿池',
+    poolTabTxt2: '邀请',
+    poolListNull: '无记录',
   },
-  pages: {
-    next: '下一页',
-    prev: '上一页',
+  invitation: {
+    level: '我的等级',
+    medal: '金牌',
+    rules: '查看规则',
+
+    inListTit: '邀请记录',
+    inListSearch: '搜索',
+    inListTxt1: '地址',
+    inListTxt2: '邀请时间',
+    inListTxt3: '已获得奖励（BIUT）',
+    inListTxt4: '查看明细',
+    inListNull: '无邀请记录',
+    inListSearchNull: '无搜索内容',
+
+    inMaskTxt: '每次邀请成功就会奖励BIUT，请注意查收哦',
+    inMaskListTxt1: '级别',
+    inMaskListTxt2: '人数',
+
+    inMask2ListTxt1: '时间',
+    inMask2ListTxt2: '奖励 (BUT)',
+
+    level1: '铜牌合伙人',
+    level2: '银牌合伙人',
+    level3: '金牌合伙人',
+    level4: '超级合伙人',
+    level4Txt: '1000以上',
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果：",
@@ -146,5 +179,21 @@ export default {
   },
   footer: {
     FooterCnt: "有任何问题，请与我们联系。官方邮箱"
+  },
+  public: {
+    available: '可用',
+    guarantee: '冻结',
+    pageNext: '下一页',
+    pagePrev: '上一页',
+
+    pageTotal: '共',
+    pageRecord: '条记录',
+    pageResults: '条结果',
+  },
+  share: {
+    shareTit1: 'BIUT- PC矿工POW',
+    shareTit2: '挖矿邀请码',
+    shareTxt1: '用浏览器扫一扫即可查看',
+    shareTxt2: '保存图片',
   }
 }
