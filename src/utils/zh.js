@@ -28,6 +28,7 @@ export default {
     passEncryption: "你的钱包是加密的！请输入密码",
     newWalletPass: "请输入新钱包密码",
     passError: "密码错误, 解锁失败",
+    inviteCodeError: "钱包地址无效"
   },
   walletInfo: {
     accessWallet: "如何访问你的钱包？",
@@ -97,6 +98,7 @@ export default {
     poolLogin: '欢迎登入',
     poolLoginIpt: '请输入钱包私钥',
     poolLoginIptError: '请输入正确的钱包私钥',
+    poolInvailidError: '钱包地址无效',
     poolLoginBtn: '登入',
 
     poolIndexL: '未登入',

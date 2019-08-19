@@ -28,6 +28,7 @@ export default {
     passEncryption: "Your wallet is encrypted! Please enter the password",
     newWalletPass: "Enter your new wallet password",
     passError: "Password error, unlock fail.",
+    inviteCodeError: "Invalid wallet address."
   },
   walletInfo: {
     accessWallet: "How would you like to access your wallet?",
@@ -97,6 +98,7 @@ export default {
     poolLogin: 'Enter Wallet',
     poolLoginIpt: 'Eenter your private key here',
     poolLoginIptError: 'Please enter the correct wallet private key.',
+    poolInvailidError: 'Invailid wallet address',
     poolLoginBtn: 'Enter Wallet',
 
     poolIndexL: 'Login',

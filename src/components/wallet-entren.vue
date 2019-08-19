@@ -86,6 +86,7 @@ const publicPass = () => import("./public-pass")
 const publicTips = () => import("./public-tips")
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
+const dataCenterHandler = require('../lib/DataCenterHandler')
 export default {
   name: 'walletEntren',
   components: {
@@ -178,34 +179,63 @@ export default {
         let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')//钱包公钥
         let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)//钱包助记词
         //传递给父级需要的参数
-        let parm = {
-          address: '0x' + extractAddress,
-          privateKey: privateVal,
-          englishWords: extractPhrase,
-          publicKey: extractPublicKey
-        }
-        this.$emit('login', parm)
+        let parm
+        this._getWalletFromDB(extractAddress, (parent) => {
+          if (parent.status) {
+            parm = {
+              address: '0x' + extractAddress,
+              privateKey: privateVal,
+              englishWords: extractPhrase,
+              publicKey: extractPublicKey,
+              invitationCode: parent.doc[0].invitationCode,
+              ownInvitationCode: parent.doc[0].ownInvitationCode,
+              mortgagePoolAddress: parent.doc[0].mortgagePoolAddress,
+              ownPoolAddress: parent.doc[0].ownPoolAddress,
+              mortgageValue: parent.doc[0].mortgageValue,
+              role: parent.doc[0].role
+            }
+            this.$emit('login', parm)
+          } else {
+            this.walletPassError = true
+            this.walletPassErrorTxt = "passTips.inviteCodeError"
+          }
+        })
+        
       } else {
         let passVal = this.passVal.replace(/\s+/g, "")
         let that = this
         //解锁钱包
-        this.$axios.get('' + this.KeyStoreUrl + '').then(function (response) {
+        this.$axios.get('' + this.KeyStoreUrl + '').then( (response) => {
           let jsonstr = response.data
           let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
           if (response.status == 200) {
             let walletData = keyData.split(':{')
             let arrData1 = '{' + walletData[1].replace("}}", "") + '}'
             let arrData = eval('(' + arrData1 + ')')
-            let parm = {
-              address: '0x' + arrData.walletAddress,
-              privateKey: arrData.privateKey,
-              englishWords: arrData.englishWords,
-              publicKey: arrData.publicKey
-            }
-            that.$emit('login', parm)
+            let parm
+            this._getWalletFromDB(arrData.walletAddress, (parent) => {
+              if (parent.status) {
+                parm = {
+                  address: '0x' + arrData.walletAddress,
+                  privateKey: arrData.privateKey,
+                  englishWords: arrData.englishWords,
+                  publicKey: arrData.publicKey,
+                  invitationCode: parent.doc[0].invitationCode,
+                  ownInvitationCode: parent.doc[0].ownInvitationCode,
+                  mortgagePoolAddress: parent.doc[0].mortgagePoolAddress,
+                  ownPoolAddress: parent.doc[0].ownPoolAddress,
+                  mortgageValue: parent.doc[0].mortgageValue,
+                  role: parent.doc[0].role
+                }
+                this.$emit('login', parm)
+              } else {
+                this.walletPassError = true
+                this.walletPassErrorTxt = "passTips.inviteCodeError"
+              }
+            })
           }
-        }).catch(function (error) {
-          that.walletPassError = true
+        }).catch( (error) => {
+          this.walletPassError = true
         });
       }
     },
@@ -233,6 +263,12 @@ export default {
       });
       this.radioList[index].isChecked = true
     },
+
+    _getWalletFromDB (walletAddress, callback) {
+      dataCenterHandler.findOutWallet({address: walletAddress}, (body) => {
+        callback(body)
+      })
+    }
   },
 }
 </script>

@@ -62,7 +62,7 @@ export default {
 
       availableAmount: 1000, //可用余额
       freezeAmount: 1000, //冻结金额
-      inviteCode: '12345678',//邀请码
+      inviteCode: '',//邀请码
 
       infoPages: 1, //默认显示登陆页面
       maskShow: false, //遮罩层 
@@ -96,6 +96,7 @@ export default {
       this.walletKey = e.privateKey
       this.walletWords = e.englishWords
       this.walletPublicKey = e.publicKey
+      this.inviteCode = e.ownInvitationCode
       let address = e.address.replace("0x", "")
       //查询SEC余额
       this.getWalletBalance(address, 'biut').then(res => {

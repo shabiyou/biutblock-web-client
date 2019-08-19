@@ -41,12 +41,14 @@ let fetch = require('node-fetch')
 //获取钱包余额 BIUT、BIU
 Vue.prototype.getWalletBalance = async (address, type) => {
   let url = _const.url
+  let token = 'SEC'
   if (type == 'biu') {
     url = _const.url_sen
+    token = 'SEN'
   }
   let bodyRequest = {
     'method': 'sec_getBalance',
-    'params': ["" + address + ""]
+    'params': [address, token]
   }
   const text = await fetch(url, {
     method: 'post',

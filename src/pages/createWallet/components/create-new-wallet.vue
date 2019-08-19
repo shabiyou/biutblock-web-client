@@ -35,7 +35,7 @@
         @input="codeChange" />
     </section>
     <!-- 邀请码错误组件 -->
-    <public-tips v-show="codeError" :tipsTxt="tipsCode" />
+    <public-tips v-show="codeError||invailidCode" :tipsTxt="tipsCode" />
 
     <!-- 提示语列表组件 -->
     <tips-list :tipsListKey="tipsListPass" class="tips-list" />
@@ -55,10 +55,17 @@ const publicTips = () => import("../../../components/public-tips")
 import tipsList from './wallet-tips-list'
 import publicPass from '../../../components/public-pass'
 import publicButton from '../../../components/public-button'
+
+const dataCenterHandler = require('../../../lib/DataCenterHandler')
+
 export default {
   name: 'createWallet',
   props: {
-    tipsListPass: Array
+    tipsListPass: Array,
+    invailidCode: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     publicPass,
@@ -77,10 +84,10 @@ export default {
       showFormat: false, //密码提示不显示
       tipsTxt1: 'passTips.passFormat',
       tipsTxt2: 'passTips.passNoMatch',
-
+      codeError: false,
       inviteCode: '',
       tipsCode: 'newWallet.codeIptError',
-      codeError: false,
+      
     }
   },
   created() {
@@ -108,6 +115,8 @@ export default {
         return _const.passReg.test(pass1) && pass1 == pass2 && code.length === 8 ? true : false
       }
     },
+
+    
   },
   methods: {
     //失去焦点
@@ -141,9 +150,10 @@ export default {
     },
 
     //创建钱包
-    createFrom() {
+    createFrom () {
       let pass = (this.walletPass1).replace(/\s+/g, "")
-      this.$emit("created", pass)
+      let inviteCode = this.inviteCode
+      this.$emit("created", pass, inviteCode)
     }
   },
   watch: {

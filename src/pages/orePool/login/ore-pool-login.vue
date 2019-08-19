@@ -15,7 +15,7 @@
         />
       </section>
 
-      <p v-show="keyError">{{ $t("pool.poolLoginIptError") }}</p>
+      <p v-show="keyError">{{ $t(walletKeyErrTxt) }}</p>
 
       <public-button
         :text="$t('pool.poolLoginBtn')"
@@ -39,7 +39,8 @@ export default {
     return {
       walletKey: '',
       keyError: false,
-      margnB: false
+      margnB: false,
+      walletKeyErrTxt: ''
     }
   },
   computed: {
@@ -68,13 +69,43 @@ export default {
      * 
      */
     loginFrom() {
-      let parm = {
-        userAddress: '0x69e80014122428105e0af5ee4ff1da56f1cbe6a3',
-        userPrivateKey: this.walletKey,
-        loginStatus: '1'
+      try {
+        let privateVal = this.privateKeyVal.replace(/\s+/g, "")
+        let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
+        let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')//钱包地址
+        let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')//钱包公钥
+        let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)//钱包助记词
+        //传递给父级需要的参数
+        let parm
+        this._getWalletFromDB(extractAddress, (parent) => {
+          if (parent.status) {
+            parm = {
+              address: '0x' + extractAddress,
+              privateKey: privateVal,
+              englishWords: extractPhrase,
+              publicKey: extractPublicKey,
+              invitationCode: parent.doc[0].invitationCode,
+              ownInvitationCode: parent.doc[0].ownInvitationCode,
+              mortgagePoolAddress: parent.doc[0].mortgagePoolAddress,
+              ownPoolAddress: parent.doc[0].ownPoolAddress,
+              mortgageValue: parent.doc[0].mortgageValue,
+              role: parent.doc[0].role
+            }
+            this.$emit('login', parm)
+          } else {
+            this._inputError()
+            this.walletKeyErrTxt = 'pool.poolInvailidError'
+          }
+        })
+      } catch (err) {
+        this._inputError()
+        this.walletKeyErrTxt = 'pool.poolLoginIptError'
       }
+    },
+
+    _inputError () {
+      this.keyError = true
       this.walletKey = ""
-      this.$emit('login', parm)
     }
   },
 }

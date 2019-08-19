@@ -1,6 +1,9 @@
 import jayson from 'jayson/lib/client'
 import WalletsHandler from './WalletsHandler'
 const moment = require('moment-timezone')
+
+let sourceCode = 'ZnVuY3Rpb24gdHJhbnNmZXIoYWRkcmVzcywgYW1vdW50KSB7CiAgICB2YXIgdHJhbnNmZXJGbGFnID0gZmFsc2UKICAgIGlmKGFtb3VudD4wKXsKICAgICAgICB0cmFuc2ZlckZsYWcgPSB0cnVlCiAgICB9CiAgICByZXR1cm4geydBZGRyZXNzJzogYWRkcmVzcywgJ0Ftb3VudCc6IGFtb3VudCwgJ1RyYW5zZmVyRmxhZyc6IHRyYW5zZmVyRmxhZ30KfQoKZnVuY3Rpb24gbG9jayhiZW5lZml0QWRkcmVzcywgYW1vdW50LCB0aW1lKXsKICAgIHZhciBsb2NrRmxhZyA9IGZhbHNlCiAgICBpZihhbW91bnQ+MCl7CiAgICAgICAgbG9ja0ZsYWcgPSB0cnVlCiAgICB9CiAgICByZXR1cm4geydBZGRyZXNzJzogYmVuZWZpdEFkZHJlc3MsICdBbW91bnQnOiBhbW91bnQsICdUaW1lJzogdGltZSwgJ0xvY2tGbGFnJzogbG9ja0ZsYWd9Cn0KCmZ1bmN0aW9uIHJlbGVhc2VMb2NrKGJlbmVmaXRBZGRyZXNzLCBhbW91bnQpewogICAgdmFyIHJlbGVhc2VMb2NrRmxhZyA9IGZhbHNlCiAgICBpZihhbW91bnQ+MCl7CiAgICAgICAgcmVsZWFzZUxvY2tGbGFnID0gdHJ1ZQogICAgfQogICAgcmV0dXJuIHsnQWRkcmVzcyc6IGJlbmVmaXRBZGRyZXNzLCAnQW1vdW50JzogYW1vdW50LCAnUmVsZWFzZUxvY2tGbGFnJzogcmVsZWFzZUxvY2tGbGFnfQp9'
+
 export default {
   install: function (Vue, options) {
     let externalServerAddress = '54.250.166.137' //'54.250.166.137'  //'18.197.120.79' Test node
@@ -170,7 +173,93 @@ export default {
             fnGetBlock(height, block)
           })
         })
-      }
+      },
+      getNonce: function (walletAddress, fnAfterGetNonce) {
+        this.client.request('sec_getNonce', [walletAddress], (err, response) => {
+          if (err) return
+          fnAfterGetNonce(response.result.Nonce)
+        })
+      },
+
+      getTimeLock: function (walletAddress, contractAddress, fnAfterGet) {
+        let history = []
+        this.client.request('sec_getTimeLock', [walletAddress, contractAddress], (err, response) => {
+          if (err) return
+          for (let i = 0; i < response.result.timeLock.length; i++) {
+            let unlockTime = WalletsHandler.formatDate(moment(response.result.timeLock[i].unlocktime).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
+            let lockTime = WalletsHandler.formatDate(moment(response.result.timeLock[i].locktime).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
+            history.push({
+              lockTime: lockTime,
+              unlockTime: unlockTime,
+              lockMoney: response.result.timeLock[i].amount
+            })
+          }
+          fnAfterGet(history)
+        })
+      },
+
+      getContractInfo: function (contractAddress, fnAfterGetInfo) {
+        this.client.request('sec_getContractInfo', [contractAddress], (err, response) => {
+          if (err) return
+          fnAfterGetInfo(response.result.contractInfo)
+        })
+      },
+
+      createContractTransaction: function (walletAddress, privateKey, contractName, transfer, fnAfterCreate) {
+        // let sourceCode = fs.readFileSync('./smart_contract_test.js').toString('base64')
+        let contractAddress = WalletsHandler.generateContractAddress(privateKey)
+        let tokenName = `SEC-${contractAddress}-${contractName}`
+        transfer.inputData = JSON.stringify({
+          sourceCode: sourceCode,
+          totalSupply: 100000000,
+          tokenName: tokenName
+        })
+        transfer.sendToAddress = contractAddress
+        this.getNonce(walletAddress, (nonce) => {
+          transfer.nonce = nonce
+          let signedTransfer = WalletsHandler.encryptTransaction(privateKey, transfer)
+          this.client.request('sec_createContractTransaction', [signedTransfer[0], tokenName], (err, response) => {
+            if (err) return
+            fnAfterCreate(contractAddress, response)
+          })
+        })
+      },
+
+      sendContractTransaction: function (walletAddress, privateKey, lockTime, transfer, fnAfterContract) {
+        let sourceCode = `lock( "${walletAddress}", ${transfer.amount}, ${lockTime})`.toString('base64')
+        sourceCode = JSON.stringify({callCode: Buffer.from(sourceCode).toString('base64')})
+        transfer.inputData = sourceCode
+        this.getNonce(walletAddress, (nonce) => {
+          transfer.nonce = nonce
+          let signedTransfer = WalletsHandler.encryptTransaction(privateKey, transfer)
+          this.client.request('sec_sendContractTransaction', signedTransfer, (err, response) => {
+            if (err) return
+            fnAfterContract(response)
+          })
+        })
+      },
+
+      releaseContractLock: function (walletAddress, privateKey, transfer, fnAfterRelease) {
+        let sourceCode = `releaseLock("${walletAddress}", ${transfer.value})`.toString('base64')
+        sourceCode = JSON.stringify({callCode: Buffer.from(sourceCode).toString('base64')})
+        transfer.inputData = sourceCode
+
+        this.getNonce(walletAddress, (nonce) => {
+          transfer.nonce = nonce
+          let signedTransfer = WalletsHandler.encryptTransaction(privateKey, transfer)
+          this.client.request('sec_sendContractTransaction', signedTransfer, (err, response) => {
+            if (err) return
+            fnAfterRelease(response)
+          })
+        })
+      },
+
+      getCreatorContract: function (walletAddress, fnAfterGetContract) {
+        this.client.request('sec_getCreatorContract', [walletAddress], (err, response) => {
+          if (err) return
+          fnAfterGetContract(response.result.contractAddress)
+        })
+      },
     }
 
     jsonRPC.client = jayson.http(`http://${externalServerAddress}:${externalServerPort}`)

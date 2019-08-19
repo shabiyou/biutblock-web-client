@@ -7,6 +7,7 @@
           <create-wallet
             v-if="pages === 1"
             :tipsListPass="tipsListPass"
+            :invailidCode="inviteCodeError"
             @created="createFrom"
           />
 
@@ -42,6 +43,8 @@ import tipsImg from '../../assets/images/tipsImg.png'
 import walletsHandler from '../../lib/WalletsHandler.js'
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
+const dataCenterHandler = require('../../lib/DataCenterHandler')
+
 export default {
   name: 'newWallet',
   components: {
@@ -57,6 +60,7 @@ export default {
       privateKey: '', //钱包私钥 -- 页面展示
       userAddress: '', //钱包地址 -- 下载名称
       keyData: '', //当前创建钱包的加密信息
+      inviteCodeError: false,
       tipsListPass: [{
         'id': '01',
         'tips_img': tipsImg,
@@ -100,29 +104,39 @@ export default {
   destroyed() { },
   methods: {
     //创建钱包
-    createFrom(e) {
-      this.pages = 2 //保存Keystore文件
+    createFrom(e, inviteCode) {
       let keys = SECUtil.generateSecKeys() //创建钱包
       let privKey64 = keys.privKey //获取创建钱包的私钥
       let englishWords = SECUtil.entropyToMnemonic(privKey64) //助记词
       let pubKey128 = keys.publicKey
       let pubKey128ToString = pubKey128.toString('hex') //公钥
       let userAddressToString = keys.secAddress //地址
+
       this.userAddress = userAddressToString //赋值当前地址用作创建json文件
       this.privateKey = privKey64 //赋值当前显示私钥
 
-      let keyFileDataJS = {
-        [privKey64]: {
-          walletName: "New Import",
-          privateKey: privKey64,
-          publicKey: pubKey128ToString,
-          walletAddress: userAddressToString,
-          englishWords: englishWords,
+      dataCenterHandler.createWallet({
+        address: this.userAddress,
+        invitationCode: inviteCode,
+      }, (body) => {
+        if (body.status) {
+          let keyFileDataJS = {
+            [privKey64]: {
+              walletName: "New Import",
+              privateKey: privKey64,
+              publicKey: pubKey128ToString,
+              walletAddress: userAddressToString,
+              englishWords: englishWords,
+            }
+          }
+          //通过密码加密钱包  
+          let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), e)
+          this.keyData = cipherKeyData.toString()
+          this.pages = 2 //保存Keystore文件
+        } else {
+          this.inviteCodeError = true
         }
-      }
-      //通过密码加密钱包  
-      let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), e)
-      this.keyData = cipherKeyData.toString()
+      })
     },
 
     //保存keyStore之后继续查看私钥
