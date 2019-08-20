@@ -22,6 +22,10 @@ const DataCenterHandler = {
       url: `${dataCenterUrl}finditem`,
       method: 'POST',
       body: params,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       json: true
     }, (err, res, body) => {
       callback(body)
@@ -33,6 +37,10 @@ const DataCenterHandler = {
       url: `${dataCenterUrl}updatefreezevalue`,
       method: 'POST',
       body: params,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       json: true
     }, (err, res, body) => {
       callback(body)
@@ -44,6 +52,25 @@ const DataCenterHandler = {
       url: `${dataCenterUrl}updatepooladdress`,
       method: 'POST',
       body: params,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  },
+
+  getAllPool: function (callback) {
+    request({
+      url: `${dataCenterUrl}getallpools`,
+      method: 'POST',
+      body: {},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       json: true
     }, (err, res, body) => {
       callback(body)

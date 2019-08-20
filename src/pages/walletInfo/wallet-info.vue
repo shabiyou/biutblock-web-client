@@ -101,13 +101,56 @@ export default {
       //查询SEC余额
       this.getWalletBalance(address, 'biut').then(res => {
         this.walletMoneyC = this.scientificNotationToString(res)
+        if (e.mortgagePoolAddress !== '' && e.ownPoolAddress !== '') {
+          this.getContractInfo(e.mortgagePoolAddress, (res) => {
+            let freezeAmount = 0
+            let walletMoneyC = Number(walletMoneyC)
+            let availableAmount = Number(walletMoneyC)
+            if (res.timeLock && res.timeLock.hasOwnProperty(this.walletAddress) && res.timeLock[this.walletAddress].hasOwnProperty(this.walletAddress)) {
+              let benifitAddress = res.timeLock[this.selectedWallet.walletAddress][this.selectedWallet.walletAddress]
+              for (let i = 0; i < benifitAddress.length; i++) {
+                freezeAmount = freezeMoney + Number(benifitAddress[i].lockAmount)
+              }
+            }
+            this.getContractInfo(e.ownPoolAddress, (res) => {
+              if (res.timeLock && res.timeLock.hasOwnProperty(this.walletAddress) && res.timeLock[this.walletAddress].hasOwnProperty(this.walletAddress)) {
+                let benifitAddress = res.timeLock[this.walletAddress][this.walletAddress]
+                for (let i = 0; i < benifitAddress.length; i++) {
+                  freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
+                }
+              }
+              this.freezeAmount = this.scientificNotationToString(freezeAmount)
+              this.walletMoneyC = this.scientificNotationToString(walletMoneyC + freezeAmount)
+              this.availableAmount = this.scientificNotationToString(availableAmount)
+            })
+          })
+        } else {
+          let contractAddress = ''
+          if (e.mortgagePoolAddress !== '' && e.ownPoolAddress === '') {
+            contractAddress = e.mortgagePoolAddress
+          } else if (e.mortgagePoolAddress === '' && e.ownPoolAddress !== '') {
+            contractAddress = e.ownPoolAddress
+          }
+          this.getContractInfo(contractAddress, (res) => {
+            let freezeAmount = 0
+            if (res.timeLock && res.timeLock.hasOwnProperty(this.walletAddress) && res.timeLock[this.walletAddress].hasOwnProperty(this.walletAddress)) {
+              let benifitAddress = res.timeLock[this.walletAddress][this.walletAddress]
+              for (let i = 0; i < benifitAddress.length; i++) {
+                freezeAmount = freezeAmount + Number(benifitAddress[i].lockAmount)
+              }
+            }
+            this.freezeAmount = this.scientificNotationToString(freezeAmount)
+            this.availableAmount = this.walletMoneyC
+            this.walletMoneyC = this.scientificNotationToString(freezeAmount + Number(this.availableAmount))
+          })
+        }
       })
 
       //查询SEN余额
       this.getWalletBalance(address, 'biu').then(res => {
         this.walletMoneyN = this.scientificNotationToString(res)
       })
-    }
+    },
   },
 }
 </script>

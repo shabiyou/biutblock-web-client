@@ -60,6 +60,39 @@ Vue.prototype.getWalletBalance = async (address, type) => {
   return amount
 }
 
+Vue.prototype.getContractInfo = function (contractAddress, callback) {
+  let rpcMethod = 'sec_getContractInfo'
+  let url = _const.url
+  let bodyRequest = {
+    'method': rpcMethod,
+    'params': [contractAddress]
+  }
+  fetch(url, {
+    method: 'post',
+    body: JSON.stringify(bodyRequest),
+    headers: httpHeaderOption
+  }).then((res) => {
+    callback(res.body.result.contractInfo)
+  })
+},
+
+Vue.prototype.getContractInfoSync = async (pools) => {
+  let contractInfos = []
+  for (let pool in pools) {
+    let bodyRequest = {
+      'method': 'sec_getContractInfo',
+      'params': [pool.ownPoolAddress]
+    }
+    let res = await fetch(_const.url, {
+      method: 'post',
+      body: JSON.stringify(bodyRequest),
+      headers: httpHeaderOption
+    }).then( (res) => res.json())
+    contractInfos.push(res.body.result.contractInfo)
+  }
+  return contractInfos
+},
+
 //获取上传url
 Vue.prototype.funDownload = function (filename, content) {
   var eleLink = document.createElement('a');

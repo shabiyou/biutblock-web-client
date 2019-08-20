@@ -103,6 +103,9 @@ import invitationMask from './invitation/invitation-mask'
 import poolFooter from './components/ore-pool-footer'
 import search from '../../assets/images/search.png'
 import searchs from '../../assets/images/searchs.png'
+
+const dataCenterHandler = require('../../lib/DataCenterHandler')
+
 export default {
   name: '',
   components: {
@@ -147,11 +150,23 @@ export default {
   },
   computed: {
     itemLists() {
-      return Array(10).fill(this.itemList[0])
+      return this.itemList
     }
   },
   created() {
-    
+    dataCenterHandler.getAllPool((pools) => {
+      this.getContractInfoSync(pools).then( infos => {
+        for (let info in infos) {
+          let poolName = info.tokenName
+          let poolMoney = info.totalSupply
+          this.itemList.push({
+            id: 0,
+            poolName: poolName,
+            pooolMoney: `${poolMoney} BIUT`
+          })
+        }
+      })
+    })
   },
   mounted() {
 
@@ -173,13 +188,29 @@ export default {
     //登陆成功
     userLogin (e) {
       this.loginPage = 0
-      this.address = e.userAddress
+      this.address = e.address
       if (this.ismobile()) {
-        this.address = e.userAddress.replace(/(.{6}).+(.{6})/, '$1...$2')
+        this.address = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
       }
-      this.privateKey = e.userPrivateKey 
-
+      this.privateKey = e.privateKey
       this.loginStatus = false
+      if (e.role === 'Miner') {
+        this.getContractInfo(e.mortgagePoolAddress, (info) => {
+          this.addPoolList.push({
+            id: 0,
+            poolName: info.tokenName.split('-')[2],
+            pooolMoney: `${info.totalSupply} BIUT`
+          })
+        })
+      } else {
+        this.getContractInfo(e.ownPoolAddress, (info) => {
+          this.addPoolList.push({
+            id: 0,
+            poolName: info.tokenName.split('-')[2],
+            pooolMoney: `${info.totalSupply} BIUT`
+          })
+        })
+      }
     },
 
     //退出登陆、退出成功之后再重新加载一次所有列表
