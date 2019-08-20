@@ -19,7 +19,9 @@ import Element from 'element-ui'
 import 'babel-polyfill'
 
 //金额，分开
-import { currency } from './utils/currency'
+import {
+  currency
+} from './utils/currency'
 Vue.filter("currency", currency)
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
@@ -42,7 +44,7 @@ let fetch = require('node-fetch')
 Vue.prototype.getWalletBalance = async (address, type) => {
   let url = _const.url
   let token = 'SEC'
-  if (type == 'biu') {
+  if (type === 'biu') {
     url = _const.url_sen
     token = 'SEN'
   }
@@ -60,7 +62,7 @@ Vue.prototype.getWalletBalance = async (address, type) => {
   return amount
 }
 
-Vue.prototype.getContractInfo = function (contractAddress, callback) {
+Vue.prototype.getContractInfo = (contractAddress, callback) => {
   let rpcMethod = 'sec_getContractInfo'
   let url = _const.url
   let bodyRequest = {
@@ -71,37 +73,42 @@ Vue.prototype.getContractInfo = function (contractAddress, callback) {
     method: 'post',
     body: JSON.stringify(bodyRequest),
     headers: httpHeaderOption
-  }).then((res) => {
-    callback(res.body.result.contractInfo)
+  }).then(res => {
+    return res.json()
+  }).then(json => {
+    callback(JSON.parse(json.body).contractInfo)
   })
-},
+}
 
 Vue.prototype.getContractInfoSync = async (pools) => {
   let contractInfos = []
-  for (let pool in pools) {
+  for (let i in pools) {
     let bodyRequest = {
       'method': 'sec_getContractInfo',
-      'params': [pool.ownPoolAddress]
+      'params': [pools[i].ownPoolAddress.replace('0x')]
     }
     let res = await fetch(_const.url, {
       method: 'post',
       body: JSON.stringify(bodyRequest),
       headers: httpHeaderOption
-    }).then( (res) => res.json())
-    contractInfos.push(res.body.result.contractInfo)
+    }).then((res) => res.json())
+    console.log(res)
+    contractInfos.push(JSON.parse(res.body).result.contractInfo)
   }
   return contractInfos
-},
+}
 
-//获取上传url
+    //获取上传url
 Vue.prototype.funDownload = function (filename, content) {
   var eleLink = document.createElement('a');
   eleLink.download = filename;
   eleLink.style.display = 'none';
   // 字符内容转变成blob地址
-  var blob = new Blob([content], { type: "application/octet-stream" });
+  var blob = new Blob([content], {
+    type: "application/octet-stream"
+  })
   eleLink.href = URL.createObjectURL(blob);
-  document.body.appendChild(eleLink);// 触发点击
+  document.body.appendChild(eleLink); // 触发点击
   eleLink.click();
   document.body.removeChild(eleLink);
 }
@@ -170,7 +177,8 @@ Vue.prototype.getPointNum = function (num, n) {
 Vue.prototype.getQueryString = function (name) {
   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
   var r = window.location.search.substr(1).match(reg);
-  if (r != null) return (r[2]); return null;
+  if (r != null) return (r[2]);
+  return null;
 }
 
 new Vue({

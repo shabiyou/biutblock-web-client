@@ -132,20 +132,8 @@ export default {
       maskPage: 1,
       maskShow: false,
       idx: 0,
-      itemList: [
-        {
-          id: 0,
-          poolNmae: '神马M20yanNerjks',
-          poolMoney: '1100 BIUT'
-        }
-      ],
-      addPoolList: [
-        {
-          id: 0,
-          poolName: '神马M20yanNerjks',
-          pooolMoney: '585454541.2345678 BIUT'
-        }
-      ]
+      itemList: [],
+      addPoolList: []
     }
   },
   computed: {
