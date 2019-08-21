@@ -145,7 +145,7 @@ export default {
     dataCenterHandler.getAllPool((pools) => {
       this.getContractInfoSync(pools).then( infos => {
         for (let info of infos) {
-          let poolName = info.tokenName
+          let poolName = info.tokenName ? info.tokenName.split('-')[2] : ''
           let poolMoney = info.totalSupply
           this.itemList.push({
             id: 0,
