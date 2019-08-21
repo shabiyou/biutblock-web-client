@@ -78,10 +78,10 @@ Vue.prototype.getContractInfo = function (contractAddress, callback) {
 
 Vue.prototype.getContractInfoSync = async (pools) => {
   let contractInfos = []
-  for (let pool in pools) {
+  for (let index in pools) {
     let bodyRequest = {
       'method': 'sec_getContractInfo',
-      'params': [pool.ownPoolAddress]
+      'params': [pools[index].ownPoolAddress]
     }
     let res = await fetch(_const.url, {
       method: 'post',
