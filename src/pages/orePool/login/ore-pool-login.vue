@@ -29,6 +29,8 @@
 
 <script>
 import publicButton from '../../../components/public-button'
+const SECUtil = require('@biut-block/biutjs-util')
+const dataCenterHandler = require('../../../lib/DataCenterHandler')
 export default {
   name: '',
   components: {
@@ -70,14 +72,16 @@ export default {
      */
     loginFrom() {
       try {
-        let privateVal = this.privateKeyVal.replace(/\s+/g, "")
+        let privateVal = this.walletKey.replace(/\s+/g, "")
         let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
         let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')//钱包地址
         let extractPublicKey = SECUtil.privateToPublic(privateKeyBuffer).toString('hex')//钱包公钥
         let extractPhrase = SECUtil.entropyToMnemonic(privateKeyBuffer)//钱包助记词
         //传递给父级需要的参数
         let parm
-        this._getWalletFromDB(extractAddress, (parent) => {
+        dataCenterHandler.findOutWallet({
+            address: extractAddress
+          }, (parent) => {
           if (parent.status) {
             parm = {
               address: '0x' + extractAddress,

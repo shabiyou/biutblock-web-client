@@ -132,20 +132,8 @@ export default {
       maskPage: 1,
       maskShow: false,
       idx: 0,
-      itemList: [
-        {
-          id: 0,
-          poolNmae: '神马M20yanNerjks',
-          poolMoney: '1100 BIUT'
-        }
-      ],
-      addPoolList: [
-        {
-          id: 0,
-          poolName: '神马M20yanNerjks',
-          pooolMoney: '585454541.2345678 BIUT'
-        }
-      ]
+      itemList: [],
+      addPoolList: []
     }
   },
   computed: {
@@ -156,13 +144,13 @@ export default {
   created() {
     dataCenterHandler.getAllPool((pools) => {
       this.getContractInfoSync(pools).then( infos => {
-        for (let info in infos) {
+        for (let info of infos) {
           let poolName = info.tokenName
           let poolMoney = info.totalSupply
           this.itemList.push({
             id: 0,
             poolName: poolName,
-            pooolMoney: `${poolMoney} BIUT`
+            poolMoney: `${poolMoney} BIUT`
           })
         }
       })
