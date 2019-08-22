@@ -90,8 +90,10 @@ export default {
        * 
        * 加入成功 调用 close() 关闭弹窗
        */
-
+      
       let ipt = this.joinIpt.replace(/\s+/g, "")
+      let sourceCode = `lock( "${this.address}", ${ipt}, ${365 * 24 * 3600 * 1000})`.toString('base64')
+      sourceCode = JSON.stringify({callCode: Buffer.from(sourceCode).toString('base64')})
       const transfer = {
         "timeStamp": new Date().getTime(),
         'walletAddress': this.address,
@@ -103,13 +105,13 @@ export default {
         'gasPrice': '0',
         'data': '',
         "nonce": this.nonce,
-        'inputData': ''
+        'inputData': sourceCode
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名，
       //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       let txBody = {
-        "method": "sec_signedTransaction",
+        "method": "sec_sendContractTransaction",
         "params": [{
           "companyName": "coinegg",
           "privateKey": this.privateKey,
