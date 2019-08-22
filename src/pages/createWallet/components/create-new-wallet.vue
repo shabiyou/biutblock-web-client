@@ -32,6 +32,7 @@
         :placeholder="$t('newWallet.codeIpt')" 
         v-model="inviteCode"
         maxlength="8"
+        :readonly="codeDis"
         @input="codeChange" />
     </section>
     <!-- 邀请码错误组件 -->
@@ -87,11 +88,14 @@ export default {
       codeError: false,
       inviteCode: '',
       tipsCode: 'newWallet.codeIptError',
-      
+      codeDis: false
     }
   },
   created() {
     this.inviteCode = this.getQueryString('code') || ''
+    if (this.getQueryString('code')) {
+      this.codeDis = true
+    }
   },
   computed: {
     //创建钱包按钮是否可点击

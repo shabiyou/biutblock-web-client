@@ -11,7 +11,7 @@ const config = {
   hashReg: /^(0x)/,
   amountReg: /^(([1-9]\d*)|\d)(\.\d{1,8})?$/,
 
-  websiteUrl: "http://192.168.0.39",
+  websiteUrl: "http://192.168.0.39:81",
 }
 
 let bindToGlobal = (obj, key) => {
