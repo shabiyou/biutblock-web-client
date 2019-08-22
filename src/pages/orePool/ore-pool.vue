@@ -45,7 +45,7 @@
           </section>
 
           <!-- 所有列表 -->
-          <pool-list :itemList="itemLists" :poolName="searchIpt" />
+          <pool-list :itemList="itemLists" :poolName="searchIpt" :nounce="nounce" :address="address" :privateKey="privateKey" />
         </section>
 
         <!-- 登录成功 -->
@@ -133,7 +133,8 @@ export default {
       maskShow: false,
       idx: 0,
       itemList: [],
-      addPoolList: []
+      addPoolList: [],
+      nounce: 0
     }
   },
   computed: {
@@ -145,16 +146,20 @@ export default {
     dataCenterHandler.getAllPool((pools) => {
       this.getContractInfoSync(pools).then( infos => {
         for (let info in infos) {
-          let poolName = info.tokenName
+          let poolName = info.tokenName.split('-')[2]
+          let poolAddress = info.tokenName.split('-')[1]
           let poolMoney = info.totalSupply
           this.itemList.push({
             id: 0,
             poolName: poolName,
-            pooolMoney: `${poolMoney} BIUT`
+            pooolMoney: `${poolMoney} BIUT`,
+            poolAddress: poolAddress
           })
         }
       })
     })
+
+    
   },
   mounted() {
 
@@ -182,23 +187,38 @@ export default {
       }
       this.privateKey = e.privateKey
       this.loginStatus = false
-      if (e.role === 'Miner') {
-        this.getContractInfo(e.mortgagePoolAddress, (info) => {
-          this.addPoolList.push({
-            id: 0,
-            poolName: info.tokenName.split('-')[2],
-            pooolMoney: `${info.totalSupply} BIUT`
-          })
-        })
-      } else {
-        this.getContractInfo(e.ownPoolAddress, (info) => {
-          this.addPoolList.push({
-            id: 0,
-            poolName: info.tokenName.split('-')[2],
-            pooolMoney: `${info.totalSupply} BIUT`
-          })
-        })
+      let poolAddress = []
+      for (let pool of e.mortgagePoolAddress) {
+        poolAddress.push(pool.replace('0x', ''))
       }
+      for (let pool of e.ownPoolAddress) {
+        poolAddress.push(pool.replace('0x', ''))
+      }
+
+      this.getContractInfoSync(poolAddress).then((infos) => {
+        for (let info of infos) {
+          let balance = this.getBalance(info.tokenName.split('-')[1], 'SEC')
+          this.addPoolList.push({
+            id: 0,
+            poolName: info.tokenName.split('-')[2],
+            pooolMoney: `${balance} BIUT`
+          })
+        }
+      })
+
+      let nonceData = {
+        "jsonrpc": "2.0",
+        "id":"1",
+        'method': 'sec_getNonce',
+        "params": [e.address.replace('0x', '')]
+      }
+      fetch(_const.url, {
+        method: 'post',
+        body: JSON.stringify(nonceData), // request is a string
+        headers: httpHeaderOption
+      }).then((res) => res.json()).then((text) => {
+        this.nonce = JSON.parse(text.body).result.Nonce
+      })
     },
 
     //退出登陆、退出成功之后再重新加载一次所有列表

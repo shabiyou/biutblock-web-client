@@ -44,13 +44,21 @@
 
 <script>
 import publicButton from '../../../components/public-button'
+let fetch = require('node-fetch')
+let httpHeaderOption = {
+  'content-type': 'application/json'
+}
 export default {
   name: '',
   components: {
     publicButton
   },
   props: {
-    maskPage: Number
+    maskPage: Number,
+    nounce: Number,
+    selectedItem: Object,
+    address: String,
+    privateKey: String
   },
   data() {
     return {
@@ -82,8 +90,55 @@ export default {
        * 
        * 加入成功 调用 close() 关闭弹窗
        */
+
       let ipt = this.joinIpt.replace(/\s+/g, "")
-      this.close() 
+      const transfer = {
+        "timeStamp": new Date().getTime(),
+        'walletAddress': this.address,
+        'sendToAddress': this.selectedItem.poolAddress,
+        'amount': ipt,
+        'txFee': '0',
+        'gasLimit': '0',
+        'gas': '0',
+        'gasPrice': '0',
+        'data': '',
+        "nonce": this.nonce,
+        'inputData': ''
+      }
+      const tx = JSON.stringify(transfer)
+      // transfer转换成json string 然后通过此方法对交易进行签名，
+      //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
+      let txBody = {
+        "method": "sec_signedTransaction",
+        "params": [{
+          "companyName": "coinegg",
+          "privateKey": this.privateKey,
+          "transfer": transfer
+        }]
+      }
+      fetch(url, {
+        method: 'post',
+        body: JSON.stringify(txBody),
+        headers: httpHeaderOption
+      }).then((res) => res.json()).then((text) => {
+        let signedTx = JSON.parse(text.body).result.signedTrans
+        console.log(signedTx)
+        let postData = {
+          "method": "sec_sendRawTransaction",
+          "id": "1",
+          "jsonrpc": "2.0",
+          "params": signedTx
+        }
+        fetch(url, {
+          method: 'post',
+          body: JSON.stringify(postData), // request is a string
+          headers: httpHeaderOption
+        }).then((res) => res.json()).then((text) => {
+          if (JSON.parse(text.body).result.status == 1) {
+            this.close() 
+          }
+        })
+      })
     },
 
     //转出全部金额

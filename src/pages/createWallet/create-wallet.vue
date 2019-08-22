@@ -119,7 +119,7 @@ export default {
         address: this.userAddress,
         invitationCode: inviteCode,
       }, (body) => {
-        if (body.status) {
+        if (body.status && body.doc[0].role !== 'Owner') {
           let keyFileDataJS = {
             [privKey64]: {
               walletName: "New Import",

@@ -22,7 +22,7 @@
         </section>
 
         <!-- 判断是否 有加入的矿池，加入的话、第一个显示  后面不现实加入按钮、没有加入 所有按钮不可点击 -->
-        <span class="list-btn" @click="joinMask">{{ $t('pool.poolIndexListTxt2') }}</span>
+        <span class="list-btn" @click="joinMask(item)">{{ $t('pool.poolIndexListTxt2') }}</span>
       </li>
     </ul>
 
@@ -40,7 +40,11 @@
     <!-- mask 弹窗 -->
     <pool-mask 
       v-show="maskShow" 
+      :nounce="nounce"
       :maskPage="maskPage"
+      :address="address"
+      :selectedItem="selectedItem"
+      :privateKey="privateKey"
       @close="closeMask" />
   </section>
 </template>
@@ -56,11 +60,15 @@ export default {
   },
   props: {
     itemList: Array,
-    poolName: String
+    poolName: String,
+    nounce: Number,
+    address: String,
+    privateKey: String
   },
   data() {
     return {
       maskShow: false,
+      selectedItem: '',
       maskPage: 2 //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
     }
   },
@@ -74,7 +82,8 @@ export default {
       this.maskShow = false
     },
 
-    joinMask () {
+    joinMask (item) {
+      this.selectedItem = item
       this.maskShow = true
     },
 
