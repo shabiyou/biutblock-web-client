@@ -17,7 +17,7 @@
       <!-- 搜索结果列表 -->
       <li v-for="(item, index) in itemList" :key="index" v-show="itemList.length > 0">
         <section>
-          <span>{{ item.poolNmae }}</span>
+          <span>{{ item.poolName }}</span>
           <span>{{ item.poolMoney }}</span>
         </section>
 

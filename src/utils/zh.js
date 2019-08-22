@@ -152,6 +152,9 @@ export default {
     level3: '金牌合伙人',
     level4: '超级合伙人',
     level4Txt: '1000以上',
+
+    invitationTipsTxt1: '在挖矿页面锁仓BIUT，即可解锁邀请码哦！',
+    invitationTipsTxt2: '在挖矿页面锁仓一万个BIUT，即可进行一键分享哦！'
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果：",

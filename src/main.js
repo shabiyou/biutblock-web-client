@@ -87,13 +87,16 @@ Vue.prototype.getContractInfoSync = async (pools) => {
       'method': 'sec_getContractInfo',
       'params': [pools[i].ownPoolAddress.replace('0x')]
     }
-    let res = await fetch(_const.url, {
+    let response = await fetch(_const.url, {
       method: 'post',
       body: JSON.stringify(bodyRequest),
       headers: httpHeaderOption
-    }).then((res) => res.json())
-    contractInfos.push(JSON.parse(res.body).result.contractInfo)
+    }).then((res) => {
+      return res.json()
+    })
+    contractInfos.push(JSON.parse(response.body).result.contractInfo)
   }
+  console.log(contractInfos)
   return contractInfos
 }
 

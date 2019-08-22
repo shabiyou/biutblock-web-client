@@ -27,13 +27,17 @@
       </li>
       <li>
         <h4>{{ $t("walletInfo.myCodeTxt") }}</h4>
-        <section class="invite-list">
+        <section class="invite-list" v-show="!inviteShow">
           <span id="invitationCode">{{ inviteCode }}</span>
           <img src="../../../assets/images/copy.png" alt="" @click="copyCode"
             data-clipboard-target="#invitationCode"
             class="copyButton"/>
           <button type="button" @click="shareMask">{{ $t("walletInfo.shareBtn") }}</button>
         </section>
+
+        <p v-show="inviteShow">
+          {{ $t('invitation.invitationTipsTxt2') }}
+        </p>
       </li>
     </ul>
 
@@ -71,7 +75,8 @@ export default {
     return {
       shareShow: false,
       transparentShow: false,
-      copySuccess: ''
+      copySuccess: '',
+      inviteShow: true //邀请码是否展示
     }
   },
   methods: {

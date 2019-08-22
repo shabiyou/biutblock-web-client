@@ -3,22 +3,34 @@
     <header>
       <section class="header-level">
         <span>{{ $t('invitation.level') }}</span>
+
         <figure>
           <figcaption>
             {{ $t('walletInfo.myCodeTxt') }}：
-            <span id="invitationCode">{{ invitationCode }}</span>
+            <span id="invitationCode" v-show="!invitationShow">{{ invitationCode }}</span>
+            <span v-show="invitationShow">--</span>
           </figcaption>
           <img
             src="../../../assets/images/copy.png"
             alt=""
+            v-show="!invitationShow"
             @click="copyCode"
             data-clipboard-target="#invitationCode"
             class="copyButton"
           />
-          <button type="button" class="shar-btn" @click="shareShow = true">
+          <img src="../../../assets/images/exclamationImg.png" v-show="invitationShow" alt="" @mouseover="showInvitation1(item)" @mouseout="showInvitation2(item)"/>
+
+          <button type="button" class="shar-btn" @click="shareShow = true" v-show="!invitationShow">
             {{ $t('walletInfo.shareBtn') }}
           </button>
+
+          <transition name="fade">
+            <section class="invitation-tips" v-show="showInvitation">
+              {{ $t('invitation.invitationTipsTxt1') }}
+            </section>
+          </transition>
         </figure>
+
       </section>
 
       <section class="header-img">
@@ -43,8 +55,7 @@
     <share-mask
       :inviteCode="invitationCode"
       @close="shareShow = false"
-      v-show="shareShow"
-    />
+      v-show="shareShow" />
 
     <wallet-transparent :txt="copySuccess" v-show="transparentShow" />
   </section>
@@ -70,7 +81,10 @@ export default {
       copySuccess: '',
       progress: 1,
       levelNumber: 9,
-      partner: '铜牌合伙人'
+      partner: '铜牌合伙人',
+
+      showInvitation: false, //邀请码tips提示
+      invitationShow: true  //判断是否有锁仓
     }
   },
   methods: {
@@ -95,6 +109,14 @@ export default {
 
     lookRules() {
       this.$emit('look', 1)
+    },
+
+    showInvitation1() {
+      this.showInvitation = true
+    },
+
+    showInvitation2() {
+      this.showInvitation = false
     }
   },
 }
@@ -111,6 +133,7 @@ export default {
       @extend %flexBetween;
       color: #2e3a40;
       font-size: 1.2rem;
+      position: relative;
       figure {
         @extend %flexBetween;
         font-size: 0.7rem;
@@ -129,6 +152,19 @@ export default {
           box-sizing: border-box;
           margin-left: 1.2rem;
         }
+      }
+      .invitation-tips {
+        position: absolute;
+        right: 0;
+        top: 2rem;
+        color: #C9D1D4;
+        font-size: .7rem;
+        width: 9.2rem;
+        height: 3.4rem;
+        background:rgba(66,83,91,1);
+        box-shadow: 0 .5rem .5rem rgba(66,83,91,0.2);
+        @extend %flexCenter;
+        padding: 0 .8rem;
       }
     }
     .header-img {
@@ -181,6 +217,15 @@ export default {
       }
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @media (max-width: 767px) {
