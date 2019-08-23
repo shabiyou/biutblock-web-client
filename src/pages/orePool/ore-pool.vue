@@ -75,7 +75,7 @@
 
           <!-- 邀请 -->
           <section v-show="idx === 1">
-            <invitation-header @look="lookRules"/>
+            <invitation-header :invitationCode="invitationCode" :progress="invitatedAmount" :invitationShow="mortgageValue!=='0'" :minerType="minerLevel" @look="lookRules"/>
 
             <invitation-list :invitationList="invitationList" @look="lookRules"/>
 
@@ -139,6 +139,10 @@ export default {
       maskPage: 1,
       maskShow: false,
       invitationList: [],
+      invitationCode: '',
+      invitatedAmount: 0,
+      minerLevel: '0',
+      mortgageValue: '0',
       idx: 0,
       itemList: [],
       addPoolList: [],
@@ -198,6 +202,8 @@ export default {
       this.poolPage = 2
       this.addPoolList = []
       this.address = e.address.replace('0x', '')
+      this.invitationCode = e.ownInvitationCode
+      this.mortgageValue = e.mortgageValue
       if (this.ismobile()) {
         this.address = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
       }
@@ -237,6 +243,15 @@ export default {
             invitationTime: `${doc.insertAt}`,
             invitationMoney: '',
           })
+        }
+      })
+
+      dataCenterHandler.getMinerLevel({
+        address: this.address
+      }, (body) => {
+        if (body.status) {
+          this.invitatedAmount = body.amount
+          this.minerLevel = body.minerType
         }
       })
 

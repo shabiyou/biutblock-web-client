@@ -45,19 +45,19 @@ export default {
           id: 1,
           imgUrl: poolList2,
           tit: 'pool.poolIndexTxt2',
-          txt: this.poolInComings
+          txt: this.poolInComing
         },
         {
           id: 2,
           imgUrl: poolList3,
           tit: 'pool.poolIndexTxt3',
-          txt: this.poolMortgages
+          txt: this.poolMortgage
         },
         {
           id: 3,
           imgUrl: poolList4,
           tit: 'pool.poolIndexTxt4',
-          txt: this.walletBalances
+          txt: this.walletBalance
         }
       ]
     },

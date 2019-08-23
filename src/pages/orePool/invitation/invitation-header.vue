@@ -40,7 +40,7 @@
             <p>{{ partner }}</p>
             <p>{{ $t('invitation.medal') }}</p>
             <section class="progress-list clearfix">
-              <el-progress :percentage="progress" color="#29D893" />
+              <el-progress :percentage="Number(progress)" color="#29D893" />
               <span>{{ progress }} / {{ levelNumber }}</span>
             </section>
           </figcaption>
@@ -68,25 +68,44 @@ import shareMask from '../../../components/wallet-share'
 import walletTransparent from '../../../components/wallet-transparent'
 export default {
   name: '',
-  props: {},
+  props: {
+    progress: Number,
+    invitationCode: String,
+    minerType: String,
+    invitationShow: Boolean
+  },
   components: {
     shareMask,
     walletTransparent
   },
   data() {
     return {
-      invitationCode: 'AK654321',
       shareShow: false,
       transparentShow: false,
       copySuccess: '',
-      progress: 1,
       levelNumber: 9,
-      partner: '铜牌合伙人',
-
       showInvitation: false, //邀请码tips提示
-      invitationShow: true  //判断是否有锁仓
     }
   },
+
+  computed: {
+    partner () {
+      if (this.minerType === "1") {
+        this.levelNumber = 100
+        return "最高等级"
+      } else if (this.minerType === "2") {
+        this.levelNumber = 64
+        return "金牌"
+      } else if (this.minerType === "3") {
+        this.levelNumber = 32
+        return "银牌"
+      } else if (this.minerType === "4") {
+        this.levelNumber = 10
+        return "铜牌"
+      }
+    }
+  },
+
   methods: {
     copyCode() {
       var clipboard = new Clipboard('.copyButton')
