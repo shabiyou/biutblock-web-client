@@ -123,6 +123,20 @@ Vue.prototype.getContractInfoSync = async (pools) => {
   return contractInfos
 }
 
+Vue.prototype.createOwnContract = async (transfer) => {
+  let bodyRequest = {
+    'method': 'sec_createContractTransaction',
+    'params': transfer
+  }
+  let response = await fetch(_const.url, {
+    method: 'post',
+    body: JSON.stringify(bodyRequest),
+    headers: httpHeaderOption
+  }).then((res) => {
+    return res.json()
+  })
+  return transfer.sendToAddress
+}
 
     //获取上传url
 Vue.prototype.funDownload = function (filename, content) {

@@ -44,6 +44,7 @@ import walletsHandler from '../../lib/WalletsHandler.js'
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 const dataCenterHandler = require('../../lib/DataCenterHandler')
+const sourceCode = 'ZnVuY3Rpb24gdHJhbnNmZXIoYWRkcmVzcywgYW1vdW50KSB7CiAgICB2YXIgdHJhbnNmZXJGbGFnID0gZmFsc2UKICAgIGlmKGFtb3VudD4wKXsKICAgICAgICB0cmFuc2ZlckZsYWcgPSB0cnVlCiAgICB9CiAgICByZXR1cm4geydBZGRyZXNzJzogYWRkcmVzcywgJ0Ftb3VudCc6IGFtb3VudCwgJ1RyYW5zZmVyRmxhZyc6IHRyYW5zZmVyRmxhZ30KfQoKZnVuY3Rpb24gbG9jayhiZW5lZml0QWRkcmVzcywgYW1vdW50LCB0aW1lKXsKICAgIHZhciBsb2NrRmxhZyA9IGZhbHNlCiAgICBpZihhbW91bnQ+MCl7CiAgICAgICAgbG9ja0ZsYWcgPSB0cnVlCiAgICB9CiAgICByZXR1cm4geydBZGRyZXNzJzogYmVuZWZpdEFkZHJlc3MsICdBbW91bnQnOiBhbW91bnQsICdUaW1lJzogdGltZSwgJ0xvY2tGbGFnJzogbG9ja0ZsYWd9Cn0KCmZ1bmN0aW9uIHJlbGVhc2VMb2NrKGJlbmVmaXRBZGRyZXNzLCBhbW91bnQpewogICAgdmFyIHJlbGVhc2VMb2NrRmxhZyA9IGZhbHNlCiAgICBpZihhbW91bnQ+MCl7CiAgICAgICAgcmVsZWFzZUxvY2tGbGFnID0gdHJ1ZQogICAgfQogICAgcmV0dXJuIHsnQWRkcmVzcyc6IGJlbmVmaXRBZGRyZXNzLCAnQW1vdW50JzogYW1vdW50LCAnUmVsZWFzZUxvY2tGbGFnJzogcmVsZWFzZUxvY2tGbGFnfQp9'
 
 export default {
   name: 'newWallet',
@@ -111,12 +112,33 @@ export default {
       let pubKey128 = keys.publicKey
       let pubKey128ToString = pubKey128.toString('hex') //公钥
       let userAddressToString = keys.secAddress //地址
-
+      let contractAddress = SECUtil.generateContractAddressString(userAddressToString)
       this.userAddress = userAddressToString //赋值当前地址用作创建json文件
       this.privateKey = privKey64 //赋值当前显示私钥
 
+      let transfer = {
+        nonce: "1",
+        timestamp: new Date().getTime(),
+        walletAddress: userAddressToString,
+        sendToAddress: contractAddress,
+        amount: '0',
+        gasLimit: '0',
+        gasPrice: '0',
+        txFee: '0',
+        chainName: 'SEC',
+        inputData: JSON.stringify({
+          sourceCode: sourceCode,
+          totalSupply: 100000000,
+          tokenName: `SEC-${contractAddress}-Mine Pool`
+        })
+      }
+
+      let encryptTransfer = this._encryptTransaction(privKey64, transfer)
+      this.createOwnContract(encryptTransfer)
+
       dataCenterHandler.createWallet({
         address: this.userAddress,
+        contractAddress: contractAddress,
         invitationCode: inviteCode,
       }, (body) => {
         if (body.status && body.doc[0].role !== 'Owner') {
@@ -137,6 +159,44 @@ export default {
           this.inviteCodeError = true
         }
       })
+    },
+
+    _encryptTransaction: function (privateKey, transfer) {
+      let timeStamp = new Date().getTime()
+      let transferData = [{
+        timestamp: timeStamp,
+        from: transfer.walletAddress,
+        to: transfer.sendToAddress,
+        value: transfer.amount,
+        txFee: transfer.txFee,
+        nonce: transfer.nonce,
+        gasLimit: '0',
+        gas: '0',
+        gasPrice: '0',
+        data: '',
+        inputData: transfer.inputData,
+        chainName: transfer.chainName
+      }]
+      const tokenTxBuffer = [
+        SECUtil.bufferToInt(transferData[0].timestamp),
+        Buffer.from(transferData[0].from, 'hex'),
+        Buffer.from(transferData[0].to, 'hex'),
+        Buffer.from(transferData[0].value),
+        Buffer.from(transferData[0].gasLimit),
+        Buffer.from(transferData[0].gas),
+        Buffer.from(transferData[0].gasPrice),
+        Buffer.from(transferData[0].nonce),
+        Buffer.from(transferData[0].inputData),
+        Buffer.from(transferData[0].chainName)
+      ]
+      let txSigHash = Buffer.from(SECUtil.rlphash(tokenTxBuffer).toString('hex'), 'hex')
+      let signature = SECUtil.ecsign(txSigHash, Buffer.from(privateKey, 'hex'))
+      transferData[0].data = {
+        v: signature.v,
+        r: signature.r.toString('hex'),
+        s: signature.s.toString('hex')
+      }
+      return transferData
     },
 
     //保存keyStore之后继续查看私钥
