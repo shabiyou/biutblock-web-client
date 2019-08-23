@@ -58,7 +58,9 @@ export default {
   components: {
     walletPage
   },
-  props: {},
+  props: {
+    invitationList: Array
+  },
   data() {
     return {
       searchIpt: '',
@@ -78,7 +80,7 @@ export default {
   },
   computed: {
     itemLists() {
-      return Array(10).fill(this.itemList[0])
+      return this.invitationList
     }
   },
   methods: {

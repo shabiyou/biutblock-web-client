@@ -77,7 +77,7 @@
           <section v-show="idx === 1">
             <invitation-header @look="lookRules"/>
 
-            <invitation-list @look="lookRules"/>
+            <invitation-list :invitationList="invitationList" @look="lookRules"/>
 
             <invitation-mask 
               :maskPage="maskPage"
@@ -138,6 +138,7 @@ export default {
       privateKey: '',//私钥
       maskPage: 1,
       maskShow: false,
+      invitationList: [],
       idx: 0,
       itemList: [],
       addPoolList: [],
@@ -226,16 +227,18 @@ export default {
         this.poolTimeLock = Number(this.scientificNotationToString(balance))
       })
 
-      // dataCenterHandler.getRelatedMiners(this.address, (docs) => {
-      //   for (let doc of docs) {
-      //     this.invitationList.push({
-      //       id: 0,
-      //       invitationAddress: `${doc.address}`,
-      //       invitationTime: `${doc.insertAt}`,
-      //       invitationMoney: '1234.12345678',
-      //     })
-      //   }
-      // })
+      dataCenterHandler.getRelatedMiners({
+        address: this.address
+      }, (docs) => {
+        for (let doc of docs) {
+          this.invitationList.push({
+            id: 0,
+            invitationAddress: `${doc.address}`,
+            invitationTime: `${doc.insertAt}`,
+            invitationMoney: '',
+          })
+        }
+      })
 
       /** 获取这个钱包对应加入矿池的信息 */
       this._getAllContractInfos(poolAddress)
