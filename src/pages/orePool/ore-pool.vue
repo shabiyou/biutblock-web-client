@@ -57,7 +57,11 @@
           </ul>
           <!-- 矿池 -->
           <section v-show="idx === 0">
-            <pool-header />
+            <pool-header
+              :walletBalance="walletBalance"
+              :poolInComing="poolTimeLock"
+              :poolMortgage="poolTimeLock"
+            />
             <pool-body 
               @lookAll="poolPage = 1"
               :itemList="addPoolList" />
@@ -126,6 +130,9 @@ export default {
       searchDsb: true,
       loginStatus: true,
       poolPage: 1,
+      poolTimeLock: 0,
+      totalPoolMoney: 0,
+      walletBalance: 0,
       loginPage: 0,
       address: '',//钱包地址
       privateKey: '',//私钥
@@ -143,12 +150,18 @@ export default {
     }
   },
   created() {
+    let poolAddress = []
     dataCenterHandler.getAllPool((pools) => {
-      this.getContractInfoSync(pools).then( infos => {
-        for (let info in infos) {
-          let poolName = info.tokenName.split('-')[2]
-          let poolAddress = info.tokenName.split('-')[1]
-          let poolMoney = info.totalSupply
+      for (let pool of pools) {
+        if (pool.ownPoolAddress !== "") {
+          poolAddress.push(pool.ownPoolAddress)
+        }
+      }
+      this.getContractInfoSync(poolAddress).then( infos => {
+        for (let info of infos) {
+          let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
+          let poolAddress = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[1] : ''
+          let poolMoney = info.hasOwnProperty("tokenName") ? info.totalSupply : ''
           this.itemList.push({
             id: 0,
             poolName: poolName,
@@ -181,36 +194,77 @@ export default {
     //登陆成功
     userLogin (e) {
       this.loginPage = 0
-      this.address = e.address
+      this.poolPage = 2
+      this.addPoolList = []
+      this.address = e.address.replace('0x', '')
       if (this.ismobile()) {
         this.address = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
       }
       this.privateKey = e.privateKey
       this.loginStatus = false
       let poolAddress = []
+
       for (let pool of e.mortgagePoolAddress) {
-        poolAddress.push(pool.replace('0x', ''))
+        if (pool !== "") {
+          poolAddress.push(pool.replace('0x', ''))
+        }
       }
       for (let pool of e.ownPoolAddress) {
-        poolAddress.push(pool.replace('0x', ''))
+        if (pool !== "") {
+          poolAddress.push(pool.replace('0x', ''))
+        }
       }
 
+      /**获取钱包余额 */
+      this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
+        this.walletBalance =Number(this.scientificNotationToString(balance))
+      })
+
+      /**获取所有矿池的总额 */
+      this.getAllWalletBalance(poolAddress, 'SEC').then((balance) => {
+        this.totalPoolMoney = Number(this.scientificNotationToString(balance))
+        this.poolTimeLock = Number(this.scientificNotationToString(balance))
+      })
+
+      // dataCenterHandler.getRelatedMiners(this.address, (docs) => {
+      //   for (let doc of docs) {
+      //     this.invitationList.push({
+      //       id: 0,
+      //       invitationAddress: `${doc.address}`,
+      //       invitationTime: `${doc.insertAt}`,
+      //       invitationMoney: '1234.12345678',
+      //     })
+      //   }
+      // })
+
+      /** 获取这个钱包对应加入矿池的信息 */
+      this._getAllContractInfos(poolAddress)
+      this._getNounce()
+    },
+
+    _getAllContractInfos (poolAddress) {
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let info of infos) {
-          let balance = this.getBalance(info.tokenName.split('-')[1], 'SEC')
-          this.addPoolList.push({
-            id: 0,
-            poolName: info.tokenName.split('-')[2],
-            pooolMoney: `${balance} BIUT`
+          this.getWalletBalance(info.tokenName.split('-')[1], 'SEC').then((balance) => {
+            this.addPoolList.push({
+              id: 0,
+              poolName: info.tokenName.split('-')[2],
+              pooolMoney: `${balance} BIUT`
+            })
           })
         }
       })
+    },
 
+    _getNounce () {
+      let httpHeaderOption = {
+        'content-type': 'application/json'
+      }
       let nonceData = {
         "jsonrpc": "2.0",
         "id":"1",
         'method': 'sec_getNonce',
-        "params": [e.address.replace('0x', '')]
+        "params": [this.address]
       }
       fetch(_const.url, {
         method: 'post',

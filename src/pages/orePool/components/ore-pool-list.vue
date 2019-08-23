@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       maskShow: false,
-      selectedItem: '',
+      selectedItem: {},
       maskPage: 2 //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
     }
   },

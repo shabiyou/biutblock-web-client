@@ -75,7 +75,18 @@ const DataCenterHandler = {
     }, (err, res, body) => {
       callback(body)
     })
-  }
+  },
+
+  getRelatedMiners: function (params, callback) {
+		request({
+			url: `${dataCenterUrl}getrelatedminers`,
+			method: 'POST',
+			body: params,
+			json: true
+		}, (err, res, body) => {
+			callback(body)
+		})
+	}
 }
 
 module.exports = DataCenterHandler

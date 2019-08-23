@@ -21,7 +21,11 @@ import poolList3 from '../../../assets/images/poolList3.png'
 import poolList4 from '../../../assets/images/poolList4.png'
 export default {
   name: '',
-  props: {},
+  props: {
+    walletBalance: Number,
+    poolInComing: Number,
+    poolMortgage: Number
+  },
   data() {
     return {
       itemList: [
@@ -29,29 +33,48 @@ export default {
           id: 0,
           imgUrl: poolList1,
           tit: 'pool.poolIndexTxt1',
-          txt: '12585.158954'
+          txt: ''
         },
         {
           id: 1,
           imgUrl: poolList2,
           tit: 'pool.poolIndexTxt2',
-          txt: '2555.15893254'
+          txt: this.poolInComings
         },
         {
           id: 2,
           imgUrl: poolList3,
           tit: 'pool.poolIndexTxt3',
-          txt: '182555'
+          txt: this.poolMortgages
         },
         {
           id: 3,
           imgUrl: poolList4,
           tit: 'pool.poolIndexTxt4',
-          txt: '100000000000000'
+          txt: this.walletBalances
         }
       ]
     }
   },
+
+  computed: {
+    poolInComings () {
+      this.itemList[1].txt = this.poolInComing
+    },
+
+    poolMortgages () {
+      this.itemList[2].txt = this.poolMortgage
+    },
+
+    walletBalances () {
+      this.itemList[3].txt = this.walletBalance
+    }
+  },
+
+  created() {
+
+  },
+
   methods: {
 
   },

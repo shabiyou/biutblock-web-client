@@ -62,6 +62,29 @@ Vue.prototype.getWalletBalance = async (address, type) => {
   return amount
 }
 
+Vue.prototype.getAllWalletBalance = async (address, type) => {
+  let url = _const.url
+  let token = 'SEC'
+  let amount = 0
+  if (type === 'biu') {
+    url = _const.url_sen
+    token = 'SEN'
+  }
+  for (let addr of address) {
+    let bodyRequest = {
+      'method': 'sec_getBalance',
+      'params': [addr, token]
+    }
+    let text = await fetch(url, {
+      method: 'post',
+      body: JSON.stringify(bodyRequest), // request is a string
+      headers: httpHeaderOption
+    }).then((res) => res.json())
+    amount = amount + Number(JSON.parse(text.body).result.value)
+  }
+  return amount
+}
+
 Vue.prototype.getContractInfo = (contractAddress, callback) => {
   let rpcMethod = 'sec_getContractInfo'
   let url = _const.url
@@ -85,7 +108,7 @@ Vue.prototype.getContractInfoSync = async (pools) => {
   for (let i in pools) {
     let bodyRequest = {
       'method': 'sec_getContractInfo',
-      'params': [pools[i].ownPoolAddress.replace('0x')]
+      'params': [pools[i].replace('0x')]
     }
     let response = await fetch(_const.url, {
       method: 'post',
@@ -99,6 +122,7 @@ Vue.prototype.getContractInfoSync = async (pools) => {
   console.log(contractInfos)
   return contractInfos
 }
+
 
     //获取上传url
 Vue.prototype.funDownload = function (filename, content) {
