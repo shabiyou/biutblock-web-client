@@ -28,7 +28,13 @@ export default {
   },
   data() {
     return {
-      itemList: [
+      
+    }
+  },
+
+  computed: {
+    itemList () {
+      return [
         {
           id: 0,
           imgUrl: poolList1,
@@ -54,21 +60,19 @@ export default {
           txt: this.walletBalances
         }
       ]
-    }
-  },
-
-  computed: {
-    poolInComings () {
-      this.itemList[1].txt = this.poolInComing
     },
 
-    poolMortgages () {
-      this.itemList[2].txt = this.poolMortgage
-    },
+    // poolInComings () {
+    //   this.itemList[1].txt = this.poolInComing
+    // },
 
-    walletBalances () {
-      this.itemList[3].txt = this.walletBalance
-    }
+    // poolMortgages () {
+    //   this.itemList[2].txt = this.poolMortgage
+    // },
+
+    // walletBalances () {
+    //   this.itemList[3].txt = this.walletBalance
+    // }
   },
 
   created() {
