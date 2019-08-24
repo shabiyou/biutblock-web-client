@@ -131,6 +131,8 @@ export default {
       input {
         border: 0;
         flex: 1;
+        height: 1.5rem;
+        line-height: 1.5rem;
       }
       img {
         cursor: pointer;

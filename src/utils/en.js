@@ -5,6 +5,8 @@ export default {
     enterPass2: "Confirm your wallet password",
     saveKeyStore: "Save Your Keystore File",
     keyStoreDown: "Keystore Download",
+    createBtn: 'Create New Wallet',
+    createBtns: 'Create New Wallet ...',
     next: "Next",
     savePrivateKey: "Save your Private Key",
 
@@ -37,6 +39,9 @@ export default {
     checkKeyStore1: "Select Your Keystore",
     checkKeyStore2: "Select Keystore",
     unlock: "Unlock",
+    unlockBtn: 'Unlock',
+    unlockBtns: 'Unlock...',
+
     inputPrivateKey1: "Enter Your Private Key",
     inputPrivateKey2: "Enter your wallet Private Key",
     walletAddress: "Address",
@@ -166,7 +171,7 @@ export default {
     poolBtn: 'I know it',
     poolTxt: 'You have joined the mine pool and can not join others.',
     poolNumber: 'Mortgage amount',
-    poolNumberError: 'At least 1000 BIUT is required to join the mine pool.',
+    poolNumberError: 'At least 10000 BIUT is required to join the mine pool.',
     poolTxt1: 'The amount of mortgage will be frozen for one year, and higher of the mortgage amount, and higher the profit of BIU token',
     poolBtn1: 'Join Now'
   },

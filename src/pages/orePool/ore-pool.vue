@@ -407,6 +407,7 @@ main {
           flex: 1;
           border: 0;
           height: 2rem;
+          line-height: 2rem;
         }
         img {
           cursor: pointer;

@@ -47,7 +47,7 @@
             class="key-store-btn"
             :disabled="!keyStoreActive"
             :class="keyStoreActive ? 'btn-active' : ''"
-            :text="$t('walletInfo.unlock')"
+            :text="$t(wordUnlockBtn)"
             @click.native="walletInfoForm"
           />
         </section>
@@ -68,7 +68,7 @@
             class="private-key-btn"
             :disabled="!privateKeyActive"
             :class="privateKeyActive ? 'btn-active' : ''"
-            :text="$t('walletInfo.unlock')"
+            :text="$t(keyUnlockBtn)"
             @click.native="walletInfoForm"
           />
         </section>
@@ -108,6 +108,9 @@ export default {
       walletPassErrorTxt: 'passTips.passError',
       KeyStoreVal: 'walletInfo.checkKeyStore2', //绑定keyStore的值
       radioPages: 0, //keyStore与私钥切换显示  0 显示keyStore  1 显示私钥
+
+      wordUnlockBtn: 'walletInfo.unlockBtn', //keystore导入按钮
+      keyUnlockBtn: 'walletInfo.unlockBtn', //私钥导入按钮
       radioList: [
         {
           id: '0',
@@ -173,6 +176,7 @@ export default {
     walletInfoForm() {
       //1 私钥登陆  0 keyStore登陆
       if (this.radioPages === 1) {
+        this.keyUnlockBtn = 'walletInfo.unlockBtns'
         let privateVal = this.privateKeyVal.replace(/\s+/g, "")
         let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
         let extractAddress = SECUtil.privateToAddress(privateKeyBuffer).toString('hex')//钱包地址
@@ -196,14 +200,17 @@ export default {
               role: parent.doc[0].role
             }
             this.$emit('login', parm)
+            this.keyUnlockBtn = 'walletInfo.unlockBtn'
           } else {
             this.walletPassError = true
             this.walletPassErrorTxt = "passTips.inviteCodeError"
+            this.keyUnlockBtn = 'walletInfo.unlockBtn'
           }
         })
         
       } else {
         let passVal = this.passVal.replace(/\s+/g, "")
+        this.wordUnlockBtn = 'walletInfo.unlockBtns'
         let that = this
         //解锁钱包
         this.$axios.get('' + this.KeyStoreUrl + '').then( (response) => {
@@ -230,14 +237,17 @@ export default {
                   role: parent.doc[0].role
                 }
                 this.$emit('login', parm)
+                this.wordUnlockBtn = 'walletInfo.unlockBtn'
               } else {
                 this.walletPassError = true
                 this.walletPassErrorTxt = "passTips.inviteCodeError"
+                this.wordUnlockBtn = 'walletInfo.unlockBtn'
               }
             })
           }
         }).catch( (error) => {
           this.walletPassError = true
+          this.wordUnlockBtn = 'walletInfo.unlockBtn'
         });
       }
     },

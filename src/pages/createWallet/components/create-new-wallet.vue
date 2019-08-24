@@ -43,7 +43,7 @@
 
     <public-button
       type="button"
-      :text="$t('newWallet.createWallet')"
+      :text="$t(createBtn)"
       :disabled="!createActive"
       :class="createActive ? 'btn-active' : ''"
       @click.native="createFrom"
@@ -88,7 +88,8 @@ export default {
       codeError: false,
       inviteCode: '',
       tipsCode: 'newWallet.codeIptError',
-      codeDis: false
+      codeDis: false,
+      createBtn: 'newWallet.createBtn'
     }
   },
   created() {
@@ -120,7 +121,6 @@ export default {
       }
     },
 
-    
   },
   methods: {
     //失去焦点

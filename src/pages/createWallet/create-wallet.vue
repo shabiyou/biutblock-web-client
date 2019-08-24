@@ -6,6 +6,7 @@
           <!-- 创建钱包 -->
           <create-wallet
             v-if="pages === 1"
+            ref="create"
             :tipsListPass="tipsListPass"
             :invailidCode="inviteCodeError"
             @created="createFrom"
@@ -106,6 +107,7 @@ export default {
   methods: {
     //创建钱包
     createFrom(e, inviteCode) {
+      this.$refs.create.createBtn = 'newWallet.createBtns'
       let keys = SECUtil.generateSecKeys() //创建钱包
       let privKey64 = keys.privKey //获取创建钱包的私钥
       let englishWords = SECUtil.entropyToMnemonic(privKey64) //助记词
@@ -155,6 +157,7 @@ export default {
           let cipherKeyData = CryptoJS.AES.encrypt(JSON.stringify(keyFileDataJS), e)
           this.keyData = cipherKeyData.toString()
           this.pages = 2 //保存Keystore文件
+          this.$refs.create.createBtn = 'newWallet.createBtn'
         } else {
           this.inviteCodeError = true
         }

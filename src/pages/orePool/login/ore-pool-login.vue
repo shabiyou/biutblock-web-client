@@ -135,13 +135,15 @@ main {
     padding: 3.6rem 0 25rem;
     section {
       width: 21.4rem;
-      padding: 0.8rem 0;
+      padding: 0.4rem 0;
       margin-bottom: 3.1rem;
       @include border($d: bottom, $c: #e6e6e6);
       box-sizing: border-box;
       input {
         width: 100%;
         border: 0;
+        height: 1.5rem;
+        line-height: 1.5rem;
       }
     }
     .errorBorder {

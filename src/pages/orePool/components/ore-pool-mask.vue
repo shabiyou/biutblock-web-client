@@ -23,7 +23,7 @@
           <p class="join-txt1">{{ $t('mask.poolNumber') }} <label>*</label></p>
         </section>
         <section class="ipt-list">
-          <input type="text" placeholder="1000.00" v-model="joinIpt" @input="clearAmount"/>
+          <input type="text" placeholder="10,000.00" v-model="joinIpt" @input="clearAmount"/>
           <span>BIUT</span>
         </section>
         <p class="join-txt-all">
@@ -75,7 +75,7 @@ export default {
   computed: {
     joinBtn () {
       let ipt = this.joinIpt.replace(/\s+/g, "")
-      return 1000 <= ipt &&  ipt <= Number(this.totalMoney) ? true : false
+      return 10000 <= ipt &&  ipt <= Number(this.totalMoney) ? true : false
     }
   },
   methods: {
@@ -213,6 +213,7 @@ export default {
     .ipt-list {
       @extend %flexBetween;
       height: 2.4rem;
+      line-height: 2.4rem;
       background: #F5FAF9;
       font-size: .7rem;
       padding: 0 1.2rem 0 .8rem;

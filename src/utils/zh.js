@@ -5,6 +5,8 @@ export default {
     enterPass2: "请再次输入钱包密码",
     saveKeyStore: "保存Keystore文件",
     keyStoreDown: "Keystore文件下载",
+    createBtn: '创建新钱包',
+    createBtns: '创建中...',
     next: "继续",
     savePrivateKey: "保存私钥",
 
@@ -37,6 +39,9 @@ export default {
     checkKeyStore1: "选择Keystore文件",
     checkKeyStore2: "选择Keystore",
     unlock: "解锁",
+    
+    unlockBtn: '解锁',
+    unlockBtns: '解锁中...',
     inputPrivateKey1: "输入您的私钥",
     inputPrivateKey2: "请输入你的私钥",
     walletAddress: "地址",
@@ -119,8 +124,8 @@ export default {
     poolIndexTxt4: '账户可用余额',
 
     poolIndexSearch1: '共找到',
-    poolIndexSearch2: '条 关于',
-    poolIndexSearch3: '的矿池结果',
+    poolIndexSearch2: '条关于',
+    poolIndexSearch3: '矿池的结果',
 
     poolTabTxt1: '矿池',
     poolTabTxt2: '邀请',
@@ -166,7 +171,7 @@ export default {
     poolBtn: '我知道了',
     poolTxt: '你已加入矿池哦，无法再加入其它矿池！',
     poolNumber: '抵押数量',
-    poolNumberError: '加入矿池最低数量为1000 BIUT',
+    poolNumberError: '加入矿池最低数量为10000 BIUT',
     poolTxt1: '抵押数量会被冻结一年，抵押数量越多，挖到BIU的收益越高哦！',
     poolBtn1: '确认加入'
   },
