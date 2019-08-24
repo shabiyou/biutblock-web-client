@@ -63,7 +63,8 @@ export default {
     poolName: String,
     nounce: Number,
     address: String,
-    privateKey: String
+    privateKey: String,
+    poolPage: Number
   },
   data() {
     return {
@@ -83,8 +84,13 @@ export default {
     },
 
     joinMask (item) {
-      this.selectedItem = item
-      this.maskShow = true
+      if (this.poolPage === 1) {
+        this.$emit('login')
+      } else {
+        this.maskShow = true
+        this.selectedItem = item
+      }
+      
     },
 
     nextPage () {

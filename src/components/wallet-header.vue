@@ -105,13 +105,13 @@ export default {
           'imgs': '',
           'urlPath': 'orePool'
         },
-        {
-          'id': '5',
-          'nav_cnt': 'headerNav.Mapping',
-          'img': '',
-          'imgs': '',
-          'urlPath': 'walletMapping'
-        },
+        // {
+        //   'id': '5',
+        //   'nav_cnt': 'headerNav.Mapping',
+        //   'img': '',
+        //   'imgs': '',
+        //   'urlPath': 'walletMapping'
+        // },
         {
           'id': '6',
           'nav_cnt': 'headerNav.Guide',

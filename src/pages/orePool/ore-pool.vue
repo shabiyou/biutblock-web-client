@@ -44,7 +44,7 @@
           </section>
 
           <!-- 所有列表 -->
-          <pool-list :itemList="itemLists" :poolName="searchIpt" :nounce="nounce" :address="address" :privateKey="privateKey" />
+          <pool-list :itemList="itemLists" :poolName="searchIpt" :poolPage="poolPage" :nounce="nounce" :address="address" :privateKey="privateKey" @login="goLogin"/>
         </section>
 
         <!-- 登录成功 -->
@@ -74,7 +74,7 @@
 
           <!-- 邀请 -->
           <section v-show="idx === 1">
-            <invitation-header :invitationCode="invitationCode" :progress="invitatedAmount" :invitationShow="mortgageValue!=='0'" :minerType="minerLevel" @look="lookRules"/>
+            <invitation-header :invitationCode="invitationCode" :progress="invitatedAmount" :invitationShow="mortgageValue!=='0'" :minerType="minerLevel" @look="lookRules" />
 
             <invitation-list :invitationList="invitationList" @look="lookRules"/>
 

@@ -159,7 +159,7 @@ export default {
     level4Txt: 'More than 64',
 
     invitationTipsTxt1: 'Lock the bin BIUT on the mining page and unlock the invitation code!',
-    invitationTipsTxt2: 'Lock 10,000 BIUT on the mining page and share with one click!'
+    invitationTipsTxt2: "In the mining page to lock 10,000 BIUT or join the mining pool, you can share a key!"
   },
   mask: {
     tips: "Operation success, click the URL below to view the results：",
@@ -170,9 +170,9 @@ export default {
     poolTips: 'Information',
     poolBtn: 'I know it',
     poolTxt: 'You have joined the mine pool and can not join others.',
-    poolNumber: 'Mortgage amount',
-    poolNumberError: 'At least 10000 BIUT is required to join the mine pool.',
-    poolTxt1: 'The amount of mortgage will be frozen for one year, and higher of the mortgage amount, and higher the profit of BIU token',
+    poolNumber: 'locked amount',
+    poolNumberError: 'At least 10,000 BIUT is required to join the mine pool.',
+    poolTxt1: 'locked BIUT will be frozen one year. The more BIUT locked, the more profits of mining BIU',
     poolBtn1: 'Join Now'
   },
   headerNav: {

@@ -98,7 +98,7 @@ export default {
         {
           level: 'invitation.level1',
           portrait: level1,
-          number: '1-9'
+          number: '0-9'
         },
         {
           level: 'invitation.level2',

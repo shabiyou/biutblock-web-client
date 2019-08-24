@@ -35,7 +35,7 @@
           <button type="button" @click="shareMask">{{ $t("walletInfo.shareBtn") }}</button>
         </section>
 
-        <p v-show="inviteShow">
+        <p v-show="inviteShow" class="share-tips">
           {{ $t('invitation.invitationTipsTxt2') }}
         </p>
       </li>
@@ -135,6 +135,12 @@ export default {
         font-weight: 500;
         word-wrap: break-word;
         white-space: pre-wrap;
+      }
+      .shareBtn {
+        color:#252F33;
+        font-size: .7rem;
+        white-space: normal;
+        padding: .7rem 0 0 0;
       }
       .amount-list {
         margin-top: 0.8rem;

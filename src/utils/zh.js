@@ -33,7 +33,7 @@ export default {
     inviteCodeError: "钱包地址无效"
   },
   walletInfo: {
-    accessWallet: "如何访问你的钱包？",
+    accessWallet: "如何访问钱包？",
     privateKey: "私钥",
     invalidPrivateKey: "无效私钥",
     checkKeyStore1: "选择Keystore文件",
@@ -42,19 +42,19 @@ export default {
     
     unlockBtn: '解锁',
     unlockBtns: '解锁中...',
-    inputPrivateKey1: "输入您的私钥",
-    inputPrivateKey2: "请输入你的私钥",
+    inputPrivateKey1: "输入钱包私钥",
+    inputPrivateKey2: "请输入钱包私钥",
     walletAddress: "地址",
     walletPrivateKey: "私钥",
     walletMoney: "余额",
-    qrCode: "你的地址（二维码）",
+    qrCode: "我的地址（二维码）",
     newKeyStore: "下载新的Keystore",
 
     myCodeTxt: '我的邀请码',
     shareBtn: '一键分享',
   },
   transfer: {
-    youAddress: "你的地址",
+    youAddress: "我的地址",
     transferAdddress: "转账地址",
     transferNumber: "转账数量",
     balance: "可用",
@@ -159,7 +159,7 @@ export default {
     level4Txt: '64以上',
 
     invitationTipsTxt1: '在挖矿页面锁仓BIUT，即可解锁邀请码哦！',
-    invitationTipsTxt2: '在挖矿页面锁仓一万个BIUT，即可进行一键分享哦！'
+    invitationTipsTxt2: '在挖矿页面锁仓一万个BIUT或者加入矿池，即可进行一键分享哦！'
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果：",
@@ -170,9 +170,9 @@ export default {
     poolTips: '提示',
     poolBtn: '我知道了',
     poolTxt: '你已加入矿池哦，无法再加入其它矿池！',
-    poolNumber: '抵押数量',
-    poolNumberError: '加入矿池最低数量为10000 BIUT',
-    poolTxt1: '抵押数量会被冻结一年，抵押数量越多，挖到BIU的收益越高哦！',
+    poolNumber: '锁仓数量',
+    poolNumberError: '加入矿池最低数量为 10,000 BIUT',
+    poolTxt1: '锁仓的biut会被冻结一年。锁仓数量越多，挖到BIU的收益越高哦！',
     poolBtn1: '确认加入'
   },
   headerNav: {

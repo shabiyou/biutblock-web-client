@@ -254,6 +254,7 @@ export default {
     }
     button {
       height: 2.4rem;
+      width: 100%!important;
     }
   }
 }
