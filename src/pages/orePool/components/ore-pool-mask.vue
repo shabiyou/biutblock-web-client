@@ -27,7 +27,7 @@
           <span>BIUT</span>
         </section>
         <p class="join-txt-all">
-          {{ $t('transfer.balance') }}：{{ totalMoney }}  BIUT
+          {{ $t('transfer.balance') }}：{{ totalMoney | currency("") }}  BIUT
           <span @click="allMoney">{{ $t('transfer.all') }}</span>
         </p>
         <p class="join-txt2">{{ $t('mask.poolTxt1') }}</p>

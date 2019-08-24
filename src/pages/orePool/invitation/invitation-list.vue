@@ -21,7 +21,7 @@
         <li v-for="(item, index) in itemLists" :key="index">
           <span>{{ item.invitationAddress }}</span>
           <span>{{ item.invitationTime }}</span>
-          <span>{{ item.invitationMoney }}</span>
+          <span>{{ item.invitationMoney | currency("") }}</span>
           <span @click="lookRules">{{ $t('invitation.inListTxt4') }}</span>
         </li>
       </ul>

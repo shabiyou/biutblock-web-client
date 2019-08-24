@@ -4,7 +4,6 @@
       <!-- banner部分 -->
       <header class="pool-header">
         <h2>{{ $t("pool.poolBanner") }}</h2>
-        <p>The Biut Mine Pool Is Officially Online.</p>
       </header>
 
       <section class="pool-body el-container">

@@ -181,6 +181,7 @@ export default {
         //传递给父级需要的参数
         let parm
         this._getWalletFromDB(extractAddress, (parent) => {
+          console.log(parent)
           if (parent.status) {
             parm = {
               address: '0x' + extractAddress,
@@ -214,6 +215,7 @@ export default {
             let arrData = eval('(' + arrData1 + ')')
             let parm
             this._getWalletFromDB(arrData.walletAddress, (parent) => {
+              console.log(parent)
               if (parent.status) {
                 parm = {
                   address: '0x' + arrData.walletAddress,

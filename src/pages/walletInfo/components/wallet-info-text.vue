@@ -14,14 +14,14 @@
         <h4>{{ $t("walletInfo.walletMoney") }}</h4>
         <section class="amount-list">
           <section class="amount-content">
-            {{ infoMoneyC }} <span>BIUT</span>
+            {{ infoMoneyC | currency("") }} <span>BIUT</span>
           </section>
           <p class="amount-list-txt">
-            <span>{{ $t("public.available") }}：{{ availableAmount }}BIUT</span>
-            <span>{{ $t("public.guarantee") }}：{{ freezeAmount }}BIUT</span>
+            <span>{{ $t("public.available") }}：{{ availableAmount | currency("") }}BIUT</span>
+            <span>{{ $t("public.guarantee") }}：{{ freezeAmount | currency("") }}BIUT</span>
           </p>
           <section class="amount-content">
-            {{ infoMoneyN }} <span>BIU</span>
+            {{ infoMoneyN | currency("") }} <span>BIU</span>
           </section>
         </section>
       </li>

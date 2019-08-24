@@ -94,7 +94,7 @@ export default {
     mappingHashTxt: 'Please enter the transaction hash value transferred on ETH',
   },
   pool: {
-    poolBanner: 'The BIUT mine pool is officially online.',
+    poolBanner: 'The BIUT mine pool is officially online',
     poolLogin: 'Enter Wallet',
     poolLoginIpt: 'Eenter your private key here',
     poolLoginIptError: 'Please enter the correct wallet private key.',

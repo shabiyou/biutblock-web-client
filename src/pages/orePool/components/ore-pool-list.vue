@@ -18,7 +18,7 @@
       <li v-for="(item, index) in itemList" :key="index" v-show="itemList.length > 0">
         <section>
           <span>{{ item.poolName }}</span>
-          <span>{{ item.poolMoney }}</span>
+          <span>{{ item.poolMoney | currency("") }}</span>
         </section>
 
         <!-- 判断是否 有加入的矿池，加入的话、第一个显示  后面不现实加入按钮、没有加入 所有按钮不可点击 -->

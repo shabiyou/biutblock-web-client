@@ -41,7 +41,7 @@
       </p>
       <p class="details-tit">{{ $t('invitation.inListTxt3') }}</p>
       <p class="details-txt">
-        {{ totalRevenue }}
+        {{ totalRevenue | currency("") }}
       </p>
 
       <ul>
@@ -51,7 +51,7 @@
         </li>
         <li v-for="(item, index) in amountLists" :key="index">
           <span>{{ item.maskTime }}</span>
-          <span>{{ item.maskAmount }}</span>
+          <span>{{ item.maskAmount | currency("") }}</span>
         </li>
       </ul>
 

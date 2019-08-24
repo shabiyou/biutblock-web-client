@@ -198,6 +198,8 @@ export default {
     input {
       border: 0;
       flex: 1;
+      height: 1.6rem;
+      line-height: 1.6rem;
     }
   }
 }
