@@ -103,12 +103,12 @@ export default {
         {
           level: 'invitation.level2',
           portrait: level2,
-          number: '10-99'
+          number: '10-31'
         },
         {
           level: 'invitation.level3',
           portrait: level3,
-          number: '100-909'
+          number: '32-63'
         },
         {
           level: 'invitation.level4',

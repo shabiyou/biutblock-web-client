@@ -151,7 +151,7 @@ export default {
     level2: 'Silver partner',
     level3: 'Gold partner',
     level4: 'Super partner',
-    level4Txt: 'More than 1000',
+    level4Txt: 'More than 64',
 
     invitationTipsTxt1: 'Lock the bin BIUT on the mining page and unlock the invitation code!',
     invitationTipsTxt2: 'Lock 10,000 BIUT on the mining page and share with one click!'

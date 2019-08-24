@@ -25,7 +25,7 @@
           </button>
 
           <transition name="fade">
-            <section class="invitation-tips" v-show="showInvitation">
+            <section class="invitation-tips" v-show="showInvitation" :class="invitationAttribute ? 'invitation-tips-en' : ''">
               {{ $t('invitation.invitationTipsTxt1') }}
             </section>
           </transition>
@@ -37,7 +37,7 @@
         <figure>
           <img src="../../../assets/images/levels1.png" alt="" />
           <figcaption>
-            <p>{{ partner }}</p>
+            <p>{{ $t(partner) }}</p>
             <p>{{ $t('invitation.medal') }}</p>
             <section class="progress-list clearfix">
               <el-progress :percentage="Number(progress)" color="#29D893" />
@@ -92,16 +92,24 @@ export default {
     partner () {
       if (this.minerType === "1") {
         this.levelNumber = 100
-        return "最高等级"
+        return "invitation.level4"
       } else if (this.minerType === "2") {
         this.levelNumber = 64
-        return "金牌"
+        return "invitation.level3"
       } else if (this.minerType === "3") {
         this.levelNumber = 32
-        return "银牌"
+        return "invitation.level2"
       } else if (this.minerType === "4") {
         this.levelNumber = 10
-        return "铜牌"
+        return "invitation.level1"
+      }
+    },
+
+    invitationAttribute () {
+      if (this.$i18n.locale == "zh") {
+        return false
+      } else {
+        return true
       }
     }
   },
@@ -175,15 +183,30 @@ export default {
       .invitation-tips {
         position: absolute;
         right: 0;
-        top: 2rem;
+        top: 2.45rem;
         color: #C9D1D4;
         font-size: .7rem;
-        width: 9.2rem;
-        height: 3.4rem;
-        background:rgba(66,83,91,1);
+        width: 10rem;
+        height: 2.9rem;
+        background:#42535b;
         box-shadow: 0 .5rem .5rem rgba(66,83,91,0.2);
         @extend %flexCenter;
-        padding: 0 .8rem;
+        border-radius: 4px;
+        padding: 0 .6rem;
+        &::after {
+          border-left: 0.4rem solid transparent;
+          border-right: 0.4rem solid transparent;
+          border-bottom: 0.4rem solid #42535b;
+          content: "";
+          position: absolute;
+          width: 0;
+          top: -.3rem;
+          right: .4rem;
+        }
+      }
+      .invitation-tips-en {
+        width: 11rem;
+        font-size: .6rem;
       }
     }
     .header-img {
