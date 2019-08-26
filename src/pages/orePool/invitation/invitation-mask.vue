@@ -63,6 +63,7 @@
         <wallet-page
           ref="pageList"
           class="page-list"
+          v-show="amountLists.length > 10"
           :total="total"
           :totalPage=2
           @next="nextPage"

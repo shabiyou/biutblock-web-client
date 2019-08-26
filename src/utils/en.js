@@ -105,6 +105,7 @@ export default {
     poolLoginIptError: 'Please enter the correct wallet private key.',
     poolInvailidError: 'Invailid wallet address',
     poolLoginBtn: 'Enter Wallet',
+    poolLoginBtns: 'Enter Wallet...',
 
     poolIndexL: 'Login',
     poolIndexE: 'Log out',

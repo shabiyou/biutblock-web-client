@@ -143,7 +143,10 @@ export default {
         contractAddress: contractAddress,
         invitationCode: inviteCode,
       }, (body) => {
-        if (body.status && body.doc[0].role !== 'Owner') {
+        if (body === undefined || body === "") {
+          alert("系统异常")
+          this.$refs.create.createBtn = 'newWallet.createBtn'
+        } else if (body.status && body.doc[0].role !== 'Owner') {
           let keyFileDataJS = {
             [privKey64]: {
               walletName: "New Import",

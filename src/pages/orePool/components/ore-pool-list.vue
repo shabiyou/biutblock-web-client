@@ -84,13 +84,16 @@ export default {
     },
 
     joinMask (item) {
+      /**
+       * 判断是否已经加入矿池
+       * 
+       */
       if (this.poolPage === 1) {
         this.$emit('login')
       } else {
         this.maskShow = true
         this.selectedItem = item
       }
-      
     },
 
     nextPage () {

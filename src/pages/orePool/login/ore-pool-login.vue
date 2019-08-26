@@ -18,7 +18,7 @@
       <p v-show="keyError">{{ $t(walletKeyErrTxt) }}</p>
 
       <public-button
-        :text="$t('pool.poolLoginBtn')"
+        :text="$t(keyLoginBtn)"
         :class="loginBtn ? 'btn-active' : ''"
         :disabled="!loginBtn"
         @click.native="loginFrom"
@@ -42,7 +42,8 @@ export default {
       walletKey: '',
       keyError: false,
       margnB: false,
-      walletKeyErrTxt: ''
+      walletKeyErrTxt: '',
+      keyLoginBtn: 'pool.poolLoginBtn'
     }
   },
   computed: {
@@ -71,6 +72,7 @@ export default {
      * 
      */
     loginFrom() {
+      this.keyLoginBtn = 'pool.poolLoginBtns'
       try {
         let privateVal = this.walletKey.replace(/\s+/g, "")
         let privateKeyBuffer = SECUtil.privateToBuffer(privateVal)
@@ -80,9 +82,12 @@ export default {
         //传递给父级需要的参数
         let parm
         dataCenterHandler.findOutWallet({
-            address: extractAddress
-          }, (parent) => {
-          if (parent.status) {
+          address: extractAddress
+        }, (parent) => {
+          if (parent === undefined || parent === "") {
+            alert("系统异常")
+            this.keyLoginBtn = 'pool.poolLoginBtn'
+          } else if (parent.status) {
             parm = {
               address: '0x' + extractAddress,
               privateKey: privateVal,
@@ -96,6 +101,7 @@ export default {
               role: parent.doc[0].role
             }
             this.$emit('login', parm)
+            this.keyLoginBtn = 'pool.poolLoginBtn'
           } else {
             this._inputError()
             this.walletKeyErrTxt = 'pool.poolInvailidError'
@@ -107,9 +113,10 @@ export default {
       }
     },
 
-    _inputError () {
+    _inputError() {
       this.keyError = true
-      this.walletKey = ""
+      this.margnB = true
+      this.keyLoginBtn = 'pool.poolLoginBtn'
     }
   },
 }
@@ -171,7 +178,9 @@ main {
   main {
     .pool-login-body {
       padding: 2.8rem 15px 15rem;
-      section,button,p {
+      section,
+      button,
+      p {
         max-width: 19rem;
       }
     }

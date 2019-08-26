@@ -18,7 +18,7 @@
           <span>{{ $t('invitation.inListTxt3') }}</span>
           <span></span>
         </li>
-        <li v-for="(item, index) in itemLists" :key="index">
+        <li v-for="(item, index) in itemLists" :key="index" v-show="itemLists.length > 0">
           <span>{{ item.invitationAddress }}</span>
           <span>{{ item.invitationTime }}</span>
           <span>{{ item.invitationMoney | currency("") }}</span>
@@ -26,7 +26,7 @@
         </li>
       </ul>
 
-      <h4>
+      <h4 v-show="itemLists.length === 0">
         {{ $t(searchContent) }}
       </h4>
     </main>
@@ -42,11 +42,12 @@
       <wallet-page
         ref="pageList"
         class="page-list"
-        :total="total"
+        :total="itemLists.length"
         :totalPage=2
         @next="nextPage"
         @prev="prevPage"
-        @goPage="goPage" />
+        @goPage="goPage"
+        v-show="itemLists.length > 10" />
     </footer>
   </section>
 </template>
