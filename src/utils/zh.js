@@ -200,6 +200,8 @@ export default {
     pageTotal: '共',
     pageRecord: '条记录',
     pageResults: '条结果',
+
+    systemError: '系统异常',
   },
   share: {
     shareTit1: 'BIUT- PC矿工POW',

@@ -27,7 +27,7 @@
     </ul>
 
     <!-- 分页 -->
-    <wallet-page
+    <!-- <wallet-page
       ref="pageList"
       class="page-list"
       :total="total"
@@ -35,7 +35,7 @@
       @next="nextPage"
       @prev="prevPage"
       @goPage="goPage"
-      v-show="itemList.length > 10" />
+      v-show="itemList.length > 10" /> -->
     
     <!-- mask 弹窗 -->
     <pool-mask 
@@ -64,7 +64,8 @@ export default {
     nounce: Number,
     address: String,
     privateKey: String,
-    poolPage: Number
+    poolPage: Number,
+    joinMaskPage: Number  // 0 没加入过  1 加入过
   },
   data() {
     return {
@@ -87,12 +88,18 @@ export default {
       /**
        * 判断是否已经加入矿池
        * 
+       * 1
        */
       if (this.poolPage === 1) {
         this.$emit('login')
       } else {
         this.maskShow = true
-        this.selectedItem = item
+        if (joinMaskPage === 0) {
+          this.maskPage = 2
+          this.selectedItem = item
+        } else {
+          this.maskPage = 1
+        }
       }
     },
 

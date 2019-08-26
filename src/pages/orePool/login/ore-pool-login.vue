@@ -85,7 +85,7 @@ export default {
           address: extractAddress
         }, (parent) => {
           if (parent === undefined || parent === "") {
-            alert("系统异常")
+            alert($('public.systemError'))
             this.keyLoginBtn = 'pool.poolLoginBtn'
           } else if (parent.status) {
             parm = {
