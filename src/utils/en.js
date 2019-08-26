@@ -30,7 +30,7 @@ export default {
     passEncryption: "Your wallet is encrypted! Please enter the password",
     newWalletPass: "Enter your new wallet password",
     passError: "Password error, unlock fail.",
-    inviteCodeError: "Invalid wallet address."
+    inviteCodeError: "Invalid input."
   },
   walletInfo: {
     accessWallet: "How would you like to access your wallet?",

@@ -30,7 +30,7 @@ export default {
     passEncryption: "你的钱包是加密的！请输入密码",
     newWalletPass: "请输入新钱包密码",
     passError: "密码错误, 解锁失败",
-    inviteCodeError: "钱包地址无效"
+    inviteCodeError: "钱包私钥无效"
   },
   walletInfo: {
     accessWallet: "如何访问钱包？",
