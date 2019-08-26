@@ -45,6 +45,7 @@
 <script>
 import publicButton from '../../../components/public-button'
 let fetch = require('node-fetch')
+let dataCenterHandler = require('../../../lib/DataCenterHandler')
 let httpHeaderOption = {
   'content-type': 'application/json'
 }
@@ -138,6 +139,13 @@ export default {
         }).then((res) => res.json()).then((text) => {
           if (JSON.parse(text.body).result.status == 1) {
             this.close() 
+            dataCenterHandler.joinPool({
+              address: this.address,
+              mortgagePoolAddress: this.selectedItem.poolAddress,
+              mortgageValue: ipt
+            }, (body) => {
+
+            })    
           }
         })
       })

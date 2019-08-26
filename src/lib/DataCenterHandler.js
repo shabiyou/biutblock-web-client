@@ -108,7 +108,18 @@ const DataCenterHandler = {
 		}, (err, res, body) => {
 			callback(body)
 		})
-	}
+  },
+  
+  joinPool: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}joinmortgagepool`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  }
 }
 
 module.exports = DataCenterHandler
