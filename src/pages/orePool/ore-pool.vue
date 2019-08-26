@@ -66,7 +66,7 @@
               :itemList="addPoolList" />
             
             <!-- 收益列表 -->
-            <pool-footer v-show="addPoolList.length > 0"/>
+            <pool-footer v-show="addPoolList.length > 0" :itemList="rewardList"/>
             
             <!-- 没有加入矿池展示 -->
             <h4 v-show="addPoolList.length === 0">{{ $t('pool.poolListNull') }}</h4>
@@ -145,6 +145,7 @@ export default {
       idx: 0,
       itemList: [],
       addPoolList: [],
+      rewardList: [],
       nounce: 0
     }
   },
@@ -199,6 +200,7 @@ export default {
       this.loginPage = 0
       this.poolPage = 2
       this.addPoolList = []
+      this.rewardList = []
       this.address = e.address.replace('0x', '')
       this.invitationCode = e.ownInvitationCode
       this.mortgageValue = e.mortgageValue
@@ -253,6 +255,20 @@ export default {
         }
       })
 
+      dataCenterHandler.getInvitationDetails({
+        address: this.address
+      }, (body)=> {
+        if (body.status) {
+          for (let detail of body.rewards) {
+            this.rewardList.push({
+              id: 1,
+              poolTime: detail.insertAt,
+              poolMoney: `+ ${detail.reward} BIUT`
+            })
+          }
+        }
+      })
+
       /** 获取这个钱包对应加入矿池的信息 */
       this._getAllContractInfos(poolAddress)
       this._getNounce()
@@ -260,11 +276,11 @@ export default {
 
     _getAllContractInfos (poolAddress) {
       this.getContractInfoSync(poolAddress).then((infos) => {
-        for (let info of infos) {
-          this.getWalletBalance(info.tokenName.split('-')[1], 'SEC').then((balance) => {
+        for (let i = 1; i < infos.length;  i++) {
+          this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
             this.addPoolList.push({
               id: 0,
-              poolName: info.tokenName.split('-')[2],
+              poolName: infos[i].tokenName.split('-')[2],
               pooolMoney: `${balance} BIUT`
             })
           })

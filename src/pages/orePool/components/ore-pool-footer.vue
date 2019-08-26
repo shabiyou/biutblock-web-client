@@ -24,20 +24,13 @@
 import walletPage from '../../../components/wallet-page'
 export default {
   name: '',
-  props: {},
+  props: {
+    itemList: Array
+  },
   components: {
     walletPage
   },
   data() {
-    return {
-      itemList: [
-        {
-          id: 0,
-          poolTime: '2019/01/24 11:01:25    GMT+8',
-          poolMoney: '+ 0.12345678BIU'
-        }
-      ]
-    }
   },
   computed: {
     itemLists() {
