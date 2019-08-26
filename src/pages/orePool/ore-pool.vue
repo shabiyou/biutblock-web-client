@@ -186,8 +186,7 @@ export default {
     //搜索内容
     searchFrom() {
       let ipt = this.searchIpt
-
-      alert("搜索内容" + ipt)
+      alert("敬请期待...")
     },
 
     //去登陆

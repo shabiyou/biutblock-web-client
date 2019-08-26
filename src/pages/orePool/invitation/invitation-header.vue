@@ -104,7 +104,7 @@ export default {
         return "invitation.level1"
       }
     },
-
+    
     invitationAttribute () {
       if (this.$i18n.locale == "zh") {
         return false

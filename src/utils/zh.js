@@ -105,6 +105,7 @@ export default {
     poolLoginIptError: '请输入正确的钱包私钥',
     poolInvailidError: '钱包地址无效',
     poolLoginBtn: '登入',
+    poolLoginBtns: '登入中...',
 
     poolIndexL: '未登入',
     poolIndexE: '退出',

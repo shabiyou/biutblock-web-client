@@ -39,7 +39,7 @@ export default {
           id: 0,
           imgUrl: poolList1,
           tit: 'pool.poolIndexTxt1',
-          txt: '' + "BIU"
+          txt: '0' + "BIU"
         },
         {
           id: 1,
@@ -60,19 +60,7 @@ export default {
           txt: this.walletBalance + "BIUT"
         }
       ]
-    },
-
-    // poolInComings () {
-    //   this.itemList[1].txt = this.poolInComing
-    // },
-
-    // poolMortgages () {
-    //   this.itemList[2].txt = this.poolMortgage
-    // },
-
-    // walletBalances () {
-    //   this.itemList[3].txt = this.walletBalance
-    // }
+    }
   },
 
   created() {

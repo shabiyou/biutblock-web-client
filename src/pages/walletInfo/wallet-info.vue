@@ -60,8 +60,8 @@ export default {
       walletMoneyC: "0",//钱包SEC币
       walletMoneyN: "0",//钱包SEN币
 
-      availableAmount: 1000, //可用余额
-      freezeAmount: 1000, //冻结金额
+      availableAmount: 0, //可用余额
+      freezeAmount: 0, //冻结金额
       inviteCode: '',//邀请码
 
       infoPages: 1, //默认显示登陆页面
