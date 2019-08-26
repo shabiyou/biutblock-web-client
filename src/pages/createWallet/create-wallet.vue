@@ -144,7 +144,7 @@ export default {
         invitationCode: inviteCode,
       }, (body) => {
         if (body === undefined || body === "") {
-          alert("系统异常")
+          alert($("public.systemError"))
           this.$refs.create.createBtn = 'newWallet.createBtn'
         } else if (body.status && body.doc[0].role !== 'Owner') {
           let keyFileDataJS = {

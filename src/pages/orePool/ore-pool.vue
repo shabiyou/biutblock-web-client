@@ -14,8 +14,7 @@
             <img
               src="../../assets/images/go.png"
               alt=""
-              @click="poolPage = 2"
-              v-show="poolPage === 1" />
+              @click="poolPage = 2"/>
           </figure>
 
           <span class="login-btn" @click="goLogin" v-show="loginStatus">
@@ -30,7 +29,7 @@
         <section v-show="poolPage === 1">
           <section class="pool-body-flex pool-body-head2">
             <span>{{ $t("pool.poolIndexTit1") }}</span>
-            <section>
+            <!-- <section>
               <input
                 type="text"
                 :placeholder="$t('pool.poolIndexIpt')"
@@ -40,11 +39,11 @@
                 alt=""
                 @click="searchFrom"
                 :class="searchDsb ? 'load' : ''" />
-            </section>
+            </section> -->
           </section>
 
           <!-- 所有列表 -->
-          <pool-list :itemList="itemLists" :poolName="searchIpt" :poolPage="poolPage" :nounce="nounce" :address="address" :privateKey="privateKey" @login="goLogin"/>
+          <pool-list :itemList="itemLists" :joinMaskPage="joinMaskPage" :poolName="searchIpt" :poolPage="poolPage" :nounce="nounce" :address="address" :privateKey="privateKey" @login="goLogin"/>
         </section>
 
         <!-- 登录成功 -->
@@ -146,7 +145,8 @@ export default {
       itemList: [],
       addPoolList: [],
       rewardList: [],
-      nounce: 0
+      nounce: 0,
+      joinMaskPage: 0
     }
   },
   computed: {
@@ -187,7 +187,6 @@ export default {
     //搜索内容
     searchFrom() {
       let ipt = this.searchIpt
-      alert("敬请期待...")
     },
 
     //去登陆
@@ -198,7 +197,6 @@ export default {
     //登陆成功
     userLogin (e) {
       this.loginPage = 0
-      this.poolPage = 2
       this.addPoolList = []
       this.rewardList = []
       this.address = e.address.replace('0x', '')
@@ -210,6 +208,10 @@ export default {
       this.privateKey = e.privateKey
       this.loginStatus = false
       let poolAddress = []
+
+      if (e.mortgagePoolAddress.length > 1) {
+        this.joinMaskPage = 1
+      }
 
       for (let pool of e.mortgagePoolAddress) {
         if (pool !== "") {

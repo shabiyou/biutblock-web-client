@@ -200,6 +200,8 @@ export default {
     pageTotal: '',
     pageRecord: ' records',
     pageResults: ' of results',
+
+    systemError: 'System exception',
   },
   share: {
     shareTit1: 'BIUT- PC Mining POW',

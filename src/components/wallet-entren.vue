@@ -186,7 +186,7 @@ export default {
         let parm
         this._getWalletFromDB(extractAddress, (parent) => {
           if (parent === undefined || parent === "") {
-            alert("系统异常")
+            alert($("public.systemError"))
             this.keyUnlockBtn = 'walletInfo.unlockBtn'
           } else if (parent.status) {
             parm = {
@@ -225,7 +225,7 @@ export default {
             let parm
             this._getWalletFromDB(arrData.walletAddress, (parent) => {
               if (parent === undefined || parent === "") {
-                alert("系统异常")
+                alert($("public.systemError"))
                 this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
               } else if (parent.status) {
                 parm = {
