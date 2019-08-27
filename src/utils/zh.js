@@ -103,7 +103,7 @@ export default {
     poolLogin: '欢迎登入',
     poolLoginIpt: '请输入钱包私钥',
     poolLoginIptError: '请输入正确的钱包私钥',
-    poolInvailidError: '钱包地址无效',
+    poolInvailidError: '钱包地址未绑定邀请码',
     poolLoginBtn: '登入',
     poolLoginBtns: '登入中...',
 

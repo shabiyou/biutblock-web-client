@@ -2,7 +2,7 @@
   <section class="pool-foot">
     <h2>{{ $t("pool.poolIndexTit3") }}</h2>
     <ul>
-      <li v-for="(item, index) in itemLists" :key="index">
+      <li v-for="(item, index) in itemList" :key="index">
         <span>{{ item.poolTime }}</span>
         <span>{{ item.poolMoney }}</span>
       </li>
@@ -11,12 +11,12 @@
     <!-- 分页 -->
     <wallet-page
       ref="pageList"
-      :total="itemLists.length"
+      :total="itemList.length"
       :totalPage=2
       @next="nextPage"
       @prev="prevPage"
       @goPage="goPage"
-      v-show="itemLists.length > 10" />
+      v-show="itemList.length > 10" />
   </section>
 </template>
 
@@ -31,11 +31,12 @@ export default {
     walletPage
   },
   data() {
+    return {
+      
+    }
   },
   computed: {
-    itemLists() {
-      return Array(5).fill(this.itemList[0])
-    }
+    
   },
   methods: {
     nextPage() {

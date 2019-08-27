@@ -119,7 +119,6 @@ Vue.prototype.getContractInfoSync = async (pools) => {
     })
     contractInfos.push(JSON.parse(response.body).result.contractInfo)
   }
-  console.log(contractInfos)
   return contractInfos
 }
 

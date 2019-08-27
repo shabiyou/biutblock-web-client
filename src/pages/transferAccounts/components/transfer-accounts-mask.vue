@@ -169,7 +169,6 @@ export default {
         headers: httpHeaderOption
       }).then((res) => res.json()).then((text) => {
         let signedTx = JSON.parse(text.body).result.signedTrans
-        console.log(signedTx)
         let postData = {
           "method": "sec_sendRawTransaction",
           "id": "1",

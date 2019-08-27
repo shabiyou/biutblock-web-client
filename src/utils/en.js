@@ -102,8 +102,8 @@ export default {
     poolBanner: 'The BIUT mine pool is officially online',
     poolLogin: 'Enter Wallet',
     poolLoginIpt: 'Eenter your private key here',
-    poolLoginIptError: 'Please enter the correct wallet private key.',
-    poolInvailidError: 'Invailid wallet address',
+    poolLoginIptError: 'Please enter the correct wallet private key',
+    poolInvailidError: 'The wallet address not bind any inviation code',
     poolLoginBtn: 'Enter Wallet',
     poolLoginBtns: 'Enter Wallet...',
 
