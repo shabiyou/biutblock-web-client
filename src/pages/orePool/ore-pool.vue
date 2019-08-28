@@ -164,15 +164,18 @@ export default {
       }
       this.getContractInfoSync(poolAddress).then( infos => {
         for (let info of infos) {
-          let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
-          let poolAddress = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[1] : ''
-          let poolMoney = info.hasOwnProperty("tokenName") ? info.totalSupply : ''
-          this.itemList.push({
-            id: 0,
-            poolName: poolName,
-            pooolMoney: `${poolMoney} BIUT`,
-            poolAddress: poolAddress
-          })
+          if (Object.keys(info).length > 0) {
+            let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
+            let poolAddress = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[1] : ''
+            this.getWalletBalance(poolAddress, 'SEC').then((balance) => {
+              this.itemList.push({
+                id: 0,
+                poolName: poolName,
+                poolMoney: `${balance} BIUT`
+              })
+            })
+          }
+
         }
       })
     })
@@ -231,10 +234,10 @@ export default {
       })
 
       /**获取所有矿池的总额 */
-      this.getAllWalletBalance(poolAddress, 'SEC').then((balance) => {
-        this.totalPoolMoney = Number(this.scientificNotationToString(balance))
-        this.poolTimeLock = Number(this.scientificNotationToString(balance))
-      })
+      // this.getAllWalletBalance(poolAddress, 'SEC').then((balance) => {
+      //   this.totalPoolMoney = Number(this.scientificNotationToString(balance))
+      //   this.poolTimeLock = Number(this.scientificNotationToString(balance))
+      // })
 
       dataCenterHandler.getRelatedMiners({
         address: this.address
@@ -278,16 +281,27 @@ export default {
     },
 
     _getAllContractInfos (poolAddress) {
+      let freezeMoney = 0
+
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let i = 1; i < infos.length;  i++) {
+          let timeLock = infos[i].timeLock
+          if (timeLock && timeLock.hasOwnProperty(this.address) && timeLock[this.address].hasOwnProperty(this.address)) {
+            let benifitAddress = timeLock[this.address][this.address]
+              for (let i = 0; i < benifitAddress.length; i++) {
+                freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
+              }
+          }
+          
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
             this.addPoolList.push({
               id: 0,
               poolName: infos[i].tokenName.split('-')[2],
-              pooolMoney: `${balance} BIUT`
+              pooolMoney: `${balance}`
             })
           })
         }
+        this.poolTimeLock = Number(this.scientificNotationToString(freezeMoney))
       })
     },
 
