@@ -108,7 +108,7 @@ Vue.prototype.getContractInfoSync = async (pools) => {
   for (let i in pools) {
     let bodyRequest = {
       'method': 'sec_getContractInfo',
-      'params': [pools[i].replace('0x')]
+      'params': [pools[i]]
     }
     let response = await fetch(_const.url, {
       method: 'post',

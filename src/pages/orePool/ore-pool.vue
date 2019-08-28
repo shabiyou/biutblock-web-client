@@ -159,7 +159,7 @@ export default {
     dataCenterHandler.getAllPool((pools) => {
       for (let pool of pools) {
         if (pool.ownPoolAddress !== "") {
-          poolAddress.push(pool.ownPoolAddress)
+          poolAddress.push(pool.ownPoolAddress[0])
         }
       }
       this.getContractInfoSync(poolAddress).then( infos => {
@@ -196,6 +196,7 @@ export default {
 
     //登陆成功
     userLogin (e) {
+      this.poolPage = 2
       this.loginPage = 0
       this.addPoolList = []
       this.rewardList = []
@@ -265,7 +266,7 @@ export default {
             this.rewardList.push({
               id: 1,
               poolTime: detail.insertAt,
-              poolMoney: `+ ${detail.reward} BIUT`
+              poolMoney: `+ ${detail.reward}`
             })
           }
         }
