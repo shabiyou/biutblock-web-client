@@ -45,6 +45,7 @@
       :address="address"
       :selectedItem="selectedItem"
       :privateKey="privateKey"
+      :totalMoney="walletBalance.toString()"
       @close="closeMask" />
   </section>
 </template>
@@ -65,6 +66,7 @@ export default {
     address: String,
     privateKey: String,
     stus: Boolean,
+    walletBalance: Number,
     joinMaskPage: Number  // 0 没加入过  1 加入过
   },
   data() {

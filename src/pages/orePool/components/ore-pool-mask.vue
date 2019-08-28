@@ -47,8 +47,10 @@ import publicButton from '../../../components/public-button'
 let fetch = require('node-fetch')
 let dataCenterHandler = require('../../../lib/DataCenterHandler')
 let httpHeaderOption = {
-  'content-type': 'application/json'
+  'content-type': 'application/json',
+  "access-control-allow-origin": '*'
 }
+let url = _const.url
 export default {
   name: '',
   components: {
@@ -59,12 +61,12 @@ export default {
     nounce: Number,
     selectedItem: Object,
     address: String,
-    privateKey: String
+    privateKey: String,
+    totalMoney: String
   },
   data() {
     return {
-      joinIpt: '',
-      totalMoney: "10000"
+      joinIpt: ''
     }
   },
   mounted() {
@@ -93,9 +95,10 @@ export default {
        */
       
       let ipt = this.joinIpt.replace(/\s+/g, "")
-      let sourceCode = `lock( "${this.address}", ${ipt}, ${365 * 24 * 3600 * 1000})`.toString('base64')
+      let sourceCode = `lock( "${this.address}", ${ipt}, ${new Date().getTime() + 365 * 24 * 3600 * 1000})`.toString('base64')
       sourceCode = JSON.stringify({callCode: Buffer.from(sourceCode).toString('base64')})
       const transfer = {
+        "nonce": '1',
         "timeStamp": new Date().getTime(),
         'walletAddress': this.address,
         'sendToAddress': this.selectedItem.poolAddress,
@@ -105,14 +108,14 @@ export default {
         'gas': '0',
         'gasPrice': '0',
         'data': '',
-        "nonce": this.nonce,
-        'inputData': sourceCode
+        'inputData': sourceCode,
+        'chainName': 'SEC'
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名，
       //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
       let txBody = {
-        "method": "sec_sendContractTransaction",
+        "method": "sec_signedTransaction",
         "params": [{
           "companyName": "coinegg",
           "privateKey": this.privateKey,
@@ -126,9 +129,7 @@ export default {
       }).then((res) => res.json()).then((text) => {
         let signedTx = JSON.parse(text.body).result.signedTrans
         let postData = {
-          "method": "sec_sendRawTransaction",
-          "id": "1",
-          "jsonrpc": "2.0",
+          "method": "sec_sendContractTransaction",
           "params": signedTx
         }
         fetch(url, {

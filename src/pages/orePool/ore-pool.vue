@@ -43,7 +43,10 @@
           </section>
 
           <!-- 所有列表 -->
-          <pool-list :itemList="itemLists" :joinMaskPage="joinMaskPage" :poolName="searchIpt" :stus="loginStatus" :nounce="nounce" :address="address" :privateKey="privateKey" @login="goLogin"/>
+          <pool-list :itemList="itemLists" :joinMaskPage="joinMaskPage" 
+          :poolName="searchIpt" :stus="loginStatus" :nounce="nounce" :address="address" 
+          :privateKey="privateKey" :walletBalance="walletBalance"
+          @login="goLogin"/>
         </section>
 
         <!-- 登录成功 -->
@@ -171,6 +174,7 @@ export default {
               this.itemList.push({
                 id: 0,
                 poolName: poolName,
+                poolAddress: poolAddress,
                 poolMoney: `${balance} BIUT`
               })
             })
@@ -281,9 +285,9 @@ export default {
 
     _getAllContractInfos (poolAddress) {
       let freezeMoney = 0
-
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let i = 1; i < infos.length;  i++) {
+          /**计算自己在矿池中抵押了多少钱 */
           let timeLock = infos[i].timeLock
           if (timeLock && timeLock.hasOwnProperty(this.address) && timeLock[this.address].hasOwnProperty(this.address)) {
             let benifitAddress = timeLock[this.address][this.address]
@@ -291,7 +295,7 @@ export default {
                 freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
               }
           }
-          
+          /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
             this.addPoolList.push({
               id: 0,
