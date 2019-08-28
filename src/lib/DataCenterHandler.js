@@ -119,6 +119,39 @@ const DataCenterHandler = {
     }, (err, res, body) => {
       callback(body)
     })
+  },
+
+  getMiningPool: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}getMiningPool`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  },
+
+  getMyTotalReward: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}getTotalRewardsByAddress`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  },
+
+  getMyLastTotalReward: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}getRewardsByAddress`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
   }
 }
 

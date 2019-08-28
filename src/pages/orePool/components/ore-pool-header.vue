@@ -23,6 +23,7 @@ export default {
   name: '',
   props: {
     walletBalance: Number,
+    poolLastWeek: Number,
     poolInComing: Number,
     poolMortgage: Number
   },
@@ -39,7 +40,7 @@ export default {
           id: 0,
           imgUrl: poolList1,
           tit: 'pool.poolIndexTxt1',
-          txt: '0' + "BIU"
+          txt: this.poolLastWeek + "BIU"
         },
         {
           id: 1,

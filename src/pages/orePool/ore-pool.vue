@@ -60,7 +60,8 @@
           <section v-show="idx === 0">
             <pool-header
               :walletBalance="walletBalance"
-              :poolInComing="poolTimeLock"
+              :poolLastWeek="lastWeekReward"
+              :poolInComing="myReward"
               :poolMortgage="poolTimeLock"
             />
             <pool-body 
@@ -111,6 +112,7 @@ import searchs from '../../assets/images/searchs.png'
 
 const dataCenterHandler = require('../../lib/DataCenterHandler')
 
+
 export default {
   name: '',
   components: {
@@ -132,6 +134,8 @@ export default {
       loginStatus: true,
       poolPage: 1,
       poolTimeLock: 0,
+      myReward: 0,
+      lastWeekReward: 0, 
       totalPoolMoney: 0,
       walletBalance: 0,
       loginPage: 0,
@@ -165,26 +169,26 @@ export default {
           poolAddress.push(pool.ownPoolAddress[0])
         }
       }
+
       this.getContractInfoSync(poolAddress).then( infos => {
         for (let info of infos) {
           if (Object.keys(info).length > 0) {
-            let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
+            //let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
             let poolAddress = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[1] : ''
             this.getWalletBalance(poolAddress, 'SEC').then((balance) => {
-              this.itemList.push({
-                id: 0,
-                poolName: poolName,
-                poolAddress: poolAddress,
-                poolMoney: `${balance} BIUT`
+              dataCenterHandler.getMiningPool({address: poolAddress}, (body) => {
+                this.itemList.push({
+                  id: 0,
+                  poolName: body.miningPool ? body.miningPool.poolName : '',
+                  poolAddress: poolAddress,
+                  poolMoney: `${balance} BIUT`
+                })
               })
             })
           }
-
         }
       })
     })
-
-    
   },
   mounted() {
 
@@ -278,6 +282,24 @@ export default {
         }
       })
 
+      dataCenterHandler.getMyTotalReward({
+        address: this.address
+      }, (body) => {
+        if(body.status) {
+          this.myReward = Number(this.scientificNotationToString(body.rewards))
+        }
+      })
+
+      dataCenterHandler.getMyLastTotalReward({
+        address: this.address,
+        startDate: new Date().getTime() - 7 * 24 * 3600 * 1000,
+        endDate: new Date().getTime()
+      }, (body) => {
+        if (body.status) {
+          this.lastWeekReward = body.rewards
+        } 
+      })
+
       /** 获取这个钱包对应加入矿池的信息 */
       this._getAllContractInfos(poolAddress)
       this._getNounce()
@@ -297,10 +319,14 @@ export default {
           }
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
-            this.addPoolList.push({
-              id: 0,
-              poolName: infos[i].tokenName.split('-')[2],
-              pooolMoney: `${balance}`
+            dataCenterHandler.getMiningPool({address: infos[i].tokenName.split('-')[1]}, (body) => {
+              if (body.status && body.miningPool && body.miningPool.poolName !== '') {
+                this.addPoolList.push({
+                  id: 0,
+                  poolName: body.miningPool.poolName,
+                  pooolMoney: `${balance}`
+                })
+              }
             })
           })
         }
