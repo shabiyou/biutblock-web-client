@@ -43,7 +43,7 @@
           </section>
 
           <!-- 所有列表 -->
-          <pool-list :itemList="itemLists" :joinMaskPage="joinMaskPage" :poolName="searchIpt" :poolPage="poolPage" :nounce="nounce" :address="address" :privateKey="privateKey" @login="goLogin"/>
+          <pool-list :itemList="itemLists" :joinMaskPage="joinMaskPage" :poolName="searchIpt" :stus="loginStatus" :nounce="nounce" :address="address" :privateKey="privateKey" @login="goLogin"/>
         </section>
 
         <!-- 登录成功 -->
@@ -209,7 +209,6 @@ export default {
       this.privateKey = e.privateKey
       this.loginStatus = false
       let poolAddress = []
-
       if (e.mortgagePoolAddress.length > 1) {
         this.joinMaskPage = 1
       }
