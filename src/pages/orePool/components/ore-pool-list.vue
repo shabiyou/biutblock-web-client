@@ -64,7 +64,7 @@ export default {
     nounce: Number,
     address: String,
     privateKey: String,
-    poolPage: Number,
+    stus: Boolean,
     joinMaskPage: Number  // 0 没加入过  1 加入过
   },
   data() {
@@ -90,11 +90,11 @@ export default {
        * 
        * 1
        */
-      if (this.poolPage === 1) {
+      if (this.stus) {
         this.$emit('login')
       } else {
         this.maskShow = true
-        if (joinMaskPage === 0) {
+        if (this.joinMaskPage === 0) {
           this.maskPage = 2
           this.selectedItem = item
         } else {
