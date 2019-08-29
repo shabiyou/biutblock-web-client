@@ -22,17 +22,16 @@
     </ul>
 
     <!-- mask 弹窗 -->
-    <pool-mask 
+    <!-- <pool-mask 
       v-show="maskShow" 
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
       :mortgageShow="mortgageShow"
-      :selectedItem="selectedItem"
       :privateKey="privateKey"
       :totalMoney="walletBalance.toString()"
       @close="closeMask"
-      @updatePage="updatePage" />
+      @updatePage="updatePage" /> -->
   </section>
 </template>
 
@@ -45,11 +44,17 @@ export default {
   },
   props: {
     itemList: Array
+    // nounce: Number,
+    // maskPage: String,
+    // address: String,
+    // mortgageShow: Boolean,
+    // selectedItem: Object,
+    // privateKey: String,
+    // walletBalance: Number
   },
   data() {
     return {
-      maskShow: false,
-      mortgageShow: true
+      maskShow: false
     }
   },
   methods: {
