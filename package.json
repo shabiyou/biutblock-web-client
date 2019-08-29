@@ -29,6 +29,7 @@
     "jayson-rpc-vue": "^1.1.2",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.0",
+    "moment-timezone": "^0.5.26",
     "node-fetch": "^2.3.0",
     "ripemd160": "^2.0.2",
     "string-random": "^0.1.3",

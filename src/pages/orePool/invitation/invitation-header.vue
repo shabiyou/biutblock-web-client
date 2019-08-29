@@ -135,7 +135,7 @@ export default {
     },
 
     lookRules() {
-      this.$emit('look', 1)
+      this.$emit('look', 1, '')
     },
 
     showInvitation1() {

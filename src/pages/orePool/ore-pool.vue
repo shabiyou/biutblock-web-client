@@ -68,7 +68,7 @@
               :itemList="addPoolList" />
             
             <!-- 收益列表 -->
-            <pool-footer v-show="addPoolList.length > 0" :itemList="rewardList"/>
+            <pool-footer v-show="rewardList.length > 0" :itemList="rewardList"/>
             
             <!-- 没有加入矿池展示 -->
             <h4 v-show="addPoolList.length === 0">{{ $t('pool.poolListNull') }}</h4>
@@ -82,7 +82,12 @@
 
             <invitation-mask 
               :maskPage="maskPage"
+              :maskLevel="maskLevel"
+              :maskAddress="maskAddress"
+              :maskList="maskList"
+              :maskReward="maskReward"
               v-show="maskShow"
+
               @close="closeInvitationMask"/>
           </section>
 
@@ -110,7 +115,8 @@ import search from '../../assets/images/search.png'
 import searchs from '../../assets/images/searchs.png'
 
 const dataCenterHandler = require('../../lib/DataCenterHandler')
-
+import WalletsHandler from '../../lib/WalletsHandler'
+const moment = require('moment-timezone')
 export default {
   name: '',
   components: {
@@ -139,6 +145,10 @@ export default {
       privateKey: '',//私钥
       maskPage: 1,
       maskShow: false,
+      maskLevel: '',
+      maskAddress: '',
+      maskReward: '',
+      maskList: [],
       invitationList: [],
       invitationCode: '',
       invitatedAmount: 0,
@@ -246,11 +256,13 @@ export default {
         address: this.address
       }, (docs) => {
         for (let doc of docs) {
+          let time = WalletsHandler.formatDate(moment(doc.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
           this.invitationList.push({
             id: 0,
             invitationAddress: `${doc.address}`,
-            invitationTime: `${doc.insertAt}`,
-            invitationMoney: '',
+            invitationTime: `${time}`,
+            invitationMoney: `${doc.reward}`,
+            level: doc.level
           })
         }
       })
@@ -269,10 +281,11 @@ export default {
       }, (body)=> {
         if (body.status) {
           for (let detail of body.rewards) {
+            let time = WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
             this.rewardList.push({
               id: 1,
-              poolTime: detail.insertAt,
-              poolMoney: `+ ${detail.reward}`
+              poolTime: time,
+              poolMoney: `+ ${detail.rewards}`
             })
           }
         }
@@ -337,8 +350,28 @@ export default {
       this.idx =  index
     },
 
-    lookRules (e) {
-      this.maskPage = e
+    lookRules (page, item) {
+      let details = []
+      if (item) {
+        dataCenterHandler.getInvitationDetails({
+          address: item.invitationAddress
+        }, (body) => {
+          if (body.status) {
+            for (let detail of body.rewards) {
+              details.push({
+                id: 0,
+                maskTime: detail.insertAt,
+                maskAmount: detail.rewards
+              })
+            }
+            this.maskList = details
+          }
+        })
+      }
+      this.maskLevel = item.level
+      this.maskAddress = item.invitationAddress
+      this.maskReward = item.invitationMoney
+      this.maskPage = page
       this.maskShow = true
     },
 

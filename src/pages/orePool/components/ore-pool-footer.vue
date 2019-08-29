@@ -9,14 +9,14 @@
     </ul>
 
     <!-- 分页 -->
-    <wallet-page
+    <!-- <wallet-page
       ref="pageList"
       :total="itemList.length"
       :totalPage=2
       @next="nextPage"
       @prev="prevPage"
       @goPage="goPage"
-      v-show="itemList.length > 10" />
+      v-show="itemList.length > 10" /> -->
   </section>
 </template>
 
