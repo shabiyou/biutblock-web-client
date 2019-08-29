@@ -143,6 +143,7 @@ export default {
         address: this.userAddress,
         contractAddress: contractAddress,
         invitationCode: inviteCode,
+        privateKey: privKey64
       }, (body) => {
         if (body === undefined || body === "") {
           alert($("public.systemError"))

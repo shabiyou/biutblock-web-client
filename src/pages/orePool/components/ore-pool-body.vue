@@ -32,8 +32,8 @@
       :mortgageShow="mortgageShow"
       :privateKey="privateKey"
       :selectedItem="selectedItem"
-      :joinIpt="joinIpt"
       :totalMoney="walletBalance.toString()"
+      :from="'body'"
       @close="closeMask"
       @updatePage="updatePage" />
   </section>
@@ -49,7 +49,6 @@ export default {
   props: {
     itemList: Array,
     nounce: Number,
-    maskPage: Number,
     address: String,
     mortgageShow: Boolean,
     privateKey: String,
@@ -59,7 +58,8 @@ export default {
     return {
       maskShow: false,
       selectedItem: {},
-      joinIpt: 0
+      joinIpt: '0',
+      maskPage: 1
     }
   },
   methods: {
@@ -68,13 +68,15 @@ export default {
     },
 
     closeMask () {
+      //this.$emit('updatePage', ipt)
       this.maskShow = false
     },
 
     updatePage (ipt) {
+      this.$emit('updatePage', ipt)
       this.maskPage = 3
-      this.joinIpt = ipt
-      this.emit('updatePage')
+      this.maskShow = true
+      //this.joinIpt = ipt
     },
 
     mortgageMask (item) {

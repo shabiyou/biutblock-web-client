@@ -82,7 +82,6 @@
             />
             <pool-body @lookAll="poolPage = 1" 
             :itemList="addPoolList"
-            :maskPage="joinMaskPage"
             :poolName="searchIpt"
             :stus="loginStatus"
             :nounce="nounce"
@@ -345,8 +344,9 @@ export default {
     },
 
     onUpdatePage() {
+      this.addPoolList = []
+      this.maskPage = 3
       this._getAllContractInfos(this.poolAddress)
-
       dataCenterHandler.getMyTotalReward({
         address: this.address
       }, (body) => {
@@ -354,8 +354,7 @@ export default {
           this.myReward = Number(this.scientificNotationToString(body.rewards))
         }
       })
-
-      this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
+      this.getWalletBalance(this.address).then((balance) => {
         this.walletBalance = Number(this.scientificNotationToString(balance))
       })
     },

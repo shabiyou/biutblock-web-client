@@ -119,21 +119,20 @@ export default {
     publicButton
   },
   props: {
-    maskPage: Number,
     nounce: Number,
     selectedItem: Object,
     address: String,
     privateKey: String,
     totalMoney: String,
     mortgageShow: Boolean,
-    joinIpt: String,
+    maskPage: Number,
     from: String
   },
   data() {
     return {
       mortgageBtn:'mask.poolMaskBtn', //抵押更多按钮
       mortgageReadonly: false,
-
+      joinIpt: '0',
       networkError: false,//网络错误
     }
   },
@@ -148,12 +147,12 @@ export default {
   },
   computed: {
     joinBtn() {
-      let ipt = this.joinIpt.replace(/\s+/g, "")
+      let ipt = this.joinIpt ? this.joinIpt.replace(/\s+/g, "") : '0'
       return 10000 <= ipt && ipt <= Number(this.totalMoney) ? true : false
     },
 
     mortgageActive () {
-      let ipt = this.joinIpt.replace(/\s+/g, "")
+      let ipt = this.joinIpt ? this.joinIpt.replace(/\s+/g, "") : '0'
       return 10 <= ipt && ipt <= Number(this.totalMoney) ? true : false
     },
 
@@ -196,6 +195,7 @@ export default {
             mortgagePoolAddress: this.selectedItem.poolAddress,
             mortgageValue: ipt
           }, (body) => {
+
           })
         })
       } else {
@@ -205,54 +205,11 @@ export default {
             mortgageValue: ipt
           }, (doc) => {
             if (doc.status) {
-            this.emit('updatePage')
+            this.$emit('updatePage', ipt)
             }
           })
         })
       }
-      
-      // let ipt = this.joinIpt.replace(/\s+/g, "")
-      // let sourceCode = `lock( "${this.address}", ${ipt}, ${new Date().getTime() + 365 * 24 * 3600 * 1000})`.toString('base64')
-      // sourceCode = JSON.stringify({ callCode: Buffer.from(sourceCode).toString('base64') })
-      // const transfer = {
-      //   "nonce": '1',
-      //   "timeStamp": new Date().getTime(),
-      //   'walletAddress': this.address,
-      //   'sendToAddress': this.selectedItem.poolAddress,
-      //   'amount': ipt,
-      //   'txFee': '0',
-      //   'gasLimit': '0',
-      //   'gas': '0',
-      //   'gasPrice': '0',
-      //   'data': '',
-      //   'inputData': sourceCode,
-      //   'chainName': 'SEC'
-      // }
-
-      // let signedTx = this._signTx(this.privateKey, transfer)
-      // let postData = {
-      //   "method": "sec_sendContractTransaction",
-      //   "params": signedTx
-      // }
-      // fetch(url, {
-      //   method: 'post',
-      //   body: JSON.stringify(postData), // request is a string
-      //   headers: httpHeaderOption
-      // }).then((res) => res.json()).then((text) => {
-      //   if (JSON.parse(text.body).result.status == 1) {
-      //     this.close()
-      //     dataCenterHandler.joinPool({
-      //       address: this.address,
-      //       mortgagePoolAddress: this.selectedItem.poolAddress,
-      //       mortgageValue: ipt
-      //     }, (body) => {
-      //     })
-      //   }
-      // })
-    },
-
-    addMoreMortgage () {
-      
     },
 
     _addMortgage (callback) {
@@ -284,7 +241,7 @@ export default {
         headers: httpHeaderOption
       }).then((res) => res.json()).then((text) => {
         if (JSON.parse(text.body).result.status == 1) {
-          this.close()
+          this.$emit('close')
           callback(ipt)
         }
       })
