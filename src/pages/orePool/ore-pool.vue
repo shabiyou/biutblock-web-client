@@ -7,14 +7,18 @@
       </header>
 
       <section class="pool-body el-container">
-        <section class="pool-body-flex pool-body-head1" :class="loginStatus ? 'flex-end' : ''">
+        <section
+          class="pool-body-flex pool-body-head1"
+          :class="loginStatus ? 'flex-end' : ''"
+        >
           <!-- 不是登陆状态下隐藏 -->
           <figure v-show="!loginStatus">
             <figcaption>{{ address }}</figcaption>
             <img
               src="../../assets/images/go.png"
               alt=""
-              @click="poolPage = 2"/>
+              @click="poolPage = 2"
+            />
           </figure>
 
           <span class="login-btn" @click="goLogin" v-show="loginStatus">
@@ -43,18 +47,29 @@
           </section>
 
           <!-- 所有列表 -->
-          <pool-list :itemList="itemLists" :joinMaskPage="joinMaskPage" 
-          :poolName="searchIpt" :stus="loginStatus" :nounce="nounce" :address="address" 
-          :privateKey="privateKey" :walletBalance="walletBalance"
-          @login="goLogin"/>
+          <pool-list
+            :itemList="itemLists"
+            :joinMaskPage="joinMaskPage"
+            :poolName="searchIpt"
+            :stus="loginStatus"
+            :nounce="nounce"
+            :address="address"
+            :privateKey="privateKey"
+            :walletBalance="walletBalance"
+            @login="goLogin"
+          />
         </section>
 
         <!-- 登录成功 -->
         <section v-show="poolPage === 2">
           <p class="tab-line"></p>
           <ul class="tab-list">
-            <li :class="idx === 0 ? 'active-list' : ''" @click="tabClick(0)"> {{ $t('pool.poolTabTxt1') }} </li>
-            <li :class="idx === 1 ? 'active-list' : ''" @click="tabClick(1)"> {{ $t('pool.poolTabTxt2') }} </li>
+            <li :class="idx === 0 ? 'active-list' : ''" @click="tabClick(0)">
+              {{ $t("pool.poolTabTxt1") }}
+            </li>
+            <li :class="idx === 1 ? 'active-list' : ''" @click="tabClick(1)">
+              {{ $t("pool.poolTabTxt2") }}
+            </li>
           </ul>
           <!-- 矿池 -->
           <section v-show="idx === 0">
@@ -63,30 +78,41 @@
               :poolInComing="poolTimeLock"
               :poolMortgage="poolTimeLock"
             />
-            <pool-body 
-              @lookAll="poolPage = 1"
-              :itemList="addPoolList" />
-            
+            <pool-body @lookAll="poolPage = 1" :itemList="addPoolList" />
+
             <!-- 收益列表 -->
-            <pool-footer v-show="addPoolList.length > 0" :itemList="rewardList"/>
-            
+            <pool-footer
+              v-show="addPoolList.length > 0"
+              :itemList="rewardList"
+            />
+
             <!-- 没有加入矿池展示 -->
-            <h4 v-show="addPoolList.length === 0">{{ $t('pool.poolListNull') }}</h4>
+            <h4 v-show="addPoolList.length === 0">
+              {{ $t("pool.poolListNull") }}
+            </h4>
           </section>
 
           <!-- 邀请 -->
           <section v-show="idx === 1">
-            <invitation-header :invitationCode="invitationCode" :progress="invitatedAmount" :invitationShow="mortgageValue!=='0'" :minerType="minerLevel" @look="lookRules" />
+            <invitation-header
+              :invitationCode="invitationCode"
+              :progress="invitatedAmount"
+              :invitationShow="mortgageValue !== '0'"
+              :minerType="minerLevel"
+              @look="lookRules"
+            />
 
-            <invitation-list :invitationList="invitationList" @look="lookRules"/>
+            <invitation-list
+              :invitationList="invitationList"
+              @look="lookRules"
+            />
 
-            <invitation-mask 
+            <invitation-mask
               :maskPage="maskPage"
               v-show="maskShow"
-              @close="closeInvitationMask"/>
+              @close="closeInvitationMask"
+            />
           </section>
-
-          
         </section>
       </section>
     </section>
@@ -165,7 +191,7 @@ export default {
           poolAddress.push(pool.ownPoolAddress[0])
         }
       }
-      this.getContractInfoSync(poolAddress).then( infos => {
+      this.getContractInfoSync(poolAddress).then(infos => {
         for (let info of infos) {
           if (Object.keys(info).length > 0) {
             let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
@@ -184,7 +210,7 @@ export default {
       })
     })
 
-    
+
   },
   mounted() {
 
@@ -202,7 +228,7 @@ export default {
     },
 
     //登陆成功
-    userLogin (e) {
+    userLogin(e) {
       this.poolPage = 2
       this.loginPage = 0
       this.addPoolList = []
@@ -233,7 +259,7 @@ export default {
 
       /**获取钱包余额 */
       this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
-        this.walletBalance =Number(this.scientificNotationToString(balance))
+        this.walletBalance = Number(this.scientificNotationToString(balance))
       })
 
       /**获取所有矿池的总额 */
@@ -266,7 +292,7 @@ export default {
 
       dataCenterHandler.getInvitationDetails({
         address: this.address
-      }, (body)=> {
+      }, (body) => {
         if (body.status) {
           for (let detail of body.rewards) {
             this.rewardList.push({
@@ -283,17 +309,17 @@ export default {
       this._getNounce()
     },
 
-    _getAllContractInfos (poolAddress) {
+    _getAllContractInfos(poolAddress) {
       let freezeMoney = 0
       this.getContractInfoSync(poolAddress).then((infos) => {
-        for (let i = 1; i < infos.length;  i++) {
+        for (let i = 1; i < infos.length; i++) {
           /**计算自己在矿池中抵押了多少钱 */
           let timeLock = infos[i].timeLock
           if (timeLock && timeLock.hasOwnProperty(this.address) && timeLock[this.address].hasOwnProperty(this.address)) {
             let benifitAddress = timeLock[this.address][this.address]
-              for (let i = 0; i < benifitAddress.length; i++) {
-                freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
-              }
+            for (let i = 0; i < benifitAddress.length; i++) {
+              freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
+            }
           }
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
@@ -308,13 +334,13 @@ export default {
       })
     },
 
-    _getNounce () {
+    _getNounce() {
       let httpHeaderOption = {
         'content-type': 'application/json'
       }
       let nonceData = {
         "jsonrpc": "2.0",
-        "id":"1",
+        "id": "1",
         'method': 'sec_getNonce',
         "params": [this.address]
       }
@@ -328,21 +354,21 @@ export default {
     },
 
     //退出登陆、退出成功之后再重新加载一次所有列表
-    exitPage () {
+    exitPage() {
       this.loginStatus = true
       this.poolPage = 1
     },
 
-    tabClick (index) {
-      this.idx =  index
+    tabClick(index) {
+      this.idx = index
     },
 
-    lookRules (e) {
+    lookRules(e) {
       this.maskPage = e
       this.maskShow = true
     },
 
-    closeInvitationMask () {
+    closeInvitationMask() {
       this.maskShow = false
     }
   },
@@ -415,12 +441,12 @@ main {
       height: 4.8rem;
     }
     .flex-end {
-      justify-content: flex-end;      
+      justify-content: flex-end;
     }
     h4 {
       text-align: center;
-      color: #9CA6AA;
-      font-size: .7rem;
+      color: #9ca6aa;
+      font-size: 0.7rem;
       padding: 2.4rem 0 6.2rem;
       font-weight: normal;
     }
@@ -454,8 +480,8 @@ main {
       }
     }
     .tab-line {
-      height: .5rem;
-      background:#f5f5f5;
+      height: 0.5rem;
+      background: #f5f5f5;
     }
     .tab-list {
       @extend %flex;
@@ -464,23 +490,23 @@ main {
       @include border($c: #e6e6e6, $d: bottom);
       margin: 0;
       padding: 0 0 0 4.4rem;
-      color: #9CA6AA;
-      font-size: .9rem;
+      color: #9ca6aa;
+      font-size: 0.9rem;
       box-sizing: border-box;
       li {
-        padding: 0 .9rem 0 1.2rem;
+        padding: 0 0.9rem 0 1.2rem;
         height: 100%;
         @extend %flexCenter;
         cursor: pointer;
-        @include border($c: transparent, $d: bottom,$w: .15rem);
-        margin-bottom: -.15rem;
+        @include border($c: transparent, $d: bottom, $w: 0.15rem);
+        margin-bottom: -0.15rem;
         &:first-child {
           margin-right: 3.2rem;
         }
       }
       .active-list {
-        color: #29D893;
-        @include border($c: #29D893, $d: bottom, $w: .15rem);
+        color: #29d893;
+        @include border($c: #29d893, $d: bottom, $w: 0.15rem);
         box-sizing: border-box;
       }
     }

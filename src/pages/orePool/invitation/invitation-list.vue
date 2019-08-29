@@ -32,14 +32,14 @@
     </main>
 
     <footer>
-      <span class="page-number" v-show="!searchRes">
+      <!-- <span class="page-number" v-show="!searchRes">
         {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
       </span>
       <span class="page-number" v-show="searchRes">
         {{ $t('public.pageTotal') }} {{ searchTotal }} {{ $t('public.pageResults') }}
-      </span>
+      </span> -->
       <!-- 分页 -->
-      <wallet-page
+      <!-- <wallet-page
         ref="pageList"
         class="page-list"
         :total="itemLists.length"
@@ -47,7 +47,7 @@
         @next="nextPage"
         @prev="prevPage"
         @goPage="goPage"
-        v-show="itemLists.length > 10" />
+        v-show="itemLists.length > 10" /> -->
     </footer>
   </section>
 </template>

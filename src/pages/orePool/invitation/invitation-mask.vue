@@ -56,11 +56,11 @@
       </ul>
 
       <footer>
-        <span class="page-number">
+        <!-- <span class="page-number">
           {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
-        </span>
+        </span> -->
         <!-- 分页 -->
-        <wallet-page
+        <!-- <wallet-page
           ref="pageList"
           class="page-list"
           v-show="amountLists.length > 10"
@@ -68,7 +68,7 @@
           :totalPage=2
           @next="nextPage"
           @prev="prevPage"
-          @goPage="goPage" />
+          @goPage="goPage" /> -->
       </footer>
     </section>
   </section>
