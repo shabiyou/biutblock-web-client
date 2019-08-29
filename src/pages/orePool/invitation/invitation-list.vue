@@ -31,8 +31,8 @@
       </h4>
     </main>
 
-    <!-- <footer>
-      <span class="page-number" v-show="!searchRes">
+    <!-- <footer> -->
+      <!-- <span class="page-number" v-show="!searchRes">
         {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
       </span>
       <span class="page-number" v-show="searchRes">

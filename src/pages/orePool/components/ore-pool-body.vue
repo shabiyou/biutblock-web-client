@@ -17,26 +17,58 @@
           <span>{{ item.poolName }}</span>
           <span>{{ item.pooolMoney }} BIUT</span>
         </section>
-        <span class="list-btn">{{ $t("pool.poolIndexListTxt1") }}</span>
+        <span class="list-btn" @click="mortgageMask">{{ $t("pool.poolListBtn") }}</span>
       </li>
     </ul>
+
+    <!-- mask 弹窗 -->
+    <pool-mask 
+      v-show="maskShow" 
+      :nounce="nounce"
+      :maskPage="maskPage"
+      :address="address"
+      :mortgageShow="mortgageShow"
+      :selectedItem="selectedItem"
+      :privateKey="privateKey"
+      :totalMoney="walletBalance.toString()"
+      @close="closeMask"
+      @updatePage="updatePage" />
   </section>
 </template>
 
 <script>
+import poolMask from './ore-pool-mask'
 export default {
   name: '',
+  components: {
+    poolMask
+  },
   props: {
     itemList: Array
   },
   data() {
     return {
-      
+      maskShow: false,
+      mortgageShow: true
     }
   },
   methods: {
     lookAll() {
       this.$emit('lookAll')
+    },
+
+    closeMask () {
+      this.maskShow = false
+    },
+
+    updatePage () {
+      this.maskPage = 3
+    },
+
+    mortgageMask () {
+      /**
+       * 显示弹窗
+       */
     }
   },
 }
@@ -84,13 +116,17 @@ export default {
         color: #9ca6aa;
       }
       .list-btn {
-        width: 4.8rem;
         height: 1.8rem;
         line-height: 1.8rem;
         @include border($c: #e6e6e6, $d: bor);
         color: #9ca6aa;
         text-align: center;
         border-radius: 0.9rem;
+        background: #0B7FE6;
+        color: #fff;
+        cursor: pointer;
+        font-size: .7rem;
+        padding: 0 1rem;
       }
     }
   }

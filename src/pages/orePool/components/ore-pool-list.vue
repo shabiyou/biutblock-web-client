@@ -43,10 +43,12 @@
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
+      :mortgageShow="mortgageShow"
       :selectedItem="selectedItem"
       :privateKey="privateKey"
       :totalMoney="walletBalance.toString()"
-      @close="closeMask" />
+      @close="closeMask"
+      @updatePage="updatePage" />
   </section>
 </template>
 
@@ -73,7 +75,8 @@ export default {
     return {
       maskShow: false,
       selectedItem: {},
-      maskPage: 2 //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
+      maskPage: 2, //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
+      mortgageShow: false
     }
   },
   computed: {
@@ -86,12 +89,17 @@ export default {
       this.maskShow = false
     },
 
+    updatePage () {
+      this.maskPage = 3
+    },
+
     joinMask (item) {
       /**
        * 判断是否已经加入矿池
        * 
        * 1
        */
+      console.log(item)
       if (this.stus) {
         this.$emit('login')
       } else {

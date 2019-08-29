@@ -35,6 +35,9 @@ export default {
       
     }
   },
+  created(){
+    console.log(this.itemList)
+  },
   computed: {
     
   },

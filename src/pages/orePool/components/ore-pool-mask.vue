@@ -1,43 +1,104 @@
 <template>
   <section class="mask">
     <!-- 已经加入过的弹窗 -->
-    <section class="mask_cnt"  v-show="maskPage === 1">
+    <section class="mask_cnt" v-show="maskPage === 1">
       <section class="join-content clearfix">
-        <p>{{ $t('mask.poolTips') }}</p>
+        <p>{{ $t("mask.poolTips") }}</p>
         <figure>
           <img src="../../../assets/images/errorImg.png" alt="" />
-          <figcaption>{{ $t('mask.poolTxt') }}</figcaption>
+          <figcaption>{{ $t("mask.poolTxt") }}</figcaption>
         </figure>
-        <button type="button" @click="close">{{ $t('mask.poolBtn') }}</button>
+        <button type="button" @click="close">{{ $t("mask.poolBtn") }}</button>
       </section>
     </section>
 
     <!-- 申请加入的弹窗 -->
+    <!-- <section class="mask_cnt apply-mask" v-show="maskPage === 2"> -->
     <section class="mask_cnt apply-mask" v-show="maskPage === 2">
       <section class="join-container">
         <header>
-          <span>{{ $t('pool.poolIndexTit2') }}</span>
-          <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
+          <span  v-show="!mortgageShow">{{ $t("pool.poolIndexTit2") }}</span>
+          <span  v-show="mortgageShow">{{ $t("mask.poolMaskTit1") }}</span>
+          <img
+            src="../../../assets/images/closeMask.png"
+            alt=""
+            @click="close"
+          />
         </header>
+
+        <ul>
+          <li
+            v-for="(item, index) in itemList"
+            :key="index"
+            class="mask-list-text">
+            <span>{{ $t(item.tit) }}</span>
+            <span>{{ item.txt }}</span>
+          </li>
+        </ul>
+
         <section class="error-list">
-          <p class="join-txt1">{{ $t('mask.poolNumber') }} <label>*</label></p>
+          <p class="join-txt1">{{ $t("mask.poolNumber") }} <label>*</label></p>
         </section>
         <section class="ipt-list">
-          <input type="text" placeholder="10,000.00" v-model="joinIpt" @input="clearAmount"/>
+          <input
+            type="text"
+            placeholder="10,000.00"
+            v-model="joinIpt"
+            @input="clearAmount"
+          />
           <span>BIUT</span>
         </section>
         <p class="join-txt-all">
-          {{ $t('transfer.balance') }}：{{ totalMoney | currency("") }}  BIUT
-          <span @click="allMoney">{{ $t('transfer.all') }}</span>
+          {{ $t("transfer.balance") }}：{{ totalMoney | currency("") }} BIUT
+          <span @click="allMoney">{{ $t("transfer.all") }}</span>
         </p>
-        <p class="join-txt2">{{ $t('mask.poolTxt1') }}</p>
-        <p class="join-txt3">{{ $t('mask.poolNumberError') }}</p>
-        <public-button 
+        <p class="join-txt2">{{ $t("mask.poolTxt1") }}</p>
+        <p class="join-txt3" v-show="!mortgageShow">{{ $t("mask.poolNumberError") }}</p>
+        <p class="join-txt3" v-show="mortgageShow">{{ $t("mask.poolNumberError1") }}</p>
+
+        <p class="join-txt4" v-show="networkError">{{ $t("mask.poolNumberError2") }}</p>
+
+        <public-button
           :text="$t('mask.poolBtn1')"
           :class="joinBtn ? 'btn-active' : ''"
           :disabled="!joinBtn"
-          @click.native="joinFrom"/>
+          @click.native="joinFrom"
+          v-show="!mortgageShow"/>
+
+        <!-- 抵押更多按钮 -->
+        <public-button 
+          :text="$t(mortgageBtn)"
+          :readonly="mortgageReadonly"
+          :class="mortgageActive ? 'btn-active' : ''"
+          :disabled="!mortgageActive"
+          @click.native="mortgageFrom"
+          v-show="mortgageShow"/>
       </section>
+    </section>
+
+    <!-- 追加成功 -->
+    <section class="mask_cnt append-success" v-show="maskPage === 3">
+      <header>
+        <figure>
+          <img src="../../../assets/images/tipsSuccess.png" alt="" />
+          <figcaption>{{ $t('mask.poolMaskTit2') }}</figcaption>
+        </figure>
+        <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
+      </header>
+
+      <ul>
+        <li v-for="(item, index) in itemList" :key="index">
+          <span>{{ $t(item.tit) }}</span>
+          <span>{{ item.txt }}</span>
+        </li>
+        <li>
+          <span>{{ $t('mask.poolMaskTxt4') }}</span>
+          <span>{{ joinIpt }}</span>
+        </li>
+      </ul>
+      <footer>
+        <button type="button" @click="close">{{ $t('mask.poolMaskClose') }}</button>
+      </footer>
     </section>
   </section>
 </template>
@@ -62,11 +123,16 @@ export default {
     selectedItem: Object,
     address: String,
     privateKey: String,
-    totalMoney: String
+    totalMoney: String,
+    mortgageShow: Boolean
   },
   data() {
     return {
-      joinIpt: ''
+      joinIpt: '',
+      mortgageBtn:'mask.poolMaskBtn', //抵押更多按钮
+      mortgageReadonly: false,
+
+      networkError: false,//网络错误
     }
   },
   mounted() {
@@ -75,28 +141,56 @@ export default {
     //   this.totalMoney = this.scientificNotationToString(res)
     // })
   },
+  created(){
+
+  },
   computed: {
-    joinBtn () {
+    joinBtn() {
       let ipt = this.joinIpt.replace(/\s+/g, "")
-      return 10000 <= ipt &&  ipt <= Number(this.totalMoney) ? true : false
+      return 10000 <= ipt && ipt <= Number(this.totalMoney) ? true : false
+    },
+
+    mortgageActive () {
+      let ipt = this.joinIpt.replace(/\s+/g, "")
+      return 10 <= ipt && ipt <= Number(this.totalMoney) ? true : false
+    },
+
+    itemList () {
+      return [
+        {
+          id: '1',
+          tit: 'mask.poolMaskTxt1',
+          txt: this.selectedItem.poolName
+        },
+        {
+          id: '2',
+          tit: 'mask.poolMaskTxt2',
+          txt: this.address
+        },
+        {
+          id: '3',
+          tit: 'mask.poolMaskTxt3',
+          txt: this.selectedItem.poolAddress
+        }
+      ]
     }
   },
   methods: {
-    close () {
+    close() {
       this.$emit('close')
       this.joinIpt = ''
     },
 
-    joinFrom () {
+    joinFrom() {
       /**
        * 确认加入矿池
        * 
        * 加入成功 调用 close() 关闭弹窗
        */
-      
+
       let ipt = this.joinIpt.replace(/\s+/g, "")
       let sourceCode = `lock( "${this.address}", ${ipt}, ${new Date().getTime() + 365 * 24 * 3600 * 1000})`.toString('base64')
-      sourceCode = JSON.stringify({callCode: Buffer.from(sourceCode).toString('base64')})
+      sourceCode = JSON.stringify({ callCode: Buffer.from(sourceCode).toString('base64') })
       const transfer = {
         "nonce": '1',
         "timeStamp": new Date().getTime(),
@@ -138,17 +232,43 @@ export default {
           headers: httpHeaderOption
         }).then((res) => res.json()).then((text) => {
           if (JSON.parse(text.body).result.status == 1) {
-            this.close() 
+            this.close()
             dataCenterHandler.joinPool({
               address: this.address,
               mortgagePoolAddress: this.selectedItem.poolAddress,
               mortgageValue: ipt
             }, (body) => {
 
-            })    
+            })
           }
         })
       })
+    },
+    
+    //抵押更多提交方法
+    mortgageFrom () { 
+      this.mortgageReadonly = true
+      this.mortgageBtn = 'mask.poolMaskBtns'
+      
+
+      /**
+       * 抵押更多成功
+       * 
+       * this.$emit('updatePage')
+       * 
+       * 
+       * this.mortgageReadonly = false
+       * 
+       * this.mortgageBtn = 'mask.poolMaskBtn'
+       * 
+       * this.close () 关闭
+       * 
+       * 
+       * 抵押失败
+       * this.mortgageReadonly = false
+       * this.mortgageBtn = 'mask.poolMaskBtn'
+       * this.networkError = false
+       */
     },
 
     //转出全部金额
@@ -182,9 +302,13 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/styless/public";
 .mask_cnt {
-  padding-bottom: .8rem;
+  padding-bottom: 0.8rem;
   .join-content {
-    p {color: #252F33;font-size: .8rem;font-family: source-Medium;}
+    p {
+      color: #252f33;
+      font-size: 0.8rem;
+      font-family: source-Medium;
+    }
     figure {
       display: flex;
       align-items: center;
@@ -205,69 +329,144 @@ export default {
   padding-bottom: 1.3rem;
   width: 15.6rem;
   .join-container {
-    color: #9CA6AA;
+    color: #9ca6aa;
     header {
       @extend %flexBetween;
       align-items: flex-start;
-      color: #252F33;
-      font-size: .8rem;
+      color: #252f33;
+      font-size: 0.8rem;
+      padding-bottom: 1.4rem;
       img {
         cursor: pointer;
       }
     }
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    .mask-list-text {
+      @extend %flex;
+      font-size: 0.7rem;
+      color: #9ca6aa;
+      padding-top: 0.8rem;
+      span {
+        &:first-child {
+          width: 5rem;
+        }
+        &:last-child {
+          color: #42535b;
+          flex: 1;
+          word-break: break-all;
+        }
+      }
+    }
     .error-list {
-       padding: 1.6rem 0 .8rem;
+      padding: 1.6rem 0 0.8rem;
     }
     .ipt-list {
       @extend %flexBetween;
       height: 2.4rem;
       line-height: 2.4rem;
-      background: #F5FAF9;
-      font-size: .7rem;
-      padding: 0 1.2rem 0 .8rem;
+      background: #f5faf9;
+      font-size: 0.7rem;
+      padding: 0 1.2rem 0 0.8rem;
       input {
         flex: 1;
-        background: #F5FAF9;
+        background: #f5faf9;
         border: 0;
-        color: #2E3A40;
-        margin-right: .8rem;
+        color: #2e3a40;
+        margin-right: 0.8rem;
       }
     }
     .join-txt1 {
-      font-size: .8rem;
+      font-size: 0.8rem;
       label {
         color: $colorRed;
       }
     }
     .join-txt2 {
       font-family: source-Light;
-      font-size: .6rem;
-      padding-top: .9rem;
+      font-size: 0.6rem;
+      padding-top: 0.9rem;
     }
     .join-txt3 {
-      font-size: .6rem;
-      padding: .2rem 0 1.4rem;
+      font-size: 0.6rem;
+      padding: 0.2rem 0 1.4rem;
+      color: $colorRed;
+      text-align: center;
+    }
+    .join-txt4 {
+      font-size: 0.6rem;
+      padding: 0;
+      margin: -1rem 0 1rem;
       color: $colorRed;
       text-align: center;
     }
     .join-txt-all {
       @extend %flexEnd;
-      padding-top: .5rem;
-      font-size: .6rem;
+      padding-top: 0.5rem;
+      font-size: 0.6rem;
       span {
         cursor: pointer;
         color: $colorGreen;
-        margin-left: .5rem;
+        margin-left: 0.5rem;
       }
     }
     button {
       height: 2.4rem;
-      width: 100%!important;
+      width: 100% !important;
     }
   }
 }
 
+.append-success {
+  width: 22.4rem;
+  padding: 0.8rem 1.2rem;
+  header {
+    @extend %flexBetween;
+    padding-bottom: 2.1rem;
+    figure {
+      margin: 0;
+      @extend %flexCenter;
+      color: #252f33;
+      font-size: 0.8rem;
+      img {
+        margin-right: 0.5rem;
+      }
+    }
+    img {
+      cursor: pointer;
+    }
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      font-size: 0.7rem;
+      color: #9ca6aa;
+      @extend %flexCenter;
+      padding-bottom: 0.8rem;
+      span {
+        &:first-child {
+          width: 5rem;
+        }
+        &:last-child {
+          flex: 1;
+          color: #42535b;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+  footer {
+    @extend %flexEnd;
+  }
+}
+
 @media (max-width: 767px) {
+  .append-success {
+    width: 15.6rem;
+  }
   .mask_cnt .join-content figure {
     align-items: flex-start;
   }
