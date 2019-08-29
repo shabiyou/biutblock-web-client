@@ -33,7 +33,6 @@
       :privateKey="privateKey"
       :selectedItem="selectedItem"
       :totalMoney="walletBalance.toString()"
-      :from="'body'"
       @close="closeMask"
       @updatePage="updatePage" />
   </section>

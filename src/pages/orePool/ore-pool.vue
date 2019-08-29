@@ -57,6 +57,7 @@
             :privateKey="privateKey"
             :walletBalance="walletBalance"
             @login="goLogin"
+            @updatePage="onUpdatePage"
           />
         </section>
 
@@ -86,6 +87,7 @@
             :stus="loginStatus"
             :nounce="nounce"
             :address="address"
+            :mortgageShow="mortgageValue !== '0'"
             :privateKey="privateKey"
             :walletBalance="walletBalance"
             @updatePage="onUpdatePage"
@@ -343,9 +345,13 @@ export default {
       this._getNounce()
     },
 
-    onUpdatePage() {
+    onUpdatePage(ipt, poolAddress) {
       this.addPoolList = []
       this.maskPage = 3
+      this.joinMaskPage = 1
+      if (poolAddress !== '') {
+        this.poolAddress.push(poolAddress)
+      }
       this._getAllContractInfos(this.poolAddress)
       dataCenterHandler.getMyTotalReward({
         address: this.address

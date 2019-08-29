@@ -49,7 +49,6 @@
       :selectedItem="selectedItem"
       :privateKey="privateKey"
       :totalMoney="walletBalance.toString()"
-      :from="'list'"
       @close="closeMask"
       @updatePage="updatePage" />
   </section>
@@ -92,8 +91,9 @@ export default {
       this.maskShow = false
     },
 
-    updatePage () {
+    updatePage (ipt, address) {
       this.maskPage = 3
+      this.$emit('updatePage', ipt, address)
     },
 
     joinMask (item) {

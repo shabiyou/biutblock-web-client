@@ -125,8 +125,7 @@ export default {
     privateKey: String,
     totalMoney: String,
     mortgageShow: Boolean,
-    maskPage: Number,
-    from: String
+    maskPage: Number
   },
   data() {
     return {
@@ -188,28 +187,16 @@ export default {
        * 
        * 加入成功 调用 close() 关闭弹窗
        */
-      if (this.from === 'list') {
-        this._addMortgage((ipt) => {
-          dataCenterHandler.joinPool({
-            address: this.address,
-            mortgagePoolAddress: this.selectedItem.poolAddress,
-            mortgageValue: ipt
-          }, (body) => {
-
-          })
+      this._addMortgage((ipt) => {
+        dataCenterHandler.joinPool({
+          address: this.address,
+          mortgagePoolAddress: this.selectedItem.poolAddress,
+          mortgageValue: ipt
+        }, (body) => {
+          this.$emit('updatePage', ipt, this.selectedItem.poolAddress)
+          //this.close()
         })
-      } else {
-        this._addMortgage((ipt) => {
-          dataCenterHandler.updateWallet({
-            address: this.address,
-            mortgageValue: ipt
-          }, (doc) => {
-            if (doc.status) {
-            this.$emit('updatePage', ipt)
-            }
-          })
-        })
-      }
+      })
     },
 
     _addMortgage (callback) {
@@ -241,16 +228,28 @@ export default {
         headers: httpHeaderOption
       }).then((res) => res.json()).then((text) => {
         if (JSON.parse(text.body).result.status == 1) {
-          this.$emit('close')
           callback(ipt)
         }
       })
     },
     
     //抵押更多提交方法
-    mortgageFrom () { 
-      this.mortgageReadonly = true
-      this.mortgageBtn = 'mask.poolMaskBtns'
+    mortgageFrom () {
+      this._addMortgage((ipt) => {
+          dataCenterHandler.updateWallet({
+            address: this.address,
+            mortgageValue: ipt
+          }, (doc) => {
+            if (doc.status) {
+            this.$emit('updatePage', ipt, '')
+            this.mortgageBtn = 'mask.poolMaskBtn'
+            this.mortgageReadonly = false
+            //this.close()
+            }
+          })
+        })
+      //this.mortgageReadonly = true
+      //this.mortgageBtn = 'mask.poolMaskBtns'
       
 
       /**
