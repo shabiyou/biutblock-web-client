@@ -19,10 +19,10 @@
           <span></span>
         </li>
         <li v-for="(item, index) in itemLists" :key="index" v-show="itemLists.length > 0">
-          <span>{{ item.invitationAddress }}</span>
+          <span>{{ '0x' + item.invitationAddress}}</span>
           <span>{{ item.invitationTime }}</span>
           <span>{{ item.invitationMoney | currency("") }}</span>
-          <span @click="lookRules">{{ $t('invitation.inListTxt4') }}</span>
+          <span @click="lookRules(item)">{{ $t('invitation.inListTxt4') }}</span>
         </li>
       </ul>
 
@@ -31,15 +31,15 @@
       </h4>
     </main>
 
-    <footer>
-      <span class="page-number" v-show="!searchRes">
+    <!-- <footer> -->
+      <!-- <span class="page-number" v-show="!searchRes">
         {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
       </span>
       <span class="page-number" v-show="searchRes">
         {{ $t('public.pageTotal') }} {{ searchTotal }} {{ $t('public.pageResults') }}
-      </span>
+      </span> -->
       <!-- 分页 -->
-      <wallet-page
+      <!-- <wallet-page
         ref="pageList"
         class="page-list"
         :total="itemLists.length"
@@ -47,8 +47,8 @@
         @next="nextPage"
         @prev="prevPage"
         @goPage="goPage"
-        v-show="itemLists.length > 10" />
-    </footer>
+        v-show="itemLists.length > 10" /> -->
+    <!-- </footer> -->
   </section>
 </template>
 
@@ -68,15 +68,15 @@ export default {
       searchContent: 'invitation.inListNull', //invitation.inListNull 列表内容为空  invitation.inListSearchNull 搜索结果为空
       total: 10,
       searchTotal: 1,
-      searchRes: false,
-      itemList: [
-        {
-          id: 0,
-          invitationAddress: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
-          invitationTime: '2019/07/21 13:50:46 GMT+8',
-          invitationMoney: '1234.12345678',
-        }
-      ]
+      searchRes: false
+      // itemList: [
+      //   {
+      //     id: 0,
+      //     invitationAddress: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
+      //     invitationTime: '2019/07/21 13:50:46 GMT+8',
+      //     invitationMoney: '1234.12345678',
+      //   }
+      // ]
     }
   },
   computed: {
@@ -103,8 +103,8 @@ export default {
       }
     },
 
-    lookRules () {
-      this.$emit('look', 2)
+    lookRules (item) {
+      this.$emit('look', 2, item)
     }
   },
 }

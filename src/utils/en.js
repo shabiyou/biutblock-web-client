@@ -111,6 +111,7 @@ export default {
     poolIndexE: 'Log out',
     poolIndexListTit1: 'Name',
     poolIndexListTit2: 'Nissan',
+    poolIndexListTit3: 'Address',
     poolIndexListTxt1: 'Joined',
     poolIndexListTxt2: 'Join',
     poolIndexIpt: 'Search',
@@ -131,6 +132,8 @@ export default {
     poolTabTxt1: 'Mining pool',
     poolTabTxt2: 'The invitation',
     poolListNull: 'No record',
+
+    poolListBtn: 'Add mortgage'
   },
   invitation: {
     level: 'My Level',
@@ -173,8 +176,22 @@ export default {
     poolTxt: 'You have joined the mine pool and can not join others.',
     poolNumber: 'locked amount',
     poolNumberError: 'At least 10,000 BIUT is required to join the mine pool.',
+    poolNumberError1: 'The minimum amount of additional collateral is 10 BIUT.',
+    poolNumberError2: 'The network response has timed out. Please try again',
     poolTxt1: 'locked BIUT will be frozen one year. The more BIUT locked, the more profits of mining BIU',
-    poolBtn1: 'Join Now'
+    poolBtn1: 'Join Now',
+
+    poolMaskBtn: 'Submit',
+    poolMaskBtns: 'Submission...',
+    poolMaskTit1: 'Mortgage more',
+    poolMaskTit2: 'Successful additional mortgage',
+
+    poolMaskTxt1: 'Pool name',
+    poolMaskTxt2: 'Current address',
+    poolMaskTxt3: 'Contract address',
+    poolMaskTxt4: 'Mortgage number',
+
+    poolMaskClose: 'Close'
   },
   headerNav: {
     "Newallet": "New Wallet",

@@ -8,7 +8,7 @@
         :class="[keyError ? 'errorBorder' : '', margnB ? 'margin-bottom' : '']"
       >
         <input
-          type="text"
+          type="password"
           :placeholder="$t('pool.poolLoginIpt')"
           v-model="walletKey"
           maxlength="64"
@@ -101,6 +101,7 @@ export default {
               role: parent.doc[0].role
             }
             this.$emit('login', parm)
+            this.walletKey = ""
             this.keyLoginBtn = 'pool.poolLoginBtn'
           } else {
             this._inputError()
@@ -116,6 +117,7 @@ export default {
     _inputError() {
       this.keyError = true
       this.margnB = true
+      this.walletKey = ""
       this.keyLoginBtn = 'pool.poolLoginBtn'
     }
   },

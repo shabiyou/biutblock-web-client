@@ -9,6 +9,7 @@
         <section>
           <span>{{ $t("pool.poolIndexListTit1") }}</span>
           <span>{{ $t("pool.poolIndexListTit2") }}</span>
+          <span>{{ $t("pool.poolIndexListTit3") }}</span>
         </section>
         <span></span>
       </li>
@@ -16,27 +17,73 @@
         <section>
           <span>{{ item.poolName }}</span>
           <span>{{ item.pooolMoney }} BIUT</span>
+          <span>{{ '0x' + item.poolAddress }}</span>
         </section>
-        <span class="list-btn">{{ $t("pool.poolIndexListTxt1") }}</span>
+        <span class="list-btn" @click="mortgageMask(item)">{{ $t("pool.poolListBtn") }}</span>
       </li>
     </ul>
+
+    <!-- mask 弹窗 -->
+    <pool-mask 
+      v-show="maskShow" 
+      :nounce="nounce"
+      :maskPage="maskPage"
+      :address="address"
+      :mortgageShow="mortgageShow"
+      :privateKey="privateKey"
+      :selectedItem="selectedItem"
+      :joinIpt="joinIpt"
+      :totalMoney="walletBalance.toString()"
+      @close="closeMask"
+      @updatePage="updatePage" />
   </section>
 </template>
 
 <script>
+import poolMask from './ore-pool-mask'
 export default {
   name: '',
+  components: {
+    poolMask
+  },
   props: {
-    itemList: Array
+    itemList: Array,
+    nounce: Number,
+    maskPage: Number,
+    address: String,
+    mortgageShow: Boolean,
+    privateKey: String,
+    walletBalance: Number
   },
   data() {
     return {
-      
+      maskShow: false,
+      selectedItem: {},
+      joinIpt: 0
     }
   },
   methods: {
     lookAll() {
       this.$emit('lookAll')
+    },
+
+    closeMask () {
+      this.maskShow = false
+    },
+
+    updatePage (ipt) {
+      this.maskPage = 3
+      this.joinIpt = ipt
+      this.emit('updatePage')
+    },
+
+    mortgageMask (item) {
+      /**
+       * 显示弹窗
+       */
+      this.maskPage = 2
+      this.maskShow = true
+      this.selectedItem = item
     }
   },
 }
@@ -80,17 +127,25 @@ export default {
         display: inline-block;
         width: 11rem;
       }
+      section span:nth-child(2) {
+        display: inline-block;
+        width: 11rem;
+      }
       &:first-child {
         color: #9ca6aa;
       }
       .list-btn {
-        width: 4.8rem;
         height: 1.8rem;
         line-height: 1.8rem;
         @include border($c: #e6e6e6, $d: bor);
         color: #9ca6aa;
         text-align: center;
         border-radius: 0.9rem;
+        background: #0B7FE6;
+        color: #fff;
+        cursor: pointer;
+        font-size: .7rem;
+        padding: 0 1rem;
       }
     }
   }

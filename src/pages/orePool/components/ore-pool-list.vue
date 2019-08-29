@@ -5,6 +5,7 @@
         <section>
           <span>{{ $t('pool.poolIndexListTit1') }}</span>
           <span>{{ $t('pool.poolIndexListTit2') }}</span>
+          <span>{{ $t('pool.poolIndexListTit3') }}</span>
         </section>
         <span></span>
       </li>
@@ -19,6 +20,7 @@
         <section>
           <span>{{ item.poolName }}</span>
           <span>{{ item.poolMoney | currency("") }}</span>
+          <span>{{ '0x' + item.poolAddress }}</span>
         </section>
 
         <!-- 判断是否 有加入的矿池，加入的话、第一个显示  后面不现实加入按钮、没有加入 所有按钮不可点击 -->
@@ -43,10 +45,13 @@
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
+      :mortgageShow="mortgageShow"
       :selectedItem="selectedItem"
       :privateKey="privateKey"
       :totalMoney="walletBalance.toString()"
-      @close="closeMask" />
+      :from="'list'"
+      @close="closeMask"
+      @updatePage="updatePage" />
   </section>
 </template>
 
@@ -73,7 +78,8 @@ export default {
     return {
       maskShow: false,
       selectedItem: {},
-      maskPage: 2 //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
+      maskPage: 2, //弹窗显示页面  1 - 已经加入过了  2 - 还没有加入过
+      mortgageShow: false
     }
   },
   computed: {
@@ -86,12 +92,17 @@ export default {
       this.maskShow = false
     },
 
+    updatePage () {
+      this.maskPage = 3
+    },
+
     joinMask (item) {
       /**
        * 判断是否已经加入矿池
        * 
        * 1
        */
+      console.log(item)
       if (this.stus) {
         this.$emit('login')
       } else {
@@ -143,7 +154,11 @@ ul {
       span:first-child {
         display: inline-block;
         width: 11.5rem;
-      }
+      };
+      span:nth-child(2) {
+        display: inline-block;
+        width: 10.5rem;
+      };
     }
     .list-btn {
       width: 4.8rem;

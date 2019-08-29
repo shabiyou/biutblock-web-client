@@ -82,6 +82,17 @@ let WalletHandler = {
     } catch (e) {
       fnAfterImport('error')
     }
+  },
+
+  formatDate: function (date, offset) {
+    let timezone = 0
+    if (offset / -60 >= 0) {
+      timezone = `+${offset / -60}`
+    } else {
+      timezone = `${offset / -60}`
+    }
+    let time = `${date} GMT${timezone}`
+    return time
   }
 }
 

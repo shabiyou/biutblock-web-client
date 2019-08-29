@@ -111,6 +111,7 @@ export default {
     poolIndexE: '退出',
     poolIndexListTit1: '矿池名称',
     poolIndexListTit2: '日产值',
+    poolIndexListTit3: '矿池地址',
     poolIndexListTxt1: '已加入',
     poolIndexListTxt2: '加入',
     poolIndexIpt: '搜索',
@@ -131,6 +132,8 @@ export default {
     poolTabTxt1: '矿池',
     poolTabTxt2: '邀请',
     poolListNull: '无记录',
+
+    poolListBtn: '追加抵押'
   },
   invitation: {
     level: '我的等级',
@@ -173,8 +176,23 @@ export default {
     poolTxt: '你已加入矿池哦，无法再加入其它矿池！',
     poolNumber: '锁仓数量',
     poolNumberError: '加入矿池最低数量为 10,000 BIUT',
+    poolNumberError1: '追加抵押最低数量为 10 BIUT',
+    poolNumberError2: '网络响应超时，请重试',
     poolTxt1: '锁仓的biut会被冻结一年。锁仓数量越多，挖到BIU的收益越高哦！',
-    poolBtn1: '确认加入'
+    poolBtn1: '确认加入',
+
+
+    poolMaskBtn: '提交',
+    poolMaskBtns: '提交中...',
+    poolMaskTit1: '抵押更多',
+    poolMaskTit2: '追加抵押成功',
+
+    poolMaskTxt1: '矿池名称',
+    poolMaskTxt2: '当前钱包地址',
+    poolMaskTxt3: '智能合约地址',
+    poolMaskTxt4: '抵押数量',
+
+    poolMaskClose: '关闭'
   },
   headerNav: {
     "Newallet": "新钱包",

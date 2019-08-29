@@ -7,8 +7,8 @@
         <figure>
           <figcaption>
             {{ $t('walletInfo.myCodeTxt') }}：
-            <span id="invitationCode" v-show="!invitationShow">{{ invitationCode }}</span>
-            <span v-show="invitationShow">--</span>
+            <span id="invitationCode" v-show="invitationShow">{{ invitationCode }}</span>
+            <span v-show="!invitationShow">--</span>
           </figcaption>
           <img
             src="../../../assets/images/copy.png"
@@ -135,7 +135,7 @@ export default {
     },
 
     lookRules() {
-      this.$emit('look', 1)
+      this.$emit('look', 1, '')
     },
 
     showInvitation1() {

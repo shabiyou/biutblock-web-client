@@ -41,7 +41,7 @@
       </p>
       <p class="details-tit">{{ $t('invitation.inListTxt3') }}</p>
       <p class="details-txt">
-        {{ totalRevenue | currency("") }}
+        {{ maskReward | currency("") }}
       </p>
 
       <ul>
@@ -55,12 +55,12 @@
         </li>
       </ul>
 
-      <footer>
-        <span class="page-number">
+      <!-- <footer> -->
+        <!-- <span class="page-number">
           {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
-        </span>
+        </span> -->
         <!-- 分页 -->
-        <wallet-page
+        <!-- <wallet-page
           ref="pageList"
           class="page-list"
           v-show="amountLists.length > 10"
@@ -68,8 +68,8 @@
           :totalPage=2
           @next="nextPage"
           @prev="prevPage"
-          @goPage="goPage" />
-      </footer>
+          @goPage="goPage" /> -->
+      <!-- </footer> -->
     </section>
   </section>
 </template>
@@ -87,19 +87,20 @@ export default {
     walletPage
   },
   props: {
-    maskPage: Number // 1 查看规则  2 查看明细
+    maskPage: Number, // 1 查看规则  2 查看明细
+    maskLevel: String,
+    maskAddress: String,
+    maskList: Array,
+    maskReward: String
   },
   data() {
     return {
-      totalRevenue: '13',
-      maskAddress: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
-      maskLevel: '二级',
       total: 10,
       itemList: [
         {
           level: 'invitation.level1',
           portrait: level1,
-          number: '0-9'
+          number: '1-9'
         },
         {
           level: 'invitation.level2',
@@ -128,7 +129,7 @@ export default {
   },
   computed: {
     amountLists () {
-      return Array(2).fill(this.amountList[0])
+      return this.maskList
     },
   },
   mounted() {
