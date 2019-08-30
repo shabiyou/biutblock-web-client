@@ -154,7 +154,7 @@ export default {
     inMaskListTxt2: 'Number of invitee',
 
     inMask2ListTxt1: 'Time',
-    inMask2ListTxt2: 'Reward (BUT)',
+    inMask2ListTxt2: 'Reward (BIUT)',
 
     level1: 'Bronze partner',
     level2: 'Silver partner',
