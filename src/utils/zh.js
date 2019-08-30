@@ -117,7 +117,7 @@ export default {
     poolIndexIpt: '搜索',
     poolIndexTit1: '矿池',
     poolIndexTitLook: '查看所有矿池',
-    poolIndexTit2: '加入矿池',
+    poolIndexTit2: '已加入矿池',
     poolIndexTit3: '收益记录',
 
     poolIndexTxt1: '上周收益',

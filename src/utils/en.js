@@ -117,7 +117,7 @@ export default {
     poolIndexIpt: 'Search',
     poolIndexTit1: 'Mining Pool',
     poolIndexTitLook: 'View All Mining Pools',
-    poolIndexTit2: 'Join The Mining Pool',
+    poolIndexTit2: 'Joined Mining Pool',
     poolIndexTit3: 'Profit Record',
 
     poolIndexTxt1: "Last week’s profits",
