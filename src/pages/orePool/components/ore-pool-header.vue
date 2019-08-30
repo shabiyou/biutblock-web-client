@@ -89,6 +89,9 @@ ul {
     height: 8.1rem;
     flex: 1;
     @include border($c: #e6e6e6, $d: right);
+    &:last-child {
+      border: 0;
+    }
     figure {
       margin: 0;
       p {
