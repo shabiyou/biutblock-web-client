@@ -36,18 +36,18 @@ export default {
   computed: {
     itemList () {
       return [
-        {
-          id: 0,
-          imgUrl: poolList1,
-          tit: 'pool.poolIndexTxt1',
-          txt: (this.getPointNum(this.poolLastWeek) || 0) + " BIU"
-        },
-        {
-          id: 1,
-          imgUrl: poolList2,
-          tit: 'pool.poolIndexTxt2',
-          txt: (this.getPointNum(this.poolInComing) || 0) + " BIU"
-        },
+        // {
+        //   id: 0,
+        //   imgUrl: poolList1,
+        //   tit: 'pool.poolIndexTxt1',
+        //   txt: (this.getPointNum(this.poolLastWeek) || 0) + " BIU"
+        // },
+        // {
+        //   id: 1,
+        //   imgUrl: poolList2,
+        //   tit: 'pool.poolIndexTxt2',
+        //   txt: (this.getPointNum(this.poolInComing) || 0) + " BIU"
+        // },
         {
           id: 2,
           imgUrl: poolList3,

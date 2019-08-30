@@ -110,7 +110,7 @@ export default {
     poolIndexL: 'Login',
     poolIndexE: 'Log out',
     poolIndexListTit1: 'Name',
-    poolIndexListTit2: 'Daily earn',
+    poolIndexListTit2: 'Mortgage Amount',
     poolIndexListTit3: 'Address',
     poolIndexListTxt1: 'Joined',
     poolIndexListTxt2: 'Join',

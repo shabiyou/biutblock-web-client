@@ -110,7 +110,7 @@ export default {
     poolIndexL: '未登入',
     poolIndexE: '退出',
     poolIndexListTit1: '矿池名称',
-    poolIndexListTit2: '日产值',
+    poolIndexListTit2: '矿池抵押总量',
     poolIndexListTit3: '矿池地址',
     poolIndexListTxt1: '已加入',
     poolIndexListTxt2: '加入',
