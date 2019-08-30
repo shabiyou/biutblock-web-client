@@ -24,7 +24,7 @@ export default {
     "tipsCnt3": "备份！保护它就像哪天它有可能值数百万美元"
   },
   passTips: {
-    passFormat:"请输入8-30位密码，密码必须包含字母、数字和特殊字符至少两种",
+    passFormat:"8-30个字符，必须包含数字、英文字母、符号的组合",
     passNoMatch: "密码输入不一致，请重试",
     passFormatError: "密码格式不正确，请重新输入",
     passEncryption: "你的钱包是加密的！请输入密码",

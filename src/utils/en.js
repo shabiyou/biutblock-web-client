@@ -24,7 +24,7 @@ export default {
     "tipsCnt3": "Make a backup! Secure it like the millions of dollars it may be worth one day ."
   },
   passTips: {
-    passFormat:"8-30 characters, must contain at least 2 types of numbers, English letters, and special characters.",
+    passFormat:"Use 8 to 30 characters must with a mix of letters, numbers & symbols",
     passNoMatch: "Password doesn't match , please try again.",
     passFormatError: "The password format is incorrect, please try again.",
     passEncryption: "Your wallet is encrypted! Please enter the password",
