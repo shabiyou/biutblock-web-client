@@ -129,7 +129,7 @@ export default {
     poolIndexSearch2: 'results for',
     poolIndexSearch3: '',
 
-    poolTabTxt1: 'Mining pool',
+    poolTabTxt1: 'Total',
     poolTabTxt2: 'The invitation',
     poolListNull: 'No record',
 
@@ -145,7 +145,7 @@ export default {
     inListTxt1: 'Address',
     inListTxt2: 'Invitation time',
     inListTxt3: 'Total reward (BIUT)',
-    inListTxt4: 'View details',
+    inListTxt4: 'View Details',
     inListNull: 'No Invitation Record',
     inListSearchNull: 'No search results yet',
 
@@ -200,7 +200,7 @@ export default {
     "Guide": "Guide",
     "Language": "Language",
     "Mapping": "Mapping",
-    "orePool": 'Mining Pool'
+    "orePool": 'My Mining'
   },
   helpTips: {
     helpTipsTxt: 'Check out the tutorial on your computer.'

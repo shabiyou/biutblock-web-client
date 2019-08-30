@@ -129,7 +129,7 @@ export default {
     poolIndexSearch2: '条关于',
     poolIndexSearch3: '矿池的结果',
 
-    poolTabTxt1: '矿池',
+    poolTabTxt1: '统计',
     poolTabTxt2: '邀请',
     poolListNull: '无记录',
 
@@ -201,7 +201,7 @@ export default {
     "Guide": "帮助",
     "Language": "语言",
     "Mapping": "映射",
-    "orePool": '矿池'
+    "orePool": '我的挖矿'
   },
   helpTips: {
     helpTipsTxt: '请在电脑上查看相关教程'
