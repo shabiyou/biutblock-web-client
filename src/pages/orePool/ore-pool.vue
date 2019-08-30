@@ -253,6 +253,7 @@ export default {
       this.loginPage = 0
       this.addPoolList = []
       this.rewardList = []
+      this.invitationList = []
       this.address = e.address.replace('0x', '')
       this.invitationCode = e.ownInvitationCode
       this.mortgageValue = e.mortgageValue

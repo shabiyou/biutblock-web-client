@@ -109,7 +109,7 @@ export default {
           poolAddress.push(pool.replace('0x', ''))
         }
         this.getContractInfoSync(poolAddress).then((infos) => {
-          let freezeAmount = "0"
+          let freezeAmount = 0
           let timeLocks = []
           let availableAmount = res
           for (let info of infos) {
@@ -118,8 +118,8 @@ export default {
             }
           }
           for (let timelock of timeLocks) {
-            if (this.walletAddress in timelock && this.walletAddress in timelock[this.walletAddress]) {
-              let benifits = timelock[this.selectedWallet.walletAddress][this.selectedWallet.walletAddress]
+            if (address in timelock && address in timelock[address]) {
+              let benifits = timelock[address][address]
               for (let benifit of benifits) {
                 freezeAmount = freezeAmount + Number(benifit.lockAmount)
               }
