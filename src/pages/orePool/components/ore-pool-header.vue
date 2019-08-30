@@ -6,7 +6,7 @@
           <img :src="item.imgUrl" />
           <figcaption>
             <p>{{ $t(item.tit) }}</p>
-            <p>{{ item.txt | currency("") }}</p>
+            <p>{{ item.txt }}</p>
           </figcaption>
         </figure>
       </li>
@@ -40,25 +40,25 @@ export default {
           id: 0,
           imgUrl: poolList1,
           tit: 'pool.poolIndexTxt1',
-          txt: this.poolLastWeek + "BIU"
+          txt: (this.getPointNum(this.poolLastWeek) || 0) + " BIU"
         },
         {
           id: 1,
           imgUrl: poolList2,
           tit: 'pool.poolIndexTxt2',
-          txt: this.poolInComing + "BIU"
+          txt: (this.getPointNum(this.poolInComing) || 0) + " BIU"
         },
         {
           id: 2,
           imgUrl: poolList3,
           tit: 'pool.poolIndexTxt3',
-          txt: this.poolMortgage + "BIUT"
+          txt: (this.getPointNum(this.poolMortgage) || 0) + " BIUT"
         },
         {
           id: 3,
           imgUrl: poolList4,
           tit: 'pool.poolIndexTxt4',
-          txt: this.walletBalance + "BIUT"
+          txt: (this.getPointNum(this.walletBalance) || 0) + " BIUT"
         }
       ]
     }

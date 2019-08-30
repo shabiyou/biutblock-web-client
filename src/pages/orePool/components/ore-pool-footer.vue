@@ -3,8 +3,8 @@
     <h2>{{ $t("pool.poolIndexTit3") }}</h2>
     <ul>
       <li v-for="(item, index) in itemList" :key="index">
-        <span>{{ item.poolTime }}</span>
-        <span>{{ item.poolMoney }}</span>
+        <span>{{ item.poolTime.substring(0, 20) }}</span>
+        <span>{{ getPointNum(item.poolMoney) }}</span>
       </li>
     </ul>
 
@@ -36,7 +36,7 @@ export default {
     }
   },
   created(){
-    console.log(this.itemList)
+    
   },
   computed: {
     

@@ -4,10 +4,10 @@
       <span class="list-title">
         {{ $t('invitation.inListTit') }}
       </span>
-      <section class="ipt-list">
+      <!-- <section class="ipt-list">
         <input type="text" v-model="searchIpt" :placeholder="$t('invitation.inListSearch')" />
         <img src="../../../assets/images/search.png" alt="" />
-      </section>
+      </section> -->
     </header>
 
     <main class="invitation-body">
@@ -20,8 +20,8 @@
         </li>
         <li v-for="(item, index) in itemLists" :key="index" v-show="itemLists.length > 0">
           <span>{{ '0x' + item.invitationAddress}}</span>
-          <span>{{ item.invitationTime }}</span>
-          <span>{{ item.invitationMoney | currency("") }}</span>
+          <span>{{ item.invitationTime.substring(0, 20) }}</span>
+          <span>{{ getPointNum(item.invitationMoney) }}</span>
           <span @click="lookRules(item)">{{ $t('invitation.inListTxt4') }}</span>
         </li>
       </ul>

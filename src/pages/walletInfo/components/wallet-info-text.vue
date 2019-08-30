@@ -14,20 +14,20 @@
         <h4>{{ $t("walletInfo.walletMoney") }}</h4>
         <section class="amount-list">
           <section class="amount-content">
-            {{ infoMoneyC | currency("") }} <span>BIUT</span>
+            {{ getPointNum(infoMoneyC) }} <span>BIUT</span>
           </section>
           <p class="amount-list-txt">
-            <span>{{ $t("public.available") }}：{{ availableAmount | currency("") }}BIUT</span>
-            <span>{{ $t("public.guarantee") }}：{{ freezeAmount | currency("") }}BIUT</span>
+            <span>{{ $t("public.available") }}：{{ getPointNum(availableAmount) }} BIUT</span>
+            <span>{{ $t("public.guarantee") }}：{{ getPointNum(freezeAmount) }} BIUT</span>
           </p>
           <section class="amount-content">
-            {{ infoMoneyN | currency("") }} <span>BIU</span>
+            {{ getPointNum(infoMoneyN) }} <span>BIU</span>
           </section>
         </section>
       </li>
       <li>
         <h4>{{ $t("walletInfo.myCodeTxt") }}</h4>
-        <section class="invite-list" v-show="freezeAmount > 0">
+        <section class="invite-list" v-show="Number(freezeAmount) > 0">
           <span id="invitationCode">{{ inviteCode }}</span>
           <img src="../../../assets/images/copy.png" alt="" @click="copyCode"
             data-clipboard-target="#invitationCode"
@@ -35,7 +35,7 @@
           <button type="button" @click="shareMask">{{ $t("walletInfo.shareBtn") }}</button>
         </section>
 
-        <section v-show="freezeAmount === 0" class="share-tips">
+        <section v-show="Number(freezeAmount) === 0" class="share-tips">
           {{ $t('invitation.invitationTipsTxt2') }}
         </section>
       </li>
@@ -67,8 +67,8 @@ export default {
     infoKey: String,
     infoMoneyC: String,
     infoMoneyN: String,
-    availableAmount: Number,
-    freezeAmount: Number,
+    availableAmount: String,
+    freezeAmount: String,
     inviteCode: String,
   },
   data() {

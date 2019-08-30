@@ -3,28 +3,38 @@
     <ul>
       <li>
         <section>
-          <span>{{ $t('pool.poolIndexListTit1') }}</span>
-          <span>{{ $t('pool.poolIndexListTit2') }}</span>
-          <span>{{ $t('pool.poolIndexListTit3') }}</span>
+          <span>{{ $t("pool.poolIndexListTit1") }}</span>
+          <span>{{ $t("pool.poolIndexListTit2") }}</span>
+          <span>{{ $t("pool.poolIndexListTit3") }}</span>
         </section>
-        <span></span>
+        <span class="list-null"></span>
       </li>
 
       <!-- 搜索结果 -->
       <li class="search-result" v-show="itemList.length === 0">
-        <p>{{ $t('pool.poolIndexSearch1') }} {{ itemList.length }} {{ $t('pool.poolIndexSearch2') }} {{ poolName }} {{ $t('pool.poolIndexSearch3') }}</p>
+        <p>
+          {{ $t("pool.poolIndexSearch1") }} {{ itemList.length }}
+          {{ $t("pool.poolIndexSearch2") }} {{ poolName }}
+          {{ $t("pool.poolIndexSearch3") }}
+        </p>
       </li>
 
       <!-- 搜索结果列表 -->
-      <li v-for="(item, index) in itemList" :key="index" v-show="itemList.length > 0">
+      <li
+        v-for="(item, index) in itemList"
+        :key="index"
+        v-show="itemList.length > 0"
+      >
         <section>
-          <span>{{ item.poolName }}</span>
-          <span>{{ item.poolMoney | currency("") }}</span>
-          <span>{{ '0x' + item.poolAddress }}</span>
+          <span>{{ item.poolName.replace(/(.{3}).+(.{3})/, "$1...") }}</span>
+          <span>{{ getPointNum(item.poolMoney) }}</span>
+          <span>{{ "0x" + item.poolAddress }}</span>
         </section>
 
         <!-- 判断是否 有加入的矿池，加入的话、第一个显示  后面不现实加入按钮、没有加入 所有按钮不可点击 -->
-        <span class="list-btn" @click="joinMask(item)">{{ $t('pool.poolIndexListTxt2') }}</span>
+        <span class="list-btn" @click="joinMask(item)">{{
+          $t("pool.poolIndexListTxt2")
+        }}</span>
       </li>
     </ul>
 
@@ -38,10 +48,10 @@
       @prev="prevPage"
       @goPage="goPage"
       v-show="itemList.length > 10" /> -->
-    
+
     <!-- mask 弹窗 -->
-    <pool-mask 
-      v-show="maskShow" 
+    <pool-mask
+      v-show="maskShow"
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
@@ -50,7 +60,8 @@
       :privateKey="privateKey"
       :totalMoney="walletBalance.toString()"
       @close="closeMask"
-      @updatePage="updatePage" />
+      @updatePage="updatePage"
+    />
   </section>
 </template>
 
@@ -82,27 +93,26 @@ export default {
     }
   },
   computed: {
-    total () {
+    total() {
       return this.itemList.length
     }
   },
   methods: {
-    closeMask () {
+    closeMask() {
       this.maskShow = false
     },
 
-    updatePage (ipt, address) {
+    updatePage(ipt, address) {
       this.maskPage = 3
       this.$emit('updatePage', ipt, address)
     },
 
-    joinMask (item) {
+    joinMask(item) {
       /**
        * 判断是否已经加入矿池
        * 
        * 1
        */
-      console.log(item)
       if (this.stus) {
         this.$emit('login')
       } else {
@@ -116,15 +126,15 @@ export default {
       }
     },
 
-    nextPage () {
+    nextPage() {
       alert("下一页")
     },
 
-    prevPage () {
+    prevPage() {
       alert("上一页")
     },
 
-    goPage (e) {
+    goPage(e) {
       if (e > this.itemList.length) {
         alert("请输入正确的页码")
         this.$refs.pageList.clearIpt()
@@ -151,14 +161,18 @@ ul {
     box-sizing: border-box;
     section {
       flex: 1;
+      display: flex;
       span:first-child {
         display: inline-block;
-        width: 11.5rem;
-      };
+        width: 8rem;
+      }
       span:nth-child(2) {
         display: inline-block;
-        width: 10.5rem;
-      };
+        width: 10rem;
+      }
+      span:last-child {
+        flex: 1;
+      }
     }
     .list-btn {
       width: 4.8rem;
@@ -167,9 +181,11 @@ ul {
       border-radius: 1.2rem;
       color: #fff;
       font-size: 0.7rem;
-      text-align: center;
-      line-height: 1.8rem;
       cursor: pointer;
+      @extend %flexCenter;
+    }
+    .list-null {
+      width: 4.8rem;
     }
     &:first-child {
       color: #9ca6aa;
@@ -180,16 +196,45 @@ ul {
     border: 0;
   }
 }
-.page-list {padding-right: 4.4rem;}
+.page-list {
+  padding-right: 4.4rem;
+}
 
 @media (max-width: 767px) {
   ul {
     padding: 0 15px;
-    li section span:first-child {
-      max-width: 8rem;
+    li {
+      section {
+        justify-content: space-around;
+        span {
+          &:first-child {
+            max-width: 3rem;
+          }
+          &:nth-child(2) {
+            flex: 1;
+          }
+          &:last-child {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 2rem;
+          }
+        }
+      }
+      .list-btn {
+        width: 3rem;
+        font-size: 0.6rem;
+        height: 1.5rem;
+        margin-left: 0.2rem;
+      }
+      .list-null {
+        width: 3rem;
+      }
     }
   }
 
-  .page-list {padding-right: 15px;}
+  .page-list {
+    padding-right: 15px;
+  }
 }
 </style>

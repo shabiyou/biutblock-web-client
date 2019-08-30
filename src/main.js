@@ -18,11 +18,8 @@ import './utils/global.js'
 import Element from 'element-ui'
 import 'babel-polyfill'
 
-//金额，分开
-import {
-  currency
-} from './utils/currency'
-Vue.filter("currency", currency)
+import cal from './utils/calculation'
+Vue.prototype.cal = cal
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 Vue.prototype.$axios = axios
@@ -204,12 +201,9 @@ Vue.prototype.ismobile = function () {
 }
 
 //截取小数点后八位
-Vue.prototype.getPointNum = function (num, n) {
+Vue.prototype.getPointNum = function (num) {
   let str = String(num);
-  let index = str.indexOf(".");
-  let str1 = str.substring(0, index + n + 1);
-  str1 = Number(str1);
-  return str1;
+  return str.split('.').map((item,idx)=>idx===0?item.replace(/\B(?=(\d{3})+$)/g,','):item.substring(0,8)).join('.')
 }
 
 //下载文件方法

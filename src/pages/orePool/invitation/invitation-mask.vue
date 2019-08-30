@@ -2,15 +2,15 @@
   <section class="mask">
     <section class="rules-content mask_cnt" v-show="maskPage === 1">
       <header class="public-head">
-        <span>{{ $t('invitation.rules') }}</span>
+        <span>{{ $t("invitation.rules") }}</span>
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
 
-      <p class="rules-tit">{{ $t('invitation.inMaskTxt') }}</p>
+      <p class="rules-tit">{{ $t("invitation.inMaskTxt") }}</p>
       <ul>
         <li>
-          <span>{{ $t('invitation.inMaskListTxt1') }}</span>
-          <span>{{ $t('invitation.inMaskListTxt2') }}</span>
+          <span>{{ $t("invitation.inMaskListTxt1") }}</span>
+          <span>{{ $t("invitation.inMaskListTxt2") }}</span>
         </li>
         <li v-for="(item, index) in itemList" :key="index">
           <figure>
@@ -28,39 +28,41 @@
 
     <section class="details-content mask_cnt" v-show="maskPage === 2">
       <header class="public-head">
-        <span>{{ $t('invitation.inListTxt4') }}</span>
+        <span>{{ $t("invitation.inListTxt4") }}</span>
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
 
-      <p class="details-tit details-tit-top">{{ $t('invitation.inListTxt1') }}</p>
+      <p class="details-tit details-tit-top">
+        {{ $t("invitation.inListTxt1") }}
+      </p>
       <p class="details-txt">
-        {{ maskAddress }}
+        0x{{ maskAddress }}
         <span>
           {{ maskLevel }}
         </span>
       </p>
-      <p class="details-tit">{{ $t('invitation.inListTxt3') }}</p>
+      <p class="details-tit">{{ $t("invitation.inListTxt3") }}</p>
       <p class="details-txt">
-        {{ maskReward | currency("") }}
+        {{ getPointNum(maskReward) }}
       </p>
 
       <ul>
         <li>
-          <span>{{ $t('invitation.inMask2ListTxt1') }}</span>
-          <span>{{ $t('invitation.inMask2ListTxt2') }}</span>
+          <span>{{ $t("invitation.inMask2ListTxt1") }}</span>
+          <span>{{ $t("invitation.inMask2ListTxt2") }}</span>
         </li>
         <li v-for="(item, index) in amountLists" :key="index">
-          <span>{{ item.maskTime }}</span>
-          <span>{{ item.maskAmount | currency("") }}</span>
+          <span>{{ item.maskTime.substring(0, 10) }}</span>
+          <span>{{ getPointNum(item.maskAmount) }}</span>
         </li>
       </ul>
 
       <!-- <footer> -->
-        <!-- <span class="page-number">
+      <!-- <span class="page-number">
           {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
         </span> -->
-        <!-- 分页 -->
-        <!-- <wallet-page
+      <!-- 分页 -->
+      <!-- <wallet-page
           ref="pageList"
           class="page-list"
           v-show="amountLists.length > 10"
@@ -100,7 +102,7 @@ export default {
         {
           level: 'invitation.level1',
           portrait: level1,
-          number: '1-9'
+          number: '0-9'
         },
         {
           level: 'invitation.level2',
@@ -128,29 +130,29 @@ export default {
     }
   },
   computed: {
-    amountLists () {
+    amountLists() {
       return this.maskList
     },
   },
   mounted() {
-    if (this.ismobile()) {
-      this.maskAddress = e.maskAddress.replace(/(.{6}).+(.{6})/, '$1...$2')
-    }
+    // if (this.ismobile()) {
+    //   this.maskAddress = e.maskAddress.replace(/(.{6}).+(.{6})/, '$1...$2')
+    // }
   },
   methods: {
     close() {
       this.$emit('close')
     },
 
-    nextPage () {
+    nextPage() {
       alert("下一页")
     },
 
-    prevPage () {
+    prevPage() {
       alert("上一页")
     },
 
-    goPage (e) {
+    goPage(e) {
       if (e > this.itemList.length) {
         alert("请输入正确的页码")
         this.$refs.pageList.clearIpt()
@@ -251,24 +253,28 @@ export default {
       margin: 0;
       padding: 1.2rem 0 0;
       height: 13.8rem;
+      overflow: auto;
+      &::-webkit-scrollbar { width: 2px; height: 2px;}
+      &::-webkit-scrollbar-thumb { -webkit-box-shadow: inset 0 0 1px #00D6B2;background: #00D6B2;border-radius: 1px;}
+      &::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 1px #EDF5F4;border-radius: 0; background: #EDF5F4;}
       li {
         display: flex;
         align-items: center;
-        color: #252F33;
-        font-size: .7rem;
-        @include border($c:#E6E6E6,$d: bottom);
-        padding: .6rem 0;
+        color: #252f33;
+        font-size: 0.7rem;
+        @include border($c: #e6e6e6, $d: bottom);
+        padding: 0.6rem 0;
         box-sizing: border-box;
         span {
           display: inline-block;
           width: 50%;
           &:first-child {
-            padding-left: .9rem;
+            padding-left: 0.9rem;
           }
         }
         &:first-child {
-          background: #F7FBFA;
-          color: #99A1A6;
+          background: #f7fbfa;
+          color: #99a1a6;
           border: 0;
         }
       }
@@ -277,8 +283,8 @@ export default {
       @extend %flexBetween;
       padding-top: 1rem;
       .page-number {
-        color: #99A1A6;
-        font-size: .7rem;
+        color: #99a1a6;
+        font-size: 0.7rem;
       }
       .page-list {
         padding: 0;
@@ -288,8 +294,13 @@ export default {
 }
 
 @media (max-width: 767px) {
-  .mask .details-content .details-txt span {
-    margin: .2rem 0 0 0;
+  .mask {
+    .rules-content {
+      width: 15.6rem;
+    }
+    .details-content .details-txt span {
+      margin: 0.2rem 0 0 0;
+    }
   }
 }
 </style>

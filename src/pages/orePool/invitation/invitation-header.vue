@@ -13,14 +13,14 @@
           <img
             src="../../../assets/images/copy.png"
             alt=""
-            v-show="!invitationShow"
+            v-show="invitationShow"
             @click="copyCode"
             data-clipboard-target="#invitationCode"
             class="copyButton"
           />
-          <img src="../../../assets/images/exclamationImg.png" v-show="invitationShow" alt="" @mouseover="showInvitation1(item)" @mouseout="showInvitation2(item)"/>
+          <img src="../../../assets/images/exclamationImg.png" v-show="!invitationShow" alt="" @mouseover="showInvitation1(item)" @mouseout="showInvitation2(item)"/>
 
-          <button type="button" class="shar-btn" @click="shareShow = true" v-show="!invitationShow">
+          <button type="button" class="shar-btn" @click="shareShow = true" v-show="invitationShow">
             {{ $t('walletInfo.shareBtn') }}
           </button>
 
@@ -38,7 +38,7 @@
           <img src="../../../assets/images/levels1.png" alt="" />
           <figcaption>
             <p>{{ $t(partner) }}</p>
-            <p>{{ $t('invitation.medal') }}</p>
+            <!-- <p>{{ $t('invitation.medal') }}</p> -->
             <section class="progress-list clearfix">
               <el-progress :percentage="Number(progress)" color="#29D893" />
               <span>{{ progress }} / {{ levelNumber }}</span>
@@ -91,16 +91,16 @@ export default {
   computed: {
     partner () {
       if (this.minerType === "1") {
-        this.levelNumber = 100
+        this.levelNumber = '64+'
         return "invitation.level4"
       } else if (this.minerType === "2") {
-        this.levelNumber = 64
+        this.levelNumber = 63
         return "invitation.level3"
       } else if (this.minerType === "3") {
-        this.levelNumber = 32
+        this.levelNumber = 31
         return "invitation.level2"
       } else if (this.minerType === "4") {
-        this.levelNumber = 10
+        this.levelNumber = 9
         return "invitation.level1"
       }
     },
@@ -193,6 +193,7 @@ export default {
         @extend %flexCenter;
         border-radius: 4px;
         padding: 0 .6rem;
+        z-index: 99;
         &::after {
           border-left: 0.4rem solid transparent;
           border-right: 0.4rem solid transparent;
@@ -229,6 +230,7 @@ export default {
           p {
             color: #42535b;
             font-size: 0.9rem;
+            padding-bottom: 1.5rem;
             &:last-child {
               font-size: 0.7rem;
             }
@@ -277,6 +279,12 @@ export default {
       .header-level,.header-img {
         flex-direction: column;
         align-items: flex-start;
+      }
+      .header-level .invitation-tips {
+        left: 0;
+        top: 3.6rem;
+        height: auto;
+        padding: .6rem;
       }
       .header-img {
         padding-top: 1.4rem;

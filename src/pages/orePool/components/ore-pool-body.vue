@@ -11,21 +11,23 @@
           <span>{{ $t("pool.poolIndexListTit2") }}</span>
           <span>{{ $t("pool.poolIndexListTit3") }}</span>
         </section>
-        <span></span>
+        <span class="list-null"></span>
       </li>
       <li v-for="(item, index) in itemList" :key="index">
         <section>
-          <span>{{ item.poolName }}</span>
-          <span>{{ item.pooolMoney }} BIUT</span>
-          <span>{{ '0x' + item.poolAddress }}</span>
+          <span>{{ item.poolName.replace(/(.{3}).+(.{3})/, "$1...") }}</span>
+          <span>{{ getPointNum(item.pooolMoney) }} BIUT</span>
+          <span>{{ "0x" + item.poolAddress }}</span>
         </section>
-        <span class="list-btn" @click="mortgageMask(item)">{{ $t("pool.poolListBtn") }}</span>
+        <span class="list-btn" @click="mortgageMask(item)">{{
+          $t("pool.poolListBtn")
+        }}</span>
       </li>
     </ul>
 
     <!-- mask 弹窗 -->
-    <pool-mask 
-      v-show="maskShow" 
+    <pool-mask
+      v-show="maskShow"
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
@@ -34,7 +36,8 @@
       :selectedItem="selectedItem"
       :totalMoney="walletBalance.toString()"
       @close="closeMask"
-      @updatePage="updatePage" />
+      @updatePage="updatePage"
+    />
   </section>
 </template>
 
@@ -66,19 +69,19 @@ export default {
       this.$emit('lookAll')
     },
 
-    closeMask () {
+    closeMask() {
       //this.$emit('updatePage', ipt)
       this.maskShow = false
     },
 
-    updatePage (ipt) {
+    updatePage(ipt) {
       this.$emit('updatePage', ipt)
       this.maskPage = 3
       this.maskShow = true
       //this.joinIpt = ipt
     },
 
-    mortgageMask (item) {
+    mortgageMask(item) {
       /**
        * 显示弹窗
        */
@@ -124,29 +127,39 @@ export default {
       @include border($c: #e6e6e6, $d: bottom);
       font-size: 0.7rem;
       color: #2e3a40;
-      section span:first-child {
-        display: inline-block;
-        width: 11rem;
+      section {
+        flex: 1;
+        display: flex;
+        span:first-child {
+          display: inline-block;
+          width: 8rem;
+        }
+        span:nth-child(2) {
+          display: inline-block;
+          width: 10rem;
+        }
+        span:last-child {
+          flex: 1;
+        }
       }
-      section span:nth-child(2) {
-        display: inline-block;
-        width: 11rem;
-      }
+
       &:first-child {
         color: #9ca6aa;
       }
       .list-btn {
         height: 1.8rem;
-        line-height: 1.8rem;
         @include border($c: #e6e6e6, $d: bor);
         color: #9ca6aa;
-        text-align: center;
         border-radius: 0.9rem;
-        background: #0B7FE6;
+        background: #0b7fe6;
         color: #fff;
         cursor: pointer;
-        font-size: .7rem;
+        font-size: 0.7rem;
         padding: 0 1rem;
+        @extend %flexCenter;
+      }
+      .list-null {
+        width: 4.8rem;
       }
     }
   }
@@ -155,10 +168,34 @@ export default {
 @media (max-width: 767px) {
   .ore-pool-body {
     padding: 2.6rem 15px 3.4rem;
-    ul li section {
-      display: flex;
-      span:first-child {
-        max-width: 8rem;
+    ul {
+      li {
+        section {
+          justify-content: space-around;
+          span {
+            &:first-child {
+              max-width: 3rem;
+            }
+            &:nth-child(2) {
+              flex: 1;
+            }
+            &:last-child {
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+              width: 2rem;
+            }
+          }
+        }
+        .list-btn {
+          width: 3rem;
+          font-size: 0.6rem;
+          height: 1.5rem;
+          margin-left: 0.2rem;
+        }
+        .list-null {
+          width: 3rem;
+        }
       }
     }
     header {

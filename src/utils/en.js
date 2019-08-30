@@ -21,15 +21,15 @@ export default {
   tipsListKey: {
     "tipsCnt1": "Do not lose it! It cannot be recovered if you lose it.",
     "tipsCnt2": "Do not share it! Your funds may be stolen if you use this file on a malicious/phishing site.",
-    "tipsCnt3": "Make a backup! Secure it like the millions of dollars it may one day be worth."
+    "tipsCnt3": "Make a backup! Secure it like the millions of dollars it may be worth one day ."
   },
   passTips: {
     passFormat:"8-30 characters, must contain at least 2 types of numbers, English letters, and special characters.",
     passNoMatch: "Password doesn't match , please try again.",
-    passFormatError: "The password format is incorrect, please reenter it.",
+    passFormatError: "The password format is incorrect, please try again.",
     passEncryption: "Your wallet is encrypted! Please enter the password",
     newWalletPass: "Enter your new wallet password",
-    passError: "Password error, unlock fail.",
+    passError: "Wrong password, unlock fail.",
     inviteCodeError: "Invalid input."
   },
   walletInfo: {
@@ -70,7 +70,7 @@ export default {
     transferMoney: "Amount is not valid.",
     transferMoney1: "The transfer amount must not be 0",
     transferMoneyN: "Transfer fee must be less than balance.",
-    transferMoneyN1: "Poundage cannot be 0.",
+    transferMoneyN1: "Transfer fee amount cannot be 0",
     transferAddressError: "This is not a valid address.",
     transferAddressError2: "The same address cannot be transferred.",
     transferError: 'Transfer failed, please try again later.',
@@ -83,9 +83,9 @@ export default {
     ethaddress: 'ETH Wallet Address',
     ethwalletddress: 'ETH Wallet Address',
     mappingTipsTxt1: 'Please try to map the same ETH address completely, one transfer, corresponding to submit a mapping request; if you transfer multiple transactions, you need to submit multiple mapping requests.',
-    mappingTipsTxt2: "Please use ETH's private key to log in and view BIUT wallet.",
-    mappingTipsTxt3: 'If in doubt, check out the help mapping tutorial.',
-    ethAddressErrorTxt: 'ETH address error',
+    mappingTipsTxt2: "Please use ETH’s private key to log in and check the BIUT wallet.",
+    mappingTipsTxt3: 'Please check the mapping tutorial if you have any question',
+    ethAddressErrorTxt: 'Invalid ETH address',
     tipTxt: 'Notice',
     confirmMapping: 'Confirm the following information',
     mappingButton: 'Mapping',
@@ -96,10 +96,10 @@ export default {
     mappingFailure3: 'System Error, please try again later!',
     mappingHash: 'ETH Transaction Hash',
     mappingHashError: 'Invalid transaction hash',
-    mappingHashTxt: 'Please enter the transaction hash value transferred on ETH',
+    mappingHashTxt: 'Please enter the transaction hash of your transfer',
   },
   pool: {
-    poolBanner: 'The BIUT mine pool is officially online',
+    poolBanner: 'The BIUT mining pool is now open',
     poolLogin: 'Enter Wallet',
     poolLoginIpt: 'Eenter your private key here',
     poolLoginIptError: 'Please enter the correct wallet private key',
@@ -110,19 +110,19 @@ export default {
     poolIndexL: 'Login',
     poolIndexE: 'Log out',
     poolIndexListTit1: 'Name',
-    poolIndexListTit2: 'Nissan',
+    poolIndexListTit2: 'Daily earn',
     poolIndexListTit3: 'Address',
     poolIndexListTxt1: 'Joined',
     poolIndexListTxt2: 'Join',
     poolIndexIpt: 'Search',
-    poolIndexTit1: 'Mine Pool',
-    poolIndexTitLook: 'View All Mine Pools',
-    poolIndexTit2: 'Join The Mine Pool',
+    poolIndexTit1: 'Mining Pool',
+    poolIndexTitLook: 'View All Mining Pools',
+    poolIndexTit2: 'Join The Mining Pool',
     poolIndexTit3: 'Profit Record',
 
-    poolIndexTxt1: "Last week's earnings",
-    poolIndexTxt2: 'Total Profit',
-    poolIndexTxt3: 'Frozen Assets In Mine Pool',
+    poolIndexTxt1: "Last week’s profits",
+    poolIndexTxt2: 'Total Profits',
+    poolIndexTxt3: 'Frozen Assets In Mining Pool',
     poolIndexTxt4: 'Available Balance',
 
     poolIndexSearch1: 'Found',
@@ -133,11 +133,11 @@ export default {
     poolTabTxt2: 'The invitation',
     poolListNull: 'No record',
 
-    poolListBtn: 'Add mortgage'
+    poolListBtn: 'Add'
   },
   invitation: {
     level: 'My Level',
-    medal: 'Gold medal',
+    medal: 'Gold',
     rules: 'View rules',
 
     inListTit: 'Invitation record',
@@ -146,12 +146,12 @@ export default {
     inListTxt2: 'Invitation time',
     inListTxt3: 'Total reward (BIUT)',
     inListTxt4: 'View details',
-    inListNull: 'Uninvited record',
+    inListNull: 'No Invitation Record',
     inListSearchNull: 'No search results yet',
 
-    inMaskTxt: 'Every time the invitation is successful, it will reward BIUT, please check it.',
+    inMaskTxt: 'Every time the invitation is successful, you will get BIUT reward, please check it.',
     inMaskListTxt1: 'Level',
-    inMaskListTxt2: 'Number of people',
+    inMaskListTxt2: 'Number of invitee',
 
     inMask2ListTxt1: 'Time',
     inMask2ListTxt2: 'Reward (BUT)',
@@ -162,21 +162,21 @@ export default {
     level4: 'Super partner',
     level4Txt: 'More than 64',
 
-    invitationTipsTxt1: 'Lock the bin BIUT on the mining page and unlock the invitation code!',
-    invitationTipsTxt2: "In the mining page to lock 10,000 BIUT or join the mining pool, you can share a key!"
+    invitationTipsTxt1: 'Lock the BIUT on the mining page to unlock the invitation code!',
+    invitationTipsTxt2: "Lock 10,000 BIUT on the mining page or join the mining pool to get your invitation link."
   },
   mask: {
     tips: "Operation success, click the URL below to view the results：",
     confirm: "Confirm",
     confirms: "Confirm...",
-    cancel: "Cancal",
+    cancel: "Cancel",
 
     poolTips: 'Information',
     poolBtn: 'I know it',
-    poolTxt: 'You have joined the mine pool and can not join others.',
-    poolNumber: 'locked amount',
-    poolNumberError: 'At least 10,000 BIUT is required to join the mine pool.',
-    poolNumberError1: 'The minimum amount of additional collateral is 10 BIUT.',
+    poolTxt: 'You have joined the mining pool and can not join others.',
+    poolNumber: 'Lock-up amount',
+    poolNumberError: 'At least 10,000 BIUT is required to join the mining pool.',
+    poolNumberError1: 'The minimum amount of additional mortgage is 10 BIUT.',
     poolNumberError2: 'The network response has timed out. Please try again',
     poolTxt1: 'locked BIUT will be frozen one year. The more BIUT locked, the more profits of mining BIU',
     poolBtn1: 'Join Now',
@@ -189,7 +189,7 @@ export default {
     poolMaskTxt1: 'Pool name',
     poolMaskTxt2: 'Current address',
     poolMaskTxt3: 'Contract address',
-    poolMaskTxt4: 'Mortgage number',
+    poolMaskTxt4: 'Mortgage amount',
 
     poolMaskClose: 'Close'
   },
@@ -200,7 +200,7 @@ export default {
     "Guide": "Guide",
     "Language": "Language",
     "Mapping": "Mapping",
-    "orePool": 'Mine Pool'
+    "orePool": 'Mining Pool'
   },
   helpTips: {
     helpTipsTxt: 'Check out the tutorial on your computer.'
@@ -210,7 +210,7 @@ export default {
   },
   public: {
     available: 'Available',
-    guarantee: 'Guarantee',
+    guarantee: 'Frozen',
     pageNext: 'Next',
     pagePrev: 'Prev',
 

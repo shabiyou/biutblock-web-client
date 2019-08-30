@@ -199,7 +199,8 @@ export default {
     //转账钱包手续费、可转账biu
     getFee(e) {
       this.feeVal = e
-      this.tradingMoney = String(this.getPointNum(this.allMoneyN - e, 8))
+      let amount = this.cal.accSub(this.allMoneyN, e)
+      this.tradingMoney = String(this.getPointNum(amount))
     },
 
     //当前输入的转账金额
@@ -246,7 +247,8 @@ export default {
       this.getWalletBalance(address, 'biu').then(res => {
         let amount = this.scientificNotationToString(res)
         this.allMoneyN = amount
-        this.tradingMoney = String(this.getPointNum(amount - this.feeVal, 8))
+        let amountFee = this.cal.accSub(amount, this.feeVal)
+        this.tradingMoney = String(this.getPointNum(amountFee))
       })
     }
   }

@@ -41,7 +41,7 @@
     <!-- 转账数量 - 转出全部金额 -->
     <section class="money-list">
       <span>{{ $t("transfer.balance") }}：</span>
-      <label>{{ transferIdx == 0 ? amountBiut : amountBiu }}</label>
+      <label>{{ transferIdx == 0 ? (getPointNum(amountBiut)) : (getPointNum(amountBiu)) }}</label>
       <span>{{ transferCurrency }}</span>
       <span @click="allTranferMoney">{{ $t("transfer.all") }}</span>
     </section>

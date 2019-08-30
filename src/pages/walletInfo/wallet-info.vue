@@ -60,8 +60,8 @@ export default {
       walletMoneyC: "0",//钱包SEC币
       walletMoneyN: "0",//钱包SEN币
 
-      availableAmount: 0, //可用余额
-      freezeAmount: 0, //冻结金额
+      availableAmount: "0", //可用余额
+      freezeAmount: "0", //冻结金额
       inviteCode: '',//邀请码
 
       infoPages: 1, //默认显示登陆页面
@@ -109,7 +109,7 @@ export default {
           poolAddress.push(pool.replace('0x', ''))
         }
         this.getContractInfoSync(poolAddress).then((infos) => {
-          let freezeAmount = 0
+          let freezeAmount = "0"
           let timeLocks = []
           let availableAmount = res
           for (let info of infos) {

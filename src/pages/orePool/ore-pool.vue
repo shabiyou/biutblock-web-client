@@ -13,7 +13,7 @@
         >
           <!-- 不是登陆状态下隐藏 -->
           <figure v-show="!loginStatus">
-            <figcaption>{{ address }}</figcaption>
+            <figcaption>0x{{ address }}</figcaption>
             <img
               src="../../assets/images/go.png"
               alt=""
