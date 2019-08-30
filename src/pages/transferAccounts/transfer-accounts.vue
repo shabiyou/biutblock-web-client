@@ -153,7 +153,7 @@ export default {
         } else {
           //转账BIU
           return address.length == 42 && this.walletMoney > 0 && address != this.address
-            && Number(this.walletMoney) <= Number(this.tradingMoney)
+            && Number(this.walletMoney) <= Number(this.allMoneyN)
             && _const.addressReg.test(address) ? true : false
         }
       }
