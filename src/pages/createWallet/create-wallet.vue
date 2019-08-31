@@ -109,6 +109,7 @@ export default {
     //创建钱包
     createFrom(e, inviteCode) {
       this.$refs.create.createBtn = 'newWallet.createBtns'
+	  this.$refs.create.createReadonly = true
       let keys = SECUtil.generateSecKeys() //创建钱包
       let privKey64 = keys.privKey //获取创建钱包的私钥
       let englishWords = SECUtil.entropyToMnemonic(privKey64) //助记词
