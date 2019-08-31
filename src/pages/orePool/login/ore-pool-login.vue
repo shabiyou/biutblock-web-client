@@ -24,17 +24,21 @@
         @click.native="loginFrom"
       />
     </section>
+
+    <wallet-transparent :txt="systemErrorTxt" v-show="transparentShow" />
   </main>
 </template>
 
 <script>
 import publicButton from '../../../components/public-button'
+import walletTransparent from '../../../components/wallet-transparent'
 const SECUtil = require('@biut-block/biutjs-util')
 const dataCenterHandler = require('../../../lib/DataCenterHandler')
 export default {
   name: '',
   components: {
-    publicButton
+    publicButton,
+    walletTransparent
   },
   props: {},
   data() {
@@ -43,7 +47,9 @@ export default {
       keyError: false,
       margnB: false,
       walletKeyErrTxt: '',
-      keyLoginBtn: 'pool.poolLoginBtn'
+      keyLoginBtn: 'pool.poolLoginBtn',
+      transparentShow: false,
+      systemErrorTxt: ''
     }
   },
   computed: {
@@ -85,8 +91,12 @@ export default {
           address: extractAddress
         }, (parent) => {
           if (parent === undefined || parent === "") {
-            alert($('public.systemError'))
+            this.transparentShow = true
+            this.systemErrorTxt = 'public.systemError'
             this.keyLoginBtn = 'pool.poolLoginBtn'
+            setTimeout(() => {
+              this.transparentShow = false
+            }, 3000)
           } else if (parent.status) {
             parm = {
               address: '0x' + extractAddress,

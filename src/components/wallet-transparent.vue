@@ -1,6 +1,6 @@
 <template>
   <section class="transparent-content">
-    <span>{{ txt }}</span>
+    <span>{{ $t(txt) }}</span>
   </section>
 </template>
 

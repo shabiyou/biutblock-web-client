@@ -45,7 +45,7 @@
       type="button"
       :text="$t(createBtn)"
       :disabled="!createActive"
-	  :readonly="createReadonly"
+	    :readonly="createReadonly"
       :class="createActive ? 'btn-active' : ''"
       @click.native="createFrom"
     />

@@ -4,39 +4,27 @@
       <el-row>
         <el-col :xs="24" :sm="24" :md="24">
           <!-- 创建钱包 -->
-          <create-wallet
-            v-if="pages === 1"
-            ref="create"
-            :tipsListPass="tipsListPass"
-            :invailidCode="inviteCodeError"
-            @created="createFrom"
-          />
+          <create-wallet v-if="pages === 1" ref="create" :tipsListPass="tipsListPass" :invailidCode="inviteCodeError" @created="createFrom" />
 
           <!-- 下载keystroe文件 -->
-          <down-keystore
-            v-if="pages === 2"
-            :tipsListKey="tipsListKey"
-            @down="downUrlTxt"
-            @next="continueKey"
-          />
+          <down-keystore v-if="pages === 2" :tipsListKey="tipsListKey" @down="downUrlTxt" @next="continueKey" />
 
           <!-- 保存私钥 -->
-          <save-priveate
-            v-if="pages === 3"
-            :tipsListKey="tipsListKey"
-            :privateKey="privateKey"
-          />
+          <save-priveate v-if="pages === 3" :tipsListKey="tipsListKey" :privateKey="privateKey" />
         </el-col>
       </el-row>
 
       <!-- 公共背景底部 -->
       <content-footer />
+
+      <wallet-transparent :txt="systemErrorTxt" v-show="transparentShow" />
     </main>
   </main>
 </template>
 
 <script>
 const contentFooter = () => import("../../components/content-footer")
+const walletTransparent = () => import("../../components/wallet-transparent")
 import createWallet from './components/create-new-wallet'
 const downKeystore = () => import("./components/create-wallet-down")
 const savePriveate = () => import("./components/create-wallet-key")
@@ -54,7 +42,8 @@ export default {
     contentFooter,
     createWallet,
     downKeystore,
-    savePriveate
+    savePriveate,
+    walletTransparent
   },
   props: {},
   data() {
@@ -95,7 +84,9 @@ export default {
         'tips_img': tipsImg,
         'tips_cnt': 'tipsListKey.tipsCnt3',
       }
-      ]
+      ],
+      transparentShow: false,
+      systemErrorTxt: ''
     }
   },
   created() {
@@ -109,7 +100,7 @@ export default {
     //创建钱包
     createFrom(e, inviteCode) {
       this.$refs.create.createBtn = 'newWallet.createBtns'
-	  this.$refs.create.createReadonly = true
+      this.$refs.create.createReadonly = true
       let keys = SECUtil.generateSecKeys() //创建钱包
       let privKey64 = keys.privKey //获取创建钱包的私钥
       let englishWords = SECUtil.entropyToMnemonic(privKey64) //助记词
@@ -147,8 +138,13 @@ export default {
         privateKey: privKey64
       }, (body) => {
         if (body === undefined || body === "") {
-          alert($("public.systemError"))
+          this.transparentShow = true
+          this.systemErrorTxt = 'public.systemError'
+          setTimeout(() => {
+            this.transparentShow = false
+          }, 3000)
           this.$refs.create.createBtn = 'newWallet.createBtn'
+          this.$refs.create.createReadonly = false
         } else if (body.status && body.doc[0].role !== 'Owner') {
           let keyFileDataJS = {
             [privKey64]: {
@@ -164,6 +160,7 @@ export default {
           this.keyData = cipherKeyData.toString()
           this.pages = 2 //保存Keystore文件
           this.$refs.create.createBtn = 'newWallet.createBtn'
+          this.$refs.create.createReadonly = false
         } else {
           this.inviteCodeError = true
         }

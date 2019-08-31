@@ -76,6 +76,8 @@
     </el-row>
     <!-- 公共背景底部 -->
     <content-footer />
+
+    <wallet-transparent :txt="systemErrorTxt" v-show="transparentShow" />
   </main>
 </template>
 
@@ -84,6 +86,8 @@ const contentFooter = () => import("./content-footer")
 const publicButton = () => import("./public-button")
 const publicPass = () => import("./public-pass")
 const publicTips = () => import("./public-tips")
+const walletTransparent = () => import("./wallet-transparent")
+
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 const dataCenterHandler = require('../lib/DataCenterHandler')
@@ -93,7 +97,8 @@ export default {
     contentFooter,
     publicButton,
     publicPass,
-    publicTips
+    publicTips,
+    walletTransparent
   },
   props: {},
   data() {
@@ -123,6 +128,8 @@ export default {
           isChecked: false,
         },
       ],
+      transparentShow: false,
+      systemErrorTxt: ''
     }
   },
   computed: {
@@ -186,8 +193,12 @@ export default {
         let parm
         this._getWalletFromDB(extractAddress, (parent) => {
           if (parent === undefined || parent === "") {
-            alert($("public.systemError"))
+            this.transparentShow = true
+            this.systemErrorTxt = 'public.systemError'
             this.keyUnlockBtn = 'walletInfo.unlockBtn'
+            setTimeout(() => {
+              this.transparentShow = false
+            }, 3000)
           } else if (parent.status) {
             parm = {
               address: '0x' + extractAddress,
@@ -225,7 +236,11 @@ export default {
             let parm
             this._getWalletFromDB(arrData.walletAddress, (parent) => {
               if (parent === undefined || parent === "") {
-                alert($("public.systemError"))
+                this.transparentShow = true
+                this.systemErrorTxt = 'public.systemError'
+                setTimeout(() => {
+                  this.transparentShow = false
+                }, 3000)
                 this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
               } else if (parent.status) {
                 parm = {
