@@ -225,5 +225,9 @@ export default {
     shareTit2: 'Mining invitation code',
     shareTxt1: 'Use the browser scan to view',
     shareTxt2: 'Save picture',
-  }
+  },
+  tips: {
+    copySuccess: 'Copied',
+    copyFailure: 'Fail to copy'
+  },
 }

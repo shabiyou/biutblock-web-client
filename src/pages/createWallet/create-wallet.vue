@@ -31,12 +31,15 @@
 
       <!-- 公共背景底部 -->
       <content-footer />
+
+      <wallet-transparent :txt="systemErrorTxt" v-show="transparentShow" />
     </main>
   </main>
 </template>
 
 <script>
 const contentFooter = () => import("../../components/content-footer")
+const walletTransparent = () => import("../../components/wallet-transparent")
 import createWallet from './components/create-new-wallet'
 const downKeystore = () => import("./components/create-wallet-down")
 const savePriveate = () => import("./components/create-wallet-key")
@@ -54,7 +57,8 @@ export default {
     contentFooter,
     createWallet,
     downKeystore,
-    savePriveate
+    savePriveate,
+    walletTransparent
   },
   props: {},
   data() {
@@ -95,7 +99,9 @@ export default {
         'tips_img': tipsImg,
         'tips_cnt': 'tipsListKey.tipsCnt3',
       }
-      ]
+      ],
+      transparentShow: false,
+      systemErrorTxt: ''
     }
   },
   created() {
@@ -146,7 +152,11 @@ export default {
         privateKey: privKey64
       }, (body) => {
         if (body === undefined || body === "") {
-          alert($("public.systemError"))
+          this.transparentShow = true
+          this.systemErrorTxt = 'public.systemError'
+          setTimeout(() => {
+            this.transparentShow = false
+          }, 3000)
           this.$refs.create.createBtn = 'newWallet.createBtn'
         } else if (body.status && body.doc[0].role !== 'Owner') {
           let keyFileDataJS = {

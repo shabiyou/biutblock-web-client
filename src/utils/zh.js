@@ -219,12 +219,16 @@ export default {
     pageRecord: '条记录',
     pageResults: '条结果',
 
-    systemError: '系统异常',
+    systemError: '系统异常'
   },
   share: {
     shareTit1: 'BIUT- PC矿工POW',
     shareTit2: '挖矿邀请码',
     shareTxt1: '用浏览器扫一扫即可查看',
     shareTxt2: '保存图片',
+  },
+  tips: {
+    copySuccess: "复制成功",
+    copyFailure: "复制失败"
   }
 }
