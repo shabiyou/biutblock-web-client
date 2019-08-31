@@ -95,7 +95,7 @@
 
             <!-- 收益列表 -->
             <pool-footer v-show="rewardList.length > 0" :itemList="rewardList"/>
-            
+              
             <!-- 没有加入矿池展示 -->
             <h4 v-show="addPoolList.length === 0">
               {{ $t("pool.poolListNull") }}
