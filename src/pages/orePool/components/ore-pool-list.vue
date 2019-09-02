@@ -24,7 +24,7 @@
         v-for="(item, index) in itemList"
         :key="index"
         v-show="itemList.length > 0"
-      >
+        v-if="item.poolAddress != '000000000000000000000000000000000009'">
         <section>
           <span>{{ item.poolName.replace(/(.{8}).+(.{3})/, "$1...") }}</span>
           <span>{{ getPointNum(item.poolMoney) }}</span>

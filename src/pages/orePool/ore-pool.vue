@@ -1,6 +1,6 @@
 <template class="pool-container">
   <main>
-    <section v-show="loginPage === 0">
+    <section v-if="loginPage === 0">
       <!-- banner部分 -->
       <header class="pool-header">
         <h2>{{ $t("pool.poolBanner") }}</h2>
@@ -12,7 +12,7 @@
           :class="loginStatus ? 'flex-end' : ''"
         >
           <!-- 不是登陆状态下隐藏 -->
-          <figure v-show="!loginStatus">
+          <figure v-if="!loginStatus">
             <figcaption>0x{{ address }}</figcaption>
             <img
               src="../../assets/images/go.png"
@@ -30,7 +30,7 @@
         </section>
 
         <!-- 没有登陆 -->
-        <section v-show="poolPage === 1">
+        <section v-if="poolPage === 1">
           <section class="pool-body-flex pool-body-head2">
             <span>{{ $t("pool.poolIndexTit1") }}</span>
             <!-- <section>
@@ -62,7 +62,7 @@
         </section>
 
         <!-- 登录成功 -->
-        <section v-show="poolPage === 2">
+        <section v-if="poolPage === 2">
           <p class="tab-line"></p>
           <ul class="tab-list">
             <li :class="idx === 0 ? 'active-list' : ''" @click="tabClick(0)">
@@ -73,28 +73,28 @@
             </li>
           </ul>
           <!-- 矿池 -->
-          <section v-show="idx === 0">
+          <section v-if="idx === 0">
             <pool-header
               :walletBalance="walletBalance"
               :poolLastWeek="lastWeekReward"
               :poolInComing="myReward"
               :poolMortgage="poolTimeLock"
-             
             />
-            <pool-body @lookAll="poolPage = 1" 
-            :itemList="addPoolList"
-            :poolName="searchIpt"
-            :stus="loginStatus"
-            :nounce="nounce"
-            :address="address"
-            :mortgageShow="mortgageValue !== '0'"
-            :privateKey="privateKey"
-            :walletBalance="walletBalance"
-            @updatePage="onUpdatePage"
+            <pool-body
+              @lookAll="poolPage = 1"
+              :itemList="addPoolList"
+              :poolName="searchIpt"
+              :stus="loginStatus"
+              :nounce="nounce"
+              :address="address"
+              :mortgageShow="mortgageValue !== '0'"
+              :privateKey="privateKey"
+              :walletBalance="walletBalance"
+              @updatePage="onUpdatePage"
             />
 
             <!-- 收益列表 -->
-            <pool-footer v-show="rewardList.length > 0" :itemList="rewardList"/>
+            <!-- <pool-footer v-show="rewardList.length > 0" :itemList="rewardList"/> -->
 
             <!-- 没有加入矿池展示 -->
             <h4 v-show="addPoolList.length === 0">
@@ -103,7 +103,7 @@
           </section>
 
           <!-- 邀请 -->
-          <section v-show="idx === 1">
+          <section v-if="idx === 1">
             <invitation-header
               :invitationCode="invitationCode"
               :progress="invitatedAmount"
@@ -124,13 +124,14 @@
               :maskList="maskList"
               :maskReward="maskReward"
               v-show="maskShow"
-              @close="closeInvitationMask"/>
+              @close="closeInvitationMask"
+            />
           </section>
         </section>
       </section>
     </section>
 
-    <section v-show="loginPage === 1">
+    <section v-if="loginPage === 1">
       <pool-login @login="userLogin" />
     </section>
   </main>
@@ -173,7 +174,7 @@ export default {
       poolPage: 1,
       poolTimeLock: 0,
       myReward: 0,
-      lastWeekReward: 0, 
+      lastWeekReward: 0,
       totalPoolMoney: 0,
       walletBalance: 0,
       loginPage: 0,
@@ -218,7 +219,7 @@ export default {
             //let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
             let poolAddress = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[1] : ''
             this.getWalletBalance(poolAddress, 'SEC').then((balance) => {
-              dataCenterHandler.getMiningPool({address: poolAddress}, (body) => {
+              dataCenterHandler.getMiningPool({ address: poolAddress }, (body) => {
                 this.itemList.push({
                   id: 0,
                   poolName: body.miningPool ? body.miningPool.poolName : '',
@@ -326,7 +327,7 @@ export default {
       dataCenterHandler.getMyTotalReward({
         address: this.address
       }, (body) => {
-        if(body.status) {
+        if (body.status) {
           this.myReward = Number(this.scientificNotationToString(body.rewards))
         }
       })
@@ -338,7 +339,7 @@ export default {
       }, (body) => {
         if (body.status) {
           this.lastWeekReward = body.rewards
-        } 
+        }
       })
 
       /** 获取这个钱包对应加入矿池的信息 */
@@ -358,7 +359,7 @@ export default {
       dataCenterHandler.getMyTotalReward({
         address: this.address
       }, (body) => {
-        if(body.status) {
+        if (body.status) {
           this.myReward = Number(this.scientificNotationToString(body.rewards))
         }
       })
@@ -381,7 +382,7 @@ export default {
           }
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
-            dataCenterHandler.getMiningPool({address: infos[i].tokenName.split('-')[1]}, (body) => {
+            dataCenterHandler.getMiningPool({ address: infos[i].tokenName.split('-')[1] }, (body) => {
               if (body.status && body.miningPool && body.miningPool.poolName !== '') {
                 this.addPoolList.push({
                   id: 0,
@@ -426,7 +427,7 @@ export default {
       this.idx = index
     },
 
-    lookRules (page, item) {
+    lookRules(page, item) {
       let details = []
       if (item) {
         dataCenterHandler.getInvitationDetails({

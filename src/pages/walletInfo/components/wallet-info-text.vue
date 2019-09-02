@@ -84,13 +84,13 @@ export default {
       clipboard.on('success', e => {
         clipboard.destroy()
         this.transparentShow = true
-        this.copySuccess = 'public.copySuccess'
+        this.copySuccess = 'tips.copySuccess'
         setTimeout(() => {
           this.transparentShow = false
         }, 3000)
       })
       clipboard.on('error', e => {
-        this.copySuccess = 'public.copyFailure'
+        this.copySuccess = 'tips.copyFailure'
         setTimeout(() => {
           this.transparentShow = false
         }, 3000)
