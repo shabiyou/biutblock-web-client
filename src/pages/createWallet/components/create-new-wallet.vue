@@ -45,8 +45,7 @@
       type="button"
       :text="$t(createBtn)"
       :disabled="!createActive"
-	    :readonly="createReadonly"
-      :class="createActive ? 'btn-active' : ''"
+      :class="[createActive ? 'btn-active' : '',createReadonly ? 'cantClick' : '']"
       @click.native="createFrom"
     />
   </main>
@@ -91,7 +90,7 @@ export default {
       tipsCode: 'newWallet.codeIptError',
       codeDis: false,
       createBtn: 'newWallet.createBtn',
-	  createReadonly: false
+	    createReadonly: false
     }
   },
   created() {

@@ -35,6 +35,7 @@
         <button
           type="button"
           @click="confirmTransfer"
+          :class="confirmDisabled ? 'cantClick' : ''"
           :disabled="confirmDisabled"
         >
           {{ $t(confrimButton) }}

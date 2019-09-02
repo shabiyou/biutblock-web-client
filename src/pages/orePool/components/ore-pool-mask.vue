@@ -60,17 +60,15 @@
 
         <public-button
           :text="joinButton"
-          :class="joinBtn ? 'btn-active' : ''"
+          :class="[joinBtn ? 'btn-active' : '',joninReadonly ? 'cantClick' : '']"
           :disabled="!joinBtn"
-          :readonly="joninReadonly"
           @click.native="joinFrom"
           v-show="!mortgageShow"/>
 
         <!-- 抵押更多按钮 -->
         <public-button 
           :text="$t(mortgageBtn)"
-          :readonly="mortgageReadonly"
-          :class="mortgageActive ? 'btn-active' : ''"
+          :class="[mortgageActive ? 'btn-active' : '',mortgageReadonly ? 'cantClick' : '']"
           :disabled="!mortgageActive"
           @click.native="mortgageFrom"
           v-show="mortgageShow"/>
