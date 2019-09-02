@@ -87,7 +87,7 @@
               :stus="loginStatus"
               :nounce="nounce"
               :address="address"
-              :mortgageShow="mortgageValue !== '0'"
+              :mortgageShow="poolAddress.length > 1"
               :privateKey="privateKey"
               :walletBalance="walletBalance"
               @updatePage="onUpdatePage"
@@ -107,7 +107,7 @@
             <invitation-header
               :invitationCode="invitationCode"
               :progress="invitatedAmount"
-              :invitationShow="mortgageValue !== '0'"
+              :invitationShow="poolAddress.length > 1"
               :minerType="minerLevel"
               @look="lookRules"
             />
@@ -266,6 +266,8 @@ export default {
       let poolAddress = []
       if (e.mortgagePoolAddress.length > 1) {
         this.joinMaskPage = 1
+      } else {
+        this.joinMaskPage = 0
       }
 
       for (let pool of e.mortgagePoolAddress) {
