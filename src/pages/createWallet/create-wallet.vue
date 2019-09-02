@@ -163,6 +163,8 @@ export default {
           this.$refs.create.createReadonly = false
         } else {
           this.inviteCodeError = true
+          this.$refs.create.createBtn = 'newWallet.createBtn'
+          this.$refs.create.createReadonly = false
         }
       })
     },

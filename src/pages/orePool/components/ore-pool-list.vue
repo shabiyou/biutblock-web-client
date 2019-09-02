@@ -26,7 +26,7 @@
         v-show="itemList.length > 0"
       >
         <section>
-          <span>{{ item.poolName.replace(/(.{3}).+(.{3})/, "$1...") }}</span>
+          <span>{{ item.poolName.replace(/(.{8}).+(.{3})/, "$1...") }}</span>
           <span>{{ getPointNum(item.poolMoney) }}</span>
           <span>{{ "0x" + item.poolAddress }}</span>
         </section>
@@ -209,6 +209,7 @@ ul {
         span {
           &:first-child {
             max-width: 3rem;
+            margin-right: .2rem;
           }
           &:nth-child(2) {
             flex: 1;

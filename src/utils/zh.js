@@ -180,6 +180,7 @@ export default {
     poolNumberError2: '网络响应超时，请重试',
     poolTxt1: '锁仓的biut会被冻结一年。锁仓数量越多，挖到BIU的收益越高哦！',
     poolBtn1: '确认加入',
+    poolBtn1s: '确认加入中...',
 
 
     poolMaskBtn: '提交',

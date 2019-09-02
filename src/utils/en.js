@@ -180,6 +180,7 @@ export default {
     poolNumberError2: 'The network response has timed out. Please try again',
     poolTxt1: 'locked BIUT will be frozen one year. The more BIUT locked, the more profits of mining BIU',
     poolBtn1: 'Join Now',
+    poolBtn1s: 'Join Now...',
 
     poolMaskBtn: 'Submit',
     poolMaskBtns: 'Submission...',

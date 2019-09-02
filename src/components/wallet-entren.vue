@@ -193,12 +193,8 @@ export default {
         let parm
         this._getWalletFromDB(extractAddress, (parent) => {
           if (parent === undefined || parent === "") {
-            this.transparentShow = true
             this.systemErrorTxt = 'public.systemError'
-            this.keyUnlockBtn = 'walletInfo.unlockBtn'
-            setTimeout(() => {
-              this.transparentShow = false
-            }, 3000)
+            this._keyError()
           } else if (parent.status) {
             parm = {
               address: '0x' + extractAddress,
@@ -215,9 +211,8 @@ export default {
             this.$emit('login', parm)
             this.keyUnlockBtn = 'walletInfo.unlockBtn'
           } else {
-            this.walletPassError = true
-            this.walletPassErrorTxt = "passTips.inviteCodeError"
-            this.keyUnlockBtn = 'walletInfo.unlockBtn'
+            this.systemErrorTxt = 'pool.poolInvailidError'
+            this._keyError()
           }
         })
 
@@ -229,6 +224,7 @@ export default {
         this.$axios.get('' + this.KeyStoreUrl + '').then((response) => {
           let jsonstr = response.data
           let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
+          console.log(response)
           if (response.status == 200) {
             let walletData = keyData.split(':{')
             let arrData1 = '{' + walletData[1].replace("}}", "") + '}'
@@ -236,12 +232,8 @@ export default {
             let parm
             this._getWalletFromDB(arrData.walletAddress, (parent) => {
               if (parent === undefined || parent === "") {
-                this.transparentShow = true
                 this.systemErrorTxt = 'public.systemError'
-                setTimeout(() => {
-                  this.transparentShow = false
-                }, 3000)
-                this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
+                this._keystoreError()
               } else if (parent.status) {
                 parm = {
                   address: '0x' + arrData.walletAddress,
@@ -258,17 +250,36 @@ export default {
                 this.$emit('login', parm)
                 this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
               } else {
-                this.walletPassError = true
-                this.walletPassErrorTxt = "passTips.inviteCodeError"
-                this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
+                this.systemErrorTxt = 'pool.poolInvailidError'
+                this._keystoreError()
               }
             })
+          } else {
+            this.systemErrorTxt = 'public.systemError'
+            this._keystoreError()
           }
         }).catch((error) => {
-          this.walletPassError = true
-          this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
+          this.systemErrorTxt = 'passTips.passError'
+          this._keystoreError()
         });
       }
+    },
+
+    //私钥导入钱包要请码不存在
+    _keyError() {
+      this.transparentShow = true
+      this.keyUnlockBtn = 'walletInfo.unlockBtn'
+      setTimeout(() => {
+        this.transparentShow = false
+      }, 3000)
+    },
+
+    _keystoreError() {
+      this.transparentShow = true
+      this.keystoreUnlockBtn = 'walletInfo.unlockBtn'
+      setTimeout(() => {
+        this.transparentShow = false
+      }, 3000)
     },
 
     //获取input file上传文件的相关属性

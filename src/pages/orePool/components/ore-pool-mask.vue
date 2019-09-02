@@ -59,9 +59,10 @@
         <p class="join-txt4" v-show="networkError">{{ $t("mask.poolNumberError2") }}</p>
 
         <public-button
-          :text="$t('mask.poolBtn1')"
+          :text="joinButton"
           :class="joinBtn ? 'btn-active' : ''"
           :disabled="!joinBtn"
+          :readonly="joninReadonly"
           @click.native="joinFrom"
           v-show="!mortgageShow"/>
 
@@ -130,7 +131,9 @@ export default {
   data() {
     return {
       mortgageBtn:'mask.poolMaskBtn', //抵押更多按钮
+      joinButton: 'mask.poolBtn1', //加入按钮
       mortgageReadonly: false,
+      joninReadonly: false,
       joinIpt: '0',
       networkError: false,//网络错误
     }
@@ -187,6 +190,8 @@ export default {
        * 
        * 加入成功 调用 close() 关闭弹窗
        */
+      this.joninReadonly = true
+      this.joinButton = 'mask.poolBtn1s'
       this._addMortgage((ipt) => {
         dataCenterHandler.joinPool({
           address: this.address,
@@ -195,6 +200,8 @@ export default {
         }, (body) => {
           this.$emit('updatePage', ipt, this.selectedItem.poolAddress)
           //this.close()
+          this.joninReadonly = false
+          this.joinButton = 'mask.poolBtn1'
         })
       })
     },
@@ -235,6 +242,8 @@ export default {
     
     //抵押更多提交方法
     mortgageFrom () {
+      this.mortgageReadonly = true
+      this.mortgageBtn = 'mask.poolMaskBtns'
       this._addMortgage((ipt) => {
           dataCenterHandler.updateWallet({
             address: this.address,

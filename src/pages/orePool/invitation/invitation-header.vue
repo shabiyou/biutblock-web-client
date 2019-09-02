@@ -18,7 +18,7 @@
             data-clipboard-target="#invitationCode"
             class="copyButton"
           />
-          <img src="../../../assets/images/exclamationImg.png" v-show="!invitationShow" alt="" @mouseover="showInvitation1(item)" @mouseout="showInvitation2(item)"/>
+          <img src="../../../assets/images/exclamationImg.png" v-show="!invitationShow" alt="" @mouseover="showInvitation1" @mouseout="showInvitation2"/>
 
           <button type="button" class="shar-btn" @click="shareShow = true" v-show="invitationShow">
             {{ $t('walletInfo.shareBtn') }}
