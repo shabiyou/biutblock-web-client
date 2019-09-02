@@ -112,9 +112,9 @@ export default {
           let freezeAmount = 0
           let timeLocks = []
           let availableAmount = res
-          for (let info of infos) {
-            if (info.timeLock) {
-              timeLocks.push(info.timeLock)
+          for (let i = 1; i < infos.length; i++) {
+            if (infos[i].timeLock) {
+              timeLocks.push(infos[i].timeLock)
             }
           }
           for (let timelock of timeLocks) {
