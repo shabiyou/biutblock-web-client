@@ -9,7 +9,7 @@ export default {
   name: 'contentFooter',
   data() {
     return {
-      email: 'alanlee@biut.io'
+      email: 'contact@biut.io'
     }
   }
 }
