@@ -186,6 +186,7 @@ export default {
     poolMaskBtns: 'Submission...',
     poolMaskTit1: 'Mortgage more',
     poolMaskTit2: 'Successful additional mortgage',
+    poolMaskTit2Add: 'Join ore pool successfully',
 
     poolMaskTxt1: 'Pool name',
     poolMaskTxt2: 'Current address',

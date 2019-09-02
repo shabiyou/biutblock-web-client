@@ -82,7 +82,7 @@
       <header>
         <figure>
           <img src="../../../assets/images/tipsSuccess.png" alt="" />
-          <figcaption>{{ $t('mask.poolMaskTit2') }}</figcaption>
+          <figcaption>{{ poolMaskTit2 }}</figcaption>
         </figure>
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
@@ -132,6 +132,7 @@ export default {
     return {
       mortgageBtn:'mask.poolMaskBtn', //抵押更多按钮
       joinButton: 'mask.poolBtn1', //加入按钮
+      poolMaskTit2: 'mask.poolMaskTit2',//
       mortgageReadonly: false,
       joninReadonly: false,
       joinIpt: '0',
@@ -200,6 +201,7 @@ export default {
         }, (body) => {
           this.$emit('updatePage', ipt, this.selectedItem.poolAddress)
           //this.close()
+          this.poolMaskTit2 = 'mask.poolMaskTit2Add'
           this.joninReadonly = false
           this.joinButton = 'mask.poolBtn1'
         })
@@ -251,6 +253,7 @@ export default {
           }, (doc) => {
             if (doc.status) {
             this.$emit('updatePage', ipt, '')
+            this.poolMaskTit2 = 'mask.poolMaskTit2'
             this.mortgageBtn = 'mask.poolMaskBtn'
             this.mortgageReadonly = false
             //this.close()

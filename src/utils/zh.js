@@ -187,6 +187,7 @@ export default {
     poolMaskBtns: '提交中...',
     poolMaskTit1: '抵押更多',
     poolMaskTit2: '追加抵押成功',
+    poolMaskTit2Add: '加入矿池成功',
 
     poolMaskTxt1: '矿池名称',
     poolMaskTxt2: '当前钱包地址',
