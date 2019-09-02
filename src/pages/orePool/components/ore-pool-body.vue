@@ -31,6 +31,7 @@
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
+      :addressShort="addressShort"
       :mortgageShow="mortgageShow"
       :privateKey="privateKey"
       :selectedItem="selectedItem"
@@ -52,6 +53,7 @@ export default {
     itemList: Array,
     nounce: Number,
     address: String,
+    addressShort: String,
     mortgageShow: Boolean,
     privateKey: String,
     walletBalance: Number

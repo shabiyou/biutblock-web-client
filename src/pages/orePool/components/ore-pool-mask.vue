@@ -80,7 +80,7 @@
       <header>
         <figure>
           <img src="../../../assets/images/tipsSuccess.png" alt="" />
-          <figcaption>{{ poolMaskTit2 }}</figcaption>
+          <figcaption>{{ $t(poolMaskTit2) }}</figcaption>
         </figure>
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
@@ -121,6 +121,7 @@ export default {
     nounce: Number,
     selectedItem: Object,
     address: String,
+    addressShort: String,
     privateKey: String,
     totalMoney: String,
     mortgageShow: Boolean,
@@ -167,7 +168,7 @@ export default {
         {
           id: '2',
           tit: 'mask.poolMaskTxt2',
-          txt: this.address
+          txt: this.addressShort
         },
         {
           id: '3',

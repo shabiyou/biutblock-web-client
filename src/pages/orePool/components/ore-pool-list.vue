@@ -55,6 +55,7 @@
       :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
+      :addressShort="addressShort"
       :mortgageShow="mortgageShow"
       :selectedItem="selectedItem"
       :privateKey="privateKey"
@@ -79,6 +80,7 @@ export default {
     poolName: String,
     nounce: Number,
     address: String,
+    addressShort: String,
     privateKey: String,
     stus: Boolean,
     walletBalance: Number,

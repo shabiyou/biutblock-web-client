@@ -13,7 +13,7 @@
         >
           <!-- 不是登陆状态下隐藏 -->
           <figure v-if="!loginStatus">
-            <figcaption>0x{{ address }}</figcaption>
+            <figcaption>0x{{ addressShort }}</figcaption>
             <img
               src="../../assets/images/go.png"
               alt=""
@@ -54,6 +54,7 @@
             :stus="loginStatus"
             :nounce="nounce"
             :address="address"
+            :addressShort="addressShort"
             :privateKey="privateKey"
             :walletBalance="walletBalance"
             @login="goLogin"
@@ -87,7 +88,8 @@
               :stus="loginStatus"
               :nounce="nounce"
               :address="address"
-              :mortgageShow="poolAddress.length > 1"
+              :addressShort="addressShort"
+              :mortgageShow="poolAddress.length > 2"
               :privateKey="privateKey"
               :walletBalance="walletBalance"
               @updatePage="onUpdatePage"
@@ -107,7 +109,7 @@
             <invitation-header
               :invitationCode="invitationCode"
               :progress="invitatedAmount"
-              :invitationShow="poolAddress.length > 1"
+              :invitationShow="poolAddress.length > 2"
               :minerType="minerLevel"
               @look="lookRules"
             />
@@ -179,6 +181,7 @@ export default {
       walletBalance: 0,
       loginPage: 0,
       address: '',//钱包地址
+      addressShort: '',
       privateKey: '',//私钥
       maskPage: 1,
       maskShow: false,
@@ -259,7 +262,9 @@ export default {
       this.invitationCode = e.ownInvitationCode
       this.mortgageValue = e.mortgageValue
       if (this.ismobile()) {
-        this.address = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
+        this.addressShort = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
+      } else {
+        this.addressShort = e.address
       }
       this.privateKey = e.privateKey
       this.loginStatus = false
