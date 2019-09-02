@@ -46,7 +46,7 @@ export default {
       walletKey: '',
       keyError: false,
       margnB: false,
-      walletKeyErrTxt: '',
+      walletKeyErrTxt: 'pool.poolLoginIptError',
       keyLoginBtn: 'pool.poolLoginBtn',
       transparentShow: false,
       systemErrorTxt: ''
