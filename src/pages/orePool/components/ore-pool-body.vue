@@ -15,7 +15,7 @@
       </li>
       <li v-for="(item, index) in itemList" :key="index">
         <section>
-          <span>{{ item.poolName.replace(/(.{3}).+(.{3})/, "$1...") }}</span>
+          <span>{{ item.poolName.replace(/(.{8}).+(.{3})/, "$1...") }}</span>
           <span>{{ getPointNum(item.pooolMoney) }} BIUT</span>
           <span>{{ "0x" + item.poolAddress }}</span>
         </section>

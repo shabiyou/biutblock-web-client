@@ -107,7 +107,7 @@ export default {
     poolLoginBtn: '登入',
     poolLoginBtns: '登入中...',
 
-    poolIndexL: '未登入',
+    poolIndexL: '登入',
     poolIndexE: '退出',
     poolIndexListTit1: '矿池名称',
     poolIndexListTit2: '矿池抵押总量',
