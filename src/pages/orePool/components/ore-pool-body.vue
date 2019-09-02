@@ -147,6 +147,7 @@ export default {
         color: #9ca6aa;
       }
       .list-btn {
+        width: 4.8rem;
         height: 1.8rem;
         @include border($c: #e6e6e6, $d: bor);
         color: #9ca6aa;
@@ -155,7 +156,6 @@ export default {
         color: #fff;
         cursor: pointer;
         font-size: 0.7rem;
-        padding: 0 1rem;
         @extend %flexCenter;
       }
       .list-null {

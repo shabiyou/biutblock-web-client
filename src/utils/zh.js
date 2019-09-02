@@ -133,7 +133,7 @@ export default {
     poolTabTxt2: '邀请',
     poolListNull: '无记录',
 
-    poolListBtn: '追加抵押'
+    poolListBtn: '追加'
   },
   invitation: {
     level: '我的等级',
