@@ -19,7 +19,7 @@ import Element from 'element-ui'
 import 'babel-polyfill'
 
 import cal from './utils/calculation'
-import Vconsole from 'vconsole'
+
 Vue.prototype.cal = cal
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
@@ -27,8 +27,6 @@ Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false
-const VConsole = new Vconsole()
-Vue.use(VConsole)
 
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
