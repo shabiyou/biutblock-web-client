@@ -109,7 +109,7 @@
             <invitation-header
               :invitationCode="invitationCode"
               :progress="invitatedAmount"
-              :invitationShow="poolAddress.length > 2"
+              :invitationShow="poolTimeLock"
               :minerType="minerLevel"
               @look="lookRules"
             />
