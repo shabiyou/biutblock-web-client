@@ -264,7 +264,7 @@ export default {
       if (this.ismobile()) {
         this.addressShort = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
       } else {
-        this.addressShort = e.address
+        this.addressShort = e.address.replace('0x', '')
       }
       this.privateKey = e.privateKey
       this.loginStatus = false
@@ -379,6 +379,9 @@ export default {
       let freezeMoney = 0
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let i = 1; i < infos.length; i++) {
+          if (Object.keys(infos[i]).length === 0) {
+            continue
+          }
           /**计算自己在矿池中抵押了多少钱 */
           let timeLock = infos[i].timeLock
           if (timeLock && timeLock.hasOwnProperty(this.address) && timeLock[this.address].hasOwnProperty(this.address)) {
