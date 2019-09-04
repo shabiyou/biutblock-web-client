@@ -32,9 +32,9 @@
         </section>
 
         <!-- 判断是否 有加入的矿池，加入的话、第一个显示  后面不现实加入按钮、没有加入 所有按钮不可点击 -->
-        <span class="list-btn" @click="joinMask(item)">{{
+        <button type="button" class="list-btn" @click="joinMask(item)">{{
           $t("pool.poolIndexListTxt2")
-        }}</span>
+        }}</button>
       </li>
     </ul>
 
@@ -181,10 +181,9 @@ ul {
       height: 1.8rem;
       background: #00d69b;
       border-radius: 1.2rem;
+      border: 0;
       color: #fff;
       font-size: 0.7rem;
-      cursor: pointer;
-      @extend %flexCenter;
     }
     .list-null {
       width: 4.8rem;

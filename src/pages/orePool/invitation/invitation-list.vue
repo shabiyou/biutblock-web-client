@@ -2,27 +2,42 @@
   <section class="invitation-list">
     <header>
       <span class="list-title">
-        {{ $t('invitation.inListTit') }}
+        {{ $t("invitation.inListTit") }}
       </span>
       <!-- <section class="ipt-list">
         <input type="text" v-model="searchIpt" :placeholder="$t('invitation.inListSearch')" />
         <img src="../../../assets/images/search.png" alt="" />
       </section> -->
+      <ul class="head-list">
+        <li v-for="(item, index) in headList" :key="index" :class="enList ? 'en-hand-list' : ''">
+          <section>
+            <span></span>
+            <span>{{ $t(item.tit) }}：</span>
+          </section>
+          <span class="head-list-cnt">{{ item.txt }}</span>
+        </li>
+      </ul>
     </header>
 
     <main class="invitation-body">
       <ul>
         <li>
-          <span>{{ $t('invitation.inListTxt1') }}</span>
-          <span>{{ $t('invitation.inListTxt2') }}</span>
-          <span>{{ $t('invitation.inListTxt3') }}</span>
+          <span>{{ $t("invitation.inListTxt1") }}</span>
+          <span>{{ $t("invitation.inListTxt2") }}</span>
+          <span>{{ $t("invitation.inListTxt3") }}</span>
           <span></span>
         </li>
-        <li v-for="(item, index) in itemLists" :key="index" v-show="itemLists.length > 0">
-          <span>{{ '0x' + item.invitationAddress}}</span>
+        <li
+          v-for="(item, index) in itemLists"
+          :key="index"
+          v-show="itemLists.length > 0"
+        >
+          <span>{{ "0x" + item.invitationAddress }}</span>
           <span>{{ item.invitationTime.substring(0, 20) }}</span>
           <span>{{ getPointNum(item.invitationMoney) }}</span>
-          <span @click="lookRules(item)">{{ $t('invitation.inListTxt4') }}</span>
+          <span @click="lookRules(item)">{{
+            $t("invitation.inListTxt4")
+          }}</span>
         </li>
       </ul>
 
@@ -32,14 +47,14 @@
     </main>
 
     <!-- <footer> -->
-      <!-- <span class="page-number" v-show="!searchRes">
+    <!-- <span class="page-number" v-show="!searchRes">
         {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
       </span>
       <span class="page-number" v-show="searchRes">
         {{ $t('public.pageTotal') }} {{ searchTotal }} {{ $t('public.pageResults') }}
       </span> -->
-      <!-- 分页 -->
-      <!-- <wallet-page
+    <!-- 分页 -->
+    <!-- <wallet-page
         ref="pageList"
         class="page-list"
         :total="itemLists.length"
@@ -49,15 +64,18 @@
         @goPage="goPage"
         v-show="itemLists.length > 10" /> -->
     <!-- </footer> -->
+    <wallet-transparent :txt="transparentTxt" v-show="transparentShow" />
   </section>
 </template>
 
 <script>
 import walletPage from '../../../components/wallet-page'
+import walletTransparent from '../../../components/wallet-transparent'
 export default {
   name: '',
   components: {
-    walletPage
+    walletPage,
+    walletTransparent
   },
   props: {
     invitationList: Array
@@ -68,7 +86,9 @@ export default {
       searchContent: 'invitation.inListNull', //invitation.inListNull 列表内容为空  invitation.inListSearchNull 搜索结果为空
       total: 10,
       searchTotal: 1,
-      searchRes: false
+      searchRes: false,
+      transparentShow: false,
+      transparentTxt: 'invitation.inMask2ListNull'
       // itemList: [
       //   {
       //     id: 0,
@@ -82,18 +102,52 @@ export default {
   computed: {
     itemLists() {
       return this.invitationList
+    },
+
+    enList() {
+      if (this.$i18n.locale == "zh") {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    //头部数据
+    headList() {
+      return [
+        {
+          id: '1',
+          tit: 'invitation.hiListHeadTxt1',
+          txt: '456'
+        },
+        {
+          id: '2',
+          tit: 'invitation.hiListHeadTxt2',
+          txt: '123456789' + 'BIUT' //只保留 9位数字
+        },
+        {
+          id: '3',
+          tit: 'invitation.hiListHeadTxt3',
+          txt: '456'
+        },
+        {
+          id: '4',
+          tit: 'invitation.hiListHeadTxt4',
+          txt: '123456789' + 'BIUT' //只保留 9位数字
+        }
+      ]
     }
   },
   methods: {
-    nextPage () {
+    nextPage() {
       alert("下一页")
     },
 
-    prevPage () {
+    prevPage() {
       alert("上一页")
     },
 
-    goPage (e) {
+    goPage(e) {
       if (e > this.itemList.length) {
         alert("请输入正确的页码")
         this.$refs.pageList.clearIpt()
@@ -103,8 +157,16 @@ export default {
       }
     },
 
-    lookRules (item) {
-      this.$emit('look', 2, item)
+    lookRules(item) {
+      console.log()
+      if (item.invitationMoney > 0) {
+        this.$emit('look', 2, item)
+      } else {
+        this.transparentShow = true
+        setTimeout(() => {
+          this.transparentShow = false
+        }, 3000)
+      }
     }
   },
 }
@@ -117,6 +179,41 @@ export default {
   header {
     @extend %flexBetween;
     padding-bottom: 1.1rem;
+    .head-list {
+      @extend %flex;
+      padding: 0;
+      margin: 0;
+      li {
+        @extend %flex;
+        padding-left: 1.8rem;
+        color: #42535b;
+        font-family: Lato-Bold;
+        font-size: 0.6rem;
+        section {
+          color: #6d7880;
+          span:first-child {
+            width: 0.3rem;
+            height: 0.3rem;
+            background: #388ed9;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.2rem;
+          }
+        }
+        &:first-child {
+          padding-left: 0;
+        }
+        &:first-child,
+        &:nth-child(2) {
+          section span:first-child {
+            background: #f5a623;
+          }
+        }
+      }
+      .en-hand-list {
+        font-size: 0.7rem;
+      }
+    }
     .list-title {
       color: #2e3a40;
       font-size: 1.2rem;
@@ -167,7 +264,7 @@ export default {
           &:nth-child(4) {
             width: 8%;
             text-align: right;
-            color: #29D893;
+            color: #29d893;
             cursor: pointer;
           }
         }
@@ -175,8 +272,8 @@ export default {
     }
     h4 {
       text-align: center;
-      color: #9CA6AA;
-      font-size: .7rem;
+      color: #9ca6aa;
+      font-size: 0.7rem;
       font-weight: normal;
       padding: 9.7rem 0 8.3rem;
     }
@@ -185,8 +282,8 @@ export default {
     @extend %flexBetween;
     padding-top: 1.3rem;
     .page-number {
-      font-size: .7rem;
-      color: #99A1A6;
+      font-size: 0.7rem;
+      color: #99a1a6;
     }
     .wallet-page {
       padding-top: 0;
@@ -197,17 +294,17 @@ export default {
 @media (max-width: 767px) {
   .invitation-list {
     padding: 1.4rem 15px 0;
-    header {
-      flex-direction: column;
-      align-items: flex-start;
-      .list-title {
-        padding-bottom: .4rem;
-      }
-    }
+    // header {
+    //   flex-direction: column;
+    //   align-items: flex-start;
+    //   .list-title {
+    //     padding-bottom: .4rem;
+    //   }
+    // }
     .invitation-body ul li {
       span {
         word-wrap: break-word;
-        padding-right: .8rem;
+        padding-right: 0.8rem;
         display: inline-block;
         &:first-child {
           width: 8rem;
@@ -225,7 +322,33 @@ export default {
           word-break: normal;
         }
       }
-    } 
+    }
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      .list-title {
+        padding-bottom: .5rem;
+      }
+      .head-list {
+        flex-direction: column;
+        width: 100%;
+        li {
+          width: 100%;
+          padding: .7rem 0;
+          justify-content: space-between;
+          border-bottom: 1px solid #E6E6E6;
+          color: #F5A623;
+          section {
+            span:first-child {
+              display: none;
+            }
+          }
+          &:nth-child(3),&:nth-child(4){
+            color: #0B7FE6;
+          }
+        }
+      }
+    }
   }
 }
 </style>

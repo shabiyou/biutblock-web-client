@@ -61,7 +61,7 @@ export default {
       walletMoneyN: "0",//钱包SEN币
 
       availableAmount: "0", //可用余额
-      freezeAmount: "0", //冻结金额
+      freezeAmount: 0, //冻结金额
       inviteCode: '',//邀请码
 
       infoPages: 1, //默认显示登陆页面
@@ -100,7 +100,7 @@ export default {
       let address = e.address.replace("0x", "")
       //查询SEC余额
       this.getWalletBalance(address, 'biut').then(res => {
-        this.walletMoneyC = this.scientificNotationToString(res)
+        this.walletMoneyC = String(this.scientificNotationToString(res))
         let poolAddress = []
         for (let pool of e.mortgagePoolAddress) {
           poolAddress.push(pool.replace('0x', ''))
@@ -126,7 +126,7 @@ export default {
             }
           }
           this.availableAmount = this.scientificNotationToString(res)
-          this.walletMoneyC = this.scientificNotationToString(Number(res) + freezeAmount)
+          this.walletMoneyC = String(this.scientificNotationToString(Number(res) + freezeAmount))
           this.freezeAmount = this.scientificNotationToString(freezeAmount)
         })
       })

@@ -309,7 +309,7 @@ nav {
         line-height: 2.5rem;
         background: #42535b;
         box-sizing: border-box;
-        @include border($c: #b9c4c2, $d: top);
+        @include border($c: rgba(185, 196, 194,.9), $d: top);
         .languageList {
           width: 100%;
           top: 2.4rem;

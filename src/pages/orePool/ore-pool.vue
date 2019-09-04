@@ -444,6 +444,7 @@ export default {
             for (let detail of body.rewards) {
               details.push({
                 id: 0,
+                maskAddress: detail.address,
                 maskTime: detail.insertAt,
                 maskAmount: detail.rewards
               })

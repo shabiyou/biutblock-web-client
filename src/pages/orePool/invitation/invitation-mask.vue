@@ -32,7 +32,7 @@
         <img src="../../../assets/images/closeMask.png" alt="" @click="close" />
       </header>
 
-      <p class="details-tit details-tit-top">
+      <!-- <p class="details-tit details-tit-top">
         {{ $t("invitation.inListTxt1") }}
       </p>
       <p class="details-txt">
@@ -44,14 +44,16 @@
       <p class="details-tit">{{ $t("invitation.inListTxt3") }}</p>
       <p class="details-txt">
         {{ getPointNum(maskReward) }}
-      </p>
+      </p> -->
 
       <ul>
         <li>
           <span>{{ $t("invitation.inMask2ListTxt1") }}</span>
           <span>{{ $t("invitation.inMask2ListTxt2") }}</span>
+          <span>{{ $t("invitation.inMask2ListTxt3") }}</span>
         </li>
         <li v-for="(item, index) in amountLists" :key="index">
+          <span>{{ item.maskAddress }}</span>
           <span>{{ item.maskTime.substring(0, 10) }}</span>
           <span>{{ getPointNum(item.maskAmount) }}</span>
         </li>
@@ -222,9 +224,12 @@ export default {
     }
   }
   .details-content {
-    max-width: 24.6rem;
-    min-height: 26.2rem;
-    padding: 1rem 1.2rem 1.2rem;
+    width: 36.5rem;
+    min-height: 23rem;
+    padding: 1rem 0 0 1.6rem;
+    .public-head {
+      padding-right: 1.6rem;
+    }
     .details-tit {
       color: #99a1a6;
       font-size: 0.7rem;
@@ -250,9 +255,9 @@ export default {
       }
     }
     ul {
-      margin: 0;
-      padding: 1.2rem 0 0;
-      height: 13.8rem;
+      margin: 1.2rem 0 0;
+      padding: 0 1.6rem 0 0;
+      height: 20.6rem;
       overflow: auto;
       &::-webkit-scrollbar { width: 2px; height: 2px;}
       &::-webkit-scrollbar-thumb { -webkit-box-shadow: inset 0 0 1px #00D6B2;background: #00D6B2;border-radius: 1px;}
@@ -267,9 +272,11 @@ export default {
         box-sizing: border-box;
         span {
           display: inline-block;
-          width: 50%;
+          width: 25%;
+          word-break: break-all;
           &:first-child {
             padding-left: 0.9rem;
+            width: 50%;
           }
         }
         &:first-child {
@@ -300,6 +307,15 @@ export default {
     }
     .details-content .details-txt span {
       margin: 0.2rem 0 0 0;
+    }
+    .details-content {
+      width: 17rem;
+      padding: 1rem 0 0 15px;
+      ul li {
+        span:nth-child(2) {
+          padding: 0 15px;
+        }
+      }
     }
   }
 }
