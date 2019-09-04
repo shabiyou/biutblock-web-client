@@ -71,7 +71,7 @@ export default {
     infoMoneyC: String,
     infoMoneyN: String,
     availableAmount: String,
-    freezeAmount: Number,
+    freezeAmount: String,
     inviteCode: String,
   },
   data() {
