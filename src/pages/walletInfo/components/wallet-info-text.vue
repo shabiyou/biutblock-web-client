@@ -7,8 +7,8 @@
         <p>{{ infoAddress }}</p>
       </li>
       <li>
-        <h4>{{ $t("walletInfo.walletPrivateKey") }}</h4>
-        <p>{{ infoKey }}</p>
+        <h4 class="look-key">{{ $t("walletInfo.walletPrivateKey") }} <img :src="infoKeyImg" @click="lookPriveKey"/></h4>
+        <p>{{ infoKeyTxt }}</p>
       </li>
       <li>
         <h4>{{ $t("walletInfo.walletMoney") }}</h4>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import passImg from '../../../assets/images/passImg.png'
+import passImgs from '../../../assets/images/passImgs.png'
 export default {
   name: 'walletInfoText',
   props: {
@@ -36,11 +38,25 @@ export default {
   },
   data() {
     return {
-
+      infoKeyTxt: '**************************************',
+      infoKeyImg: passImg,
+      infoKeyIdx: 1
     }
   },
   methods: {
-
+    lookPriveKey() {
+      let idx = this.infoKeyIdx
+      if (idx === 1) {
+        this.infoKeyImg = passImgs
+        this.infoKeyTxt = this.infoKey
+        this.infoKeyIdx = 2
+      } 
+      if (idx === 2) {
+        this.infoKeyImg = passImg
+        this.infoKeyTxt = '**************************************'
+        this.infoKeyIdx = 1
+      }
+    }
   }
 }
 </script>
@@ -66,6 +82,14 @@ export default {
         margin: 0;
         font-size: 1rem;
         font-weight: normal;
+      }
+      .look-key {
+        display: flex;
+        align-items: center;
+        img {
+          margin-left: 1rem;
+          cursor: pointer;
+        }
       }
       p {
         padding: 0.8rem 0 2.3rem;

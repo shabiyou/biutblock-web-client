@@ -3,6 +3,7 @@ const config = {
   url: 'https://scan.biut.io/rpctransfer/callrpc',
   //url_sen: 'http://test.biut.io/rpctransfer/callrpc-sen',  //测试网络
   url_sen: 'https://scan.biut.io/rpctransfer/callrpc-sen',
+
   url_mapping: 'https://scan.biut.io/mapping',
   passReg: /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{8,30}$/,
   priverKeyReg: /[0-9a-f]{64}$/,
