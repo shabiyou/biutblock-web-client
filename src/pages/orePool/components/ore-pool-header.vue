@@ -54,13 +54,13 @@ export default {
           id: 2,
           imgUrl: poolList3,
           tit: 'pool.poolIndexTxt3',
-          txt: (this.getPointNum(this.poolMortgage) || 0) + " BIUT"
+          txt: (this.getPointNum(this.scientificNotationToString(this.poolMortgage)) || 0) + " BIUT"
         },
         {
           id: 3,
           imgUrl: poolList4,
           tit: 'pool.poolIndexTxt4',
-          txt: (this.getPointNum(this.walletBalance) || 0) + " BIUT"
+          txt: (this.getPointNum(this.scientificNotationToString(this.walletBalance)) || 0) + " BIUT"
         }
       ]
     }
