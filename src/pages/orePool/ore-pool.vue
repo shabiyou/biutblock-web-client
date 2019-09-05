@@ -357,7 +357,8 @@ export default {
     onUpdatePage(ipt, poolAddress) {
       this.addPoolList = []
       this.maskPage = 3
-      this.mortgageValue = (Number(this.mortgageValue) + Number(ipt)).toString()
+      this.mortgageValue = String(this.cal.accAdd(this.mortgageValue, ipt))
+
       this.joinMaskPage = 1
       if (poolAddress !== '') {
         this.poolAddress.push(poolAddress)
@@ -387,7 +388,7 @@ export default {
           if (timeLock && timeLock.hasOwnProperty(this.address) && timeLock[this.address].hasOwnProperty(this.address)) {
             let benifitAddress = timeLock[this.address][this.address]
             for (let i = 0; i < benifitAddress.length; i++) {
-              freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
+              freezeMoney = this.cal.accAdd(freezeMoney, benifitAddress[i].lockAmount)
             }
           }
           /**计算加入矿池的矿池总收入 */
