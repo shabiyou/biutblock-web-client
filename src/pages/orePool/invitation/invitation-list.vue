@@ -185,7 +185,7 @@ export default {
               this.firstLevel = this.firstLevel + 1
               this.itemList.push({
                 id: '1',
-                invitationAddress: doc[i].address,
+                invitationAddress: doc[i].addressFrom,
                 invitationTime: time.substring(0, 20),
                 invitationMoney: (doc[i].rewards || 0)
               })

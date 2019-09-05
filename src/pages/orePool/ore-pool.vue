@@ -431,7 +431,7 @@ export default {
               if (detail.type === 'level1') {
                 details.push({
                   id: 0,
-                  maskAddress: detail.address,
+                  maskAddress: detail.addressFrom,
                   maskTime: WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
                   maskAmount: detail.rewards
                 })
