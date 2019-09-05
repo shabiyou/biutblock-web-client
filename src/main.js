@@ -203,7 +203,7 @@ Vue.prototype.ismobile = function () {
 //截取小数点后八位
 Vue.prototype.getPointNum = function (num) {
   let str = String(num);
-  return str.split('.').map((item, idx) => idx === 0 ? item.replace(/\B(?=(\d{3})+$)/g, ',') : item.substring(0, 8)).join('.')
+  return str.split('.').map((item, idx) => idx === 0 ? item.replace(/\B(?=(\d{3})+$)/g, ',') : item.substring(0, 8)).join('.').replace(/(?:(\.\d*[1-9])0+|\.0*)$/, '$1')
 }
 
 //下载文件方法
