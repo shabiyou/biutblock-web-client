@@ -36,7 +36,7 @@
           :key="index"
           v-show="!invitationNull"
         >
-          <span>{{ "0x" + item.invitationAddress }}</span>
+          <span>{{ item.invitationAddress === '' ? '' : '0x'+ item.invitationAddress }}</span>
           <span>{{ item.invitationTime }}</span>
           <span>{{ getPointNum(item.invitationMoney) }}</span>
           <span @click="lookRules(item)">{{
@@ -185,7 +185,7 @@ export default {
               this.firstLevel = this.firstLevel + 1
               this.itemList.push({
                 id: '1',
-                invitationAddress: doc[i].addressFrom,
+                invitationAddress: doc[i].addressFrom || '',
                 invitationTime: time.substring(0, 20),
                 invitationMoney: (doc[i].rewards || 0)
               })

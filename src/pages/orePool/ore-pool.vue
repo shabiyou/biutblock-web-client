@@ -259,7 +259,7 @@ export default {
       this.invitationCode = e.ownInvitationCode
       this.mortgageValue = e.mortgageValue
       if (this.ismobile()) {
-        this.addressShort = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
+        this.addressShort = e.address.replace('0x', '').replace(/(.{6}).+(.{6})/, '$1...$2')
       } else {
         this.addressShort = e.address.replace('0x', '')
       }
@@ -431,7 +431,7 @@ export default {
               if (detail.type === 'level1') {
                 details.push({
                   id: 0,
-                  maskAddress: detail.addressFrom,
+                  maskAddress: detail.addressFrom ? `0x${detail.addressFrom}` : '',
                   maskTime: WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
                   maskAmount: detail.rewards
                 })
