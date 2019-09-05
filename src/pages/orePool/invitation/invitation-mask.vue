@@ -54,7 +54,7 @@
         </li>
         <li v-for="(item, index) in amountLists" :key="index">
           <span>{{ item.maskAddress }}</span>
-          <span>{{ item.maskTime.substring(0, 10) }}</span>
+          <span>{{ item.maskTime.substring(0, 20) }}</span>
           <span>{{ getPointNum(item.maskAmount) }}</span>
         </li>
       </ul>

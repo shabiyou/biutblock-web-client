@@ -90,8 +90,6 @@ export default {
         dataCenterHandler.findOutWallet({
           address: extractAddress
         }, (parent) => {
-          console.log(parent);
-          
           if (parent === undefined || parent === "") {
             this.transparentShow = true
             this.systemErrorTxt = 'public.systemError'

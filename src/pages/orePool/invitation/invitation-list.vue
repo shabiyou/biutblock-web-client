@@ -9,7 +9,11 @@
         <img src="../../../assets/images/search.png" alt="" />
       </section> -->
       <ul class="head-list">
-        <li v-for="(item, index) in headList" :key="index" :class="enList ? 'en-hand-list' : ''">
+        <li
+          v-for="(item, index) in headList"
+          :key="index"
+          :class="enList ? 'en-hand-list' : ''"
+        >
           <section>
             <span></span>
             <span>{{ $t(item.tit) }}：</span>
@@ -28,12 +32,12 @@
           <span></span>
         </li>
         <li
-          v-for="(item, index) in itemLists"
+          v-for="(item, index) in itemList"
           :key="index"
-          v-show="itemLists.length > 0"
+          v-show="!invitationNull"
         >
           <span>{{ "0x" + item.invitationAddress }}</span>
-          <span>{{ item.invitationTime.substring(0, 20) }}</span>
+          <span>{{ item.invitationTime }}</span>
           <span>{{ getPointNum(item.invitationMoney) }}</span>
           <span @click="lookRules(item)">{{
             $t("invitation.inListTxt4")
@@ -41,7 +45,7 @@
         </li>
       </ul>
 
-      <h4 v-show="itemLists.length === 0">
+      <h4 v-show="invitationNull">
         {{ $t(searchContent) }}
       </h4>
     </main>
@@ -57,12 +61,12 @@
     <!-- <wallet-page
         ref="pageList"
         class="page-list"
-        :total="itemLists.length"
+        :total="itemList.length"
         :totalPage=2
         @next="nextPage"
         @prev="prevPage"
         @goPage="goPage"
-        v-show="itemLists.length > 10" /> -->
+        v-show="itemList.length > 10" /> -->
     <!-- </footer> -->
     <wallet-transparent :txt="transparentTxt" v-show="transparentShow" />
   </section>
@@ -71,6 +75,9 @@
 <script>
 import walletPage from '../../../components/wallet-page'
 import walletTransparent from '../../../components/wallet-transparent'
+const dataCenterHandler = require('../../../lib/DataCenterHandler')
+import WalletsHandler from '../../../lib/WalletsHandler'
+const moment = require('moment-timezone')
 export default {
   name: '',
   components: {
@@ -78,7 +85,7 @@ export default {
     walletTransparent
   },
   props: {
-    invitationList: Array
+    address: String
   },
   data() {
     return {
@@ -88,22 +95,16 @@ export default {
       searchTotal: 1,
       searchRes: false,
       transparentShow: false,
-      transparentTxt: 'invitation.inMask2ListNull'
-      // itemList: [
-      //   {
-      //     id: 0,
-      //     invitationAddress: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
-      //     invitationTime: '2019/07/21 13:50:46 GMT+8',
-      //     invitationMoney: '1234.12345678',
-      //   }
-      // ]
+      transparentTxt: 'invitation.inMask2ListNull',
+      itemList: [],
+      invitationNull: false,
+      firstLevel: 0,
+      firstLevelAmount: 0,
+      secondLevel: 0,
+      secondLevelAmount: 0,
     }
   },
   computed: {
-    itemLists() {
-      return this.invitationList
-    },
-
     enList() {
       if (this.$i18n.locale == "zh") {
         return true
@@ -118,25 +119,28 @@ export default {
         {
           id: '1',
           tit: 'invitation.hiListHeadTxt1',
-          txt: '456'
+          txt: this.firstLevel
         },
         {
           id: '2',
           tit: 'invitation.hiListHeadTxt2',
-          txt: '123456789' + 'BIUT' //只保留 9位数字
+          txt: this.firstLevelAmount + 'BIUT' //只保留 9位数字
         },
         {
           id: '3',
           tit: 'invitation.hiListHeadTxt3',
-          txt: '456'
+          txt: this.secondLevel
         },
         {
           id: '4',
           tit: 'invitation.hiListHeadTxt4',
-          txt: '123456789' + 'BIUT' //只保留 9位数字
+          txt: this.secondLevelAmount + 'BIUT' //只保留 9位数字
         }
       ]
     }
+  },
+  created() {
+    this.getInvitationList()
   },
   methods: {
     nextPage() {
@@ -158,7 +162,6 @@ export default {
     },
 
     lookRules(item) {
-      console.log()
       if (item.invitationMoney > 0) {
         this.$emit('look', 2, item)
       } else {
@@ -167,6 +170,34 @@ export default {
           this.transparentShow = false
         }, 3000)
       }
+    },
+
+    getInvitationList() {
+      dataCenterHandler.getInvitationDetails({ address: this.address }, (docs) => {
+        let doc = docs.rewards
+        if (docs.status && doc.length > 0) {
+          this.invitationNull = false
+          for (var i = 0; i < doc.length; i++) {
+
+            let time = WalletsHandler.formatDate(moment(doc[i].insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
+            if (doc[i].rewards !== '0' && doc[i].type === 'level1') {
+              this.firstLevelAmount = this.cal.accAdd(this.firstLevelAmount, doc[i].rewards)
+              this.firstLevel = this.firstLevel + 1
+              this.itemList.push({
+                id: '1',
+                invitationAddress: doc[i].address,
+                invitationTime: time.substring(0, 20),
+                invitationMoney: (doc[i].rewards || 0)
+              })
+            } else if (doc[i].rewards !== '0' && doc[i].type === 'level2') {
+              this.secondLevel = this.secondLevel + 1
+              this.secondLevelAmount = this.cal.accAdd(this.secondLevelAmount, doc[i].rewards)
+            }
+          }
+        } else {
+          this.invitationNull = true
+        }
+      })
     }
   },
 }
@@ -327,24 +358,25 @@ export default {
       flex-direction: column;
       align-items: flex-start;
       .list-title {
-        padding-bottom: .5rem;
+        padding-bottom: 0.5rem;
       }
       .head-list {
         flex-direction: column;
         width: 100%;
         li {
           width: 100%;
-          padding: .7rem 0;
+          padding: 0.7rem 0;
           justify-content: space-between;
-          border-bottom: 1px solid #E6E6E6;
-          color: #F5A623;
+          border-bottom: 1px solid #e6e6e6;
+          color: #f5a623;
           section {
             span:first-child {
               display: none;
             }
           }
-          &:nth-child(3),&:nth-child(4){
-            color: #0B7FE6;
+          &:nth-child(3),
+          &:nth-child(4) {
+            color: #0b7fe6;
           }
         }
       }

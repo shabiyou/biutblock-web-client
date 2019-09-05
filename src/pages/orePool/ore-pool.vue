@@ -114,10 +114,7 @@
               @look="lookRules"
             />
 
-            <invitation-list
-              :invitationList="invitationList"
-              @look="lookRules"
-            />
+            <invitation-list :address="address" @look="lookRules" />
 
             <invitation-mask
               :maskPage="maskPage"
@@ -227,7 +224,7 @@ export default {
                   id: 0,
                   poolName: body.miningPool ? body.miningPool.poolName : '',
                   poolAddress: poolAddress,
-                  poolMoney: `${balance} BIUT`
+                  poolMoney: balance
                 })
               })
             })
@@ -290,21 +287,6 @@ export default {
       /**获取钱包余额 */
       this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
         this.walletBalance = Number(this.scientificNotationToString(balance))
-      })
-
-      dataCenterHandler.getRelatedMiners({
-        address: this.address
-      }, (docs) => {
-        for (let doc of docs) {
-          let time = WalletsHandler.formatDate(moment(doc.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
-          this.invitationList.push({
-            id: 0,
-            invitationAddress: `${doc.address}`,
-            invitationTime: `${time}`,
-            invitationMoney: `${doc.reward}`,
-            level: doc.level
-          })
-        }
       })
 
       dataCenterHandler.getMinerLevel({
@@ -446,12 +428,15 @@ export default {
         }, (body) => {
           if (body.status) {
             for (let detail of body.rewards) {
-              details.push({
-                id: 0,
-                maskAddress: detail.address,
-                maskTime: detail.insertAt,
-                maskAmount: detail.rewards
-              })
+              if (detail.type === 'level2') {
+                details.push({
+                  id: 0,
+                  maskAddress: detail.address,
+                  maskTime: WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+                  maskAmount: detail.rewards
+                })
+              }
+              
             }
             this.maskList = details
           }
