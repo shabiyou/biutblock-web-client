@@ -1,6 +1,6 @@
 const request = require('request')
 const dataCenterUrl = "http://scan.biut.io:3000/mining-pool/"
-
+const Promise = require('es6-promise').Promise
 const DataCenterHandler = {
   createWallet: function (params, callback) {
     request({
@@ -87,6 +87,20 @@ const DataCenterHandler = {
 			callback(body)
 		})
   },
+
+  getRelatedMinersPromise: function (params) {
+    return new Promise((resovle, reject) => {
+      request({
+        url: `${dataCenterUrl}getrelatedminers`,
+        method: 'POST',
+        body: params,
+        json: true
+      }, (err, res, body) => {
+        if (err) throw reject(err)
+        resovle(body)
+      })
+    })
+  },
   
   getMinerLevel: function (params, callback) {
 		request({
@@ -108,6 +122,20 @@ const DataCenterHandler = {
 		}, (err, res, body) => {
 			callback(body)
 		})
+  },
+
+  getInvitationDetailsPromise: function (params) {
+    return new Promise((resovle, reject) => {
+      request({
+        url: `${dataCenterUrl}getRewardsHistoryByAddress`,
+        method: 'POST',
+        body: params,
+        json: true
+      }, (err, res, body) => {
+        if (err) throw reject(err)
+        resovle(body)
+      })
+    })
   },
 
   joinPool: function (params, callback) {

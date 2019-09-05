@@ -292,20 +292,20 @@ export default {
         this.walletBalance = Number(this.scientificNotationToString(balance))
       })
 
-      dataCenterHandler.getRelatedMiners({
-        address: this.address
-      }, (docs) => {
-        for (let doc of docs) {
-          let time = WalletsHandler.formatDate(moment(doc.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
-          this.invitationList.push({
-            id: 0,
-            invitationAddress: `${doc.address}`,
-            invitationTime: `${time}`,
-            invitationMoney: `${doc.reward}`,
-            level: doc.level
-          })
-        }
-      })
+      // dataCenterHandler.getRelatedMiners({
+      //   address: this.address
+      // }, (docs) => {
+      //   for (let doc of docs) {
+      //     let time = WalletsHandler.formatDate(moment(doc.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
+      //     this.invitationList.push({
+      //       id: 0,
+      //       invitationAddress: `${doc.address}`,
+      //       invitationTime: `${time}`,
+      //       invitationMoney: `${doc.reward}`,
+      //       level: doc.level
+      //     })
+      //   }
+      // })
 
       dataCenterHandler.getMinerLevel({
         address: this.address
@@ -351,6 +351,7 @@ export default {
 
       /** 获取这个钱包对应加入矿池的信息 */
       this._getAllContractInfos(poolAddress)
+      this._getRelatedMiner()
       this._getNounce()
     },
 
@@ -372,6 +373,72 @@ export default {
       })
       this.getWalletBalance(this.address).then((balance) => {
         this.walletBalance = Number(this.scientificNotationToString(balance))
+      })
+    },
+
+    _getRelatedMiner () {
+      let params = {address: this.address}
+      Promise.all([dataCenterHandler.getRelatedMinersPromise(params), dataCenterHandler.getInvitationDetailsPromise(params)])
+      .then(infos => {
+        console.log(infos)
+        let allRelatedMiners = infos[0].filter(item => item.level === '1')
+        let alreadyPayedMiners = infos[1].rewards
+        let remove = false
+
+        for (let i = 0; i < alreadyPayedMiners.length; i++) {
+          let reward = alreadyPayedMiners[i].rewards || '0'
+          let level = 1
+          switch (alreadyPayedMiners[i].type) {
+            case 'level1':
+              level = 1
+              break
+            case 'level2':
+              level = 2
+              break
+            case 'level3':
+              level = 3
+              break
+            case 'level4':
+              level = 4
+              break
+            case 'pool':
+              level = 5 //矿池的等级
+              break
+          }
+          if (alreadyPayedMiners[i].type === 'level1') {
+            this.invitationList.push({
+              id: 0,
+              invitationAddress: alreadyPayedMiners[i].addressFrom ? `0x${alreadyPayedMiners[i].addressFrom}` : '',
+              invitationTime: WalletsHandler.formatDate(moment(alreadyPayedMiners[i].insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+              invitationMoney: `${reward}`,
+              level: 1
+            })
+          } else if (alreadyPayedMiners[i].rewards !== '0' && alreadyPayedMiners[i].type === 'level2') {
+            this.secondLevel = this.secondLevel + 1
+            this.secondLevelAmount = this.cal.accAdd(this.secondLevelAmount, alreadyPayedMiners[i].rewards)
+          }
+        }
+
+        for (let miner of allRelatedMiners) {
+          for (let payed of this.invitationList) {
+            let address = payed.invitationAddress.replace('0x', '')
+            if (address === miner.address) {
+              remove = true
+              break
+            }
+          }
+          if (!remove) {
+            this.invitationList.push({
+              id: 0,
+              invitationAddress: `${miner.address}`,
+              invitationTime: WalletsHandler.formatDate(moment(miner.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+              invitationMoney: `0`,
+              level: 1
+            })
+          } 
+        }
+      }).catch ((err) => {
+        console.log(err)
       })
     },
 
