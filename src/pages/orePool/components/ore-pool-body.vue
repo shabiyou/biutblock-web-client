@@ -19,9 +19,9 @@
           <span>{{ getPointNum(item.pooolMoney) }} BIUT</span>
           <span>{{ "0x" + item.poolAddress }}</span>
         </section>
-        <span class="list-btn" @click="mortgageMask(item)">{{
+        <button type="button" class="list-btn" @click="mortgageMask(item)">{{
           $t("pool.poolListBtn")
-        }}</span>
+        }}</button>
       </li>
     </ul>
 
@@ -156,9 +156,8 @@ export default {
         border-radius: 0.9rem;
         background: #0b7fe6;
         color: #fff;
-        cursor: pointer;
         font-size: 0.7rem;
-        @extend %flexCenter;
+        border: 0;
       }
       .list-null {
         width: 4.8rem;

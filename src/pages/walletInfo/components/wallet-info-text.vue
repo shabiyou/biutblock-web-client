@@ -7,8 +7,8 @@
         <p>{{ infoAddress }}</p>
       </li>
       <li>
-        <h4>{{ $t("walletInfo.walletPrivateKey") }}</h4>
-        <p>{{ infoKey }}</p>
+        <h4 class="look-key">{{ $t("walletInfo.walletPrivateKey") }} <img :src="infoKeyImg" @click="lookPriveKey"/></h4>
+        <p>{{ infoKeyTxt }}</p>
       </li>
       <li>
         <h4>{{ $t("walletInfo.walletMoney") }}</h4>
@@ -54,8 +54,11 @@
 
 <script>
 import Clipboard from 'clipboard'
+import passImg from '../../../assets/images/passImg.png'
+import passImgs from '../../../assets/images/passImgs.png'
 import shareMask from '../../../components/wallet-share'
 import walletTransparent from '../../../components/wallet-transparent'
+import { log } from 'util';
 export default {
   name: 'walletInfoText',
   components: {
@@ -75,7 +78,10 @@ export default {
     return {
       shareShow: false,
       transparentShow: false,
-      copySuccess: ''
+      copySuccess: '',
+      infoKeyTxt: '**************************************',
+      infoKeyImg: passImg,
+      infoKeyIdx: 1
     }
   },
   methods: {
@@ -96,6 +102,20 @@ export default {
         }, 3000)
         clipboard.destroy()
       })
+    },
+
+    lookPriveKey() {
+      let idx = this.infoKeyIdx
+      if (idx === 1) {
+        this.infoKeyImg = passImgs
+        this.infoKeyTxt = this.infoKey
+        this.infoKeyIdx = 2
+      } 
+      if (idx === 2) {
+        this.infoKeyImg = passImg
+        this.infoKeyTxt = '**************************************'
+        this.infoKeyIdx = 1
+      }
     },
 
     shareMask () {
@@ -127,6 +147,14 @@ export default {
         font-size: .7rem;
         color: #99A1A6;
         font-weight: normal;
+      }
+      .look-key {
+        display: flex;
+        align-items: center;
+        img {
+          margin-left: 1rem;
+          cursor: pointer;
+        }
       }
       p {
         padding-top: 0.8rem;

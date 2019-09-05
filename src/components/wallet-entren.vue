@@ -224,7 +224,6 @@ export default {
         this.$axios.get('' + this.KeyStoreUrl + '').then((response) => {
           let jsonstr = response.data
           let keyData = CryptoJS.AES.decrypt(jsonstr.toString(), passVal).toString(CryptoJS.enc.Utf8)
-          console.log(response)
           if (response.status == 200) {
             let walletData = keyData.split(':{')
             let arrData1 = '{' + walletData[1].replace("}}", "") + '}'

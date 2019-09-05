@@ -120,7 +120,7 @@ export default {
     poolIndexTit2: '已加入矿池',
     poolIndexTit3: '收益记录',
 
-    poolIndexTxt1: '上周收益',
+    poolIndexTxt1: '最近收益',
     poolIndexTxt2: '总收益',
     poolIndexTxt3: '加入矿池冻结资产',
     poolIndexTxt4: '账户可用余额',
@@ -145,7 +145,7 @@ export default {
     inListTxt1: '地址',
     inListTxt2: '邀请时间',
     inListTxt3: '已获得奖励（BIUT）',
-    inListTxt4: '查看明细',
+    inListTxt4: '查看',
     inListNull: '无邀请记录',
     inListSearchNull: '无搜索内容',
 
@@ -153,8 +153,11 @@ export default {
     inMaskListTxt1: '级别',
     inMaskListTxt2: '人数',
 
-    inMask2ListTxt1: '时间',
-    inMask2ListTxt2: '奖励 (BUT)',
+    inMask2ListTxt1: '二级钱包地址',
+    inMask2ListTxt2: '时间',
+    inMask2ListTxt3: '奖励 (BUT)',
+
+    inMask2ListNull: '暂无记录',
 
     level1: '铜牌合伙人',
     level2: '银牌合伙人',
@@ -163,7 +166,12 @@ export default {
     level4Txt: '64以上',
 
     invitationTipsTxt1: '在挖矿页面锁仓BIUT，即可解锁邀请码哦！',
-    invitationTipsTxt2: '在挖矿页面锁仓一万个BIUT或者加入矿池，即可进行一键分享哦！'
+    invitationTipsTxt2: '在挖矿页面锁仓一万个BIUT或者加入矿池，即可进行一键分享哦！',
+    
+    hiListHeadTxt1: '一级人数',
+    hiListHeadTxt2: '一级奖励',
+    hiListHeadTxt3: '二级人数',
+    hiListHeadTxt4: '二级奖励',
   },
   mask: {
     tips: "操作成功，点击下方链接查看结果：",

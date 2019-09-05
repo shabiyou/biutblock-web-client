@@ -2,65 +2,90 @@
   <section class="invitation-list">
     <header>
       <span class="list-title">
-        {{ $t('invitation.inListTit') }}
+        {{ $t("invitation.inListTit") }}
       </span>
       <!-- <section class="ipt-list">
         <input type="text" v-model="searchIpt" :placeholder="$t('invitation.inListSearch')" />
         <img src="../../../assets/images/search.png" alt="" />
       </section> -->
+      <ul class="head-list">
+        <li
+          v-for="(item, index) in headList"
+          :key="index"
+          :class="enList ? 'en-hand-list' : ''"
+        >
+          <section>
+            <span></span>
+            <span>{{ $t(item.tit) }}：</span>
+          </section>
+          <span class="head-list-cnt">{{ item.txt }}</span>
+        </li>
+      </ul>
     </header>
 
     <main class="invitation-body">
       <ul>
         <li>
-          <span>{{ $t('invitation.inListTxt1') }}</span>
-          <span>{{ $t('invitation.inListTxt2') }}</span>
-          <span>{{ $t('invitation.inListTxt3') }}</span>
+          <span>{{ $t("invitation.inListTxt1") }}</span>
+          <span>{{ $t("invitation.inListTxt2") }}</span>
+          <span>{{ $t("invitation.inListTxt3") }}</span>
           <span></span>
         </li>
-        <li v-for="(item, index) in itemLists" :key="index" v-show="itemLists.length > 0">
-          <span>{{ '0x' + item.invitationAddress}}</span>
-          <span>{{ item.invitationTime.substring(0, 20) }}</span>
+        <li
+          v-for="(item, index) in itemList"
+          :key="index"
+          v-show="!invitationNull"
+        >
+          <span>{{ item.invitationAddress === '' ? '' : '0x'+ item.invitationAddress }}</span>
+          <span>{{ item.invitationTime }}</span>
           <span>{{ getPointNum(item.invitationMoney) }}</span>
-          <span @click="lookRules(item)">{{ $t('invitation.inListTxt4') }}</span>
+          <span @click="lookRules(item)">{{
+            $t("invitation.inListTxt4")
+          }}</span>
         </li>
       </ul>
 
-      <h4 v-show="itemLists.length === 0">
+      <h4 v-show="invitationNull">
         {{ $t(searchContent) }}
       </h4>
     </main>
 
     <!-- <footer> -->
-      <!-- <span class="page-number" v-show="!searchRes">
+    <!-- <span class="page-number" v-show="!searchRes">
         {{ $t('public.pageTotal') }} {{ total }} {{ $t('public.pageRecord') }}
       </span>
       <span class="page-number" v-show="searchRes">
         {{ $t('public.pageTotal') }} {{ searchTotal }} {{ $t('public.pageResults') }}
       </span> -->
-      <!-- 分页 -->
-      <!-- <wallet-page
+    <!-- 分页 -->
+    <!-- <wallet-page
         ref="pageList"
         class="page-list"
-        :total="itemLists.length"
+        :total="itemList.length"
         :totalPage=2
         @next="nextPage"
         @prev="prevPage"
         @goPage="goPage"
-        v-show="itemLists.length > 10" /> -->
+        v-show="itemList.length > 10" /> -->
     <!-- </footer> -->
+    <wallet-transparent :txt="transparentTxt" v-show="transparentShow" />
   </section>
 </template>
 
 <script>
 import walletPage from '../../../components/wallet-page'
+import walletTransparent from '../../../components/wallet-transparent'
+const dataCenterHandler = require('../../../lib/DataCenterHandler')
+import WalletsHandler from '../../../lib/WalletsHandler'
+const moment = require('moment-timezone')
 export default {
   name: '',
   components: {
-    walletPage
+    walletPage,
+    walletTransparent
   },
   props: {
-    invitationList: Array
+    address: String
   },
   data() {
     return {
@@ -68,32 +93,65 @@ export default {
       searchContent: 'invitation.inListNull', //invitation.inListNull 列表内容为空  invitation.inListSearchNull 搜索结果为空
       total: 10,
       searchTotal: 1,
-      searchRes: false
-      // itemList: [
-      //   {
-      //     id: 0,
-      //     invitationAddress: '0xa9ed4f5fdcee9a1d8c9cdf8a45afba73845a4630',
-      //     invitationTime: '2019/07/21 13:50:46 GMT+8',
-      //     invitationMoney: '1234.12345678',
-      //   }
-      // ]
+      searchRes: false,
+      transparentShow: false,
+      transparentTxt: 'invitation.inMask2ListNull',
+      itemList: [],
+      invitationNull: false,
+      firstLevel: 0,
+      firstLevelAmount: 0,
+      secondLevel: 0,
+      secondLevelAmount: 0,
     }
   },
   computed: {
-    itemLists() {
-      return this.invitationList
+    enList() {
+      if (this.$i18n.locale == "zh") {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    //头部数据
+    headList() {
+      return [
+        {
+          id: '1',
+          tit: 'invitation.hiListHeadTxt1',
+          txt: this.firstLevel
+        },
+        {
+          id: '2',
+          tit: 'invitation.hiListHeadTxt2',
+          txt: this.getPointNum(this.firstLevelAmount).substring(0, 9) + 'BIUT' //只保留 9位数字
+        },
+        {
+          id: '3',
+          tit: 'invitation.hiListHeadTxt3',
+          txt: this.secondLevel
+        },
+        {
+          id: '4',
+          tit: 'invitation.hiListHeadTxt4',
+          txt: this.getPointNum(this.secondLevelAmount).substring(0, 9)+ 'BIUT' //只保留 9位数字
+        }
+      ]
     }
   },
+  created() {
+    this._getRelatedMiner()
+  },
   methods: {
-    nextPage () {
+    nextPage() {
       alert("下一页")
     },
 
-    prevPage () {
+    prevPage() {
       alert("上一页")
     },
 
-    goPage (e) {
+    goPage(e) {
       if (e > this.itemList.length) {
         alert("请输入正确的页码")
         this.$refs.pageList.clearIpt()
@@ -103,9 +161,112 @@ export default {
       }
     },
 
-    lookRules (item) {
-      this.$emit('look', 2, item)
+    lookRules(item) {
+      if (item.invitationMoney > 0) {
+        this.$emit('look', 2, item)
+      } else {
+        this.transparentShow = true
+        setTimeout(() => {
+          this.transparentShow = false
+        }, 3000)
+      }
+    },
+
+    _getRelatedMiner () {
+      let params = {address: this.address}
+      Promise.all([dataCenterHandler.getRelatedMinersPromise(params), dataCenterHandler.getInvitationDetailsPromise(params)])
+      .then(infos => {
+        console.log(infos)
+        let allRelatedMiners = infos[0].filter(item => item.level === '1')
+        let alreadyPayedMiners = infos[1].rewards
+        let remove = false
+
+        for (let i = 0; i < alreadyPayedMiners.length; i++) {
+          let reward = alreadyPayedMiners[i].rewards || '0'
+          let level = 1
+          switch (alreadyPayedMiners[i].type) {
+            case 'level1':
+              level = 1
+              break
+            case 'level2':
+              level = 2
+              break
+            case 'level3':
+              level = 3
+              break
+            case 'level4':
+              level = 4
+              break
+            case 'pool':
+              level = 5 //矿池的等级
+              break
+          }
+          if (alreadyPayedMiners[i].type === 'level1') {
+            this.firstLevel = this.firstLevel + 1
+            this.firstLevelAmount = this.cal.accAdd(this.firstLevelAmount, alreadyPayedMiners[i].rewards)
+            this.itemList.push({
+              id: 0,
+              invitationAddress: alreadyPayedMiners[i].addressFrom ? `${alreadyPayedMiners[i].addressFrom}` : '',
+              invitationTime: WalletsHandler.formatDate(moment(alreadyPayedMiners[i].insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+              invitationMoney: `${reward}`,
+              level: 1
+            })
+          } else if (alreadyPayedMiners[i].rewards !== '0' && alreadyPayedMiners[i].type === 'level2') {
+            this.secondLevel = this.secondLevel + 1
+            this.secondLevelAmount = this.cal.accAdd(this.secondLevelAmount, alreadyPayedMiners[i].rewards)
+          }
+        }
+
+        for (let miner of allRelatedMiners) {
+          for (let payed of this.itemList) {
+            let address = payed.invitationAddress.replace('0x', '')
+            if (address === miner.address) {
+              remove = true
+              break
+            }
+          }
+          if (!remove) {
+            this.itemList.push({
+              id: 0,
+              invitationAddress: `${miner.address}`,
+              invitationTime: WalletsHandler.formatDate(moment(miner.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+              invitationMoney: `0`,
+              level: 1
+            })
+          } 
+        }
+      }).catch ((err) => {
+        console.log(err)
+      })
     }
+
+    // getInvitationList() {
+    //   dataCenterHandler.getInvitationDetails({ address: this.address }, (docs) => {
+    //     let doc = docs.rewards
+    //     if (docs.status && doc.length > 0) {
+    //       this.invitationNull = false
+    //       for (var i = 0; i < doc.length; i++) {
+
+    //         let time = WalletsHandler.formatDate(moment(doc[i].insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
+    //         if (doc[i].rewards !== '0' && doc[i].type === 'level1') {
+    //           this.firstLevelAmount = this.cal.accAdd(this.firstLevelAmount, doc[i].rewards)
+    //           this.firstLevel = this.firstLevel + 1
+    //           this.itemList.push({
+    //             id: '1',
+    //             invitationAddress: doc[i].addressFrom || '',
+    //             invitationTime: time.substring(0, 20),
+    //             invitationMoney: (doc[i].rewards || 0)
+    //           })
+    //         } else if (doc[i].rewards !== '0' && doc[i].type === 'level2') {
+    //           this.secondLevel = this.secondLevel + 1
+    //           this.secondLevelAmount = this.cal.accAdd(this.secondLevelAmount, doc[i].rewards)
+    //         }
+    //       }
+    //     } else {
+    //       this.invitationNull = true
+    //     }
+    //   })
+    // }
   },
 }
 </script>
@@ -117,6 +278,41 @@ export default {
   header {
     @extend %flexBetween;
     padding-bottom: 1.1rem;
+    .head-list {
+      @extend %flex;
+      padding: 0;
+      margin: 0;
+      li {
+        @extend %flex;
+        padding-left: 1.8rem;
+        color: #42535b;
+        font-family: Lato-Bold;
+        font-size: 0.6rem;
+        section {
+          color: #6d7880;
+          span:first-child {
+            width: 0.3rem;
+            height: 0.3rem;
+            background: #388ed9;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.2rem;
+          }
+        }
+        &:first-child {
+          padding-left: 0;
+        }
+        &:first-child,
+        &:nth-child(2) {
+          section span:first-child {
+            background: #f5a623;
+          }
+        }
+      }
+      .en-hand-list {
+        font-size: 0.7rem;
+      }
+    }
     .list-title {
       color: #2e3a40;
       font-size: 1.2rem;
@@ -167,7 +363,7 @@ export default {
           &:nth-child(4) {
             width: 8%;
             text-align: right;
-            color: #29D893;
+            color: #29d893;
             cursor: pointer;
           }
         }
@@ -175,8 +371,8 @@ export default {
     }
     h4 {
       text-align: center;
-      color: #9CA6AA;
-      font-size: .7rem;
+      color: #9ca6aa;
+      font-size: 0.7rem;
       font-weight: normal;
       padding: 9.7rem 0 8.3rem;
     }
@@ -185,8 +381,8 @@ export default {
     @extend %flexBetween;
     padding-top: 1.3rem;
     .page-number {
-      font-size: .7rem;
-      color: #99A1A6;
+      font-size: 0.7rem;
+      color: #99a1a6;
     }
     .wallet-page {
       padding-top: 0;
@@ -197,17 +393,17 @@ export default {
 @media (max-width: 767px) {
   .invitation-list {
     padding: 1.4rem 15px 0;
-    header {
-      flex-direction: column;
-      align-items: flex-start;
-      .list-title {
-        padding-bottom: .4rem;
-      }
-    }
+    // header {
+    //   flex-direction: column;
+    //   align-items: flex-start;
+    //   .list-title {
+    //     padding-bottom: .4rem;
+    //   }
+    // }
     .invitation-body ul li {
       span {
         word-wrap: break-word;
-        padding-right: .8rem;
+        padding-right: 0.8rem;
         display: inline-block;
         &:first-child {
           width: 8rem;
@@ -225,7 +421,34 @@ export default {
           word-break: normal;
         }
       }
-    } 
+    }
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      .list-title {
+        padding-bottom: 0.5rem;
+      }
+      .head-list {
+        flex-direction: column;
+        width: 100%;
+        li {
+          width: 100%;
+          padding: 0.7rem 0;
+          justify-content: space-between;
+          border-bottom: 1px solid #e6e6e6;
+          color: #f5a623;
+          section {
+            span:first-child {
+              display: none;
+            }
+          }
+          &:nth-child(3),
+          &:nth-child(4) {
+            color: #0b7fe6;
+          }
+        }
+      }
+    }
   }
 }
 </style>

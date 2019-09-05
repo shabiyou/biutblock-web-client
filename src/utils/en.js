@@ -120,7 +120,7 @@ export default {
     poolIndexTit2: 'Joined Mining Pool',
     poolIndexTit3: 'Profit Record',
 
-    poolIndexTxt1: "Last week’s profits",
+    poolIndexTxt1: "Recent Earnings",
     poolIndexTxt2: 'Total Profits',
     poolIndexTxt3: 'Frozen Assets In Mining Pool',
     poolIndexTxt4: 'Available Balance',
@@ -145,7 +145,7 @@ export default {
     inListTxt1: 'Address',
     inListTxt2: 'Invitation time',
     inListTxt3: 'Total reward (BIUT)',
-    inListTxt4: 'View Details',
+    inListTxt4: 'Overview',
     inListNull: 'No Invitation Record',
     inListSearchNull: 'No search results yet',
 
@@ -153,8 +153,11 @@ export default {
     inMaskListTxt1: 'Level',
     inMaskListTxt2: 'Number of invitee',
 
-    inMask2ListTxt1: 'Time',
-    inMask2ListTxt2: 'Reward (BIUT)',
+    inMask2ListTxt1: 'LV2 Address',
+    inMask2ListTxt2: 'Time',
+    inMask2ListTxt3: 'Total Reward (BIUT)',
+
+    inMask2ListNull: 'No records',
 
     level1: 'Bronze partner',
     level2: 'Silver partner',
@@ -163,7 +166,12 @@ export default {
     level4Txt: 'More than 64',
 
     invitationTipsTxt1: 'Lock the BIUT on the mining page to unlock the invitation code!',
-    invitationTipsTxt2: "Lock 10,000 BIUT on the mining page or join the mining pool to get your invitation link."
+    invitationTipsTxt2: "Lock 10,000 BIUT on the mining page or join the mining pool to get your invitation link.",
+
+    hiListHeadTxt1: 'LV 1 Invitee',
+    hiListHeadTxt2: 'Referral Bonus',
+    hiListHeadTxt3: 'LV 2 Invitee',
+    hiListHeadTxt4: 'Referral Bonus',
   },
   mask: {
     tips: "Operation success, click the URL below to view the results：",

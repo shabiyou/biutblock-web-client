@@ -100,7 +100,7 @@ export default {
       let address = e.address.replace("0x", "")
       //查询SEC余额
       this.getWalletBalance(address, 'biut').then(res => {
-        this.walletMoneyC = this.scientificNotationToString(res)
+        this.walletMoneyC = String(this.scientificNotationToString(res))
         let poolAddress = []
         for (let pool of e.mortgagePoolAddress) {
           poolAddress.push(pool.replace('0x', ''))
@@ -109,7 +109,7 @@ export default {
           poolAddress.push(pool.replace('0x', ''))
         }
         this.getContractInfoSync(poolAddress).then((infos) => {
-          let freezeAmount = 0
+          let freezeAmount = "0"
           let timeLocks = []
           let availableAmount = res
           for (let i = 1; i < infos.length; i++) {
@@ -121,19 +121,19 @@ export default {
             if (address in timelock && address in timelock[address]) {
               let benifits = timelock[address][address]
               for (let benifit of benifits) {
-                freezeAmount = freezeAmount + Number(benifit.lockAmount)
+                freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
               }
             }
           }
-          this.availableAmount = this.scientificNotationToString(res)
-          this.walletMoneyC = this.scientificNotationToString(Number(res) + freezeAmount)
-          this.freezeAmount = this.scientificNotationToString(freezeAmount)
+          this.availableAmount = String(this.scientificNotationToString(res))
+          this.walletMoneyC = String(this.scientificNotationToString(this.cal.accAdd(res, freezeAmount)))
+          this.freezeAmount = String(this.scientificNotationToString(freezeAmount))
         })
       })
 
       //查询SEN余额
       this.getWalletBalance(address, 'biu').then(res => {
-        this.walletMoneyN = this.scientificNotationToString(res)
+        this.walletMoneyN = String(this.scientificNotationToString(res))
       })
     },
   },

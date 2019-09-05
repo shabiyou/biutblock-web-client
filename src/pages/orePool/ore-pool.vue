@@ -109,15 +109,12 @@
             <invitation-header
               :invitationCode="invitationCode"
               :progress="invitatedAmount"
-              :invitationShow="poolAddress.length > 2"
+              :invitationShow="poolTimeLock"
               :minerType="minerLevel"
               @look="lookRules"
             />
 
-            <invitation-list
-              :invitationList="invitationList"
-              @look="lookRules"
-            />
+            <invitation-list :address="address" @look="lookRules" />
 
             <invitation-mask
               :maskPage="maskPage"
@@ -227,7 +224,7 @@ export default {
                   id: 0,
                   poolName: body.miningPool ? body.miningPool.poolName : '',
                   poolAddress: poolAddress,
-                  poolMoney: `${balance} BIUT`
+                  poolMoney: balance
                 })
               })
             })
@@ -262,9 +259,9 @@ export default {
       this.invitationCode = e.ownInvitationCode
       this.mortgageValue = e.mortgageValue
       if (this.ismobile()) {
-        this.addressShort = e.address.replace(/(.{6}).+(.{6})/, '$1...$2')
+        this.addressShort = e.address.replace('0x', '').replace(/(.{6}).+(.{6})/, '$1...$2')
       } else {
-        this.addressShort = e.address
+        this.addressShort = e.address.replace('0x', '')
       }
       this.privateKey = e.privateKey
       this.loginStatus = false
@@ -351,14 +348,15 @@ export default {
 
       /** 获取这个钱包对应加入矿池的信息 */
       this._getAllContractInfos(poolAddress)
-      this._getRelatedMiner()
+      // this._getRelatedMiner()
       this._getNounce()
     },
 
     onUpdatePage(ipt, poolAddress) {
       this.addPoolList = []
       this.maskPage = 3
-      this.mortgageValue = (Number(this.mortgageValue) + Number(ipt)).toString()
+      this.mortgageValue = String(this.cal.accAdd(this.mortgageValue, ipt))
+
       this.joinMaskPage = 1
       if (poolAddress !== '') {
         this.poolAddress.push(poolAddress)
@@ -446,12 +444,15 @@ export default {
       let freezeMoney = 0
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let i = 1; i < infos.length; i++) {
+          if (Object.keys(infos[i]).length === 0) {
+            continue
+          }
           /**计算自己在矿池中抵押了多少钱 */
           let timeLock = infos[i].timeLock
           if (timeLock && timeLock.hasOwnProperty(this.address) && timeLock[this.address].hasOwnProperty(this.address)) {
             let benifitAddress = timeLock[this.address][this.address]
             for (let i = 0; i < benifitAddress.length; i++) {
-              freezeMoney = freezeMoney + Number(benifitAddress[i].lockAmount)
+              freezeMoney = this.cal.accAdd(freezeMoney, benifitAddress[i].lockAmount)
             }
           }
           /**计算加入矿池的矿池总收入 */
@@ -509,17 +510,21 @@ export default {
         }, (body) => {
           if (body.status) {
             for (let detail of body.rewards) {
-              details.push({
-                id: 0,
-                maskTime: detail.insertAt,
-                maskAmount: detail.rewards
-              })
+              if (detail.type === 'level1') {
+                details.push({
+                  id: 0,
+                  maskAddress: detail.addressFrom ? `0x${detail.addressFrom}` : '',
+                  maskTime: WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+                  maskAmount: detail.rewards
+                })
+              }
+              
             }
             this.maskList = details
           }
         })
       }
-      this.maskLevel = item.level
+      this.maskLevel = item.level.toString()
       this.maskAddress = item.invitationAddress
       this.maskReward = item.invitationMoney
       this.maskPage = page

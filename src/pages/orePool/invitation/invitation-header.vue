@@ -7,20 +7,20 @@
         <figure>
           <figcaption>
             {{ $t('walletInfo.myCodeTxt') }}：
-            <span id="invitationCode" v-show="invitationShow">{{ invitationCode }}</span>
-            <span v-show="!invitationShow">--</span>
+            <span id="invitationCode" v-show="invitationShow > 0">{{ invitationCode }}</span>
+            <span v-show="invitationShow === 0">--</span>
           </figcaption>
           <img
             src="../../../assets/images/copy.png"
             alt=""
-            v-show="invitationShow"
+            v-show="invitationShow > 0"
             @click="copyCode"
             data-clipboard-target="#invitationCode"
             class="copyButton"
           />
-          <img src="../../../assets/images/exclamationImg.png" v-show="!invitationShow" alt="" @mouseover="showInvitation1" @mouseout="showInvitation2"/>
+          <img src="../../../assets/images/exclamationImg.png" v-show="invitationShow === 0" alt="" @mouseover="showInvitation1" @mouseout="showInvitation2"/>
 
-          <button type="button" class="shar-btn" @click="shareShow = true" v-show="invitationShow">
+          <button type="button" class="shar-btn" @click="shareShow = true" v-show="invitationShow > 0">
             {{ $t('walletInfo.shareBtn') }}
           </button>
 
@@ -35,12 +35,12 @@
 
       <section class="header-img">
         <figure>
-          <img src="../../../assets/images/levels1.png" alt="" />
+          <img :src="levelImg" alt="" />
           <figcaption>
             <p>{{ $t(partner) }}</p>
             <!-- <p>{{ $t('invitation.medal') }}</p> -->
             <section class="progress-list clearfix">
-              <el-progress :percentage="Number(progress)" color="#29D893" />
+              <el-progress :percentage="progressTxt" color="#29D893" />
               <span>{{ progress }} / {{ levelNumber }}</span>
             </section>
           </figcaption>
@@ -63,7 +63,10 @@
 
 <script>
 import Clipboard from 'clipboard'
-import wechat from '../../../assets/images/levels1.png'
+import level1 from '../../../assets/images/levels1.png'
+import level2 from '../../../assets/images/levels2.png'
+import level3 from '../../../assets/images/levels3.png'
+import level4 from '../../../assets/images/levels4.png'
 import shareMask from '../../../components/wallet-share'
 import walletTransparent from '../../../components/wallet-transparent'
 export default {
@@ -72,7 +75,7 @@ export default {
     progress: Number,
     invitationCode: String,
     minerType: String,
-    invitationShow: Boolean
+    invitationShow: Number
   },
   components: {
     shareMask,
@@ -85,6 +88,11 @@ export default {
       copySuccess: '',
       levelNumber: 9,
       showInvitation: false, //邀请码tips提示
+      level1,
+      level2,
+      level3,
+      level4,
+      levelImg: level1
     }
   },
 
@@ -92,15 +100,19 @@ export default {
     partner () {
       if (this.minerType === "1") {
         this.levelNumber = '64+'
+        this.levelImg = level4
         return "invitation.level4"
       } else if (this.minerType === "2") {
         this.levelNumber = 63
+        this.levelImg = level3
         return "invitation.level3"
       } else if (this.minerType === "3") {
         this.levelNumber = 31
+        this.levelImg = level2
         return "invitation.level2"
       } else if (this.minerType === "4") {
         this.levelNumber = 9
+        this.levelImg = level1
         return "invitation.level1"
       }
     },
@@ -110,6 +122,49 @@ export default {
         return false
       } else {
         return true
+      }
+    },
+
+    //返回进度条
+    progressTxt() {
+      if (this.minerType === "4") {
+        if (this.progress === 0) {
+          return 0
+        } else if (this.progress === 9) {
+          return 100
+        } else {
+          for (var i = 0; i < 9; i++) {
+            if (i === this.progress) {
+              return i * 10
+            }
+          }
+        }
+      } else if (this.minerType === "3") {
+        if (this.progress === 10) {
+          return 0
+        } else if (this.progress === 31) {
+          return 100
+        } else {
+          for (var i = 11; i < 31; i++) {
+            if (i === this.progress) {
+              return (i - 10) * 4.5
+            }
+          }
+        }
+      } else if (this.minerType === "2") {
+        if (this.progress === 32) {
+          return 0
+        } else if (this.progress === 63) {
+          return 100
+        } else {
+          for (var i = 33; i < 63; i++) {
+            if (i === this.progress) {
+              return (i - 32) * 3.2
+            }
+          }
+        }
+      } else {
+        return 100
       }
     }
   },
@@ -127,6 +182,7 @@ export default {
       })
       clipboard.on('error', e => {
         this.copySuccess = 'tips.copyFailure'
+        this.transparentShow = true
         setTimeout(() => {
           this.transparentShow = false
         }, 3000)
