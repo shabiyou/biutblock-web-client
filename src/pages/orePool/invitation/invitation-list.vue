@@ -124,7 +124,7 @@ export default {
         {
           id: '2',
           tit: 'invitation.hiListHeadTxt2',
-          txt: this.firstLevelAmount + 'BIUT' //只保留 9位数字
+          txt: this.getPointNum(this.firstLevelAmount).substring(0, 9) + 'BIUT' //只保留 9位数字
         },
         {
           id: '3',
@@ -134,7 +134,7 @@ export default {
         {
           id: '4',
           tit: 'invitation.hiListHeadTxt4',
-          txt: this.secondLevelAmount + 'BIUT' //只保留 9位数字
+          txt: this.getPointNum(this.secondLevelAmount).substring(0, 9)+ 'BIUT' //只保留 9位数字
         }
       ]
     }
