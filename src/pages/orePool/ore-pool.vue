@@ -428,7 +428,7 @@ export default {
         }, (body) => {
           if (body.status) {
             for (let detail of body.rewards) {
-              if (detail.type === 'level2') {
+              if (detail.type === 'level1') {
                 details.push({
                   id: 0,
                   maskAddress: detail.address,
