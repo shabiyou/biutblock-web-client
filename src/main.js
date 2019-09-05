@@ -134,7 +134,7 @@ Vue.prototype.createOwnContract = async (transfer) => {
   return transfer.sendToAddress
 }
 
-    //获取上传url
+//获取上传url
 Vue.prototype.funDownload = function (filename, content) {
   var eleLink = document.createElement('a');
   eleLink.download = filename;
@@ -203,7 +203,7 @@ Vue.prototype.ismobile = function () {
 //截取小数点后八位
 Vue.prototype.getPointNum = function (num) {
   let str = String(num);
-  return str.split('.').map((item,idx)=>idx===0?item.replace(/\B(?=(\d{3})+$)/g,','):item.substring(0,8)).join('.')
+  return str.split('.').map((item, idx) => idx === 0 ? item.replace(/\B(?=(\d{3})+$)/g, ',') : item.substring(0, 8)).join('.')
 }
 
 //下载文件方法

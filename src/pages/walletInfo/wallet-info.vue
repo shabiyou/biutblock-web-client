@@ -121,12 +121,12 @@ export default {
             if (address in timelock && address in timelock[address]) {
               let benifits = timelock[address][address]
               for (let benifit of benifits) {
-                freezeAmount = String(freezeAmount + Number(benifit.lockAmount))
+                freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
               }
             }
           }
           this.availableAmount = String(this.scientificNotationToString(res))
-          this.walletMoneyC = String(this.scientificNotationToString(Number(res) + freezeAmount))
+          this.walletMoneyC = String(this.scientificNotationToString(this.cal.accAdd(res, freezeAmount)))
           this.freezeAmount = String(this.scientificNotationToString(freezeAmount))
         })
       })
