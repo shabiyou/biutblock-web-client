@@ -149,7 +149,7 @@ export default {
         if (this.transferIdx === 0) {
           return address.length == 42 && this.walletMoney > 0 && address != this.address
             && Number(this.walletMoney) <= Number(this.allMoneyC) && _const.addressReg.test(address)
-            && Number(this.feeValZ) <= Number(this.allMoneyN) ? true : false
+            && Number(this.feeVal) <= Number(this.allMoneyN) ? true : false
         } else {
           //转账BIU
           return address.length == 42 && this.walletMoney > 0 && address != this.address
