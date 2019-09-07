@@ -120,7 +120,7 @@ export default {
     poolIndexTit2: '已加入矿池',
     poolIndexTit3: '收益记录',
 
-    poolIndexTxt1: '最近收益',
+    poolIndexTxt1: '最新收益',
     poolIndexTxt2: '总收益',
     poolIndexTxt3: '加入矿池冻结资产',
     poolIndexTxt4: '账户可用余额',

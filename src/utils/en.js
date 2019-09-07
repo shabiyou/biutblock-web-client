@@ -120,7 +120,7 @@ export default {
     poolIndexTit2: 'Joined Mining Pool',
     poolIndexTit3: 'Profit Record',
 
-    poolIndexTxt1: "Recent Earnings",
+    poolIndexTxt1: "Latest Earnings",
     poolIndexTxt2: 'Total Profits',
     poolIndexTxt3: 'Frozen Assets In Mining Pool',
     poolIndexTxt4: 'Available Balance',
