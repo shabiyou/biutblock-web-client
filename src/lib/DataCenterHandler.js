@@ -180,7 +180,41 @@ const DataCenterHandler = {
     }, (err, res, body) => {
       callback(body)
     })
+  },
+
+  getLastProfit: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}lastProfit`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  },
+
+  getTotalProfit: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}totalProfit`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  },
+
+  getProfitHistory: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}profitHistory`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
   }
+
 }
 
 module.exports = DataCenterHandler
