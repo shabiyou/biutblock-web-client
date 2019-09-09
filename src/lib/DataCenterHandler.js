@@ -213,8 +213,18 @@ const DataCenterHandler = {
     }, (err, res, body) => {
       callback(body)
     })
-  }
+  },
 
+  getMyPoolProfit: function (params, callback) {
+    request({
+      url: `${dataCenterUrl}myPoolProfit`,
+      method: 'POST',
+      body: params,
+      json: true
+    }, (err, res, body) => {
+      callback(body)
+    })
+  }
 }
 
 module.exports = DataCenterHandler

@@ -311,12 +311,20 @@ export default {
         }
       })
 
-      dataCenterHandler.getTotalProfit({
-        address: this.address
-      }, (body) => {
-        this.myReward = Number(this.scientificNotationToString(body.profit))
-      })
-
+      if (e.role === 'Miner') {
+        dataCenterHandler.getTotalProfit({
+          address: this.address
+        }, (body) => {
+          this.myReward = Number(this.scientificNotationToString(body.profit))
+        })
+      } else {
+        dataCenterHandler.getMyPoolProfit({
+          address: this.address
+        }, (body) => {
+          this.myReward = Number(this.scientificNotationToString(body.profit))
+        })
+      }
+      
       dataCenterHandler.getProfitHistory({
         address: this.address
       }, (body) => {
