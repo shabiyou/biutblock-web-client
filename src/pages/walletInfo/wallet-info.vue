@@ -108,6 +108,7 @@ export default {
         for (let pool of e.ownPoolAddress) {
           poolAddress.push(pool.replace('0x', ''))
         }
+        
         this.getContractInfoSync(poolAddress).then((infos) => {
           let freezeAmount = "0"
           let timeLocks = []

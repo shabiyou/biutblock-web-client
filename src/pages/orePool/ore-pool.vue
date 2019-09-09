@@ -286,6 +286,7 @@ export default {
           poolAddress.push(pool.replace('0x', ''))
         }
       }
+      poolAddress = Array.from(new Set(poolAddress))
       this.poolAddress = poolAddress
 
       /**获取钱包余额 */
@@ -301,21 +302,6 @@ export default {
           this.minerLevel = body.minerType
         }
       })
-
-      // dataCenterHandler.getInvitationDetails({
-      //   address: this.address
-      // }, (body) => {
-      //   if (body.status) {
-      //     for (let detail of body.rewards) {
-      //       let time = WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
-      //       this.rewardList.push({
-      //         id: 1,
-      //         poolTime: time,
-      //         poolMoney: `+ ${detail.rewards}`
-      //       })
-      //     }
-      //   }
-      // })
 
       dataCenterHandler.getLastProfit({
         address: this.address
@@ -377,7 +363,7 @@ export default {
     _getAllContractInfos(poolAddress) {
       let freezeMoney = 0
       this.getContractInfoSync(poolAddress).then((infos) => {
-        for (let i = 1; i < infos.length; i++) {
+        for (let i = 0; i < infos.length; i++) {
           if (Object.keys(infos[i]).length === 0) {
             continue
           }
