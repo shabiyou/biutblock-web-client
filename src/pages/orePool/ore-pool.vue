@@ -606,6 +606,15 @@ main {
 
 @media (max-width: 767px) {
   main {
+    .pool-header {
+      height: 16rem;
+      font-size: 0.65rem;
+      h2 {
+        color: #f5f7fa;
+        font-size: 1.4rem;
+        padding-top: 3.5rem;
+      }
+    }
     .pool-body {
       width: calc(100% - 30px);
       .pool-body-head1 {

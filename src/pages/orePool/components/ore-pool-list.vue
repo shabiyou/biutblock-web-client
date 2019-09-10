@@ -210,16 +210,19 @@ ul {
         span {
           &:first-child {
             max-width: 3rem;
-            margin-right: .2rem;
+            overflow: hidden;
           }
           &:nth-child(2) {
-            flex: 1;
+            flex: 2;
+            margin: 0 1rem;
+            word-break: break-word;
           }
           &:last-child {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
             width: 2rem;
+            flex: 1;
           }
         }
       }
