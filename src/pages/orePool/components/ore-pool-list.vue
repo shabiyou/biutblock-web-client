@@ -213,8 +213,8 @@ ul {
             overflow: hidden;
           }
           &:nth-child(2) {
-            flex: 2;
-            margin: 0 1rem;
+            width: 6rem;
+            margin: 0 .5rem;
             word-break: break-word;
           }
           &:last-child {
