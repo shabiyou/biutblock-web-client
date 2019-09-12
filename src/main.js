@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import './assets/css/reset.css'
 import './assets/css/public.scss'
-import './assets/common/font.css'
+//import './assets/common/font.css' 使用字体
 
 import i18n from './utils/index'
 import axios from 'axios'

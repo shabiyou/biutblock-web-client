@@ -106,7 +106,7 @@ export default {
       margin: 0;
       color: #2e3a40;
       font-size: 1.2rem;
-      font-family: source-Medium;
+      //font-family: source-Medium;
     }
     span {
       width: 8.2rem;

@@ -356,7 +356,7 @@ export default {
     p {
       color: #252f33;
       font-size: 0.8rem;
-      font-family: source-Medium;
+      //font-family: source-Medium;
     }
     figure {
       display: flex;
@@ -434,7 +434,7 @@ export default {
       }
     }
     .join-txt2 {
-      font-family: source-Light;
+      //font-family: source-Light;
       font-size: 0.6rem;
       padding-top: 0.9rem;
     }

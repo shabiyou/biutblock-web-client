@@ -381,7 +381,7 @@ h2 {
     color: $colorTips;
     font-weight: 500;
     padding: 1.45rem 0 0.55rem;
-    font-family: source-Medium;
+    //font-family: source-Medium;
   }
 }
 
@@ -399,7 +399,7 @@ h2 {
     top: 3rem;
     opacity: 0;
     max-width: 100% !important;
-    font-family: source-Regular;
+    //font-family: source-Regular;
     &:hover {
       cursor: pointer;
     }

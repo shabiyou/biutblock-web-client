@@ -97,10 +97,10 @@ ul {
       p {
         color: #2e3a40;
         font-size: 1rem;
-        font-family: source-Medium;
+        //font-family: source-Medium;
         &:first-child {
           font-size: 0.7rem;
-          font-family: source-Regular;
+          //font-family: source-Regular;
           padding: 0.6rem 0 0.2rem;
           color: #7e73e3;
         }

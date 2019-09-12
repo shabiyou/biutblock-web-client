@@ -207,7 +207,7 @@ nav {
     line-height: 3.5rem;
     padding: 0;
     margin: 0;
-    font-family: source-Light;
+    //font-family: source-Light;
     li {
       float: left;
       position: relative;

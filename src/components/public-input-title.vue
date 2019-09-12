@@ -79,7 +79,8 @@ export default {
     font-size: .8rem;
     color: $colorTips;
     padding-bottom: .4rem;
-    font-family: source-Bold;
+    font-weight: bold;
+    //font-family: source-Bold;
   }
   label {
     color: $colorRed;

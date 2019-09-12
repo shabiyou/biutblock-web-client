@@ -161,7 +161,8 @@ export default {
   @extend %flexBetween;
   padding-bottom: 0.4rem;
   p {
-    font-family: source-Bold;
+    //font-family: source-Bold;
+    font-weight: bold;
     font-size: 0.8rem;
     color: $colorTips;
     label {

@@ -286,7 +286,8 @@ export default {
         @extend %flex;
         padding-left: 1.8rem;
         color: #42535b;
-        font-family: Lato-Bold;
+        //font-family: Lato-Bold;
+        font-weight: bold;
         font-size: 0.6rem;
         section {
           color: #6d7880;
