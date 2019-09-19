@@ -213,28 +213,22 @@ export default {
     let poolAddress = []
     dataCenterHandler.getAllPool((pools) => {
       for (let pool of pools) {
-        if (pool.ownPoolAddress !== "") {
-          poolAddress.push(pool.ownPoolAddress[0])
-        }
+        poolAddress.push(pool.ownPoolAddress[0])
+        this.itemList.push({
+          id: 0,
+          poolName: pool.poolName,
+          poolAddress: pool.ownPoolAddress[0],
+          poolMoney: -1
+        })
+
+        this.getWalletBalance(pool.ownPoolAddress[0], 'SEC').then((balance) => {
+          this.itemList.map(item => {
+            if (item.poolAddress === pool.ownPoolAddress[0]) {
+              item.poolMoney = balance
+            }
+          })
+        })
       }
-      this.getContractInfoSync(poolAddress).then(infos => {
-        for (let info of infos) {
-          if (Object.keys(info).length > 0) {
-            //let poolName = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[2] : ''
-            let poolAddress = info.hasOwnProperty("tokenName") ? info.tokenName.split('-')[1] : ''
-            this.getWalletBalance(poolAddress, 'SEC').then((balance) => {
-              dataCenterHandler.getMiningPool({ address: poolAddress }, (body) => {
-                this.itemList.push({
-                  id: 0,
-                  poolName: body.miningPool ? body.miningPool.poolName : '',
-                  poolAddress: poolAddress,
-                  poolMoney: balance
-                })
-              })
-            })
-          }
-        }
-      })
     })
   },
   mounted() {

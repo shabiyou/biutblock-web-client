@@ -106,7 +106,7 @@ export default {
     poolInvailidError: '钱包地址未绑定邀请码',
     poolLoginBtn: '登入',
     poolLoginBtns: '登入中...',
-
+    poolLoading: '加载中...',
     poolIndexL: '登入',
     poolIndexE: '退出',
     poolIndexListTit1: '矿池名称',

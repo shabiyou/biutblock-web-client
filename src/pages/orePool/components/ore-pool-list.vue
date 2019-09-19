@@ -27,7 +27,7 @@
         v-if="item.poolAddress != '000000000000000000000000000000000009'">
         <section>
           <span>{{ item.poolName.replace(/(.{8}).+(.{3})/, "$1...") }}</span>
-          <span>{{ getPointNum(item.poolMoney) }} BIUT</span>
+          <span>{{ item.poolMoney === -1 ? $t("pool.poolLoading") : getPointNum(item.poolMoney) + ' BIUT' }} </span>
           <span>{{ "0x" + item.poolAddress }}</span>
         </section>
 

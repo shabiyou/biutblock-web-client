@@ -106,7 +106,7 @@ export default {
     poolInvailidError: 'The wallet address not bind any inviation code',
     poolLoginBtn: 'Enter Wallet',
     poolLoginBtns: 'Enter Wallet...',
-
+    poolLoading: 'Loading...',
     poolIndexL: 'Login',
     poolIndexE: 'Log out',
     poolIndexListTit1: 'Name',
