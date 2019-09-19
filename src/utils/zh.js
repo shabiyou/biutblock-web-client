@@ -155,7 +155,7 @@ export default {
 
     inMask2ListTxt1: '二级钱包地址',
     inMask2ListTxt2: '时间',
-    inMask2ListTxt3: '奖励 (BUT)',
+    inMask2ListTxt3: '奖励 (BIUT)',
 
     inMask2ListNull: '暂无记录',
 
