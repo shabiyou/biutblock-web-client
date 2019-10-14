@@ -37,6 +37,8 @@
 
 <script>
 import walletEntren from '../../components/wallet-entren'
+import { transcode } from 'buffer';
+const rpctransfer = require('../../lib/RpcTransfer')
 const contentFooter = () => import("../../components/content-footer")
 const infoMask = () => import("./components/wallet-info-mask")
 const walletInfo = () => import("./components/wallet-info-text")
@@ -99,6 +101,12 @@ export default {
       this.inviteCode = e.ownInvitationCode
       let address = e.address.replace("0x", "")
       //查询SEC余额
+
+      rpctransfer.getWalletBalance(address, 'biut', (bdy) => {
+        console.log('----------')
+        //console.log(bdy)
+      })
+
       this.getWalletBalance(address, 'biut').then(res => {
         this.walletMoneyC = String(this.scientificNotationToString(res))
         let poolAddress = []

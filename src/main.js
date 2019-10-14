@@ -12,14 +12,16 @@ import './assets/css/public.scss'
 import i18n from './utils/index'
 import axios from 'axios'
 import qs from 'qs'
-
+import Vconsole from 'vconsole'
 import './utils/global.js'
 
 import Element from 'element-ui'
 import 'babel-polyfill'
 
 import cal from './utils/calculation'
-
+import { resolve } from 'url'
+import { rejects } from 'assert'
+const request = require('request')
 Vue.prototype.cal = cal
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
@@ -32,8 +34,13 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
+const vConsole = new Vconsole()
+Vue.use(vConsole)
+
 let httpHeaderOption = {
-  'content-type': 'application/json'
+  'content-type': 'application/json',
+  'access-control-allow-origin' : '*',
+  'access-control-allow-headers': '*'
 }
 let fetch = require('node-fetch')
 
@@ -49,11 +56,27 @@ Vue.prototype.getWalletBalance = async (address, type) => {
     'method': 'sec_getBalance',
     'params': [address, token]
   }
-  const text = await fetch(url, {
-    method: 'post',
-    body: JSON.stringify(bodyRequest), // request is a string
-    headers: httpHeaderOption
-  }).then((res) => res.json())
+
+  const text = await new Promise((resolve, rejects) => {
+    request({
+      url: url,
+      method: 'POST',
+      body: bodyRequest,
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      //   'Accept': 'application/json'
+      // },
+      json: true
+    }, (err, res, body) => {
+      resolve(body.result.value)
+    })
+  })
+
+  // const text = await fetch(url, {
+  //   method: 'post',
+  //   body: JSON.stringify(bodyRequest), // request is a string
+  //   headers: httpHeaderOption
+  // }).then((res) => res.json())
 
   let amount = JSON.parse(text.body).result.value
   return amount
