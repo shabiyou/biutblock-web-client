@@ -14,7 +14,7 @@ import axios from 'axios'
 import qs from 'qs'
 import Vconsole from 'vconsole'
 import './utils/global.js'
-
+import store from '../store'
 import Element from 'element-ui'
 import 'babel-polyfill'
 
@@ -62,21 +62,11 @@ Vue.prototype.getWalletBalance = async (address, type) => {
       url: url,
       method: 'POST',
       body: bodyRequest,
-      // headers: {
-      //   'Content-Type': 'application/x-www-form-urlencoded',
-      //   'Accept': 'application/json'
-      // },
       json: true
     }, (err, res, body) => {
       resolve(body.result.value)
     })
   })
-
-  // const text = await fetch(url, {
-  //   method: 'post',
-  //   body: JSON.stringify(bodyRequest), // request is a string
-  //   headers: httpHeaderOption
-  // }).then((res) => res.json())
 
   let amount = JSON.parse(text.body).result.value
   return amount
@@ -241,8 +231,9 @@ new Vue({
   el: '#app',
   router,
   i18n,
+  store,
   components: {
-    App
+    App,
   },
   template: '<App/>'
 }).$mount('#app')

@@ -38,7 +38,6 @@
 <script>
 import walletEntren from '../../components/wallet-entren'
 import { transcode } from 'buffer';
-const rpctransfer = require('../../lib/RpcTransfer')
 const contentFooter = () => import("../../components/content-footer")
 const infoMask = () => import("./components/wallet-info-mask")
 const walletInfo = () => import("./components/wallet-info-text")
@@ -71,7 +70,14 @@ export default {
     }
   },
   computed: {
-
+    isLogin () {
+      if (this.$store.isLogin) {
+        this.infoPages = 2
+      } else {
+        this.infopages = 1
+      }
+      return this.$store.isLogin
+    }
   },
   created() {
 
@@ -100,13 +106,9 @@ export default {
       this.walletPublicKey = e.publicKey
       this.inviteCode = e.ownInvitationCode
       let address = e.address.replace("0x", "")
+
+      this.$store.commit('login', e)
       //查询SEC余额
-
-      rpctransfer.getWalletBalance(address, 'biut', (bdy) => {
-        console.log('----------')
-        //console.log(bdy)
-      })
-
       this.getWalletBalance(address, 'biut').then(res => {
         this.walletMoneyC = String(this.scientificNotationToString(res))
         let poolAddress = []
@@ -146,6 +148,40 @@ export default {
       })
     },
   },
+
+  updateWalletBalance: function (wallet) {
+    let address = wallet.address.replace('0x', '')
+    let walletSEC = this.getWalletBalance(address, 'biut')
+    let walletSEN = this.getWalletBalance(address, 'biu')
+    let freezeAmount = '0'
+    let timeLocks = []
+    let availibleAmount = walletSEC
+    let poolAddress = []
+    for (let pool of e.mortgagePoolAddress) {
+      poolAddress.push(pool.replace('0x', ''))
+    }
+    for (let pool of e.ownPoolAddress) {
+      poolAddress.push(pool.replace('0x', ''))
+    }
+    let contracts = this.getContractInfoSync(poolAddress)
+
+    for (let i = 1; i < contracts.length; i++) {
+      if (contracts[i].timeLock) {
+        timeLocks.push(infos[i].timeLock)
+      }
+    }
+    for (let timelock of timeLocks) {
+      if (address in timelock && address in timelock[address]) {
+        let benifits = timelock[address][address]
+        for (let benifit of benifits) {
+          freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
+        }
+      }
+    }
+
+    this.$store.commit('updateWalletBalance', )
+
+  }
 }
 </script>
 
