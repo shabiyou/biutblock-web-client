@@ -12,7 +12,6 @@ const state = {
 		availibleAmount: "-",
 		freezeAmount: "-",
     invitationCode: "-",
-		ownInvitationCode: "-",
 		englishWords: "",
     mortgagePoolAddress: [],
     ownPoolAddress: [],
@@ -40,7 +39,7 @@ const mutations = {
 		state.wallet.walletAddress = wallet.address
 		state.wallet.walletKey = wallet.privateKey
 		state.wallet.walletPublicKey = wallet.publicKey
-		state.wallet.onwInvitationCode = wallet.ownInvitationCode
+		state.wallet.ownInvitationCode = wallet.ownInvitationCode
 		state.wallet.invitationCode = wallet.invitationCode
 		state.wallet.mortgagePoolAddress = wallet.mortgagePoolAddress
 		state.wallet.ownPoolAddress = wallet.ownPoolAddress
@@ -62,10 +61,14 @@ const mutations = {
 	}
 }
 
+const actions = {
+
+}
 
 
 export default {
     state,
     mutations,
-    getters
+		getters,
+		actions
 }

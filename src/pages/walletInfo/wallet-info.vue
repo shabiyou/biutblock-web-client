@@ -1,10 +1,10 @@
 <template>
   <main class="el-container">
     <!-- 钱包登陆 -->
-    <wallet-entren v-if="infoPages === 1" @login="loginWallet" />
+    <wallet-entren v-if="!isLogin" @login="loginWallet" />
 
     <!-- 登陆成功 -->
-    <main class="wallet-background" v-if="infoPages === 2">
+    <main class="wallet-background" v-if="isLogin">
       <section class="wallet-info-content">
         <!-- 钱包基本信息 -->
         <wallet-info
@@ -82,7 +82,7 @@ export default {
       return this.$store.getters.walletKey
     },
     walletAddress () {
-      return this.$store.getters.address
+      return this.$store.getters.walletAddress
     },
     walletWords () {
       return this.$store.getters.englishWords
@@ -126,54 +126,8 @@ export default {
 
     //登陆钱包
     loginWallet(e) {
-      // this.infoPages = 2
-      // this.walletAddress = e.address
-      // this.walletKey = e.privateKey
-      // this.walletWords = e.englishWords
-      // this.walletPublicKey = e.publicKey
-      // this.inviteCode = e.ownInvitationCode
-      // let address = e.address.replace("0x", "")
-
       this.$store.commit('login', e)
       this.updateWalletBalance(e)
-      //查询SEC余额
-      // this.getWalletBalance(address, 'biut').then(res => {
-      //   this.walletMoneyC = String(this.scientificNotationToString(res))
-      //   let poolAddress = []
-      //   for (let pool of e.mortgagePoolAddress) {
-      //     poolAddress.push(pool.replace('0x', ''))
-      //   }
-      //   for (let pool of e.ownPoolAddress) {
-      //     poolAddress.push(pool.replace('0x', ''))
-      //   }
-        
-      //   this.getContractInfoSync(poolAddress).then((infos) => {
-      //     let freezeAmount = "0"
-      //     let timeLocks = []
-      //     let availableAmount = res
-      //     for (let i = 1; i < infos.length; i++) {
-      //       if (infos[i].timeLock) {
-      //         timeLocks.push(infos[i].timeLock)
-      //       }
-      //     }
-      //     for (let timelock of timeLocks) {
-      //       if (address in timelock && address in timelock[address]) {
-      //         let benifits = timelock[address][address]
-      //         for (let benifit of benifits) {
-      //           freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
-      //         }
-      //       }
-      //     }
-      //     this.availableAmount = String(this.scientificNotationToString(res))
-      //     this.walletMoneyC = String(this.scientificNotationToString(this.cal.accAdd(res, freezeAmount)))
-      //     this.freezeAmount = String(this.scientificNotationToString(freezeAmount))
-      //   })
-      // })
-
-      // //查询SEN余额
-      // this.getWalletBalance(address, 'biu').then(res => {
-      //   this.walletMoneyN = String(this.scientificNotationToString(res))
-      // })
     },
 
     updateWalletBalance: async function (wallet) {
@@ -190,11 +144,11 @@ export default {
       for (let pool of wallet.ownPoolAddress) {
         poolAddress.push(pool.replace('0x', ''))
       }
-      let contracts = this.getContractInfoSync(poolAddress)
+      let contracts = await this.getContractInfoSync(poolAddress)
 
-      for (let i = 1; i < contracts.length; i++) {
+      for (let i = 0; i < contracts.length; i++) {
         if (contracts[i].timeLock) {
-          timeLocks.push(infos[i].timeLock)
+          timeLocks.push(contracts[i].timeLock)
         }
       }
       for (let timelock of timeLocks) {
