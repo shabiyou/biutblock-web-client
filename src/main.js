@@ -64,11 +64,11 @@ Vue.prototype.getWalletBalance = async (address, type) => {
       body: bodyRequest,
       json: true
     }, (err, res, body) => {
-      resolve(body.result.value)
+      resolve(body.body)
     })
   })
 
-  let amount = JSON.parse(text.body).result.value
+  let amount = JSON.parse(text).result.value
   return amount
 }
 
