@@ -34,15 +34,17 @@
 const publicPass = () => import("../../../components/public-pass")
 const publicTips = () => import("../../../components/public-tips")
 import walletsHandler from '../../../lib/WalletsHandler.js'
+import {mapGetters} from 'vuex'
+
 const SECUtil = require('@biut-block/biutjs-util')
 const CryptoJS = require('crypto-js')
 export default {
   name: 'walletInfoMask',
   props: {
-    infoAddress: String,
-    infoKey: String,
-    infoWord: String,
-    infoPublicKey: String
+    // infoAddress: String,
+    // infoKey: String,
+    // infoWord: String,
+    // infoPublicKey: String
   },
   components: {
     publicPass,
@@ -56,6 +58,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      infoAddress: 'walletAddress',
+      infoKey: 'walletKey',
+      infoWord: 'englishWords',
+      infoPublicKey: 'walletPublicKey'
+    }),
     //新钱包密码按钮是否激活
     passActive() {
       let pass = (this.newWalletPass).replace(/\s+/g, "")

@@ -16,7 +16,8 @@ const state = {
     mortgagePoolAddress: [],
     ownPoolAddress: [],
     mortgageValue: "0",
-    role: ""
+		role: "",
+		nonce: ""
 	}
 }
 
@@ -26,11 +27,13 @@ const getters = {
 	walletAddress: state => state.wallet.walletAddress,
 	walletKey: state => state.wallet.walletKey,
 	walletPublicKey: state => state.wallet.walletPublicKey,
+	englishWords: state => state.wallet.englishWords,
 	inviteCode: state => state.wallet.ownInvitationCode,
 	walletMoneyC: state => state.wallet.walletBalance,
 	walletMoneyN: state => state.wallet.walletBalanceSEN,
 	availibleAmount: state => state.wallet.availibleAmount,
-	freezeAmount: state => state.wallet.freezeAmount
+	freezeAmount: state => state.wallet.freezeAmount,
+	nonce: state => state.wallet.nonce
 }
 
 const mutations = {
@@ -58,6 +61,7 @@ const mutations = {
 		state.wallet.availibleAmount = params.availibleAmount
 		state.wallet.freezeAmount = params.freezeAmount
 		state.wallet.walletBalanceSEN = params.walletBalanceSEN
+		state.wallet.nonce = params.nonce
 	}
 }
 

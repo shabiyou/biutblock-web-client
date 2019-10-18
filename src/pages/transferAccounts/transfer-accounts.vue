@@ -75,6 +75,7 @@ const inputList = () => import("../../components/public-input-title")
 const transferMask = () => import("./components/transfer-accounts-mask")
 const transferSlider = () => import("./components/transfer-accounts-slider")
 import transferCheck from './components/transfer-accounts-check'
+import {mapGetters} from 'vuex'
 let fetch = require('node-fetch')
 let httpHeaderOption = {
   'content-type': 'application/json'
@@ -95,23 +96,30 @@ export default {
     return {
       tradingPages: 1, //默认显示登陆页面
       maskShow: false,//遮罩层
-      address: '', //发款地址
-      allMoneyC: "0", //总金额 BIUT
-      allMoneyN: "0", //总金额 BIU
+      // address: '', //发款地址
+      // allMoneyC: "0", //总金额 BIUT
+      // allMoneyN: "0", //总金额 BIU
       tradingMoney: "0", //biu可转账金额
       walletAddress: '', //收款地址
       walletMoney: '', //转账金额
       feeVal: 0.02,
       transferIdx: 0,
-      nonce: '',
-
-      privateKey: '',//当前钱包私钥
+      // nonce: '',
+      // privateKey: '',//当前钱包私钥
 
       addressTxt: 'transfer.transferAddressError', //地址错误
       addressError: false,
     }
   },
   computed: {
+    ...mapGetters({
+      address: 'walletAddress',
+      allMoneyC: 'availibleAmount',
+      allMoneyN: 'walletMoneyN',
+      privateKey: 'walletKey',
+      nonce: 'nonce'
+      
+    }),
     //转账信息传给子组件（包含所有的转账信息）
     tradingInfo() {
       return [
@@ -168,27 +176,36 @@ export default {
   destroyed() { },
   methods: {
     //登陆钱包
-    loginWallet(e) {
+    async loginWallet(e) {
       this.tradingPages = 2
-      this.address = e.address
-      this.privateKey = e.privateKey
-      
-      let address = e.address.replace("0x", "")
-      this.selectMoney(address)
-
-      let nonceData = {
-        "jsonrpc": "2.0",
-        "id":"1",
-        'method': 'sec_getNonce',
-        "params": [""+e.address+""]
-      }
-      fetch(_const.url, {
-        method: 'post',
-        body: JSON.stringify(nonceData), // request is a string
-        headers: httpHeaderOption
-      }).then((res) => res.json()).then((text) => {
-        this.nonce = JSON.parse(text.body).result.Nonce
+      this.$store.commit('login', e)
+      let balance = await this.updateWalletBalance(e)
+      this.$store.commit('updateWalletBalance', {
+        walletBalance: balance.walletSEC,
+        freezeAmount: balance.freezeAmount,
+        availibleAmount: balance.availibleAmount,
+        walletBalanceSEN: balance.walletSEN,
+        nonce: balance.nonce
       })
+      // this.address = e.address
+      // this.privateKey = e.privateKey
+      
+      // let address = e.address.replace("0x", "")
+      // this.selectMoney(address)
+
+      // let nonceData = {
+      //   "jsonrpc": "2.0",
+      //   "id":"1",
+      //   'method': 'sec_getNonce',
+      //   "params": [""+e.address+""]
+      // }
+      // fetch(_const.url, {
+      //   method: 'post',
+      //   body: JSON.stringify(nonceData), // request is a string
+      //   headers: httpHeaderOption
+      // }).then((res) => res.json()).then((text) => {
+      //   this.nonce = JSON.parse(text.body).result.Nonce
+      // })
     },
 
     //转账钱包地址
@@ -231,8 +248,15 @@ export default {
         this.$refs.moneyModel.clearIpt()
         this.$refs.feeModel.resetSlider()
         this.maskShow = false
-        this.$nextTick(() => {
-          this.selectMoney(this.address.replace("0x", ""))
+        this.$nextTick(async () => {
+          let balance = await this.updateWalletBalance(e)
+          this.$store.commit('updateWalletBalance', {
+            walletBalance: balance.walletSEC,
+            freezeAmount: balance.freezeAmount,
+            availibleAmount: balance.availibleAmount,
+            walletBalanceSEN: balance.walletSEN,
+            nonce: balance.nonce
+          })
         })
       }
     },

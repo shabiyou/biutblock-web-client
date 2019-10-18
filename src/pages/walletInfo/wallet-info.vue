@@ -7,18 +7,10 @@
     <main class="wallet-background" v-if="isLogin">
       <section class="wallet-info-content">
         <!-- 钱包基本信息 -->
-        <wallet-info
-          :infoAddress="walletAddress"
-          :infoKey="walletKey"
-          :infoMoneyC="walletMoneyC"
-          :infoMoneyN="walletMoneyN"
-          :availableAmount="availableAmount"
-          :freezeAmount="freezeAmount"
-          :inviteCode="inviteCode"
-        />
+        <wallet-info/>
 
         <!-- 钱包二维码 -->
-        <wallet-qrcode :qrAddress="walletAddress" @createMask="createdMask" />
+        <wallet-qrcode @createMask="createdMask" />
       </section>
       <!-- 公共背景底部 -->
       <content-footer />
@@ -27,10 +19,6 @@
     <!-- 遮罩层 -->
     <info-mask
       v-show="maskShow"
-      :infoAddress="walletAddress"
-      :infoKey="walletKey"
-      :infoWord="walletWords"
-      :infoPublicKey="walletPublicKey"
       @close="closeMask" />
   </main>
 </template>
@@ -54,17 +42,6 @@ export default {
   props: {},
   data() {
     return {
-      // walletAddress: '',//钱包地址
-      // walletKey: '',//钱包私钥
-      // walletPublicKey: '',//钱包公钥
-      // walletWords: '',//钱包助记词
-      // walletMoneyC: "0",//钱包SEC币
-      // walletMoneyN: "0",//钱包SEN币
-// 
-      // availableAmount: "0", //可用余额
-      // freezeAmount: "0", //冻结金额
-      // inviteCode: '',//邀请码
-
       infoPages: 1, //默认显示登陆页面
       maskShow: false, //遮罩层 
     }
@@ -125,49 +102,56 @@ export default {
     },
 
     //登陆钱包
-    loginWallet(e) {
+    async loginWallet(e) {
       this.$store.commit('login', e)
-      this.updateWalletBalance(e)
+      let balance = await this.updateWalletBalance(e)
+      this.$store.commit('updateWalletBalance', {
+        walletBalance: balance.walletSEC,
+        freezeAmount: balance.freezeAmount,
+        availibleAmount: balance.availibleAmount,
+        walletBalanceSEN: balance.walletSEN,
+        nonce: balance.nonce
+      })
     },
 
-    updateWalletBalance: async function (wallet) {
-      let address = wallet.address.replace('0x', '')
-      let walletSEC = await this.getWalletBalance(address, 'biut')
-      let walletSEN = await this.getWalletBalance(address, 'biu')
-      let freezeAmount = '0'
-      let timeLocks = []
-      let availibleAmount = walletSEC
-      let poolAddress = []
-      for (let pool of wallet.mortgagePoolAddress) {
-        poolAddress.push(pool.replace('0x', ''))
-      }
-      for (let pool of wallet.ownPoolAddress) {
-        poolAddress.push(pool.replace('0x', ''))
-      }
-      let contracts = await this.getContractInfoSync(poolAddress)
+    // updateWalletBalance: async function (wallet) {
+    //   let address = wallet.address.replace('0x', '')
+    //   let walletSEC = await this.getWalletBalance(address, 'biut')
+    //   let walletSEN = await this.getWalletBalance(address, 'biu')
+    //   let freezeAmount = '0'
+    //   let timeLocks = []
+    //   let availibleAmount = walletSEC
+    //   let poolAddress = []
+    //   for (let pool of wallet.mortgagePoolAddress) {
+    //     poolAddress.push(pool.replace('0x', ''))
+    //   }
+    //   for (let pool of wallet.ownPoolAddress) {
+    //     poolAddress.push(pool.replace('0x', ''))
+    //   }
+    //   let contracts = await this.getContractInfoSync(poolAddress)
 
-      for (let i = 0; i < contracts.length; i++) {
-        if (contracts[i].timeLock) {
-          timeLocks.push(contracts[i].timeLock)
-        }
-      }
-      for (let timelock of timeLocks) {
-        if (address in timelock && address in timelock[address]) {
-          let benifits = timelock[address][address]
-          for (let benifit of benifits) {
-            freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
-          }
-        }
-      }
+    //   for (let i = 0; i < contracts.length; i++) {
+    //     if (contracts[i].timeLock) {
+    //       timeLocks.push(contracts[i].timeLock)
+    //     }
+    //   }
+    //   for (let timelock of timeLocks) {
+    //     if (address in timelock && address in timelock[address]) {
+    //       let benifits = timelock[address][address]
+    //       for (let benifit of benifits) {
+    //         freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
+    //       }
+    //     }
+    //   }
 
-      this.$store.commit('updateWalletBalance', {
-        walletBalance: walletSEC,
-        freezeAmount: freezeAmount,
-        availibleAmount: availibleAmount,
-        walletBalanceSEN: walletSEN
-      })
+    //   this.$store.commit('updateWalletBalance', {
+    //     walletBalance: walletSEC,
+    //     freezeAmount: freezeAmount,
+    //     availibleAmount: availibleAmount,
+    //     walletBalanceSEN: walletSEN
+    //   })
 
-  }
+    // }
   }
 }
 </script>

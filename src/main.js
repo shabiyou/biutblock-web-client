@@ -95,6 +95,62 @@ Vue.prototype.getAllWalletBalance = async (address, type) => {
   return amount
 }
 
+Vue.prototype.getNonce = async function (address) {
+  let nonceData = {
+    "jsonrpc": "2.0",
+    "id":"1",
+    'method': 'sec_getNonce',
+    "params": [""+address+""]
+  }
+  let body = fetch(_const.url, {
+    method: 'post',
+    body: JSON.stringify(nonceData), // request is a string
+    headers: httpHeaderOption
+  }).then((res) => res.json())
+  let nonce = JSON.parse(body.body).result.Nonce
+  return nonce
+}
+
+Vue.prototype.updateWalletBalance = async function (wallet) {
+  let address = wallet.address.replace('0x', '')
+  let walletSEC = await this.getWalletBalance(address, 'biut')
+  let walletSEN = await this.getWalletBalance(address, 'biu')
+  let nonce = await this.getNonce(address)
+  let freezeAmount = '0'
+  let timeLocks = []
+  let availibleAmount = walletSEC
+  let poolAddress = []
+  for (let pool of wallet.mortgagePoolAddress) {
+    poolAddress.push(pool.replace('0x', ''))
+  }
+  for (let pool of wallet.ownPoolAddress) {
+    poolAddress.push(pool.replace('0x', ''))
+  }
+  let contracts = await this.getContractInfoSync(poolAddress)
+
+  for (let i = 0; i < contracts.length; i++) {
+    if (contracts[i].timeLock) {
+      timeLocks.push(contracts[i].timeLock)
+    }
+  }
+  for (let timelock of timeLocks) {
+    if (address in timelock && address in timelock[address]) {
+      let benifits = timelock[address][address]
+      for (let benifit of benifits) {
+        freezeAmount = this.cal.accAdd(freezeAmount, benifit.lockAmount)
+      }
+    }
+  }
+
+  return {
+    walletBalance: walletSEC,
+    freezeAmount: freezeAmount,
+    availibleAmount: availibleAmount,
+    walletBalanceSEN: walletSEN,
+    nonce: nonce
+  }
+}
+
 Vue.prototype.getContractInfo = (contractAddress, callback) => {
   let rpcMethod = 'sec_getContractInfo'
   let url = _const.url

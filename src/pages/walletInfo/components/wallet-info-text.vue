@@ -59,6 +59,7 @@ import passImgs from '../../../assets/images/passImgs.png'
 import shareMask from '../../../components/wallet-share'
 import walletTransparent from '../../../components/wallet-transparent'
 import { log } from 'util';
+import { mapGetters } from 'vuex'
 export default {
   name: 'walletInfoText',
   components: {
@@ -66,13 +67,13 @@ export default {
     walletTransparent
   },
   props: {
-    infoAddress: String,
-    infoKey: String,
-    infoMoneyC: String,
-    infoMoneyN: String,
-    availableAmount: String,
-    freezeAmount: String,
-    inviteCode: String,
+    // infoAddress: String,
+    // infoKey: String,
+    // infoMoneyC: String,
+    // infoMoneyN: String,
+    // availableAmount: String,
+    // freezeAmount: String,
+    // inviteCode: String,
   },
   data() {
     return {
@@ -83,6 +84,17 @@ export default {
       infoKeyImg: passImg,
       infoKeyIdx: 1
     }
+  },
+  computed: {
+    ...mapGetters({
+      infoAddress: 'walletAddress',
+      infoKey: 'walletKey',
+      infoMoneyC: 'walletMoneyC',
+      infoMoneyN: 'walletMoneyN',
+      availableAmount: 'availibleAmount',
+      freezeAmount: 'freezeAmount',
+      inviteCode: 'inviteCode',
+    })
   },
   methods: {
     copyCode() {

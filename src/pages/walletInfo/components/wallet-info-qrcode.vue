@@ -16,7 +16,6 @@ import qrcode from '@xkeshi/vue-qrcode'
 export default {
   name: 'walletInfoQrcode',
   props: {
-    qrAddress: String
   },
   components: {
     qrcode
@@ -24,6 +23,11 @@ export default {
   data() {
     return {
       walletQr: ''
+    }
+  },
+  computed: {
+    qrAddress () {
+      return this.$store.getters.walletAddress
     }
   },
   created() {
