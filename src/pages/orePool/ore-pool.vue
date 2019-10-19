@@ -151,6 +151,7 @@ import invitationMask from './invitation/invitation-mask'
 import poolFooter from './components/ore-pool-footer'
 import search from '../../assets/images/search.png'
 import searchs from '../../assets/images/searchs.png'
+import {mapGettemapGetters, mapGetters} from "vuex"
 
 const dataCenterHandler = require('../../lib/DataCenterHandler')
 import WalletsHandler from '../../lib/WalletsHandler'
@@ -173,33 +174,33 @@ export default {
       searchIpt: '', //搜索框
       searchImg: search,
       searchDsb: true,
-      loginStatus: true,
+      // loginStatus: true,
       poolPage: 1,
-      poolTimeLock: 0,
-      myReward: 0,
-      lastWeekReward: 0,
-      totalPoolMoney: 0,
-      walletBalance: 0,
+      // poolTimeLock: 0,
+      // myReward: 0,
+      // lastWeekReward: 0,
+      // totalPoolMoney: 0,
+      // walletBalance: 0,
       loginPage: 0,
-      address: '',//钱包地址
-      addressShort: '',
-      privateKey: '',//私钥
+      // address: '',//钱包地址
+      // addressShort: '',
+      // privateKey: '',//私钥
       maskPage: 1,
       maskShow: false,
       maskLevel: '',
       maskAddress: '',
       maskReward: '',
       maskList: [],
-      invitationList: [],
-      invitationCode: '',
-      invitatedAmount: 0,
-      minerLevel: '0',
-      mortgageValue: '0',
+      // invitationList: [],
+      // invitationCode: '',
+      // invitatedAmount: 0,
+      // minerLevel: '0',
+      // mortgageValue: '0',
       idx: 0,
       itemList: [],
-      addPoolList: [],
-      rewardList: [],
-      nounce: 0,
+      // addPoolList: [],
+      // rewardList: [],
+      // nounce: 0,
       joinMaskPage: 0,
       poolAddress: []
     }
@@ -207,7 +208,33 @@ export default {
   computed: {
     itemLists() {
       return this.itemList
-    }
+    },
+    lastWeekReward () {
+      return Number(this.scientificNotationToString(this.$store.getters.lastWeekReward))
+    },
+    myReward () {
+      return Number(this.scientificNotationToString(this.$store.getters.myReward))
+    },
+    poolTimeLock () {
+      return Number(this.scientificNotationToString(this.$store.getters.poolTimeLock))
+    },
+    loginStatus () {
+      return !this.$store.getters.isLogin
+    },
+
+    ...mapGetters({
+      wallet: 'wallet',
+      rewardList: 'rewardList',
+      minerLevel: 'minerLevel',
+      nonce: 'nonce',
+      address: 'walletAddress',
+      poolTimeLock: 'poolTimeLock',
+      privateKey: 'walletKey',
+      walletBalance: 'availibleAmount',
+      addPoolList: 'poolList',
+      invitatedAmount: 'invitatedAmount',
+      mortgagePoolAddress: 'mortgagePoolAddress'
+    })
   },
   created() {
     let poolAddress = []
@@ -247,30 +274,39 @@ export default {
     },
 
     //登陆成功
-    userLogin(e) {
+    async userLogin(e) {
       this.poolPage = 2
       this.loginPage = 0
-      this.addPoolList = []
-      this.rewardList = []
-      this.invitationList = []
-      this.address = e.address.replace('0x', '')
-      this.invitationCode = e.ownInvitationCode
-      this.mortgageValue = e.mortgageValue
+      // this.addPoolList = []
+      // this.rewardList = []
+      // this.invitationList = []
+      // this.address = e.address.replace('0x', '')
+      // this.invitationCode = e.ownInvitationCode
+      // this.mortgageValue = e.mortgageValue
+      this.$store.commit('login', e)
+      let balance = await this.updateWalletBalance(e)
+      this.$store.commit('updateWalletBalance', {
+        walletBalance: balance.walletSEC,
+        freezeAmount: balance.freezeAmount,
+        availibleAmount: balance.availibleAmount,
+        walletBalanceSEN: balance.walletSEN,
+        nonce: balance.nonce
+      })
       if (this.ismobile()) {
-        this.addressShort = e.address.replace('0x', '').replace(/(.{6}).+(.{6})/, '$1...$2')
+        this.addressShort = this.address.replace('0x', '').replace(/(.{6}).+(.{6})/, '$1...$2')
       } else {
-        this.addressShort = e.address.replace('0x', '')
+        this.addressShort = this.address.replace('0x', '')
       }
-      this.privateKey = e.privateKey
-      this.loginStatus = false
+      // this.privateKey = e.privateKey
+      // this.loginStatus = false
       let poolAddress = []
-      if (e.mortgagePoolAddress.length > 1) {
+      if (this.mortgagePoolAddress.length > 1) {
         this.joinMaskPage = 1
       } else {
         this.joinMaskPage = 0
       }
 
-      for (let pool of e.mortgagePoolAddress) {
+      for (let pool of this.mortgagePoolAddress) {
         if (pool !== "") {
           poolAddress.push(pool.replace('0x', ''))
         }
@@ -282,62 +318,63 @@ export default {
       }
       poolAddress = Array.from(new Set(poolAddress))
       this.poolAddress = poolAddress
-
+      this.$store.dispatch('updatePoolStuffs')
+     
       /**获取钱包余额 */
-      this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
-        this.walletBalance = Number(this.scientificNotationToString(balance))
-      })
+      // this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
+      //   this.walletBalance = Number(this.scientificNotationToString(balance))
+      // })
 
-      dataCenterHandler.getMinerLevel({
-        address: this.address
-      }, (body) => {
-        if (body.status) {
-          this.invitatedAmount = body.amount
-          this.minerLevel = body.minerType
-        }
-      })
+      // dataCenterHandler.getMinerLevel({
+      //   address: this.address
+      // }, (body) => {
+      //   if (body.status) {
+      //     this.invitatedAmount = body.amount
+      //     this.minerLevel = body.minerType
+      //   }
+      // })
 
-      dataCenterHandler.getLastProfit({
-        address: this.address
-      }, (body) => {
-        if (body.status) {
-          this.lastWeekReward = Number(this.scientificNotationToString(body.profit))
-        }
-      })
+      // dataCenterHandler.getLastProfit({
+      //   address: this.address
+      // }, (body) => {
+      //   if (body.status) {
+      //     this.lastWeekReward = Number(this.scientificNotationToString(body.profit))
+      //   }
+      // })
 
-      if (e.role === 'Miner') {
-        dataCenterHandler.getTotalProfit({
-          address: this.address
-        }, (body) => {
-          this.myReward = Number(this.scientificNotationToString(body.profit))
-        })
-      } else {
-        dataCenterHandler.getMyPoolProfit({
-          address: this.address
-        }, (body) => {
-          this.myReward = Number(this.scientificNotationToString(body.profit))
-        })
-      }
+      // if (e.role === 'Miner') {
+      //   dataCenterHandler.getTotalProfit({
+      //     address: this.address
+      //   }, (body) => {
+      //     this.myReward = Number(this.scientificNotationToString(body.profit))
+      //   })
+      // } else {
+      //   dataCenterHandler.getMyPoolProfit({
+      //     address: this.address
+      //   }, (body) => {
+      //     this.myReward = Number(this.scientificNotationToString(body.profit))
+      //   })
+      // }
       
-      dataCenterHandler.getProfitHistory({
-        address: this.address
-      }, (body) => {
-        if (body.status) {
-          for (let detail of body.profitHistory) {
-            let time = WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
-            this.rewardList.push({
-              id: 1,
-              poolTime: time,
-              poolMoney: `+ ${detail.profit}`
-            })
-          }
-        }
-      })
+      // dataCenterHandler.getProfitHistory({
+      //   address: this.address
+      // }, (body) => {
+      //   if (body.status) {
+      //     for (let detail of body.profitHistory) {
+      //       let time = WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
+      //       this.rewardList.push({
+      //         id: 1,
+      //         poolTime: time,
+      //         poolMoney: `+ ${detail.profit}`
+      //       })
+      //     }
+      //   }
+      // })
 
       /** 获取这个钱包对应加入矿池的信息 */
       this._getAllContractInfos(poolAddress)
       // this._getRelatedMiner()
-      this._getNounce()
+      //this._getNounce()
     },
 
     onUpdatePage(ipt, poolAddress) {
@@ -350,16 +387,26 @@ export default {
         this.poolAddress.push(poolAddress)
       }
       this._getAllContractInfos(this.poolAddress)
-      dataCenterHandler.getMyTotalReward({
-        address: this.address
-      }, (body) => {
-        if (body.status) {
-          this.myReward = Number(this.scientificNotationToString(body.rewards))
-        }
+      this.$store.dispatch('updatePoolStuffs')
+      // dataCenterHandler.getMyTotalReward({
+      //   address: this.address
+      // }, (body) => {
+      //   if (body.status) {
+      //     this.myReward = Number(this.scientificNotationToString(body.rewards))
+      //   }
+      // })
+       this.updateWalletBalance(this.wallet).then((balance) => {
+        this.$store.commit('updateWalletBalance', {
+          walletBalance: balance.walletSEC,
+          freezeAmount: balance.freezeAmount,
+          availibleAmount: balance.availibleAmount,
+          walletBalanceSEN: balance.walletSEN,
+          nonce: balance.nonce
+        })
       })
-      this.getWalletBalance(this.address).then((balance) => {
-        this.walletBalance = Number(this.scientificNotationToString(balance))
-      })
+      // this.getWalletBalance(this.address).then((balance) => {
+      //   this.walletBalance = Number(this.scientificNotationToString(balance))
+      // })
     },
 
     _getAllContractInfos(poolAddress) {
@@ -375,23 +422,26 @@ export default {
             let benifitAddress = timeLock[this.address][this.address]
             for (let i = 0; i < benifitAddress.length; i++) {
               freezeMoney = this.cal.accAdd(freezeMoney, benifitAddress[i].lockAmount)
+              
             }
           }
+          this.commit('updatePoolTimeLock', freezeMoney)
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
-            dataCenterHandler.getMiningPool({ address: infos[i].tokenName.split('-')[1] }, (body) => {
-              if (body.status && body.miningPool && body.miningPool.poolName !== '') {
-                this.addPoolList.push({
-                  id: 0,
-                  poolName: body.miningPool.poolName,
-                  poolAddress: infos[i].tokenName.split('-')[1],
-                  pooolMoney: `${balance}`
-                })
-              }
-            })
+            this.$store.dispatch('getPoolInfo', infos[i].tokenName.split('-')[1], balance)
+            // dataCenterHandler.getMiningPool({ address: infos[i].tokenName.split('-')[1] }, (body) => {
+            //   if (body.status && body.miningPool && body.miningPool.poolName !== '') {
+            //     this.addPoolList.push({
+            //       id: 0,
+            //       poolName: body.miningPool.poolName,
+            //       poolAddress: infos[i].tokenName.split('-')[1],
+            //       pooolMoney: `${balance}`
+            //     })
+            //   }
+            // })
           })
         }
-        this.poolTimeLock = Number(this.scientificNotationToString(freezeMoney))
+        // this.poolTimeLock = Number(this.scientificNotationToString(freezeMoney))
       })
     },
 
