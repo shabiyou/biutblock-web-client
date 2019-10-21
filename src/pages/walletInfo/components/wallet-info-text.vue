@@ -4,7 +4,7 @@
     <ul>
       <li>
         <h4>{{ $t("walletInfo.walletAddress") }}</h4>
-        <p>{{ infoAddress }}</p>
+        <p>0x{{ infoAddress }}</p>
       </li>
       <li>
         <h4 class="look-key">{{ $t("walletInfo.walletPrivateKey") }} <img :src="infoKeyImg" @click="lookPriveKey"/></h4>

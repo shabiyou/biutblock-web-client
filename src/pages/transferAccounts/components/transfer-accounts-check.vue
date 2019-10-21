@@ -110,8 +110,8 @@ export default {
       if (this.transferIdx == 0) {
         this.walletMoney = this.amountBiut
       } else {
-        if (this.tradingMoney < 0) {
-          this.walletMoney = 0
+        if (this.tradingMoney <= 0) {
+          this.walletMoney = this.amountBiu
         } else {
           this.walletMoney = this.tradingMoney
         }

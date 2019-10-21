@@ -22,7 +22,7 @@ import poolList4 from '../../../assets/images/poolList4.png'
 export default {
   name: '',
   props: {
-    walletBalance: Number,
+    // walletBalance: String,
     poolLastWeek: Number,
     poolInComing: Number,
     poolMortgage: Number
@@ -34,6 +34,9 @@ export default {
   },
 
   computed: {
+    walletBalance () {
+      return this.$store.getters.availibleAmount
+    },
     itemList () {
       return [
         {

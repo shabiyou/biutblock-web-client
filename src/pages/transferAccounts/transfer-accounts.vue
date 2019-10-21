@@ -1,10 +1,10 @@
 <template>
   <main class="el-container" @click="closeAmountList">
     <!-- 钱包登陆 -->
-    <wallet-entren v-show="tradingPages === 1" @login="loginWallet" />
+    <wallet-entren v-show="!loginStatus" @login="loginWallet" />
 
     <!-- 填写转账信息 -->
-    <main class="wallet-background" v-if="tradingPages === 2">
+    <main class="wallet-background" v-if="loginStatus">
       <section class="transfer-content">
         <!-- 当前钱包地址 字段 address -->
         <input-list
@@ -99,7 +99,7 @@ export default {
       // address: '', //发款地址
       // allMoneyC: "0", //总金额 BIUT
       // allMoneyN: "0", //总金额 BIU
-      tradingMoney: "0", //biu可转账金额
+      tradingMoney: "0.02", //biu可转账金额
       walletAddress: '', //收款地址
       walletMoney: '', //转账金额
       feeVal: 0.02,
@@ -112,13 +112,23 @@ export default {
     }
   },
   computed: {
+    loginStatus () {
+      return this.$store.getters.isLogin
+    },
+    
+    address () {
+      return `0x${this.$store.getters.walletAddress}`
+    },
+    allMoneyN () {
+      let amount = this.cal.accSub(this.$store.getters.walletMoneyN, 0.02)
+      this.tradingMoney = String(this.getPointNum(amount))
+      return this.$store.getters.walletMoneyN
+    },
     ...mapGetters({
-      address: 'walletAddress',
       allMoneyC: 'availibleAmount',
-      allMoneyN: 'walletMoneyN',
       privateKey: 'walletKey',
-      nonce: 'nonce'
-      
+      nonce: 'nonce',
+      wallet: 'wallet'
     }),
     //转账信息传给子组件（包含所有的转账信息）
     tradingInfo() {
@@ -181,10 +191,10 @@ export default {
       this.$store.commit('login', e)
       let balance = await this.updateWalletBalance(e)
       this.$store.commit('updateWalletBalance', {
-        walletBalance: balance.walletSEC,
+        walletBalance: balance.walletBalance,
         freezeAmount: balance.freezeAmount,
         availibleAmount: balance.availibleAmount,
-        walletBalanceSEN: balance.walletSEN,
+        walletBalanceSEN: balance.walletBalanceSEN,
         nonce: balance.nonce
       })
       // this.address = e.address
@@ -249,7 +259,7 @@ export default {
         this.$refs.feeModel.resetSlider()
         this.maskShow = false
         this.$nextTick(async () => {
-          let balance = await this.updateWalletBalance(e)
+          let balance = await this.updateWalletBalance(this.wallet)
           this.$store.commit('updateWalletBalance', {
             walletBalance: balance.walletSEC,
             freezeAmount: balance.freezeAmount,
@@ -261,20 +271,20 @@ export default {
       }
     },
 
-    //查询余额
-    selectMoney(address) {
-      //查询SEC余额
-      this.getWalletBalance(address, 'biut').then(res => {
-        this.allMoneyC = this.scientificNotationToString(res)
-      })
-      //查询BIU余额
-      this.getWalletBalance(address, 'biu').then(res => {
-        let amount = this.scientificNotationToString(res)
-        this.allMoneyN = amount
-        let amountFee = this.cal.accSub(amount, this.feeVal)
-        this.tradingMoney = String(this.getPointNum(amountFee))
-      })
-    }
+    // //查询余额
+    // selectMoney(address) {
+    //   //查询SEC余额
+    //   this.getWalletBalance(address, 'biut').then(res => {
+    //     this.allMoneyC = this.scientificNotationToString(res)
+    //   })
+    //   //查询BIU余额
+    //   this.getWalletBalance(address, 'biu').then(res => {
+    //     let amount = this.scientificNotationToString(res)
+    //     this.allMoneyN = amount
+    //     let amountFee = this.cal.accSub(amount, this.feeVal)
+    //     this.tradingMoney = String(this.getPointNum(amountFee))
+    //   })
+    // }
   }
 }
 </script>

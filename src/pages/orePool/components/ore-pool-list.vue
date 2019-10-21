@@ -52,7 +52,6 @@
     <!-- mask 弹窗 -->
     <pool-mask
       v-show="maskShow"
-      :nounce="nounce"
       :maskPage="maskPage"
       :address="address"
       :addressShort="addressShort"
@@ -78,12 +77,11 @@ export default {
   props: {
     itemList: Array,
     poolName: String,
-    nounce: Number,
     address: String,
     addressShort: String,
     privateKey: String,
     stus: Boolean,
-    walletBalance: Number,
+    // walletBalance: Number,
     joinMaskPage: Number  // 0 没加入过  1 加入过
   },
   data() {
@@ -97,6 +95,9 @@ export default {
   computed: {
     total() {
       return this.itemList.length
+    },
+    walletBalance () {
+      return this.$store.getters.availibleAmount
     }
   },
   methods: {

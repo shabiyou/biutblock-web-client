@@ -118,12 +118,11 @@ export default {
     publicButton
   },
   props: {
-    nounce: Number,
     selectedItem: Object,
     address: String,
     addressShort: String,
     privateKey: String,
-    totalMoney: String,
+    // totalMoney: String,
     mortgageShow: Boolean,
     maskPage: Number
   },
@@ -148,6 +147,10 @@ export default {
 
   },
   computed: {
+    totalMoney() {
+      return this.$store.getters.availibleAmount
+    },
+
     joinBtn() {
       let ipt = this.joinIpt ? this.joinIpt.replace(/\s+/g, "") : '0'
       return 10000 <= ipt && ipt <= Number(this.totalMoney) ? true : false

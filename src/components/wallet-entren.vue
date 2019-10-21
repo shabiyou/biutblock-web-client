@@ -196,7 +196,7 @@ export default {
             this._keyError()
           } else if (parent.status) {
             parm = {
-              address: '0x' + extractAddress,
+              walletAddress: '0x' + extractAddress,
               privateKey: privateVal,
               englishWords: extractPhrase,
               publicKey: extractPublicKey,
@@ -234,7 +234,7 @@ export default {
                 this._keystoreError()
               } else if (parent.status) {
                 parm = {
-                  address: '0x' + arrData.walletAddress,
+                  walletAddress: '0x' + arrData.walletAddress,
                   privateKey: arrData.privateKey,
                   englishWords: arrData.englishWords,
                   publicKey: arrData.publicKey,

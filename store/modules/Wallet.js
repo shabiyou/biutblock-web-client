@@ -1,6 +1,7 @@
 import { strictEqual } from "assert"
+import WalletsHandler from "../../src/lib/WalletsHandler"
 const dataCenterHandler = require("../../src/lib/DataCenterHandler")
-const WalletsHandler = require("../../src/lib/WalletsHandler")
+const moment = require('moment-timezone')
 
 const state = {
 	isLogin: false,
@@ -8,7 +9,7 @@ const state = {
 		walletAddress: "",
 		walletKey: "",
 		walletPublicKey: "",
-		onwInvitationCode: "",
+		ownInvitationCode: "",
 		walletBalance: "-",
 		walletBalanceSEN: "-",
 		availibleAmount: "-",
@@ -19,7 +20,7 @@ const state = {
     ownPoolAddress: [],
     mortgageValue: "0",
 		role: "",
-		nonce: "",
+		nonce: 0,
 		invitatedAmount: 0,
 		minerLevel: '',
 		lastWeekReward: 0,
@@ -51,13 +52,14 @@ const getters = {
 	rewardList: state => state.wallet.rewardList,
 	poolTimeLock: state => state.wallet.poolTimeLock,
 	poolList: state => state.wallet.pools,
-	mortgagePoolAddress: state => state.wallet.mortgagePoolAddress
+	mortgagePoolAddress: state => state.wallet.mortgagePoolAddress,
+	ownPoolAddress: state => state.wallet.ownPoolAddress
 }
 
 const mutations = {
 	login: function (state, wallet) {
 		state.isLogin = true
-		state.wallet.walletAddress = wallet.address.replace('0x', '')
+		state.wallet.walletAddress = wallet.walletAddress.replace('0x', '')
 		state.wallet.walletKey = wallet.privateKey
 		state.wallet.walletPublicKey = wallet.publicKey
 		state.wallet.ownInvitationCode = wallet.ownInvitationCode
@@ -71,7 +73,30 @@ const mutations = {
 
 	logoff: function (state) {
 		state.isLogin = false
-		state.wallet = {}
+		state.wallet = {
+			walletAddress: "",
+			walletKey: "",
+			walletPublicKey: "",
+			onwInvitationCode: "",
+			walletBalance: "-",
+			walletBalanceSEN: "-",
+			availibleAmount: "-",
+			freezeAmount: "-",
+    	invitationCode: "-",
+			englishWords: "",
+    	mortgagePoolAddress: [],
+    	ownPoolAddress: [],
+    	mortgageValue: "0",
+			role: "",
+			nonce: 0,
+			invitatedAmount: 0,
+			minerLevel: '',
+			lastWeekReward: 0,
+			myReward: 0,
+			rewardList: [],
+			poolTimeLock: 0,
+			pools: []
+		}
 	},
 
 	updateWalletBalance: function (state, params) {
@@ -165,7 +190,7 @@ const actions = {
 	getPoolInfo ({commit}, address, balance) {
 		dataCenterHandler.getMiningPool({ address: address }, (body) => {
 			if (body.status && body.miningPool && body.miningPool.poolName !== '') {
-				commit('insertPool', {
+				commit('insertMyPool', {
 					id: 0,
 					poolName: body.miningPool.poolName,
 					poolAddress: infos[i].tokenName.split('-')[1],

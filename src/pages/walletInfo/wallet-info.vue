@@ -81,6 +81,9 @@ export default {
     },
     freezeAmount () {
       return this.$store.getters.freezeAmount
+    },
+    wallet () {
+      return this.$store.getters.wallet
     }
   },
   created() {
@@ -104,14 +107,14 @@ export default {
     //登陆钱包
     async loginWallet(e) {
       this.$store.commit('login', e)
-      let balance = await this.updateWalletBalance(e)
       this.$store.commit('updateWalletBalance', {
-        walletBalance: balance.walletSEC,
+        walletBalance: balance.walletBalance,
         freezeAmount: balance.freezeAmount,
         availibleAmount: balance.availibleAmount,
-        walletBalanceSEN: balance.walletSEN,
+        walletBalanceSEN: balance.walletBalanceSEN,
         nonce: balance.nonce
       })
+      let balance = await this.updateWalletBalance(this.wallet)
     },
 
     // updateWalletBalance: async function (wallet) {

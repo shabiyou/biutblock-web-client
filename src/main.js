@@ -102,7 +102,7 @@ Vue.prototype.getNonce = async function (address) {
     'method': 'sec_getNonce',
     "params": [""+address+""]
   }
-  let body = fetch(_const.url, {
+  let body = await fetch(_const.url, {
     method: 'post',
     body: JSON.stringify(nonceData), // request is a string
     headers: httpHeaderOption
@@ -112,7 +112,7 @@ Vue.prototype.getNonce = async function (address) {
 }
 
 Vue.prototype.updateWalletBalance = async function (wallet) {
-  let address = wallet.address.replace('0x', '')
+  let address = wallet.walletAddress.replace('0x', '')
   let walletSEC = await this.getWalletBalance(address, 'biut')
   let walletSEN = await this.getWalletBalance(address, 'biu')
   let nonce = await this.getNonce(address)

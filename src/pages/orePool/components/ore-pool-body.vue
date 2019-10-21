@@ -35,7 +35,6 @@
       :mortgageShow="mortgageShow"
       :privateKey="privateKey"
       :selectedItem="selectedItem"
-      :totalMoney="walletBalance.toString()"
       @close="closeMask"
       @updatePage="updatePage"
     />
@@ -51,12 +50,12 @@ export default {
   },
   props: {
     itemList: Array,
-    nounce: Number,
+    // nounce: Number,
     address: String,
     addressShort: String,
     mortgageShow: Boolean,
     privateKey: String,
-    walletBalance: Number
+    // walletBalance: Number
   },
   data() {
     return {
@@ -64,6 +63,14 @@ export default {
       selectedItem: {},
       joinIpt: '0',
       maskPage: 1
+    }
+  },
+  computed: {
+    walletBalance () {
+      return this.$store.getters.availibleAmount
+    },
+    nounce () {
+      return Number(this.$store.getters.nonce)
     }
   },
   methods: {
