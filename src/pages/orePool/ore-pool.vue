@@ -268,7 +268,9 @@ export default {
   mounted() {
 
   },
-  destroyed() { },
+  destroyed() { 
+    this.$store.commit('logoff')
+  },
   methods: {
     //搜索内容
     searchFrom() {
@@ -538,7 +540,7 @@ export default {
               
             }
           }
-          this.commit('updatePoolTimeLock', freezeMoney)
+          this.$store.commit('updatePoolTimeLock', freezeMoney)
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
             // this.$store.dispatch('getPoolInfo', infos[i].tokenName.split('-')[1], balance)

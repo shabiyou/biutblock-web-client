@@ -59,44 +59,70 @@ const getters = {
 const mutations = {
 	login: function (state, wallet) {
 		state.isLogin = true
-		state.wallet.walletAddress = wallet.walletAddress.replace('0x', '')
-		state.wallet.walletKey = wallet.privateKey
-		state.wallet.walletPublicKey = wallet.publicKey
-		state.wallet.ownInvitationCode = wallet.ownInvitationCode
-		state.wallet.invitationCode = wallet.invitationCode
-		state.wallet.mortgagePoolAddress = wallet.mortgagePoolAddress
-		state.wallet.ownPoolAddress = wallet.ownPoolAddress
-		state.wallet.mortageValue = wallet.mortgageValue
-		state.wallet.role = wallet.role
-		state.wallet.englishWords = wallet.englishWords
+		if (state.wallet.walletAddress !== wallet.walletAddress.replace('0x', '')) {
+			state.wallet = {
+				walletAddress: "",
+				walletKey: "",
+				walletPublicKey: "",
+				onwInvitationCode: "",
+				walletBalance: "-",
+				walletBalanceSEN: "-",
+				availibleAmount: "-",
+				freezeAmount: "-",
+    		invitationCode: "-",
+				englishWords: "",
+    		mortgagePoolAddress: [],
+    		ownPoolAddress: [],
+    		mortgageValue: "0",
+				role: "",
+				nonce: 0,
+				invitatedAmount: 0,
+				minerLevel: '',
+				lastWeekReward: 0,
+				myReward: 0,
+				rewardList: [],
+				poolTimeLock: 0,
+				pools: []
+			}
+			state.wallet.walletAddress = wallet.walletAddress.replace('0x', '')
+			state.wallet.walletKey = wallet.privateKey
+			state.wallet.walletPublicKey = wallet.publicKey
+			state.wallet.ownInvitationCode = wallet.ownInvitationCode
+			state.wallet.invitationCode = wallet.invitationCode
+			state.wallet.mortgagePoolAddress = wallet.mortgagePoolAddress
+			state.wallet.ownPoolAddress = wallet.ownPoolAddress
+			state.wallet.mortageValue = wallet.mortgageValue
+			state.wallet.role = wallet.role
+			state.wallet.englishWords = wallet.englishWords
+		}
 	},
 
 	logoff: function (state) {
 		state.isLogin = false
-		state.wallet = {
-			walletAddress: "",
-			walletKey: "",
-			walletPublicKey: "",
-			onwInvitationCode: "",
-			walletBalance: "-",
-			walletBalanceSEN: "-",
-			availibleAmount: "-",
-			freezeAmount: "-",
-    	invitationCode: "-",
-			englishWords: "",
-    	mortgagePoolAddress: [],
-    	ownPoolAddress: [],
-    	mortgageValue: "0",
-			role: "",
-			nonce: 0,
-			invitatedAmount: 0,
-			minerLevel: '',
-			lastWeekReward: 0,
-			myReward: 0,
-			rewardList: [],
-			poolTimeLock: 0,
-			pools: []
-		}
+		// state.wallet = {
+		// 	walletAddress: "",
+		// 	walletKey: "",
+		// 	walletPublicKey: "",
+		// 	onwInvitationCode: "",
+		// 	walletBalance: "-",
+		// 	walletBalanceSEN: "-",
+		// 	availibleAmount: "-",
+		// 	freezeAmount: "-",
+    // 	invitationCode: "-",
+		// 	englishWords: "",
+    // 	mortgagePoolAddress: [],
+    // 	ownPoolAddress: [],
+    // 	mortgageValue: "0",
+		// 	role: "",
+		// 	nonce: 0,
+		// 	invitatedAmount: 0,
+		// 	minerLevel: '',
+		// 	lastWeekReward: 0,
+		// 	myReward: 0,
+		// 	rewardList: [],
+		// 	poolTimeLock: 0,
+		// 	pools: []
+		// }
 	},
 
 	updateWalletBalance: function (state, params) {

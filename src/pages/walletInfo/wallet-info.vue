@@ -92,7 +92,9 @@ export default {
   mounted() {
 
   },
-  destroyed() { },
+  destroyed() { 
+    this.$store.commit('logoff')
+  },
   methods: {
     //取消创建新钱包
     closeMask() {
@@ -107,6 +109,7 @@ export default {
     //登陆钱包
     async loginWallet(e) {
       this.$store.commit('login', e)
+      let balance = await this.updateWalletBalance(this.wallet)
       this.$store.commit('updateWalletBalance', {
         walletBalance: balance.walletBalance,
         freezeAmount: balance.freezeAmount,
@@ -114,7 +117,6 @@ export default {
         walletBalanceSEN: balance.walletBalanceSEN,
         nonce: balance.nonce
       })
-      let balance = await this.updateWalletBalance(this.wallet)
     },
 
     // updateWalletBalance: async function (wallet) {

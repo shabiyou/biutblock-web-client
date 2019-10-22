@@ -183,7 +183,9 @@ export default {
   mounted() {
 
   },
-  destroyed() { },
+  destroyed() { 
+    this.$store.commit('logoff')
+  },
   methods: {
     //登陆钱包
     async loginWallet(e) {
