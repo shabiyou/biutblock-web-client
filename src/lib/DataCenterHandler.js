@@ -1,5 +1,5 @@
 const request = require('request')
-const dataCenterUrl = "http://test.biut.io:3000/mining-pool/"
+const dataCenterUrl = "http://scan.biut.io:3000/mining-pool/"
 const Promise = require('es6-promise').Promise
 const DataCenterHandler = {
   createWallet: function (params, callback) {

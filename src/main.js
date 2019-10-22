@@ -126,6 +126,7 @@ Vue.prototype.updateWalletBalance = async function (wallet) {
   for (let pool of wallet.ownPoolAddress) {
     poolAddress.push(pool.replace('0x', ''))
   }
+  poolAddress = Array.from(new Set(poolAddress))
   let contracts = await this.getContractInfoSync(poolAddress)
 
   for (let i = 0; i < contracts.length; i++) {
