@@ -21,12 +21,12 @@ const state = {
     mortgageValue: "0",
 		role: "",
 		nonce: 0,
-		invitatedAmount: 0,
+		invitatedAmount: "-",
 		minerLevel: '',
-		lastWeekReward: 0,
-		myReward: 0,
+		lastWeekReward: "-",
+		myReward: "-",
 		rewardList: [],
-		poolTimeLock: 0,
+		poolTimeLock: "-",
 		pools: []
 	},
 	pools: []
@@ -46,7 +46,7 @@ const getters = {
 	freezeAmount: state => state.wallet.freezeAmount,
 	nonce: state => state.wallet.nonce,
 	invitatedAmount: state => state.wallet.invitatedAmount,
-	minerLevel: state => state.wallet.invitatedAmount,
+	minerLevel: state => state.wallet.minerLevel,
 	lastWeekReward: state => state.wallet.lastWeekReward,
 	myReward: state => state.wallet.myReward,
 	rewardList: state => state.wallet.rewardList,
@@ -76,12 +76,12 @@ const mutations = {
     		mortgageValue: "0",
 				role: "",
 				nonce: 0,
-				invitatedAmount: 0,
-				minerLevel: '',
-				lastWeekReward: 0,
-				myReward: 0,
+				invitatedAmount: "-",
+				minerLevel: '4',
+				lastWeekReward: "-",
+				myReward: "-",
 				rewardList: [],
-				poolTimeLock: 0,
+				poolTimeLock: "-",
 				pools: []
 			}
 			state.wallet.walletAddress = wallet.walletAddress.replace('0x', '')
@@ -147,6 +147,7 @@ const mutations = {
 	},
 
 	updateRewardList: function (state, list) {
+		state.wallet.rewardList = []
 		for (let detail of list) {
 			let time = WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
 			state.wallet.rewardList.push({
@@ -161,8 +162,8 @@ const mutations = {
 		state.wallet.poolTimeLock = timelock
 	},
 
-	insertMyPool: function (state, pool) {
-		state.wallet.pools.push(pool)
+	insertMyPool: function (state, pools) {
+		state.wallet.pools = pools
 	},
 
 	insertPool: function (state) {

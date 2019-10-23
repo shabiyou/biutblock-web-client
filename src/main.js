@@ -12,7 +12,7 @@ import './assets/css/public.scss'
 import i18n from './utils/index'
 import axios from 'axios'
 import qs from 'qs'
-import Vconsole from 'vconsole'
+// import Vconsole from 'vconsole'
 import './utils/global.js'
 import store from '../store'
 import Element from 'element-ui'
@@ -34,8 +34,9 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
-const vConsole = new Vconsole()
-Vue.use(vConsole)
+/**打开移动端浏览器debug */
+// const vConsole = new Vconsole()
+// Vue.use(vConsole)
 
 let httpHeaderOption = {
   'content-type': 'application/json',

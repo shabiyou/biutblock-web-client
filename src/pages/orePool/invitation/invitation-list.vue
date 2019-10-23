@@ -217,56 +217,32 @@ export default {
           }
         }
 
-        for (let miner of allRelatedMiners) {
+        let relatedTemp = allRelatedMiners.filter(miner => {
+        let repeat = false
           for (let payed of this.itemList) {
-            let address = payed.invitationAddress.replace('0x', '')
-            if (address === miner.address) {
-              remove = true
+            if (payed.invitationAddress.replace('0x', '') === miner.address) {
+              repeat = true
               break
             }
           }
-          if (!remove) {
-            this.itemList.push({
-              id: 0,
-              invitationAddress: `${miner.address}`,
-              invitationTime: WalletsHandler.formatDate(moment(miner.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
-              invitationMoney: `0`,
-              level: 1
-            })
-          } 
+          if (!repeat) {
+              return miner
+          }
+        })
+
+        for (let item of relatedTemp) {
+          this.itemList.push({
+            id: 0,
+            invitationAddress: `${item.address}`,
+            invitationTime: WalletsHandler.formatDate(moment(item.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+            invitationMoney: `0`,
+            level: 1
+          })
         }
       }).catch ((err) => {
         console.log(err)
       })
     }
-
-    // getInvitationList() {
-    //   dataCenterHandler.getInvitationDetails({ address: this.address }, (docs) => {
-    //     let doc = docs.rewards
-    //     if (docs.status && doc.length > 0) {
-    //       this.invitationNull = false
-    //       for (var i = 0; i < doc.length; i++) {
-
-    //         let time = WalletsHandler.formatDate(moment(doc[i].insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
-    //         if (doc[i].rewards !== '0' && doc[i].type === 'level1') {
-    //           this.firstLevelAmount = this.cal.accAdd(this.firstLevelAmount, doc[i].rewards)
-    //           this.firstLevel = this.firstLevel + 1
-    //           this.itemList.push({
-    //             id: '1',
-    //             invitationAddress: doc[i].addressFrom || '',
-    //             invitationTime: time.substring(0, 20),
-    //             invitationMoney: (doc[i].rewards || 0)
-    //           })
-    //         } else if (doc[i].rewards !== '0' && doc[i].type === 'level2') {
-    //           this.secondLevel = this.secondLevel + 1
-    //           this.secondLevelAmount = this.cal.accAdd(this.secondLevelAmount, doc[i].rewards)
-    //         }
-    //       }
-    //     } else {
-    //       this.invitationNull = true
-    //     }
-    //   })
-    // }
   },
 }
 </script>

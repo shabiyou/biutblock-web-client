@@ -23,9 +23,9 @@ export default {
   name: '',
   props: {
     // walletBalance: String,
-    poolLastWeek: Number,
-    poolInComing: Number,
-    poolMortgage: Number
+    // poolLastWeek: String,
+    // poolInComing: String,
+    // poolMortgage: String
   },
   data() {
     return {
@@ -36,6 +36,15 @@ export default {
   computed: {
     walletBalance () {
       return this.$store.getters.availibleAmount
+    },
+    poolLastWeek () {
+      return this.$store.getters.lastWeekReward
+    },
+    poolInComing () {
+      return this.$store.getters.myReward
+    },
+    poolMortgage () {
+      return this.$store.getters.freezeAmount
     },
     itemList () {
       return [

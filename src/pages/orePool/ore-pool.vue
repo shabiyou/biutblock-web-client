@@ -76,10 +76,7 @@
           <!-- 矿池 -->
           <section v-if="idx === 0">
             <pool-header
-              :walletBalance="walletBalance"
-              :poolLastWeek="lastWeekReward"
-              :poolInComing="myReward"
-              :poolMortgage="poolTimeLock"
+
             />
             <pool-body
               @lookAll="poolPage = 1"
@@ -137,6 +134,8 @@
     <section v-if="loginPage === 1">
       <pool-login @login="userLogin" />
     </section>
+
+    <wallet-transparent :txt="transparentTxt" v-show="transparentShow" />
   </main>
 </template>
 
@@ -151,6 +150,7 @@ import invitationMask from './invitation/invitation-mask'
 import poolFooter from './components/ore-pool-footer'
 import search from '../../assets/images/search.png'
 import searchs from '../../assets/images/searchs.png'
+import walletTransparent from '../../components/wallet-transparent'
 import {mapGettemapGetters, mapGetters} from "vuex"
 
 const dataCenterHandler = require('../../lib/DataCenterHandler')
@@ -166,7 +166,8 @@ export default {
     poolLogin,
     invitationHeader,
     invitationList,
-    invitationMask
+    invitationMask,
+    walletTransparent
   },
   props: {},
   data() {
@@ -191,6 +192,8 @@ export default {
       maskAddress: '',
       maskReward: '',
       maskList: [],
+      transparentShow: false,
+      transparentTxt: 'invitation.inMask2ListNull',
       // invitationList: [],
       // invitationCode: '',
       // invitatedAmount: 0,
@@ -302,94 +305,6 @@ export default {
         nonce: balance.nonce
       })
       this._getPoolInvitationStuffs()
-      // if (this.ismobile()) {
-      //   this.addressShort = this.address.replace('0x', '').replace(/(.{6}).+(.{6})/, '$1...$2')
-      // } else {
-      //   this.addressShort = this.address.replace('0x', '')
-      // }
-      // // this.privateKey = e.privateKey
-      // // this.loginStatus = false
-      // let poolAddress = []
-      // if (this.mortgagePoolAddress.length > 1) {
-      //   this.joinMaskPage = 1
-      // } else {
-      //   this.joinMaskPage = 0
-      // }
-
-      // for (let pool of this.mortgagePoolAddress) {
-      //   if (pool !== "") {
-      //     poolAddress.push(pool.replace('0x', ''))
-      //   }
-      // }
-      // for (let pool of e.ownPoolAddress) {
-      //   if (pool !== "") {
-      //     poolAddress.push(pool.replace('0x', ''))
-      //   }
-      // }
-      // poolAddress = Array.from(new Set(poolAddress))
-      // this.poolAddress = poolAddress
-      // //this.$store.dispatch('updatePoolStuffs')
-     
-      // /**获取钱包余额 */
-      // // this.getWalletBalance(e.address.replace('0x', '')).then((balance) => {
-      // //   this.walletBalance = Number(this.scientificNotationToString(balance))
-      // // })
-
-      // dataCenterHandler.getMinerLevel({
-      //   address: this.address
-      // }, (body) => {
-      //   if (body.status) {
-      //     this.$store.commit('updateMinerLevel', {invitatedAmount: body.amount, minerLevel: body.minerType})
-      //     //this.invitatedAmount = body.amount
-      //     //this.minerLevel = body.minerType
-      //   }
-      // })
-
-      // dataCenterHandler.getLastProfit({
-      //   address: this.address
-      // }, (body) => {
-      //   if (body.status) {
-      //     this.$store.commit('updateLastWeekReward', body.profit)
-      //     // this.lastWeekReward = Number(this.scientificNotationToString(body.profit))
-      //   }
-      // })
-
-      // if (e.role === 'Miner') {
-      //   dataCenterHandler.getTotalProfit({
-      //     address: this.address
-      //   }, (body) => {
-      //     this.$store.commit('updateMyReward', body.profit)
-      //     // this.myReward = Number(this.scientificNotationToString(body.profit))
-      //   })
-      // } else {
-      //   dataCenterHandler.getMyPoolProfit({
-      //     address: this.address
-      //   }, (body) => {
-      //     this.$store.commit('updateMyReward', body.profit)
-      //     // this.myReward = Number(this.scientificNotationToString(body.profit))
-      //   })
-      // }
-      
-      // dataCenterHandler.getProfitHistory({
-      //   address: this.address
-      // }, (body) => {
-      //   if (body.status) {
-      //     this.$store.commit('updateRewardList', body.profitHistory)
-      //     // for (let detail of body.profitHistory) {
-      //     //   let time = WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset())
-      //     //   this.rewardList.push({
-      //     //     id: 1,
-      //     //     poolTime: time,
-      //     //     poolMoney: `+ ${detail.profit}`
-      //     //   })
-      //     // }
-      //   }
-      // })
-
-      // /** 获取这个钱包对应加入矿池的信息 */
-      // this._getAllContractInfos(poolAddress)
-      // this._getRelatedMiner()
-      //this._getNounce()
     },
     
     _getPoolInvitationStuffs () {
@@ -544,14 +459,16 @@ export default {
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
             // this.$store.dispatch('getPoolInfo', infos[i].tokenName.split('-')[1], balance)
+            let pools = []
             dataCenterHandler.getMiningPool({ address: infos[i].tokenName.split('-')[1] }, (body) => {
               if (body.status && body.miningPool && body.miningPool.poolName !== '') {
-                this.$store.commit('insertMyPool', {
+                pools.push({
 					        id: 0,
 					        poolName: body.miningPool.poolName,
 					        poolAddress: infos[i].tokenName.split('-')[1],
 					        pooolMoney: `${balance}`
 				      })
+                this.$store.commit('insertMyPool', pools)
                 
                 // this.addPoolList.push({
                 //   id: 0,
@@ -599,31 +516,76 @@ export default {
 
     lookRules(page, item) {
       let details = []
-      if (item) {
-        dataCenterHandler.getInvitationDetails({
-          address: item.invitationAddress
-        }, (body) => {
-          if (body.status) {
-            for (let detail of body.rewards) {
-              if (detail.type === 'level1') {
-                details.push({
-                  id: 0,
-                  maskAddress: detail.addressFrom ? `0x${detail.addressFrom}` : '',
-                  maskTime: WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
-                  maskAmount: detail.rewards
-                })
-              }
-              
+      this.maskList = []
+      if (typeof(item) === "object") {
+        Promise.all([dataCenterHandler.getInvitationDetailsPromise({address: item.invitationAddress.replace('0x', '')}), 
+                   dataCenterHandler.getInvitationDetailsPromise({address: this.address})])
+      .then((infos) => {
+        let firstlevel = infos[0].rewards.filter(item => item.type === 'level1')
+        let secondlevel = infos[1].rewards.filter(item => item.type === 'level2')
+        let isSameAddress = false
+        for (let level2item of secondlevel) {
+          for (let level1item of firstlevel) {
+            if (level2item.addressFrom === level1item.addressFrom) {
+              isSameAddress = true
+              break
+            } else {
+              isSameAddress = false
             }
-            this.maskList = details
           }
-        })
+          if (isSameAddress) {
+            details.push({
+              id: 1,
+              maskAddress: level2item.addressFrom ? `0x${level2item.addressFrom}` : '',
+              maskTime: level2item.insertAt ? WalletsHandler.formatDate(moment(level2item.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()) : '',
+              maskAmount: level2item.rewards
+            })
+          }
+        }
+        if (details.length === 0) {
+          this.transparentShow = true
+          setTimeout(() => {
+            this.transparentShow = false
+          }, 3000)
+          return
+        } else {
+          this.maskList = details
+          this.maskLevel = item.level.toString()
+          this.maskAddress = item.invitationAddress
+          this.maskReward = item.invitationMoney
+          this.maskPage = page
+          this.maskShow = true
+        }
+        
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+        // dataCenterHandler.getInvitationDetails({
+        //   address: item.invitationAddress
+        // }, (body) => {
+        //   if (body.status) {
+        //     for (let detail of body.rewards) {
+        //       if (detail.type === 'level1') {
+        //         details.push({
+        //           id: 0,
+        //           maskAddress: detail.addressFrom ? `0x${detail.addressFrom}` : '',
+        //           maskTime: WalletsHandler.formatDate(moment(detail.insertAt).format('YYYY/MM/DD HH:mm:ss'), new Date().getTimezoneOffset()),
+        //           maskAmount: detail.rewards
+        //         })
+        //       }
+              
+        //     }
+        //     this.maskList = details
+        //   }
+        // })
+
+      } else {
+        this.maskPage = page
+          this.maskShow = true
       }
-      this.maskLevel = item.level.toString()
-      this.maskAddress = item.invitationAddress
-      this.maskReward = item.invitationMoney
-      this.maskPage = page
-      this.maskShow = true
+
     },
 
     closeInvitationMask() {

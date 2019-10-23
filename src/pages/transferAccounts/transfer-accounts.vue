@@ -166,12 +166,12 @@ export default {
         //转账SEC
         if (this.transferIdx === 0) {
           return address.length == 42 && this.walletMoney > 0 && address != this.address
-            && Number(this.walletMoney) <= Number(this.allMoneyC) && _const.addressReg.test(address)
+            && Number(this.walletMoney.replace(",", "")) <= Number(this.allMoneyC.replace(",", "")) && _const.addressReg.test(address)
             && Number(this.feeVal) <= Number(this.allMoneyN) ? true : false
         } else {
           //转账BIU
           return address.length == 42 && this.walletMoney > 0 && address != this.address
-            && Number(this.walletMoney) <= Number(this.allMoneyN)
+            && Number(this.walletMoney.replace(",", "")) <= Number(this.allMoneyN.replace(",", ""))
             && _const.addressReg.test(address) ? true : false
         }
       }
