@@ -263,10 +263,10 @@ export default {
         this.$nextTick(async () => {
           let balance = await this.updateWalletBalance(this.wallet)
           this.$store.commit('updateWalletBalance', {
-            walletBalance: balance.walletSEC,
+            walletBalance: balance.walletBalance,
             freezeAmount: balance.freezeAmount,
             availibleAmount: balance.availibleAmount,
-            walletBalanceSEN: balance.walletSEN,
+            walletBalanceSEN: balance.walletBalanceSEN,
             nonce: balance.nonce
           })
         })
