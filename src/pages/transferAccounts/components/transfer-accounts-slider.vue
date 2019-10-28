@@ -27,10 +27,15 @@ export default {
   name: 'transferAccountsSlider',
   props: {
     feeVal: Number,
-    ststs: String
+    // ststs: String
   },
   components: {
     publicTips
+  },
+  computed: {
+    ststs () {
+      return this.$store.getters.walletMoneyN
+    }
   },
   data() {
     return {
@@ -57,7 +62,7 @@ export default {
         this.fastTips = true
         this.slowTips = false
       } else if (Number(newFee) < 0.02636364) {
-        this.slowTips = true
+        this.slowTips = true 
         this.fastTips = false
       } else {
         this.fastTips = false

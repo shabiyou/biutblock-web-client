@@ -55,13 +55,21 @@ import tradingCheck from '../../../assets/images/tradingCheck.png'
 export default {
   name: 'transferAccountsCheck',
   props: {
-    amountBiut: String,
-    amountBiu: String,
+    // amountBiut: String,
+    // amountBiu: String,
     tradingMoney: String //biu可转账金额
   },
   components: {
     publicInput,
     publicTips
+  },
+  computed: {
+    amountBiut () {
+      return this.$store.getters.availibleAmount
+    },
+    amountBiu () {
+      return this.$store.getters.walletMoneyN
+    }
   },
   data() {
     return {
@@ -108,10 +116,10 @@ export default {
     //转出全部金额
     allTranferMoney() {
       if (this.transferIdx == 0) {
-        this.walletMoney = this.amountBiut
+        this.walletMoney = this.getPointNum(this.amountBiut)
       } else {
         if (this.tradingMoney <= 0) {
-          this.walletMoney = this.amountBiu
+          this.walletMoney = this.getPointNum(this.amountBiu)
         } else {
           this.walletMoney = this.tradingMoney
         }

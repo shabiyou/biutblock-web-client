@@ -12,7 +12,7 @@ const config = {
   hashReg: /^(0x)/,
   amountReg: /^(([1-9]\d*)|\d)(\.\d{1,8})?$/,
 
-  websiteUrl: "http://mining.biut.io",
+  websiteUrl: "https://mining.biut.io",
 }
 
 let bindToGlobal = (obj, key) => {

@@ -69,7 +69,7 @@ Vue.prototype.getWalletBalance = async (address, type) => {
     })
   })
 
-  let amount = JSON.parse(text).result.value
+  let amount = JSON.parse(text).result.value.Balance
   return amount
 }
 
@@ -91,7 +91,7 @@ Vue.prototype.getAllWalletBalance = async (address, type) => {
       body: JSON.stringify(bodyRequest), // request is a string
       headers: httpHeaderOption
     }).then((res) => res.json())
-    amount = amount + Number(JSON.parse(text.body).result.value)
+    amount = amount + Number(JSON.parse(text.body).result.value.Balance)
   }
   return amount
 }

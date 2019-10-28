@@ -165,13 +165,14 @@ export default {
         this.addressError = false
         //转账SEC
         if (this.transferIdx === 0) {
-          return address.length == 42 && this.walletMoney > 0 && address != this.address
-            && Number(this.walletMoney.replace(",", "")) <= Number(this.allMoneyC.replace(",", "")) && _const.addressReg.test(address)
+          return address.length == 42 && Number(this.walletMoney.toString().replace(",", "")) > 0 && address != this.address
+            && Number(this.walletMoney.toString().replace(",", "")) <= Number(this.allMoneyC.toString().replace(",", "")) && _const.addressReg.test(address)
             && Number(this.feeVal) <= Number(this.allMoneyN) ? true : false
         } else {
           //转账BIU
-          return address.length == 42 && this.walletMoney > 0 && address != this.address
-            && Number(this.walletMoney.replace(",", "")) <= Number(this.allMoneyN.replace(",", ""))
+          return address.length == 42 && Number(this.walletMoney.toString().replace(",", "")) > 0 && address != this.address
+            && Number(this.walletMoney.toString().replace(",", "")) <= Number(this.allMoneyN.toString().replace(",", ""))
+            && Number(this.walletMoney.toString().replace(",", "")) + Number(this.feeVal.toString().replace(",", "")) <= Number(this.allMoneyN.toString().replace(",", ""))
             && _const.addressReg.test(address) ? true : false
         }
       }
