@@ -145,7 +145,7 @@ Vue.prototype.updateWalletBalance = async function (wallet) {
   }
 
   return {
-    walletBalance: walletSEC,
+    walletBalance: Number(this.cal.accAdd(freezeAmount, availibleAmount)),
     freezeAmount: freezeAmount,
     availibleAmount: availibleAmount,
     walletBalanceSEN: walletSEN,
