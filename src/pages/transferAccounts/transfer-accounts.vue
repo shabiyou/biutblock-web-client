@@ -240,11 +240,11 @@ export default {
     selectMoney(address) {
       //查询SEC余额
       this.getWalletBalance(address, 'biut').then(res => {
-        this.allMoneyC = this.scientificNotationToString(res.Balance)
+        this.allMoneyC = this.scientificNotationToString(res)
       })
       //查询BIU余额
       this.getWalletBalance(address, 'biu').then(res => {
-        let amount = this.scientificNotationToString(res.Balance)
+        let amount = this.scientificNotationToString(res)
         this.allMoneyN = amount
         this.tradingMoney = String(this.getPointNum(amount - this.feeVal, 8))
       })

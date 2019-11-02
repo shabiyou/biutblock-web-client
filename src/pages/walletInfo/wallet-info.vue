@@ -92,12 +92,12 @@ export default {
       let address = e.address.replace("0x", "")
       //查询SEC余额
       this.getWalletBalance(address, 'biut').then(res => {
-        this.walletMoneyC = this.scientificNotationToString(res.Balance)
+        this.walletMoneyC = this.scientificNotationToString(res)
       })
 
       //查询SEN余额
       this.getWalletBalance(address, 'biu').then(res => {
-        this.walletMoneyN = this.scientificNotationToString(res.Balance)
+        this.walletMoneyN = this.scientificNotationToString(res)
       })
     }
   },
