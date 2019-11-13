@@ -1,7 +1,7 @@
 <template>
   <main>
     <section class="tit-list">
-      <p>{{ $t(iptTitle) }}<label v-show="!iptRd">*</label></p>
+      <p>{{ $t(iptTitle) }}<label v-show="!isOptional">*</label></p>
       <public-tips v-show="errorShow" :tipsTxt="errorTxt" />
     </section>
 
@@ -34,6 +34,8 @@ export default {
     errorTxt: String,
     iptRd: Boolean,
     iptVal: String,
+    isOptional: Boolean,
+    strictFormat: Boolean
   },
   data() {
     return {
@@ -50,7 +52,9 @@ export default {
     //输入框不能输入中文、空格
     inputChange() {
       this.$nextTick(() => {
-        this.mappingVal = this.inputNull(this.mappingVal)
+        if (this.strictFormat) {
+          this.mappingVal = this.inputNull(this.mappingVal)
+        }
       })
     },
 
@@ -61,7 +65,12 @@ export default {
   },
   watch: {
     mappingVal(newVal, oldVal) {
-      this.$emit("change", newVal.replace(/\s+/g, ""))
+      if (this.strictFormat) {
+        this.$emit("change", newVal.replace(/\s+/g, ""))
+      } else {
+        this.$emit("change", newVal)
+      }
+      
     }
   },
 }

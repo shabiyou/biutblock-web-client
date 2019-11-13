@@ -108,6 +108,11 @@ export default {
           id: '05',
           title: 'transfer.transferAomunt',
           cnt: this.maskInfo[0].transferAmount + ' ' + this.amountType
+        },
+        {
+          id: '06',
+          title: 'transfer.transferInputData',
+          cnt: this.maskInfo[0].inputData
         }
       ]
     }
@@ -130,7 +135,7 @@ export default {
       let fee = this.maskInfo[0].transferFee.toString() //手续费
       let tradingType = this.maskInfo[0].transferType //转账类型 0 BIUT 1 BIU
       let nonce = this.maskInfo[0].nonce
-      let inputData = 'Test'
+      let inputData = this.maskInfo[0].inputData
 
       let url = _const.url
       if (tradingType == 1) {
