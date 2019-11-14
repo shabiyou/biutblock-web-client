@@ -78,6 +78,7 @@ export default {
     transferPoundage1: 'Gas Price',
     transferFast: 'Fast',
     transferSlow: 'Slow',
+    transferInputData: "Transfer comments"
   },
   mapping: {
     ethaddress: 'ETH Wallet Address',

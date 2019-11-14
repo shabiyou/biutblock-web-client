@@ -78,6 +78,7 @@ export default {
     transferPoundage1: '手续费',
     transferFast: '快',
     transferSlow: '慢',
+    transferInputData: "备注"
   },
   mapping: {
     ethaddress: 'ETH地址',

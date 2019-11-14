@@ -13,6 +13,8 @@
           :iptTitle="$t('transfer.youAddress')"
           :iptPlc="$t('transfer.youAddress')"
           :iptRd="true"
+          :isOptional=false
+          :strictFormat=true
           :iptVal="address"
         />
 
@@ -25,6 +27,8 @@
           :iptLength="42"
           :errorShow="addressError"
           :errorTxt="addressTxt"
+          :strictFormat=true
+          :isOptional=false
           @change="addressChange"
         />
 
@@ -34,6 +38,17 @@
           :amountBiu="allMoneyN"
           :tradingMoney="tradingMoney"
           @getAmount="getAmount"
+        />
+
+        <input-list
+          ref="addressModel"
+          class="ipt-m"
+          :iptTitle="$t('transfer.transferInputData')"
+          :iptPlc="$t('transfer.transferInputData')"
+          :iptLength="42"
+          :isOptional=true
+          :strictFormat=false
+          @change="inputDataChange"
         />
 
         <!-- 滑块 -->
@@ -109,6 +124,7 @@ export default {
 
       addressTxt: 'transfer.transferAddressError', //地址错误
       addressError: false,
+      inputData: ""
     }
   },
   computed: {
@@ -140,7 +156,8 @@ export default {
           transferType: this.transferIdx, //类型 0 BIUT 1 BIU
           transferAmount: this.walletMoney, //转账金额
           transferFee: this.feeVal, //转账手续费
-          nonce: this.nonce
+          nonce: this.nonce,
+          inputData: this.inputData
         }
       ]
     },
@@ -224,6 +241,10 @@ export default {
     //转账钱包地址
     addressChange(e) {
       this.walletAddress = e
+    },
+
+    inputDataChange(e) {
+      this.inputData = e
     },
 
     //转账钱包手续费、可转账biu

@@ -59,6 +59,7 @@
 
 <script>
 import SECSDK from '../../../lib/SECSDK.bundle.js'
+const SECUtil = require('@biut-block/biutjs-util')
 let fetch = require('node-fetch')
 let httpHeaderOption = {
   'content-type': 'application/json'
@@ -109,6 +110,11 @@ export default {
           id: '05',
           title: 'transfer.transferAomunt',
           cnt: this.maskInfo[0].transferAmount + ' ' + this.amountType
+        },
+        {
+          id: "06",
+          title: "transfer.transferInputData",
+          cnt: this.maskInfo[0].inputData
         }
       ]
     }
@@ -132,7 +138,7 @@ export default {
       let fee = this.maskInfo[0].transferFee.toString() //手续费
       let tradingType = this.maskInfo[0].transferType //转账类型 0 BIUT 1 BIU
       let nonce = this.maskInfo[0].nonce
-      let inputData = 'Test'
+      let inputData = this.maskInfo[0].inputData
 
       let url = _const.url
       if (tradingType == 1) {
@@ -152,32 +158,28 @@ export default {
         'gasPrice': '0',
         'data': '',
         "nonce": nonce,
-        'inputData': inputData
+        'inputData': inputData,
+        'chainName': tradingType === 0 ? 'SEC' : 'SEN'
       }
       const tx = JSON.stringify(transfer)
       // transfer转换成json string 然后通过此方法对交易进行签名，
       //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
-      let txBody = {
-        "method": "sec_signedTransaction",
-        "params": [{
-          "companyName": "coinegg",
-          "privateKey": privateVal,
-          "transfer": transfer
-        }]
-      }
-      fetch(url, {
-        method: 'post',
-        body: JSON.stringify(txBody),
-        headers: httpHeaderOption
-      }).then((res) => res.json()).then((text) => {
-        let signedTx = JSON.parse(text.body).result.signedTrans
-        let postData = {
+      // let txBody = {
+      //   "method": "sec_signedTransaction",
+      //   "params": [{
+      //     "companyName": "coinegg",
+      //     "privateKey": privateVal,
+      //     "transfer": transfer
+      //   }]
+      // }
+      let signedTx = this._signedTx(privateVal, transfer)
+      let postData = {
           "method": "sec_sendRawTransaction",
           "id": "1",
           "jsonrpc": "2.0",
           "params": signedTx
         }
-        fetch(url, {
+      fetch(url, {
           method: 'post',
           body: JSON.stringify(postData), // request is a string
           headers: httpHeaderOption
@@ -195,7 +197,76 @@ export default {
             this.transferError = true
           }
         })
-      })
+      
+      // fetch(url, {
+      //   method: 'post',
+      //   body: JSON.stringify(txBody),
+      //   headers: httpHeaderOption
+      // }).then((res) => res.json()).then((text) => {
+      //   let signedTx = JSON.parse(text.body).result.signedTrans
+      //   let postData = {
+      //     "method": "sec_sendRawTransaction",
+      //     "id": "1",
+      //     "jsonrpc": "2.0",
+      //     "params": signedTx
+      //   }
+      //   fetch(url, {
+      //     method: 'post',
+      //     body: JSON.stringify(postData), // request is a string
+      //     headers: httpHeaderOption
+      //   }).then((res) => res.json()).then((result) => {
+      //     this.confirmDisabled = false
+      //     this.confrimButton = 'mask.confirm'
+      //     if (JSON.parse(result.body).result) {
+      //       this.maskPage = 2
+      //       if (tradingType == 0) {
+      //         this.successUrl = "https://scan.biut.io/accountdetails?address=" + fromAddress + ""
+      //       } else {
+      //         this.successUrl = "https://scan.biut.io/sen/accountdetails?address=" + fromAddress + ""
+      //       }
+      //     } else {
+      //       this.transferError = true
+      //     }
+      //   })
+      // })
+    },
+
+    _signedTx: function (privateKey, transfer) {
+      let timeStamp = new Date().getTime()
+      let transferData = [{
+        timestamp: timeStamp,
+        from: transfer.walletAddress,
+        to: transfer.sendToAddress,
+        value: transfer.amount,
+        txFee: transfer.txFee,
+        nonce: transfer.nonce,
+        gasLimit: '0',
+        gas: '0',
+        gasPrice: '0',
+        data: '',
+        inputData: transfer.inputData,
+        chainName: transfer.chainName
+      }]
+      const tokenTxBuffer = [
+        SECUtil.bufferToInt(transferData[0].timestamp),
+        Buffer.from(transferData[0].from, 'hex'),
+        Buffer.from(transferData[0].to, 'hex'),
+        Buffer.from(transferData[0].value),
+        Buffer.from(transferData[0].gasLimit),
+        Buffer.from(transferData[0].gas),
+        Buffer.from(transferData[0].gasPrice),
+        Buffer.from(transferData[0].nonce),
+        Buffer.from(transferData[0].inputData),
+        Buffer.from(transferData[0].chainName)
+      ]
+      let txSigHash = Buffer.from(SECUtil.rlphash(tokenTxBuffer).toString('hex'), 'hex')
+      let signature = SECUtil.ecsign(txSigHash, Buffer.from(privateKey, 'hex'))
+      transferData[0].data = {
+        v: signature.v,
+        r: signature.r.toString('hex'),
+        s: signature.s.toString('hex')
+      }
+      return transferData
     }
   },
   created() {
