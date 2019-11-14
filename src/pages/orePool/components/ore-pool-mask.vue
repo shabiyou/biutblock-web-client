@@ -63,7 +63,7 @@
           :class="[joinBtn ? 'btn-active' : '',joninReadonly ? 'cantClick' : '']"
           :disabled="!joinBtn"
           @click.native="joinFrom"
-          v-show="!mortgageShow"/>
+          v-show="mortgageShow"/>
 
         <!-- 抵押更多按钮 -->
         <public-button 
@@ -71,7 +71,7 @@
           :class="[mortgageActive ? 'btn-active' : '',mortgageReadonly ? 'cantClick' : '']"
           :disabled="!mortgageActive"
           @click.native="mortgageFrom"
-          v-show="mortgageShow"/>
+          v-show="!mortgageShow"/>
       </section>
     </section>
 
@@ -152,13 +152,13 @@ export default {
     },
 
     joinBtn() {
-      let ipt = this.joinIpt ? this.joinIpt.replace(/\s+/g, "") : '0'
-      return 10000 <= ipt && ipt <= Number(this.totalMoney) ? true : false
+      let ipt = this.joinIpt ? this.joinIpt.toString().replace(/\s+/g, "") : '0'
+      return 10000 <= Number(ipt) && Number(ipt) <= Number(this.totalMoney) ? true : false
     },
 
     mortgageActive () {
-      let ipt = this.joinIpt ? this.joinIpt.replace(/\s+/g, "") : '0'
-      return 10 <= ipt && ipt <= Number(this.totalMoney) ? true : false
+      let ipt = this.joinIpt ? this.joinIpt.toString().replace(/\s+/g, "") : '0'
+      return 10 <= Number(ipt) && Number(ipt) <= Number(this.totalMoney) ? true : false
     },
 
     itemList () {

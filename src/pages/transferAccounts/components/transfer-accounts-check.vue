@@ -124,6 +124,7 @@ export default {
           this.walletMoney = this.tradingMoney
         }
       }
+      this.walletMoney = this.walletMoney.replace(",", "")
     },
 
     //打开显示列表
