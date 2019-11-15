@@ -134,7 +134,7 @@ export default {
       let privateVal = this.maskInfo[0].privateKey //钱包私钥
       let fromAddress = this.maskInfo[0].fromAddress.replace("0x", "") //发送地址
       let toAddress = this.maskInfo[0].toAddress.replace("0x", "") //接收地址
-      let amount = this.maskInfo[0].transferAmount.replace(",", "") //转账金额
+      let amount = this.maskInfo[0].transferAmount.replace(/,/gm, "") //转账金额
       let fee = this.maskInfo[0].transferFee.toString() //手续费
       let tradingType = this.maskInfo[0].transferType //转账类型 0 BIUT 1 BIU
       let nonce = this.maskInfo[0].nonce
