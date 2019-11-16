@@ -238,7 +238,7 @@ export default {
         body: JSON.stringify(postData), // request is a string
         headers: httpHeaderOption
       }).then((res) => res.json()).then((text) => {
-        if (JSON.parse(text.body).result.status == 1) {
+        if (JSON.parse(text.body).result) {
           callback(ipt)
         }
       })

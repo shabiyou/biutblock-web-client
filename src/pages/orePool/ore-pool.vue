@@ -412,7 +412,7 @@ export default {
       this.mortgageValue = String(this.cal.accAdd(this.mortgageValue, ipt))
 
       this.joinMaskPage = 1
-      if (poolAddress !== '') {
+      if (poolAddress && poolAddress !== '') {
         this.poolAddress.push(poolAddress)
       }
       this._getAllContractInfos(this.poolAddress)
@@ -441,6 +441,7 @@ export default {
 
     _getAllContractInfos(poolAddress) {
       let freezeMoney = 0
+       let pools = []
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let i = 0; i < infos.length; i++) {
           if (Object.keys(infos[i]).length === 0) {
@@ -459,7 +460,7 @@ export default {
           /**计算加入矿池的矿池总收入 */
           this.getWalletBalance(infos[i].tokenName.split('-')[1], 'SEC').then((balance) => {
             // this.$store.dispatch('getPoolInfo', infos[i].tokenName.split('-')[1], balance)
-            let pools = []
+           
             dataCenterHandler.getMiningPool({ address: infos[i].tokenName.split('-')[1] }, (body) => {
               if (body.status && body.miningPool && body.miningPool.poolName !== '') {
                 pools.push({
@@ -468,7 +469,7 @@ export default {
 					        poolAddress: infos[i].tokenName.split('-')[1],
 					        pooolMoney: `${balance}`
 				      })
-                this.$store.commit('insertMyPool', pools)
+                
                 
                 // this.addPoolList.push({
                 //   id: 0,
@@ -479,6 +480,7 @@ export default {
               }
             })
           })
+          this.$store.commit('insertMyPool', pools)
         }
         // this.poolTimeLock = Number(this.scientificNotationToString(freezeMoney))
       })
