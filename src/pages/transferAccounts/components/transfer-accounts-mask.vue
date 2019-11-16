@@ -175,11 +175,12 @@ export default {
         this.confirmDisabled = false
         this.confrimButton = 'mask.confirm'
         if (JSON.parse(result.body).result) {
+          let txHash = JSON.parse(result.body).result.txHash
           this.maskPage = 2
           if (tradingType == 0) {
-            this.successUrl = "https://scan.biut.io/accountdetails?address=" + fromAddress + ""
+            this.successUrl = "https://scan.biut.io/tokentxdetails?hash=" + txHash + ""
           } else {
-            this.successUrl = "https://scan.biut.io/sen/accountdetails?address=" + fromAddress + ""
+            this.successUrl = "https://scan.biut.io/sen/tokentxdetails?hash=" + txHash + ""
           }
         } else {
           this.transferError = true
