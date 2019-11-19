@@ -442,6 +442,7 @@ export default {
     _getAllContractInfos(poolAddress) {
       let freezeMoney = 0
        let pools = []
+      this.$store.commit("initMyPool")
       this.getContractInfoSync(poolAddress).then((infos) => {
         for (let i = 0; i < infos.length; i++) {
           if (Object.keys(infos[i]).length === 0) {
@@ -468,9 +469,8 @@ export default {
 					        poolName: body.miningPool.poolName,
 					        poolAddress: infos[i].tokenName.split('-')[1],
 					        pooolMoney: `${balance}`
-				      })
-                
-                
+              })
+              this.$store.commit('insertMyPool', pools)
                 // this.addPoolList.push({
                 //   id: 0,
                 //   poolName: body.miningPool.poolName,
@@ -480,8 +480,9 @@ export default {
               }
             })
           })
-          this.$store.commit('insertMyPool', pools)
+          
         }
+        
         // this.poolTimeLock = Number(this.scientificNotationToString(freezeMoney))
       })
     },

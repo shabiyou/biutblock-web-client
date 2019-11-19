@@ -325,7 +325,7 @@ export default {
   },
     //转出全部金额
     allMoney() {
-      this.joinIpt = this.totalMoney
+      this.joinIpt = this.totalMoney.toString()
     },
 
     //转账只能输入金额

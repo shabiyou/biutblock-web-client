@@ -163,8 +163,12 @@ const mutations = {
 	},
 
 	insertMyPool: function (state, pools) {
-		state.wallet.pools = pools
+		state.wallet.pools.push(pools[pools.length - 1])
 	},
+
+	initMyPool: function (state) {
+		state.wallet.pools = []
+	}, 
 
 	insertPool: function (state) {
 
@@ -174,7 +178,7 @@ const mutations = {
 
 const actions = {
 	updatePoolStuffs ({commit, state}) {
-		let address = state.walletAddress
+		let address = state.wallet.walletAddress
 		dataCenterHandler.getMinerLevel({
 			address: address
 		}, (body) => {
