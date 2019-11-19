@@ -67,7 +67,7 @@
 
         <!-- 抵押更多按钮 -->
         <public-button 
-          :text="$t(mortgageBtn)"
+          :text="mortgageBtn"
           :class="[mortgageActive ? 'btn-active' : '',mortgageReadonly ? 'cantClick' : '']"
           :disabled="!mortgageActive"
           @click.native="mortgageFrom"

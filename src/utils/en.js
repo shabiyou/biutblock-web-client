@@ -8,7 +8,7 @@ export default {
     createBtn: 'Create New Wallet',
     createBtns: 'Create New Wallet ...',
     next: "Next",
-    savePrivateKey: "Save your Private Key",
+    savePrivateKey: "Save your private key",
 
     codeIpt: "Please enter the invitation code",
     codeIptError: "Please enter the correct invitation code",
@@ -42,8 +42,8 @@ export default {
     unlockBtn: 'Unlock',
     unlockBtns: 'Unlock...',
 
-    inputPrivateKey1: "Enter Your Private Key",
-    inputPrivateKey2: "Enter your wallet Private Key",
+    inputPrivateKey1: "Enter your private key",
+    inputPrivateKey2: "Enter your wallet private key",
     walletAddress: "Address",
     walletPrivateKey: "Private Key",
     walletMoney: "Balance",
