@@ -152,7 +152,7 @@ export default {
         'walletAddress': fromAddress,
         'sendToAddress': toAddress,
         'amount': amount,
-        'txFee': fee,
+        'txFee': '0',
         'gasLimit': '0',
         'gas': '0',
         'gasPrice': '0',
@@ -162,16 +162,6 @@ export default {
         'chainName': tradingType === 0 ? 'SEC' : 'SEN'
       }
       const tx = JSON.stringify(transfer)
-      // transfer转换成json string 然后通过此方法对交易进行签名，
-      //let txSigned = JSON.parse(SECSDK.default.txSign(tx))
-      // let txBody = {
-      //   "method": "sec_signedTransaction",
-      //   "params": [{
-      //     "companyName": "coinegg",
-      //     "privateKey": privateVal,
-      //     "transfer": transfer
-      //   }]
-      // }
       let signedTx = this._signedTx(privateVal, transfer)
       let postData = {
           "method": "sec_sendRawTransaction",
@@ -198,38 +188,6 @@ export default {
             this.transferError = true
           }
         })
-      
-      // fetch(url, {
-      //   method: 'post',
-      //   body: JSON.stringify(txBody),
-      //   headers: httpHeaderOption
-      // }).then((res) => res.json()).then((text) => {
-      //   let signedTx = JSON.parse(text.body).result.signedTrans
-      //   let postData = {
-      //     "method": "sec_sendRawTransaction",
-      //     "id": "1",
-      //     "jsonrpc": "2.0",
-      //     "params": signedTx
-      //   }
-      //   fetch(url, {
-      //     method: 'post',
-      //     body: JSON.stringify(postData), // request is a string
-      //     headers: httpHeaderOption
-      //   }).then((res) => res.json()).then((result) => {
-      //     this.confirmDisabled = false
-      //     this.confrimButton = 'mask.confirm'
-      //     if (JSON.parse(result.body).result) {
-      //       this.maskPage = 2
-      //       if (tradingType == 0) {
-      //         this.successUrl = "https://scan.biut.io/accountdetails?address=" + fromAddress + ""
-      //       } else {
-      //         this.successUrl = "https://scan.biut.io/sen/accountdetails?address=" + fromAddress + ""
-      //       }
-      //     } else {
-      //       this.transferError = true
-      //     }
-      //   })
-      // })
     },
 
     _signedTx: function (privateKey, transfer) {
