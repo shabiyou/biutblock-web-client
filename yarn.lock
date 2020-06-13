@@ -35,10 +35,10 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@biut-block/biutjs-util@^1.0.2":
+"@biut-block/biutjs-util@*":
   version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@biut-block/biutjs-util/-/biutjs-util-1.0.2.tgz#e2b05138a262b828997afcab34262245ab25c298"
-  integrity sha512-bujA4kpOdcsecAgvK4oiO5OeqDwB8ivX8wUqR6zWYui+w+/nkcXqvcByv6YUJhMtgFxHiXrVCH1OsVwEocU2Vw==
+  resolved "https://registry.npm.taobao.org/@biut-block/biutjs-util/download/@biut-block/biutjs-util-1.0.2.tgz#e2b05138a262b828997afcab34262245ab25c298"
+  integrity sha1-4rBROKJiuCiZevyrNCYiRaslwpg=
   dependencies:
     bip39 "^2.5.0"
     bn.js "^4.11.0"
@@ -76,9 +76,10 @@
   resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
   integrity sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==
 
-"@xkeshi/vue-qrcode@github:xkeshi/vue-qrcode":
+"@xkeshi/vue-qrcode@^1.0.0":
   version "1.0.0"
-  resolved "https://codeload.github.com/xkeshi/vue-qrcode/tar.gz/397b8d148d47bb2c139db9c52323730eba65a14f"
+  resolved "https://registry.npm.taobao.org/@xkeshi/vue-qrcode/download/@xkeshi/vue-qrcode-1.0.0.tgz#e86e612bad5ffdf9b7956dff1ea3a48c35cd420d"
+  integrity sha1-6G5hK61f/fm3lW3/HqOkjDXNQg0=
   dependencies:
     qrious "^4.0.2"
 

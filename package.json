@@ -13,8 +13,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "@biut-block/biutjs-util": "^1.0.2",
-    "@xkeshi/vue-qrcode": "github:xkeshi/vue-qrcode",
+    "@biut-block/biutjs-util": "*",
+    "@xkeshi/vue-qrcode": "^1.0.0",
     "axios": "^0.18.1",
     "babel-plugin-component": "^1.1.1",
     "babel-polyfill": "^6.26.0",
